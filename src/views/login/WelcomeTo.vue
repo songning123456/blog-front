@@ -1,11 +1,17 @@
 <template>
-    <div class='welcome-to'></div>
+    <div class='welcome-to'>
+        <img src="../../assets/login.jpg">
+    </div>
 </template>
 
 <script>
-    import '@/style/login/welcomeTo.scss';
+
 
     export default {
         name: 'WelcomeTo'
     };
 </script>
+
+<style lang="scss">
+    @import '../../style/login/welcomeTo.scss';
+</style>
