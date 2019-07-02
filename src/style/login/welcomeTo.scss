@@ -1,12 +1,40 @@
 .welcome-to {
     height: 100%;
     width: 100%;
-    position: relative;
     background-color: #e9eaef;
+    display: flex;
+    align-items: center;
 
-    img {
-        position: relative;
-        top: 15rem;
-        right:12rem;
+    .login-image {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        width: 50%;
+    }
+
+    .login-info {
+        width: 24rem;
+        height: 24rem;
+        background-color: white;
+
+        .inner-image {
+            margin: .8rem;
+        }
+
+        .el-col {
+            .el-row {
+                img {
+                    max-height: 3rem;
+                    max-width: 3rem;
+                }
+
+                .el-input {
+                    input {
+                        width: 80%;
+                        margin: .4rem;
+                    }
+                }
+            }
+        }
     }
 }
