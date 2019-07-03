@@ -29,7 +29,7 @@
                 </el-col>
             </el-row>
             <el-row class='login-button'>
-                <el-button type="primary">登陆</el-button>
+                <el-button type="primary" @click.native='switchRouter'>登陆</el-button>
             </el-row>
             <el-row class='register'>
                 <el-link type="primary">立即注册</el-link>
@@ -50,6 +50,12 @@
                 },
                 remember: false
             };
+        },
+        methods: {
+            switchRouter () {
+                let scope = this;
+                scope.$router.push({path: '/home-page'});
+            }
         }
     };
 </script>
