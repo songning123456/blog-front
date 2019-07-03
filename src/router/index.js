@@ -13,7 +13,28 @@ export default new Router({
         {
             path: '/home-page',
             name: 'homePage',
-            component: () => import('../views/homePage/HomePage')
+            component: () => import('../views/homePage/HomePage'),
+            children: [
+                {
+                    path: 'read',
+                    name: 'read',
+                    component: () => import('../views/current/ReadArticle')
+                },
+                {
+                    path: 'topic',
+                    name: 'topic',
+                    component: () => import('../views/current/Topic')
+                },
+                {
+                    path: 'history',
+                    name: 'history',
+                    component: () => import('../views/current/History')
+                }
+            ]
+        }, {
+            path: '/edit',
+            name: 'edit',
+            component: () => import('../views/edit/EditArticle')
         }
     ]
 });

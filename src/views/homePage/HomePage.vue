@@ -8,33 +8,54 @@
                 <span class='title-font'>simple</span>
             </el-col>
             <el-col :span='8' class='tabs-info'>
-                <el-tabs v-model="activeName" @tab-click="handleClick">
+                <el-tabs v-model='currentPage' @tab-click='handleClick'>
                     <el-tab-pane v-for='(tab, index) in tabs' :label='tab.label' :name='tab.name'
                                  :key='index'></el-tab-pane>
                 </el-tabs>
             </el-col>
             <el-col :span='8' class='article-info'>
-                <el-button type="primary">写文章</el-button>
+                <el-button type="primary" @click.native='writeArticle'>写文章</el-button>
             </el-col>
         </el-row>
-        <el-row>
-
+        <el-row class='row-content'>
+            <router-view></router-view>
         </el-row>
-        <el-row></el-row>
     </div>
 </template>
 
 <script>
+    import ReadArticle from '@/views/current/ReadArticle';
+
     export default {
         name: 'HomePage',
+        components: {ReadArticle},
         data () {
             return {
                 tabs: [
-                    {label: '首页', name: 'first'},
+                    {label: '阅读', name: 'first'},
                     {label: '话题', name: 'second'},
                     {label: '历史', name: 'third'}
-                ]
+                ],
+                currentPage: 'first'
             };
+        },
+        methods: {
+            writeArticle () {
+                let scope = this;
+                scope.$router.push({path: '/edit'});
+            },
+            handleClick () {
+                let scope = this;
+                if (scope.currentPage === 'first') {
+                    scope.$router.push({path: '/home-page/read'});
+                } else if (scope.currentPage === 'second') {
+                    scope.$router.push({path: '/home-page/topic'});
+                } else if (scope.currentPage === 'third') {
+                    scope.$router.push({path: '/home-page/history'});
+                } else {
+                    // ...
+                }
+            }
         }
     };
 </script>
