@@ -30,3 +30,4 @@ npm test
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
 
 # 设计师网址导航: https://hao.uisdc.com/
+# 在VPS上搭建WordPress博客网站: https://juejin.im/post/5d230469e51d454f72302581
