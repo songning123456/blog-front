@@ -107,13 +107,13 @@
                             //默认高度都设置为100%
                             children[i].$el.style.width = '100%';
                             if (leftIndex.indexOf(i) < 0) {
-                                children[i].$el.style.height = this._rows[i];
+                                children[i].$el.style.height = scope.rows_[i];
                             } else {
                                 // i in leftIndex
                                 let calcExp = '100%';//calc expression
                                 for (let j = 0; j < scope.rows_.length; j++) {
                                     if (leftIndex.indexOf(j) < 0) {
-                                        calcExp = calcExp + ' - ' + this._rows[j];
+                                        calcExp = calcExp + ' - ' + scope.rows_[j];
                                     }
                                 }
                                 calcExp = `(${calcExp}) / ${leftIndex.length}`;

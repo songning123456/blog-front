@@ -3,8 +3,6 @@
     width: 100%;
 
     .label-info {
-        height: 6%;
-        width: 100%;
         display: flex;
         justify-content: center;
 
@@ -19,7 +17,7 @@
 
             .el-tabs__item {
                 padding: 0 1.5rem;
-                font-size: 1rem;
+                font-size: .8rem;
             }
 
             .el-tabs__active-bar {
@@ -33,20 +31,18 @@
     }
 
     .content-info {
-        height: 94%;
-        width: 100%;
         background-color: #f8f8f9;
 
-        .el-col {
-            height: 100%;
+        &.el-frameset {
+            .el-frame {
+                .max-height {
+                    max-height: 40rem;
+                }
 
-            .max-height {
-                max-height: 52rem;
-            }
-
-            .el-scrollbar {
-                .el-scrollbar__thumb {
-                    background-color: unset;
+                .el-scrollbar {
+                    .el-scrollbar__thumb {
+                        background-color: unset;
+                    }
                 }
             }
         }

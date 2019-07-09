@@ -1,33 +1,39 @@
 <template>
-    <div class='read-article'>
-        <el-row class='label-info'>
+    <el-frameset :rows='"6%, *"' class='read-article'>
+        <el-frame class='label-info'>
             <el-tabs v-model='currentContent'>
                 <el-tab-pane v-for='(tab, index) in tabs' :label='tab.label' :name='tab.name'
                              :key='index'></el-tab-pane>
             </el-tabs>
-        </el-row>
-        <el-row class='content-info'>
-            <el-col :span='6'></el-col>
-            <el-col :span='12'>
-                <el-scrollbar wrap-class="max-height" wrap-style="color: red;" view-style="font-weight: bold;"
-                              view-class="view-box" :native="false">
-                    <div v-for="value in 100" :key="value">
-                        {{value}}
-                    </div>
-                </el-scrollbar>
-            </el-col>
-            <el-col :span='6'></el-col>
-        </el-row>
-    </div>
+        </el-frame>
+        <el-frame>
+            <el-frameset :cols='"25%, *, 25%"' class='content-info'>
+                <el-frame></el-frame>
+                <el-frame>
+                    <el-scrollbar wrap-class="max-height" wrap-style="color: red;" view-style="font-weight: bold;"
+                                  view-class="view-box" :native="false">
+                        <div v-for="value in 100" :key="value">
+                            {{value}}
+                        </div>
+                    </el-scrollbar>
+                </el-frame>
+                <el-frame></el-frame>
+            </el-frameset>
+        </el-frame>
+    </el-frameset>
 </template>
 
 <script>
+    import ElFrameset from '@/components/layout/el-frameset';
+    import ElFrame from '@/components/layout/el-frame';
+
     export default {
         name: 'ReadArticle',
+        components: {ElFrame, ElFrameset},
         data () {
             return {
                 tabs: [
-                    {label: '推荐', name: 'first'},
+                    {label: '热门', name: 'first'},
                     {label: '关注', name: 'second'},
                     {label: '后端', name: 'third'},
                     {label: '前端', name: 'fourth'},

@@ -1,34 +1,38 @@
 <template>
-    <div class='home-page'>
-        <el-row :gutter='20' class='row-flex'>
-            <el-col :span='8' class='title-info'>
+    <el-frameset :rows='"10%, *"' class='home-page'>
+        <el-frame>
+            <el-row :gutter='20' class='row-flex'>
+                <el-col :span='8' class='title-info'>
                 <span class='title-image'>
                     <img src='../../assets/notebook.png'/>
                 </span>
-                <span class='title-font'>simple</span>
-            </el-col>
-            <el-col :span='8' class='tabs-info'>
-                <el-tabs v-model='currentPage' @tab-click='handleClick'>
-                    <el-tab-pane v-for='(tab, index) in tabs' :label='tab.label' :name='tab.name'
-                                 :key='index'></el-tab-pane>
-                </el-tabs>
-            </el-col>
-            <el-col :span='8' class='article-info'>
-                <el-button type="primary" @click.native='writeArticle'>写文章</el-button>
-            </el-col>
-        </el-row>
-        <el-row class='row-content'>
+                    <span class='title-font'>simple</span>
+                </el-col>
+                <el-col :span='8' class='tabs-info'>
+                    <el-tabs v-model='currentPage' @tab-click='handleClick'>
+                        <el-tab-pane v-for='(tab, index) in tabs' :label='tab.label' :name='tab.name'
+                                     :key='index'></el-tab-pane>
+                    </el-tabs>
+                </el-col>
+                <el-col :span='8' class='article-info'>
+                    <el-button type="primary" @click.native='writeArticle'>写文章</el-button>
+                </el-col>
+            </el-row>
+        </el-frame>
+        <el-frame>
             <router-view></router-view>
-        </el-row>
-    </div>
+        </el-frame>
+    </el-frameset>
 </template>
 
 <script>
     import ReadArticle from '@/views/current/ReadArticle';
+    import ElFrameset from '@/components/layout/el-frameset';
+    import ElFrame from '@/components/layout/el-frame';
 
     export default {
         name: 'HomePage',
-        components: {ReadArticle},
+        components: {ElFrame, ElFrameset, ReadArticle},
         data () {
             return {
                 tabs: [
@@ -61,6 +65,6 @@
 </script>
 
 <style lang='scss'>
-    @import '../../style/homePage/homePage';
+    @import '~@/style/homePage/homePage';
 
 </style>
