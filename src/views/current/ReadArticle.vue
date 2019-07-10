@@ -10,12 +10,7 @@
             <el-frameset :cols='"25%, *, 25%"' class='content-info'>
                 <el-frame></el-frame>
                 <el-frame>
-                    <el-scrollbar wrap-class="max-height" wrap-style="color: red;" view-style="font-weight: bold;"
-                                  view-class="view-box" :native="false">
-                        <div v-for="value in 100" :key="value">
-                            {{value}}
-                        </div>
-                    </el-scrollbar>
+
                 </el-frame>
                 <el-frame></el-frame>
             </el-frameset>

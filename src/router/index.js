@@ -29,6 +29,11 @@ export default new Router({
                     path: 'history',
                     name: 'history',
                     component: () => import('../views/current/History')
+                },
+                {
+                    path: 'growth',
+                    name: 'growth',
+                    component: () => import('../views/current/Growth')
                 }
             ]
         }, {

@@ -38,7 +38,8 @@
                 tabs: [
                     {label: '阅读', name: 'first'},
                     {label: '话题', name: 'second'},
-                    {label: '历史', name: 'third'}
+                    {label: '历史', name: 'third'},
+                    {label: '成长', name: 'fourth'}
                 ],
                 currentPage: 'first'
             };
@@ -56,6 +57,8 @@
                     scope.$router.push({path: '/home-page/topic'});
                 } else if (scope.currentPage === 'third') {
                     scope.$router.push({path: '/home-page/history'});
+                } else if (scope.currentPage === 'fourth') {
+                    scope.$router.push({path: '/home-page/growth'});
                 } else {
                     // ...
                 }

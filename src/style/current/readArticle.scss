@@ -32,19 +32,5 @@
 
     .content-info {
         background-color: #f8f8f9;
-
-        &.el-frameset {
-            .el-frame {
-                .max-height {
-                    max-height: 40rem;
-                }
-
-                .el-scrollbar {
-                    .el-scrollbar__thumb {
-                        background-color: unset;
-                    }
-                }
-            }
-        }
     }
 }
