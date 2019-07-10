@@ -3,7 +3,7 @@
         <mavon-editor v-model='content'></mavon-editor>
         <div class='sure-button'>
             <div class='submit'>
-                <el-button type="primary">发布</el-button>
+                <el-button type="primary" @click.native='publish'>发布</el-button>
             </div>
             <div class='cancel'>
                 <el-button type="primary" @click.native='goback'>返回</el-button>
@@ -13,6 +13,8 @@
 </template>
 
 <script>
+    import {publishArticle} from '@/service/request';
+
     export default {
         name: 'EditArticle',
         data () {
@@ -21,6 +23,18 @@
             };
         },
         methods: {
+            publish () {
+                let scope = this;
+                let form = {
+                    content: scope.content
+                };
+                let params = {
+                    condition: form
+                };
+                publishArticle(params).then(() => {
+                }).finally(() => {
+                });
+            },
             goback () {
                 let scope = this;
                 scope.$router.push({path: '/home-page/read'});

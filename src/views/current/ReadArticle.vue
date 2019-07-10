@@ -7,10 +7,12 @@
             </el-tabs>
         </el-frame>
         <el-frame>
-            <el-frameset :cols='"25%, *, 25%"' class='content-info'>
+            <el-frameset :cols='"30%, *, 30%"' class='content-info'>
                 <el-frame></el-frame>
                 <el-frame>
-
+                    <template v-if='currentContent === "first"'>
+                        <hot-article></hot-article>
+                    </template>
                 </el-frame>
                 <el-frame></el-frame>
             </el-frameset>
@@ -21,10 +23,11 @@
 <script>
     import ElFrameset from '@/components/layout/el-frameset';
     import ElFrame from '@/components/layout/el-frame';
+    import HotArticle from '@/views/current/readArticle/HotArticle';
 
     export default {
         name: 'ReadArticle',
-        components: {ElFrame, ElFrameset},
+        components: {HotArticle, ElFrame, ElFrameset},
         data () {
             return {
                 tabs: [
