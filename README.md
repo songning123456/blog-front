@@ -31,3 +31,4 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 
 # 设计师网址导航: https://hao.uisdc.com/
 # 在VPS上搭建WordPress博客网站: https://juejin.im/post/5d230469e51d454f72302581
+# 基于Vue的markdown编辑器: https://github.com/hinesboy/mavonEditor
