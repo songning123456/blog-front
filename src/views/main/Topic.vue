@@ -1,14 +1,14 @@
 <template>
-    <div class='history'></div>
+    <div class='topic'></div>
 </template>
 
 <script>
     export default {
-        name: 'History'
+        name: 'Topic'
     };
 </script>
 
 <style lang="scss">
-    @import "../../style/current/history";
+    @import "../../style/main/topic";
 
 </style>

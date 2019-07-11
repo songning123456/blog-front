@@ -86,6 +86,6 @@
 </script>
 
 <style lang='scss'>
-    @import "~@/style/current/readArticle/hot-article";
+    @import "~@/style/main/readArticle/hot-article";
 
 </style>

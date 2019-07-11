@@ -26,7 +26,7 @@
 </template>
 
 <script>
-    import ReadArticle from '@/views/current/ReadArticle';
+    import ReadArticle from '@/views/main/ReadArticle';
     import ElFrameset from '@/components/layout/el-frameset';
     import ElFrame from '@/components/layout/el-frame';
 
