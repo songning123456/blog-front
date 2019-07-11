@@ -17,6 +17,7 @@
                 <el-frame></el-frame>
             </el-frameset>
         </el-frame>
+        <tool-loading :loading='true'></tool-loading>
     </el-frameset>
 </template>
 
@@ -24,10 +25,11 @@
     import ElFrameset from '@/components/layout/el-frameset';
     import ElFrame from '@/components/layout/el-frame';
     import HotArticle from '@/views/main/readArticle/hotArticle/HotArticle';
+    import ToolLoading from '@/components/util/ToolLoading';
 
     export default {
         name: 'ReadArticle',
-        components: {HotArticle, ElFrame, ElFrameset},
+        components: {ToolLoading, HotArticle, ElFrame, ElFrameset},
         data () {
             return {
                 tabs: [
