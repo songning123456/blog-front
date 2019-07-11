@@ -44,6 +44,40 @@
 </script>
 
 <style lang="scss">
-    @import '../../style/main/readArticle';
+    .read-article {
+        height: 100%;
+        width: 100%;
 
+        .label-info {
+            display: flex;
+            justify-content: center;
+
+            .el-tabs {
+
+                display: flex;
+                align-items: center;
+
+                .el-tabs__header {
+                    margin: unset;
+                }
+
+                .el-tabs__item {
+                    padding: 0 1.5rem;
+                    font-size: .8rem;
+                }
+
+                .el-tabs__active-bar {
+                    background-color: white;
+                }
+
+                .el-tabs__nav-wrap::after {
+                    background-color: white;
+                }
+            }
+        }
+
+        .content-info {
+            background-color: #f8f8f9;
+        }
+    }
 </style>
