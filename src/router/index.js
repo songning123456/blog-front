@@ -18,22 +18,22 @@ export default new Router({
                 {
                     path: 'read',
                     name: 'read',
-                    component: () => import('../views/main/ReadArticle')
+                    component: () => import('../views/main/readArticle/ReadArticle')
                 },
                 {
                     path: 'topic',
                     name: 'topic',
-                    component: () => import('../views/main/Topic')
+                    component: () => import('../views/main/topic/Topic')
                 },
                 {
                     path: 'history',
                     name: 'history',
-                    component: () => import('../views/main/History')
+                    component: () => import('../views/main/history/History')
                 },
                 {
                     path: 'growth',
                     name: 'growth',
-                    component: () => import('../views/main/Growth')
+                    component: () => import('../views/main/growth/Growth')
                 }
             ]
         }, {

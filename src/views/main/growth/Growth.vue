@@ -8,6 +8,9 @@
     };
 </script>
 
-<style scoped>
-
+<style lang="scss">
+    .growth {
+        width: 100%;
+        height: 100%;
+    }
 </style>

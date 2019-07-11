@@ -23,7 +23,7 @@
 <script>
     import ElFrameset from '@/components/layout/el-frameset';
     import ElFrame from '@/components/layout/el-frame';
-    import HotArticle from '@/views/main/readArticle/HotArticle';
+    import HotArticle from '@/views/main/readArticle/hotArticle/HotArticle';
 
     export default {
         name: 'ReadArticle',

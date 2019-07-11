@@ -26,7 +26,7 @@
 </template>
 
 <script>
-    import ReadArticle from '@/views/main/ReadArticle';
+    import ReadArticle from '@/views/main/readArticle/ReadArticle';
     import ElFrameset from '@/components/layout/el-frameset';
     import ElFrame from '@/components/layout/el-frame';
 
@@ -68,6 +68,82 @@
 </script>
 
 <style lang='scss'>
-    @import '~@/style/homePage/homePage';
+    .home-page {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+
+        &.el-frameset {
+            .el-frame {
+                overflow: unset;
+            }
+        }
+
+        .row-flex {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #f0f2f9;
+            background: url('../../assets/标题背景.jpg') no-repeat 10px -2000px;
+
+            .title-info {
+                font-family: 'Tahoma';
+                display: flex;
+                justify-content: flex-end;
+                padding-left: .5rem !important;
+
+                .title-image {
+                    padding-right: .5rem;
+
+                    img {
+                        padding-top: .5rem;
+                        max-width: 2rem;
+                        max-height: 2rem;
+                    }
+                }
+
+                .title-font {
+                    padding-top: .3rem;
+                    font-size: 1.5rem;
+                    font-style: italic;
+                    color: #dc9e52;
+                }
+            }
+
+            .tabs-info {
+
+                .el-tabs__header {
+                    margin: 0 0 0;
+
+                    .el-tabs__nav-scroll {
+                        display: flex;
+                        justify-content: center;
+                    }
+                }
+
+                .el-tabs--top .el-tabs__item.is-top {
+                    font-size: 1.2rem;
+                }
+
+                .el-tabs__active-bar {
+                    background-color: unset;
+                }
+
+                .el-tabs__nav-wrap::after {
+                    background-color: unset;
+                }
+            }
+
+            .article-info {
+                display: flex;
+                justify-content: flex-start;
+
+                .el-button {
+                    width: 20%;
+                }
+            }
+        }
+    }
+
 
 </style>

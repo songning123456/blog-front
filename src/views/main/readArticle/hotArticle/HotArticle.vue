@@ -86,6 +86,9 @@
 </script>
 
 <style lang='scss'>
-    @import "~@/style/main/readArticle/hot-article";
+    .hot-article {
+        width: 100%;
+        height: 100%;
+    }
 
 </style>
