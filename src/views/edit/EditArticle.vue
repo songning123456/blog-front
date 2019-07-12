@@ -21,6 +21,7 @@
                 </el-frameset>
             </el-frame>
         </el-frameset>
+        <tool-loading :loading='loading'></tool-loading>
     </div>
 </template>
 
@@ -28,18 +29,61 @@
     import {publishArticle} from '@/service/request';
     import ElFrameset from '@/components/layout/el-frameset';
     import ElFrame from '@/components/layout/el-frame';
+    import ToolLoading from '@/components/util/ToolLoading';
 
     export default {
         name: 'EditArticle',
-        components: {ElFrame, ElFrameset},
+        components: {ToolLoading, ElFrame, ElFrameset},
         data () {
             return {
                 content: '',
-                title: ''
+                title: '',
+                loading: false,
+                throttleFn: null
             };
         },
+        created () {
+            let scope = this;
+            scope.throttleFn = scope.throttle(scope.updateArticle, 3000, 3000);
+        },
         methods: {
+            throttle (fn, delay, duration) {
+                let timer = null;
+                let begin = +new Date();
+                return function () {
+                    let scope = this;
+                    let args = arguments;
+                    let current = +new Date();
+                    clearTimeout(timer);
+                    if (current - begin >= duration) {
+                        fn.apply(scope, args);
+                        begin = current;
+                    }
+                };
+            },
+            throttle2 (fn, delay, duration) {
+                let timer = null;
+                let begin = +new Date();
+                return function () {
+                    let scope = this;
+                    let args = arguments;
+                    let current = +new Date();
+                    clearTimeout(timer);
+                    if (current - begin >= duration) {
+                        fn.apply(scope, args);
+                        begin = current;
+                    } else {
+                        timer = setTimeout(function () {
+                            fn.apply(scope, args);
+                        }, delay);
+                    }
+                };
+            },
             publish () {
+                let scope = this;
+                scope.throttleFn();
+            },
+            updateArticle () {
                 let scope = this;
                 if (!scope.title) {
                     scope.$message({
@@ -62,15 +106,10 @@
                 let params = {
                     condition: form
                 };
-                const loading = this.$loading({
-                    lock: true,
-                    text: 'Loading',
-                    spinner: 'el-icon-loading',
-                    background: 'rgba(0, 0, 0, 0.7)'
-                });
+                scope.loading = true;
                 publishArticle(params).then(() => {
                 }).finally(() => {
-                    loading.close();
+                    scope.loading = false;
                 });
             },
             goback () {

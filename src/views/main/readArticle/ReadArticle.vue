@@ -17,7 +17,6 @@
                 <el-frame></el-frame>
             </el-frameset>
         </el-frame>
-        <tool-loading :loading='true'></tool-loading>
     </el-frameset>
 </template>
 
