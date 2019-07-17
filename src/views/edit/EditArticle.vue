@@ -47,6 +47,7 @@
             scope.throttleFn = scope.throttle(scope.updateArticle, 3000, 3000);
         },
         methods: {
+            // 限定时间过后不执行
             throttle (fn, delay, duration) {
                 let timer = null;
                 let begin = +new Date();
@@ -61,6 +62,7 @@
                     }
                 };
             },
+            // 限定时间过后仍执行
             throttle2 (fn, delay, duration) {
                 let timer = null;
                 let begin = +new Date();

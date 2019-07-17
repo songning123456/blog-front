@@ -6,7 +6,7 @@
 </template>
 
 <script>
-    import DateUtil from '../../utils/Date';
+    import DateUtil from '../../utils/DateUtil';
 
     export default {
         name: 'Column',
