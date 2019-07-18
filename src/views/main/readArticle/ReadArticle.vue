@@ -84,5 +84,10 @@
                 overflow: auto;
             }
         }
+
+        /*隐藏滚动条*/
+        .content-info::-webkit-scrollbar {
+            width: 0;
+        }
     }
 </style>

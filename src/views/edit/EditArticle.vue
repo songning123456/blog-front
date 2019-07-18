@@ -8,6 +8,7 @@
                     <!--标题-->
                     <el-frame class='title'>
                         <span><el-input v-model="title" placeholder="请输入标题"></el-input></span>
+                        <span><img src='../../assets/标签.svg' @click='chooseLabel' title="选择标签"></span>
                         <span>
                            <img src='../../assets/发布.svg' @click='publish' title="发布文章"/>
                         </span>
@@ -21,6 +22,18 @@
                 </el-frameset>
             </el-frame>
         </el-frameset>
+        <el-dialog title='标签选择' :visible.sync='enableLabel' width='18%' top='30vh'>
+            <div v-for='(item, index) in COMMON_MAP["blog_label"]' :key='index' class='label-choose'>
+                <div><span>{{item.label}}</span></div>
+                <div>
+                    <el-switch v-model='labels[index]' active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+                </div>
+            </div>
+            <div slot='footer' class='dialog-footer'>
+                <el-button @click='enableLabel = false' size='mini'>取消</el-button>
+                <el-button @click='sureLabel' type='primary' size='mini'>确定</el-button>
+            </div>
+        </el-dialog>
         <tool-loading :loading='loading'></tool-loading>
     </div>
 </template>
@@ -38,8 +51,11 @@
             return {
                 content: '',
                 title: '',
+                kinds: '',
                 loading: false,
-                throttleFn: null
+                throttleFn: null,
+                enableLabel: false,
+                labels: []
             };
         },
         created () {
@@ -61,6 +77,14 @@
                         begin = current;
                     }
                 };
+            },
+            chooseLabel () {
+                let scope = this;
+                scope.enableLabel = true;
+            },
+            sureLabel () {
+                let scope = this;
+                scope.enableLabel = false;
             },
             publish () {
                 let scope = this;
@@ -119,8 +143,9 @@
             }
 
             span:nth-child(2) {
-                width: 40%;
-                text-align: right;
+                width: 30%;
+                text-align: left;
+                padding-left: .5rem;
 
                 img {
                     cursor: pointer;
@@ -128,7 +153,16 @@
             }
 
             span:nth-child(3) {
-                width: 25%;
+                width: 20%;
+                text-align: right;
+
+                img {
+                    cursor: pointer;
+                }
+            }
+
+            span:nth-child(4) {
+                width: 15%;
                 text-align: left;
                 padding-left: 2rem;
 
@@ -140,6 +174,22 @@
 
         .markdown-body {
             height: 100%;
+        }
+
+        .label-choose {
+            height: 1.5rem;
+
+            div:nth-child(1) {
+                display: inline-block;
+                width: 50%;
+                height: 100%;
+            }
+
+            div:nth-child(2) {
+                display: inline-block;
+                width: 50%;
+                height: 100%;
+            }
         }
     }
 
