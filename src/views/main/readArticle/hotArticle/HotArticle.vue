@@ -3,6 +3,7 @@
         <div v-infinite-scroll='loadMore' infinite-scroll-disabled='busy' infinite-scroll-distance='50'>
             <column v-for='(item, index) in data' :key='index' :data='item'></column>
         </div>
+        <el-backtop target='.content-info' :visibility-height='50'></el-backtop>
     </div>
 </template>
 
@@ -90,7 +91,7 @@
                 setTimeout(() => {
                     for (let i = 0, j = 10; i < j; i++) {
                         this.data.push({
-                            title: '滚动加载',
+                            title: '滚动加载' + Math.random(),
                             author: 'songning',
                             createTime: '2019-7-18 13:30:30',
                             updateTime: '2019-7-18 13:30:30'
