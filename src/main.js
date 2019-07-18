@@ -7,11 +7,13 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import mavonEditor from 'mavon-editor';
 import 'mavon-editor/dist/css/index.css';
+import infiniteScroll from 'vue-infinite-scroll';
 
 Vue.config.productionTip = false;
 
 Vue.use(ElementUI);
 Vue.use(mavonEditor);
+Vue.use(infiniteScroll);
 /* eslint-disable no-new */
 new Vue({
     el: '#app',

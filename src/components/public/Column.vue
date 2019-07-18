@@ -39,7 +39,7 @@
         margin: .2rem 0;
 
         &.column:hover {
-            background-color: rgb(238, 240, 247);
+            background-color: #f8f8f9;
             cursor: pointer;
         }
 

@@ -9,10 +9,10 @@
                     <el-frame class='title'>
                         <span><el-input v-model="title" placeholder="请输入标题"></el-input></span>
                         <span>
-                            <el-button type="primary" @click.native='publish'>发布文章</el-button>
+                           <img src='../../assets/发布.svg' @click='publish' title="发布文章"/>
                         </span>
                         <span>
-                            <el-button type="primary" @click.native='goback'>返回首页</el-button>
+                            <img src='../../assets/返回.svg' @click='goback' title='返回首页'/>
                         </span>
                     </el-frame>
                     <el-frame>
@@ -59,25 +59,6 @@
                     if (current - begin >= duration) {
                         fn.apply(scope, args);
                         begin = current;
-                    }
-                };
-            },
-            // 限定时间过后仍执行
-            throttle2 (fn, delay, duration) {
-                let timer = null;
-                let begin = +new Date();
-                return function () {
-                    let scope = this;
-                    let args = arguments;
-                    let current = +new Date();
-                    clearTimeout(timer);
-                    if (current - begin >= duration) {
-                        fn.apply(scope, args);
-                        begin = current;
-                    } else {
-                        timer = setTimeout(function () {
-                            fn.apply(scope, args);
-                        }, delay);
                     }
                 };
             },
@@ -140,12 +121,20 @@
             span:nth-child(2) {
                 width: 40%;
                 text-align: right;
+
+                img {
+                    cursor: pointer;
+                }
             }
 
             span:nth-child(3) {
                 width: 25%;
                 text-align: left;
                 padding-left: 2rem;
+
+                img {
+                    cursor: pointer;
+                }
             }
         }
 
