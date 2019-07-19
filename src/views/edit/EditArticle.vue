@@ -7,7 +7,10 @@
                 <el-frameset :rows='"8%, *"'>
                     <!--标题-->
                     <el-frame class='title'>
-                        <span><el-input v-model="title" placeholder="请输入标题"></el-input></span>
+                        <span><el-input v-model="title" placeholder="请输入标题">
+                              <i slot="suffix" class="el-input__icon el-icon-error" v-show='title !== ""'
+                                 @click='deleteTitle'></i>
+                        </el-input></span>
                         <span><img src='../../assets/标签.svg' @click='chooseLabel' title="选择标签"></span>
                         <span>
                            <img src='../../assets/发布.svg' @click='publish' title="发布文章"/>
@@ -26,12 +29,8 @@
             <div v-for='(item, index) in COMMON_MAP["blog_label"]' :key='index' class='label-choose'>
                 <div><span>{{item.label}}</span></div>
                 <div>
-                    <el-switch v-model='labels[index]' active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+                    <el-switch v-model='labels[item.label]' active-color="#13ce66"></el-switch>
                 </div>
-            </div>
-            <div slot='footer' class='dialog-footer'>
-                <el-button @click='enableLabel = false' size='mini'>取消</el-button>
-                <el-button @click='sureLabel' type='primary' size='mini'>确定</el-button>
             </div>
         </el-dialog>
         <tool-loading :loading='loading'></tool-loading>
@@ -51,11 +50,10 @@
             return {
                 content: '',
                 title: '',
-                kinds: '',
                 loading: false,
                 throttleFn: null,
                 enableLabel: false,
-                labels: []
+                labels: {}
             };
         },
         created () {
@@ -82,9 +80,9 @@
                 let scope = this;
                 scope.enableLabel = true;
             },
-            sureLabel () {
+            deleteTitle () {
                 let scope = this;
-                scope.enableLabel = false;
+                scope.title = '';
             },
             publish () {
                 let scope = this;
@@ -95,21 +93,46 @@
                 if (!scope.title) {
                     scope.$message({
                         type: 'error',
-                        message: '标题不能为空!'
+                        message: '标题不能为空!',
+                        duration: 1000
                     });
                     return;
                 }
                 if (!scope.content) {
                     scope.$message({
                         type: 'error',
-                        message: '文本不能为空!'
+                        message: '文本不能为空!',
+                        duration: 1000
+                    });
+                    return;
+                }
+                if (JSON.stringify(scope.labels) === '{}') {
+                    scope.$message({
+                        type: 'error',
+                        message: '请至少选择一种标签!',
+                        duration: 1000
                     });
                     return;
                 }
                 let form = {
                     content: scope.content,
-                    title: scope.title
+                    title: scope.title,
+                    readTimes: 0
                 };
+                // 设置标签
+                let arr = [];
+                for (let key in scope.labels) {
+                    if (scope.labels[key]) {
+                        arr.push(key);
+                    }
+                }
+                form.kinds = arr.join(',');
+                // 设置摘要
+                if (scope.content.length > 25) {
+                    form.summary = scope.content.slice(0, 25);
+                } else {
+                    form.summary = scope.content;
+                }
                 let params = {
                     condition: form
                 };
@@ -140,6 +163,14 @@
             span:nth-child(1) {
                 width: 35%;
                 padding-left: .5rem;
+
+                .el-input {
+                    span {
+                        width: unset;
+                        padding-left: unset;
+                        text-align: unset;
+                    }
+                }
             }
 
             span:nth-child(2) {
@@ -180,15 +211,17 @@
             height: 1.5rem;
 
             div:nth-child(1) {
-                display: inline-block;
+                float: left;
                 width: 50%;
                 height: 100%;
+                line-height: 1.4rem;
             }
 
             div:nth-child(2) {
-                display: inline-block;
+                float: right;
                 width: 50%;
                 height: 100%;
+                line-height: 1.4rem;
             }
         }
     }

@@ -16,4 +16,15 @@ FunctionUtil.deepClone = function clone (obj) {
     return result;
 };
 
+/**
+ * []根据{label: '', value:''}中的某一key获取另一个key的值
+ */
+FunctionUtil.getValueByLabel = function (arr, srcKey, srcValue, targetKey) {
+    for (let i in arr) {
+        if (arr[i][srcKey] === srcValue) {
+            return arr[i][targetKey];
+        }
+    }
+};
+
 export default FunctionUtil;

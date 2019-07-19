@@ -8,16 +8,16 @@
             Vue.prototype.COMMON_MAP = {
                 'blog_label': [
                     {
-                        'value': 0,
-                        'label': '未分类'
-                    },
-                    {
-                        'value': 1,
+                        'value': 'first',
                         'label': '前端'
                     },
                     {
-                        'value': 2,
+                        'value': 'second',
                         'label': '后端'
+                    },
+                    {
+                        'value': 'third',
+                        'label': '数据库'
                     }
                 ]
             };

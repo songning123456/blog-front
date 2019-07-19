@@ -11,7 +11,7 @@
                 <el-frame></el-frame>
                 <el-frame>
                     <template v-if='currentContent === "first"'>
-                        <hot-article></hot-article>
+                        <kind-article :kinds='"数据库"'></kind-article>
                     </template>
                 </el-frame>
                 <el-frame></el-frame>
@@ -23,12 +23,20 @@
 <script>
     import ElFrameset from '@/components/layout/el-frameset';
     import ElFrame from '@/components/layout/el-frame';
-    import HotArticle from '@/views/main/readArticle/hotArticle/HotArticle';
+    import KindArticle from '@/views/main/readArticle/kindArticle/KindArticle';
     import ToolLoading from '@/components/util/ToolLoading';
+    import FunctionUtil from '@/utils/FunctionUtil';
 
     export default {
         name: 'ReadArticle',
-        components: {ToolLoading, HotArticle, ElFrame, ElFrameset},
+        components: {KindArticle, ToolLoading, ElFrame, ElFrameset},
+        computed: {
+            category () {
+                let scope = this;
+                let result = FunctionUtil.getValueByLabel(scope.tabs, 'name', scope.currentContent, 'label');
+                return result;
+            }
+        },
         data () {
             return {
                 tabs: [
