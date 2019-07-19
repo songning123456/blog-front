@@ -117,7 +117,8 @@
                 let form = {
                     content: scope.content,
                     title: scope.title,
-                    readTimes: 0
+                    readTimes: 0,
+                    author: 'songning'
                 };
                 // 设置标签
                 let arr = [];

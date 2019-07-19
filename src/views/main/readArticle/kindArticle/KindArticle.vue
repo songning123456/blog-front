@@ -33,7 +33,7 @@
         methods: {
             loadMore () {
                 let scope = this;
-                scope.busy = true;
+                scope.busy = false;
                 let form = {
                     kinds: scope.kinds
                 };
@@ -48,7 +48,7 @@
                             data.data.forEach(item => {
                                 scope.data.push(item);
                             });
-                            scope.busy = false;
+                            scope.busy = true;
                         }
                     } else {
                         scope.$message({
