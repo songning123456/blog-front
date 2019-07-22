@@ -1,34 +1,56 @@
 <template>
-    <div class='hot-article'>
-        <div v-infinite-scroll='loadMore' infinite-scroll-disabled='busy' infinite-scroll-distance='50'>
-            <column v-for='(item, index) in data' :key='index' :data='item'></column>
-        </div>
-        <el-backtop target='.content-info' :visibility-height='50'></el-backtop>
+    <div class='kind-article'>
+        <template v-if='result.total !== 0'>
+            <div v-infinite-scroll='loadMore' infinite-scroll-disabled='busy' infinite-scroll-distance='50'>
+                <column v-for='(item, index) in result.data' :key='index' :data='item'></column>
+            </div>
+            <el-backtop target='.content-info' :visibility-height='50'></el-backtop>
+        </template>
+        <template v-else>
+            <empty-view></empty-view>
+        </template>
     </div>
 </template>
 
 <script>
     import Column from '@/components/public/Column';
     import {getAbstract} from '@/service/request';
+    import EmptyView from '@/components/util/EmptyView';
 
     export default {
         name: 'KindArticle',
-        components: {Column},
+        components: {EmptyView, Column},
         props: {
             kinds: {
                 type: String,
-                default: '前端'
+                default: '热门'
             }
         },
         data () {
             return {
+                // 是否继续查询
                 busy: false,
-                data: [],
+                // 分页信息
                 page: {
                     recordStartNo: 0,
                     pageRecordNum: 10
+                },
+                // 返回的数据
+                result: {
+                    data: [],
+                    total: 0
                 }
             };
+        },
+        watch: {
+            kinds (newVal, oldVal) {
+                let scope = this;
+                scope.result = {
+                    data: [],
+                    total: 0
+                };
+                scope.loadMore();
+            }
         },
         methods: {
             loadMore () {
@@ -45,8 +67,9 @@
                 getAbstract(param).then((data) => {
                     if (data.status === 200) {
                         if (data.total > 0) {
+                            scope.result.total = data.total;
                             data.data.forEach(item => {
-                                scope.data.push(item);
+                                scope.result.data.push(item);
                             });
                             scope.busy = true;
                         }
@@ -66,7 +89,7 @@
 </script>
 
 <style lang='scss'>
-    .hot-article {
+    .kind-article {
         width: 100%;
         height: 100%;
     }

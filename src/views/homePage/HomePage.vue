@@ -84,7 +84,7 @@
             display: flex;
             align-items: center;
             border-bottom: 1px solid #f0f2f9;
-            background: url('../../assets/标题背景.jpg') no-repeat 10px -2000px;
+            background: url('../../assets/ttile-bg.png') no-repeat;
 
             .title-info {
                 font-family: 'Tahoma';

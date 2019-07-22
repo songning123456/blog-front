@@ -14,3 +14,11 @@ export const publishArticle = (params) => {
 export const getAbstract = (params) => {
     return axios.ajax(environment.DEV.url + '/blog/queryAbstract', 'post', params);
 };
+
+/**
+ * 查询总数
+ * @returns {*|Promise|Promise<any>}
+ */
+export const getAllCount = () => {
+    return axios.ajax(environment.DEV.url + '/blog/queryAllCount', 'post');
+};

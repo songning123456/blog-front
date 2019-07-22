@@ -11,6 +11,18 @@
                 <el-frame></el-frame>
                 <el-frame>
                     <template v-if='currentContent === "first"'>
+                        <kind-article :kinds='"热门"'></kind-article>
+                    </template>
+                    <template v-else-if='currentContent === "second"'>
+                        <kind-article :kinds='"关注"'></kind-article>
+                    </template>
+                    <template v-else-if='currentContent === "third"'>
+                        <kind-article :kinds='"前端"'></kind-article>
+                    </template>
+                    <template v-else-if='currentContent === "fourth"'>
+                        <kind-article :kinds='"后端"'></kind-article>
+                    </template>
+                    <template v-else-if='currentContent === "fifth"'>
                         <kind-article :kinds='"数据库"'></kind-article>
                     </template>
                 </el-frame>
@@ -42,9 +54,9 @@
                 tabs: [
                     {label: '热门', name: 'first'},
                     {label: '关注', name: 'second'},
-                    {label: '后端', name: 'third'},
-                    {label: '前端', name: 'fourth'},
-                    {label: '代码人生', name: 'fifth'}
+                    {label: '前端', name: 'third'},
+                    {label: '后端', name: 'fourth'},
+                    {label: '数据库', name: 'fifth'}
                 ],
                 currentContent: 'first'
             };

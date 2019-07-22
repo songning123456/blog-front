@@ -32,6 +32,10 @@
                     <el-switch v-model='labels[item.label]' active-color="#13ce66"></el-switch>
                 </div>
             </div>
+            <div slot='footer' class='dialog-footer'>
+                <el-button @click='cancelLabel' size='mini'>取消</el-button>
+                <el-button @click='sureLabel' type='primary' size='mini'>确定</el-button>
+            </div>
         </el-dialog>
         <tool-loading :loading='loading'></tool-loading>
     </div>
@@ -79,6 +83,17 @@
             chooseLabel () {
                 let scope = this;
                 scope.enableLabel = true;
+            },
+            sureLabel () {
+                let scope = this;
+                scope.enableLabel = false;
+            },
+            cancelLabel () {
+                let scope = this;
+                scope.enableLabel = false;
+                scope.COMMON_MAP['blog_label'].forEach(item => {
+                    scope.labels[item.label] = false;
+                });
             },
             deleteTitle () {
                 let scope = this;

@@ -21,11 +21,8 @@
         methods: {
             getRecentTime () {
                 let scope = this;
-                if (DateUtil.compareTime(scope.data.createTime, scope.data.updateTime)) {
-                    return scope.data.createTime;
-                } else {
-                    return scope.data.updateTime;
-                }
+                let result = DateUtil.formatDate(new Date(scope.data.updateTime));
+                return result;
             }
         }
     };
