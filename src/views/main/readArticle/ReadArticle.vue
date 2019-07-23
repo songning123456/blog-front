@@ -35,7 +35,7 @@
 <script>
     import ElFrameset from '@/components/layout/el-frameset';
     import ElFrame from '@/components/layout/el-frame';
-    import KindArticle from '@/views/main/readArticle/kindArticle/KindArticle';
+    import KindArticle from '@/components/public/KindArticle';
     import ToolLoading from '@/components/util/ToolLoading';
     import FunctionUtil from '@/utils/FunctionUtil';
 

@@ -1,6 +1,7 @@
 <template>
     <div class='column'>
         <div class='title'><span>{{data.title}}</span></div>
+        <div class='summary'><span>{{data.summary}}</span></div>
         <div class='info'><span>{{data.author + ' | ' + getRecentTime()}}</span></div>
     </div>
 </template>
@@ -31,7 +32,7 @@
 <style lang='scss'>
     .column {
         width: 100%;
-        height: 6rem;
+        height: 7rem;
         background: white;
         margin: .2rem 0;
 
@@ -42,7 +43,27 @@
 
         .title {
             width: 100%;
-            height: 70%;
+            height: 30%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+
+            span {
+                text-align: left;
+                padding-left: 3rem;
+                padding-top: .9rem;
+                font-size: inherit;
+                font-weight: 600;
+                width: 65%;
+                overflow: hidden; /*内容会被修剪，并且其余内容是不可见的*/
+                text-overflow: ellipsis; /*显示省略符号来代表被修剪的文本。*/
+                white-space: nowrap; /*文本不换行*/
+            }
+        }
+
+        .summary {
+            width: 100%;
+            height: 40%;
             display: flex;
             align-items: center;
             justify-content: flex-start;
@@ -50,9 +71,8 @@
             span {
                 text-align: left;
                 padding-left: 2rem;
-                padding-top: 1.5rem;
-                font-size: larger;
-                font-weight: 600;
+                font-size: unset;
+                font-weight: 400;
                 width: 65%;
                 overflow: hidden; /*内容会被修剪，并且其余内容是不可见的*/
                 text-overflow: ellipsis; /*显示省略符号来代表被修剪的文本。*/

@@ -22,3 +22,12 @@ export const getAbstract = (params) => {
 export const getAllCount = () => {
     return axios.ajax(environment.DEV.url + '/blog/queryAllCount', 'post');
 };
+
+/**
+ * 获取文章详情
+ * @param params
+ * @returns {*|Promise|Promise<any>}
+ */
+export const getContent = (params) => {
+    return axios.ajax(environment.DEV.url + '/blog/queryContent', 'post', params);
+};

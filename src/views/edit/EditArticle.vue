@@ -160,7 +160,7 @@
             },
             goback () {
                 let scope = this;
-                scope.$router.push({path: '/home-page/read'});
+                scope.$router.push({path: '/home-page/detail'});
             }
         }
     };

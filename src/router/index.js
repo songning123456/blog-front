@@ -40,6 +40,10 @@ export default new Router({
             path: '/edit',
             name: 'edit',
             component: () => import('../views/edit/EditArticle')
+        }, {
+            path: '/detail',
+            name: 'detail',
+            component: () => import('../views/detail/DetailArticle')
         }
     ]
 });

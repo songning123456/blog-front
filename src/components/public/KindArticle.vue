@@ -2,7 +2,8 @@
     <div class='kind-article'>
         <template v-if='result.total !== 0'>
             <div v-infinite-scroll='loadMore' infinite-scroll-disabled='busy' infinite-scroll-distance='50'>
-                <column v-for='(item, index) in result.data' :key='index' :data='item'></column>
+                <column v-for='(item, index) in result.data' :key='index' :data='item'
+                        @click.native='getDetail(item.id)'></column>
             </div>
             <el-backtop target='.content-info' :visibility-height='50'></el-backtop>
         </template>
@@ -45,14 +46,21 @@
         watch: {
             kinds (newVal, oldVal) {
                 let scope = this;
-                scope.result = {
-                    data: [],
-                    total: 0
-                };
+                scope.result.data = [];
                 scope.loadMore();
             }
         },
         methods: {
+            getDetail (id) {
+                let scope = this;
+                let routerData = scope.$router.resolve({
+                    path: '/detail',
+                    query: {
+                        id: id
+                    }
+                });
+                window.open(routerData.href, '_blank');
+            },
             loadMore () {
                 let scope = this;
                 scope.busy = false;
