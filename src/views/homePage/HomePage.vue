@@ -52,7 +52,7 @@
             handleClick () {
                 let scope = this;
                 if (scope.currentPage === 'first') {
-                    scope.$router.push({path: '/home-page/detail'});
+                    scope.$router.push({path: '/home-page/read'});
                 } else if (scope.currentPage === 'second') {
                     scope.$router.push({path: '/home-page/topic'});
                 } else if (scope.currentPage === 'third') {
