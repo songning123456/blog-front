@@ -47,6 +47,10 @@
             kinds (newVal, oldVal) {
                 let scope = this;
                 scope.result.data = [];
+                scope.page = {
+                    recordStartNo: 0,
+                    pageRecordNum: 10
+                };
                 scope.loadMore();
             }
         },
@@ -90,6 +94,7 @@
                 }).catch(() => {
 
                 }).finally(() => {
+                    scope.page.recordStartNo++;
                 });
             }
         }
