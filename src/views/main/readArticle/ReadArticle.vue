@@ -10,21 +10,11 @@
             <el-frameset :cols='"30%, *, 30%"' class='content-info'>
                 <el-frame></el-frame>
                 <el-frame>
-                    <template v-if='currentContent === "first"'>
-                        <kind-article :kinds='"热门"'></kind-article>
-                    </template>
-                    <template v-else-if='currentContent === "second"'>
-                        <kind-article :kinds='"关注"'></kind-article>
-                    </template>
-                    <template v-else-if='currentContent === "third"'>
-                        <kind-article :kinds='"前端"'></kind-article>
-                    </template>
-                    <template v-else-if='currentContent === "fourth"'>
-                        <kind-article :kinds='"后端"'></kind-article>
-                    </template>
-                    <template v-else-if='currentContent === "fifth"'>
-                        <kind-article :kinds='"数据库"'></kind-article>
-                    </template>
+                    <div v-for='(item, index) in tabs' :key='index'>
+                        <div v-show='currentContent === item.name'>
+                            <kind-article :kinds='item.label'></kind-article>
+                        </div>
+                    </div>
                 </el-frame>
                 <el-frame></el-frame>
             </el-frameset>
@@ -42,13 +32,6 @@
     export default {
         name: 'ReadArticle',
         components: {KindArticle, ToolLoading, ElFrame, ElFrameset},
-        computed: {
-            category () {
-                let scope = this;
-                let result = FunctionUtil.getValueByLabel(scope.tabs, 'name', scope.currentContent, 'label');
-                return result;
-            }
-        },
         data () {
             return {
                 tabs: [
@@ -60,6 +43,13 @@
                 ],
                 currentContent: 'first'
             };
+        },
+        methods: {
+            getKinds () {
+                let scope = this;
+                let result = FunctionUtil.getValueByLabel(scope.tabs, 'name', scope.currentContent, 'label');
+                return result;
+            }
         }
     };
 </script>

@@ -1,15 +1,10 @@
 <template>
     <div class='kind-article'>
-        <template v-if='result.total !== 0'>
-            <div v-infinite-scroll='loadMore' infinite-scroll-disabled='busy' infinite-scroll-distance='50'>
-                <column v-for='(item, index) in result.data' :key='index' :data='item'
-                        @click.native='getDetail(item.id)'></column>
-            </div>
-            <el-backtop target='.content-info' :visibility-height='50'></el-backtop>
-        </template>
-        <template v-else>
-            <empty-view></empty-view>
-        </template>
+        <div v-infinite-scroll='loadMore' infinite-scroll-disabled='busy' infinite-scroll-distance='10'>
+            <column v-for='(item, index) in result.data' :key='index' :data='item'
+                    @click.native='getDetail(item.id)'></column>
+        </div>
+        <el-backtop target='.content-info' :visibility-height='50'></el-backtop>
     </div>
 </template>
 
@@ -43,18 +38,8 @@
                 }
             };
         },
-        watch: {
-            kinds (newVal, oldVal) {
-                let scope = this;
-                scope.result.data = [];
-                scope.page = {
-                    recordStartNo: 0,
-                    pageRecordNum: 10
-                };
-                scope.loadMore();
-            }
-        },
         methods: {
+            // 跳转到文章内容
             getDetail (id) {
                 let scope = this;
                 let routerData = scope.$router.resolve({
@@ -65,9 +50,9 @@
                 });
                 window.open(routerData.href, '_blank');
             },
-            loadMore () {
+            // 加载文章
+            getAllAbstract () {
                 let scope = this;
-                scope.busy = false;
                 let form = {
                     kinds: scope.kinds
                 };
@@ -80,10 +65,14 @@
                     if (data.status === 200) {
                         if (data.total > 0) {
                             scope.result.total = data.total;
-                            data.data.forEach(item => {
-                                scope.result.data.push(item);
-                            });
-                            scope.busy = true;
+                            if (data.data.length > 0) {
+                                data.data.forEach(item => {
+                                    scope.result.data.push(item);
+                                });
+                                scope.busy = false;
+                            } else {
+                                scope.busy = true;
+                            }
                         }
                     } else {
                         scope.$message({
@@ -94,8 +83,15 @@
                 }).catch(() => {
 
                 }).finally(() => {
-                    scope.page.recordStartNo++;
                 });
+            },
+            loadMore () {
+                let scope = this;
+                scope.busy = true;
+                setTimeout(() => {
+                    scope.page.recordStartNo++;
+                    scope.getAllAbstract();
+                }, 500);
             }
         }
     };
