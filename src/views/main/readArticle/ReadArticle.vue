@@ -2,22 +2,21 @@
     <el-frameset :rows='"6%, *"' class='read-article'>
         <el-frame class='label-info'>
             <el-tabs v-model='currentContent'>
-                <el-tab-pane v-for='(tab, index) in tabs' :label='tab.label' :name='tab.name'
+                <el-tab-pane v-for='(tab, index) in COMMON_MAP["blog_label"]' :label='tab.label' :name='tab.value'
                              :key='index'></el-tab-pane>
             </el-tabs>
         </el-frame>
         <el-frame>
-            <el-frameset :cols='"30%, *, 30%"' class='content-info'>
-                <el-frame></el-frame>
-                <el-frame>
-                    <div v-for='(item, index) in tabs' :key='index'>
-                        <div v-show='currentContent === item.name'>
-                            <kind-article :kinds='item.label'></kind-article>
-                        </div>
-                    </div>
-                </el-frame>
-                <el-frame></el-frame>
-            </el-frameset>
+            <div style='height: 100%; width: 100%' v-for='(item, index) in COMMON_MAP["blog_label"]' :key='index'
+                 v-if='currentContent === item.value'>
+                <el-frameset :cols='"30%, *, 30%"' class='content-info'>
+                    <el-frame></el-frame>
+                    <el-frame>
+                        <kind-article :kinds='item.label'></kind-article>
+                    </el-frame>
+                    <el-frame></el-frame>
+                </el-frameset>
+            </div>
         </el-frame>
     </el-frameset>
 </template>
@@ -27,30 +26,16 @@
     import ElFrame from '@/components/layout/el-frame';
     import KindArticle from '@/components/public/KindArticle';
     import ToolLoading from '@/components/util/ToolLoading';
-    import FunctionUtil from '@/utils/FunctionUtil';
 
     export default {
         name: 'ReadArticle',
         components: {KindArticle, ToolLoading, ElFrame, ElFrameset},
         data () {
             return {
-                tabs: [
-                    {label: '热门', name: 'first'},
-                    {label: '关注', name: 'second'},
-                    {label: '前端', name: 'third'},
-                    {label: '后端', name: 'fourth'},
-                    {label: '数据库', name: 'fifth'}
-                ],
                 currentContent: 'first'
             };
         },
-        methods: {
-            getKinds () {
-                let scope = this;
-                let result = FunctionUtil.getValueByLabel(scope.tabs, 'name', scope.currentContent, 'label');
-                return result;
-            }
-        }
+        methods: {}
     };
 </script>
 
