@@ -4,6 +4,7 @@
             <column v-for='(item, index) in result.data' :key='index' :data='item'
                     @click.native='getDetail(item.id)'></column>
         </div>
+        <tool-loading :loading='loading'></tool-loading>
         <el-backtop target='.content-info' :visibility-height='50'></el-backtop>
     </div>
 </template>
@@ -12,10 +13,11 @@
     import Column from '@/components/public/Column';
     import {getAbstract} from '@/service/request';
     import EmptyView from '@/components/util/EmptyView';
+    import ToolLoading from '@/components/util/ToolLoading';
 
     export default {
         name: 'KindArticle',
-        components: {EmptyView, Column},
+        components: {ToolLoading, EmptyView, Column},
         props: {
             kinds: {
                 type: String,
@@ -28,14 +30,15 @@
                 busy: false,
                 // 分页信息
                 page: {
-                    recordStartNo: 0,
-                    pageRecordNum: 10
+                    recordStartNo: -1,
+                    pageRecordNum: 20
                 },
                 // 返回的数据
                 result: {
                     data: [],
                     total: 0
-                }
+                },
+                loading: false
             };
         },
         methods: {
@@ -83,11 +86,13 @@
                 }).catch(() => {
 
                 }).finally(() => {
+                    scope.loading = false;
                 });
             },
             loadMore () {
                 let scope = this;
                 scope.busy = true;
+                scope.loading = true;
                 setTimeout(() => {
                     scope.page.recordStartNo++;
                     scope.getAllAbstract();

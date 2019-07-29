@@ -44,6 +44,9 @@
                 currentPage: 'first'
             };
         },
+        mounted () {
+            this.handleClick();
+        },
         methods: {
             writeArticle () {
                 let scope = this;
