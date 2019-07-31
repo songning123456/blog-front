@@ -1,6 +1,6 @@
 <template>
     <el-frameset :rows='"10%, *"' class='home-page'>
-        <el-frame class='above-info'>
+        <el-frame class='above-info' @click.native='closeExpand'>
             <div class='left-title'>
                   <span class='title-image'>
                      <img src='../../assets/notebook.png'/>
@@ -17,7 +17,7 @@
                 <div class='article-button'>
                     <el-button type="primary" @click.native='writeArticle'>写文章</el-button>
                 </div>
-                <div class='config-info' @click='multipleChoice'>
+                <div class='config-info' @click.stop='multipleChoice'>
                     <i class='el-icon-caret-bottom'></i>
                 </div>
             </div>
@@ -80,6 +80,9 @@
                 } else {
                     document.getElementsByClassName('link-popover')[0].style.display = 'none';
                 }
+            },
+            closeExpand () {
+                document.getElementsByClassName('link-popover')[0].style.display = 'none';
             }
         }
     };
