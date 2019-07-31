@@ -4,8 +4,12 @@
             <el-frame></el-frame>
             <el-frame class='read-detail'>
                 <div class='title'>
-                    <div></div>
-                    <div></div>
+                    <div class='top'>{{result.title}}</div>
+                    <div class='bottom'>
+                        <span>
+                        {{result.author + '&nbsp;&nbsp;|&nbsp;&nbsp;' + updateTime}}
+                    </span>
+                    </div>
                 </div>
                 <div class='content'>
                     <mavon-editor v-model='content' :defaultOpen='"preview"' :editable='false' :subfield='false'
@@ -22,6 +26,7 @@
     import {getContent} from '../../service/request.js';
     import ElFrameset from '@/components/layout/el-frameset';
     import ElFrame from '@/components/layout/el-frame';
+    import DateUtil from '../../utils/DateUtil';
 
     export default {
         name: 'DetailArticle',
@@ -57,6 +62,10 @@
                 },
                 set () {
                 }
+            },
+            updateTime () {
+                let scope = this;
+                return DateUtil.formatDate(new Date(scope.result.updateTime));
             }
         }
     };
@@ -71,13 +80,29 @@
             .title {
                 width: 100%;
                 height: 20%;
+                background-image: url("../../assets/detail-article.png");
+                background-position: 1.5rem -2.25rem;
 
-                div:nth-child(1) {
-
+                .top {
+                    height: 80%;
+                    width: 100%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-size: 30px;
                 }
 
-                div:nth-child(2) {
+                .bottom {
+                    height: 20%;
+                    width: 100%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-size: 15px;
 
+                    span {
+                        padding-left: 7rem;
+                    }
                 }
             }
 

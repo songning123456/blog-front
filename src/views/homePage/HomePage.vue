@@ -1,23 +1,30 @@
 <template>
     <el-frameset :rows='"10%, *"' class='home-page'>
-        <el-frame>
-            <el-row :gutter='20' class='row-flex'>
-                <el-col :span='8' class='title-info'>
-                <span class='title-image'>
-                    <img src='../../assets/notebook.png'/>
-                </span>
-                    <span class='title-font'>simple</span>
-                </el-col>
-                <el-col :span='8' class='tabs-info'>
-                    <el-tabs v-model='currentPage' @tab-click='handleClick'>
-                        <el-tab-pane v-for='(tab, index) in tabs' :label='tab.label' :name='tab.name'
-                                     :key='index'></el-tab-pane>
-                    </el-tabs>
-                </el-col>
-                <el-col :span='8' class='article-info'>
+        <el-frame class='above-info'>
+            <div class='left-title'>
+                  <span class='title-image'>
+                     <img src='../../assets/notebook.png'/>
+                 </span>
+                <span class='title-font'>simple</span>
+            </div>
+            <div class='middle-title'>
+                <el-tabs v-model='currentPage' @tab-click='handleClick'>
+                    <el-tab-pane v-for='(tab, index) in tabs' :label='tab.label' :name='tab.name'
+                                 :key='index'></el-tab-pane>
+                </el-tabs>
+            </div>
+            <div class='right-title'>
+                <div class='article-button'>
                     <el-button type="primary" @click.native='writeArticle'>写文章</el-button>
-                </el-col>
-            </el-row>
+                </div>
+                <div class='config-info' @click='multipleChoice'>
+                    <i class='el-icon-caret-bottom'></i>
+                </div>
+            </div>
+            <div class='link-popover'>
+                <div><span>登陆配置</span></div>
+                <div><span>管理配置</span></div>
+            </div>
         </el-frame>
         <el-frame>
             <router-view></router-view>
@@ -46,6 +53,7 @@
         },
         mounted () {
             this.handleClick();
+            document.getElementsByClassName('link-popover')[0].style.display = 'none';
         },
         methods: {
             writeArticle () {
@@ -65,6 +73,13 @@
                 } else {
                     // ...
                 }
+            },
+            multipleChoice () {
+                if (document.getElementsByClassName('link-popover')[0].style.display === 'none') {
+                    document.getElementsByClassName('link-popover')[0].style.display = 'unset';
+                } else {
+                    document.getElementsByClassName('link-popover')[0].style.display = 'none';
+                }
             }
         }
     };
@@ -82,38 +97,37 @@
             }
         }
 
-        .row-flex {
-            height: 100%;
+        .above-info {
+
             display: flex;
             align-items: center;
             border-bottom: 1px solid #f0f2f9;
             background: url('../../assets/ttile-bg.png') no-repeat;
 
-            .title-info {
+            .left-title {
+                width: 33%;
+
                 font-family: 'Tahoma';
                 display: flex;
                 justify-content: flex-end;
-                padding-left: .5rem !important;
 
                 .title-image {
-                    padding-right: .5rem;
 
                     img {
-                        padding-top: .5rem;
                         max-width: 2rem;
                         max-height: 2rem;
                     }
                 }
 
                 .title-font {
-                    padding-top: .3rem;
                     font-size: 1.5rem;
                     font-style: italic;
                     color: #dc9e52;
                 }
             }
 
-            .tabs-info {
+            .middle-title {
+                width: calc(100% - 33% - 33%);
 
                 .el-tabs__header {
                     margin: 0 0 0;
@@ -135,14 +149,62 @@
                 .el-tabs__nav-wrap::after {
                     background-color: unset;
                 }
+
             }
 
-            .article-info {
+            .right-title {
+                width: 33%;
+
                 display: flex;
                 justify-content: flex-start;
 
-                .el-button {
-                    width: 20%;
+                .article-button {
+                    height: 100%;
+                    width: 18%;
+
+                    .el-button {
+                        height: 100%;
+                        width: 100%;
+                    }
+                }
+
+                .config-info {
+                    width: 1.9%;
+                    margin-left: .02rem;
+                    border-radius: .05rem;
+                    background-color: #409EFF;
+
+                    :hover {
+                        cursor: pointer;
+                        background-color: rgba(255, 255, 255, 0.31);
+                    }
+
+                    .el-icon-caret-bottom {
+                        height: 100%;
+                        color: white;
+                        line-height: 3;
+                        font-size: 10px;
+                    }
+                }
+            }
+
+            .link-popover {
+                width: 6.6%;
+                z-index: 2999;
+                background: white;
+                right: 25.35rem;
+                top: 3.45rem;
+                position: absolute;
+
+                div {
+                    span {
+                        font-size: 15px;
+                        cursor: pointer;
+                    }
+
+                    :hover {
+                        color: #409EFF;
+                    }
                 }
             }
         }
