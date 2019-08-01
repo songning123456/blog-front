@@ -31,3 +31,12 @@ export const getAllCount = () => {
 export const getContent = (params) => {
     return axios.ajax(environment.DEV.url + '/blog/queryContent', 'post', params);
 };
+
+/**
+ * 获取热门文章
+ * @param params
+ * @returns {*|Promise|Promise<any>}
+ */
+export const getHotArticle = (params) => {
+    return axios.ajax(environment.DEV.url + '/blog/queryHotArticle', 'post', params);
+};
