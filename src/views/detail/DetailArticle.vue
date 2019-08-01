@@ -11,6 +11,7 @@
                     </span>
                     </div>
                 </div>
+                <div class='interval'></div>
                 <div class='content'>
                     <mavon-editor v-model='content' :defaultOpen='"preview"' :editable='false' :subfield='false'
                                   :toolbarsFlag='false' :boxShadow='false' :shortCut='false'></mavon-editor>
@@ -106,9 +107,14 @@
                 }
             }
 
+            .interval {
+                width: 100%;
+                height: 2%;
+            }
+
             .content {
                 width: 100%;
-                height: 80%;
+                height: 78%;
 
                 .v-note-wrapper {
                     .v-note-panel {
