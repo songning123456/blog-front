@@ -1,6 +1,6 @@
 <template>
     <div class='tool-lading' v-show='loading'>
-        <img class='image' src='../../assets/loading.gif' alt=''>
+        <img class='image' :src=url alt=''>
     </div>
 </template>
 
@@ -12,6 +12,11 @@
                 type: Boolean,
                 default: false
             }
+        },
+        data() {
+            return {
+                url: require('../../assets/loading.gif')
+            };
         }
     };
 </script>
@@ -36,7 +41,6 @@
             margin: auto;
             position: absolute;
             background-size: 100% 100%;
-            background-image: url('../../assets/loading.gif');
         }
     }
 

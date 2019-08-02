@@ -105,7 +105,7 @@
             display: flex;
             align-items: center;
             border-bottom: 1px solid #f0f2f9;
-            background: url('../../assets/ttile-bg.png') no-repeat;
+            background: url('../../assets/title-bg.png') no-repeat;
 
             .left-title {
                 width: 33%;
