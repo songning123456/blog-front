@@ -87,6 +87,7 @@
 
                 }).finally(() => {
                     scope.loading = false;
+                    this.$emit('hotShow');
                 });
             },
             loadMore () {

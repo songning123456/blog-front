@@ -12,10 +12,10 @@
                 <el-frameset :cols='"30%, *, 30%"' class='content-info'>
                     <el-frame></el-frame>
                     <el-frame>
-                        <kind-article :kinds='item.label'></kind-article>
+                        <kind-article :kinds='item.label' @hotShow='showHot'></kind-article>
                     </el-frame>
                     <el-frame>
-                        <hot-article :result='hotResult'></hot-article>
+                        <hot-article :result='hotResult' v-show='hotShow'></hot-article>
                     </el-frame>
                 </el-frameset>
             </div>
@@ -36,18 +36,28 @@
         components: {HotArticle, KindArticle, ToolLoading, ElFrame, ElFrameset},
         data () {
             return {
+                // 当前分类
                 currentContent: 'first',
-                hotResult: []
+                // 各分类热门文章结果集
+                hotResult: [],
+                // 判断热门文章是否显示
+                hotShow: false
             };
         },
         mounted () {
             this.handleClick();
         },
         methods: {
+            // 等分类的文章加载完毕 右侧的热门文章才显示
+            showHot () {
+                let scope = this;
+                scope.hotShow = true;
+            },
             handleClick (tab, event) {
                 let scope = this;
                 let form;
                 if (tab) {
+                    scope.hotShow = false;
                     form = {
                         kinds: tab.label
                     };
