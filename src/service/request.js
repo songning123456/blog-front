@@ -40,3 +40,7 @@ export const getContent = (params) => {
 export const getHotArticle = (params) => {
     return axios.ajax(environment.DEV.url + '/blog/queryHotArticle', 'post', params);
 };
+
+export const getLabelCache = () => {
+    return axios.ajax(environment.DEV.url + '/label/queryLabelCache', 'post');
+};
