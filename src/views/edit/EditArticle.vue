@@ -7,7 +7,10 @@
                               <i slot="suffix" class="el-input__icon el-icon-error" v-show='title !== ""'
                                  @click='deleteTitle'></i>
                         </el-input></span>
-                <span><img src='../../assets/标签.svg' @click='chooseLabel' title="选择标签"></span>
+                <span>
+                    <el-select v-model='selected' placeholder='请选择标签'></el-select>
+                    <img src='../../assets/标签.svg' @click='chooseLabel' title="选择标签">
+                </span>
                 <span>
                            <img src='../../assets/发布.svg' @click='publish' title="发布文章"/>
                         </span>
@@ -51,7 +54,8 @@
                 loading: false,
                 throttleFn: null,
                 enableLabel: false,
-                labels: {}
+                labels: {},
+                selected: ''
             };
         },
         created () {

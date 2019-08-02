@@ -144,7 +144,9 @@
     }
 
     .el-frameset.vertical {
+        /*! autoprefixer: off */
         -webkit-box-orient: vertical;
+        /* autoprefixer: on */
         box-orient: vertical;
     }
 
