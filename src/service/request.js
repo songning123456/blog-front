@@ -41,6 +41,22 @@ export const getHotArticle = (params) => {
     return axios.ajax(environment.DEV.url + '/blog/queryHotArticle', 'post', params);
 };
 
+/**
+ *
+ * @returns {*|Promise|Promise<any>}
+ */
 export const getLabelCache = () => {
     return axios.ajax(environment.DEV.url + '/label/queryLabelCache', 'post');
+};
+
+/**
+ *
+ * @returns {*|Promise|Promise<any>}
+ */
+export const getGroupCache = () => {
+    return axios.ajax(environment.DEV.url + '/label/queryGroupCache', 'post');
+};
+
+export const getAllLabelName = () => {
+    return axios.ajax(environment.DEV.url + '/label/queryAllLabelName', 'post');
 };

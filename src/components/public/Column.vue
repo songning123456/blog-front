@@ -73,7 +73,7 @@
                 padding-left: 2rem;
                 font-size: unset;
                 font-weight: 400;
-                width: 65%;
+                width: 89%;
                 overflow: hidden; /*内容会被修剪，并且其余内容是不可见的*/
                 text-overflow: ellipsis; /*显示省略符号来代表被修剪的文本。*/
                 white-space: nowrap; /*文本不换行*/

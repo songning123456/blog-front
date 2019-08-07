@@ -11,10 +11,12 @@
                     </el-input>
                 </span>
                 <span class='span-second'>
-                    <img src='../../assets/标签.svg' title="选择标签" alt=""/>
+                    <img src='../../assets/标签.svg' alt=""/>
                     <el-select v-model='selected' placeholder='请选择标签' clearable>
-                        <el-option v-for='(item, index) in options' :key='index' :label='item.labelGroupName'
-                                   :value='item.labelGroupName'></el-option>
+                        <el-option-group v-for='(group, index) in options' :key='index' :label='group.label'>
+                            <el-option v-for='item in group.options' :key='item.value' :label='item.label'
+                                       :value='item.value'></el-option>
+                        </el-option-group>
                     </el-select>
                 </span>
                 <span class='span-third'>
@@ -36,7 +38,7 @@
 </template>
 
 <script>
-    import {publishArticle, getLabelCache} from '@/service/request';
+    import {publishArticle, getGroupCache} from '@/service/request';
     import ElFrameset from '@/components/layout/el-frameset';
     import ElFrame from '@/components/layout/el-frame';
     import ToolLoading from '@/components/util/ToolLoading';
@@ -61,7 +63,7 @@
         },
         mounted () {
             let scope = this;
-            getLabelCache().then((data) => {
+            getGroupCache().then((data) => {
                 scope.options = data.data;
             }).finally();
         },
