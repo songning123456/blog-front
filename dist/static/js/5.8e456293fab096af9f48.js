@@ -1,0 +1,2 @@
+webpackJsonp([5],{"G+8K":function(e,t){},"V/Ga":function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var r={render:function(){var e=this.$createElement;return(this._self._c||e)("div",{staticClass:"history"})},staticRenderFns:[]};var s=n("VU/8")({name:"History"},r,!1,function(e){n("G+8K")},null,null);t.default=s.exports}});
+//# sourceMappingURL=5.8e456293fab096af9f48.js.map
