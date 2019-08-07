@@ -80,6 +80,7 @@
                         kinds: tab.label
                     };
                 } else {
+                    scope.currentContent = scope.labelNames[0];
                     form = {
                         kinds: scope.labelNames[0]
                     };
