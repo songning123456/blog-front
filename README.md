@@ -33,3 +33,4 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 # 在VPS上搭建WordPress博客网站: https://juejin.im/post/5d230469e51d454f72302581
 # 基于Vue的markdown编辑器: https://github.com/hinesboy/mavonEditor
 # 安装ElasticSearch-6.x: https://blog.csdn.net/zhouzhiwengang/article/details/81294956
+# 参考博客 https://github.com/SleepyOcean/
