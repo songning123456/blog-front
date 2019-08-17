@@ -26,12 +26,12 @@
 </template>
 
 <script>
-    import ElFrameset from '@/components/layout/el-frameset';
-    import ElFrame from '@/components/layout/el-frame';
-    import KindArticle from '@/components/public/KindArticle';
-    import ToolLoading from '@/components/util/ToolLoading';
-    import HotArticle from '@/components/public/HotArticle';
-    import {getHotArticle, getAllLabelName} from '@/service/request';
+    import ElFrameset from '../../../components/layout/el-frameset';
+    import ElFrame from '../../../components/layout/el-frame';
+    import KindArticle from '../../../components/public/KindArticle';
+    import ToolLoading from '../../../components/util/ToolLoading';
+    import HotArticle from '../../../components/public/HotArticle';
+    import {getHotArticle, getAllLabelName} from '../../../service/request';
 
     export default {
         name: 'ReadArticle',
@@ -86,7 +86,9 @@
                     };
                 }
                 let param = {
-                    condition: form
+                    condition: form,
+                    recordStartNo: 0,
+                    pageRecordNum: 5
                 };
                 getHotArticle(param).then((data) => {
                     scope.hotResult = data.data;

@@ -10,10 +10,10 @@
 </template>
 
 <script>
-    import Column from '@/components/public/Column';
-    import {getAbstract} from '@/service/request';
-    import EmptyView from '@/components/util/EmptyView';
-    import ToolLoading from '@/components/util/ToolLoading';
+    import Column from '../../components/public/Column';
+    import {getAbstract} from '../../service/request';
+    import EmptyView from '../../components/util/EmptyView';
+    import ToolLoading from '../../components/util/ToolLoading';
 
     export default {
         name: 'KindArticle',

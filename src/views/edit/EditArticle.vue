@@ -38,15 +38,15 @@
 </template>
 
 <script>
-    import {publishArticle, getGroupCache} from '@/service/request';
-    import ElFrameset from '@/components/layout/el-frameset';
-    import ElFrame from '@/components/layout/el-frame';
-    import ToolLoading from '@/components/util/ToolLoading';
+    import {publishArticle, getGroupCache} from '../../service/request';
+    import ElFrameset from '../../components/layout/el-frameset';
+    import ElFrame from '../../components/layout/el-frame';
+    import ToolLoading from '../../components/util/ToolLoading';
 
     export default {
         name: 'EditArticle',
         components: {ToolLoading, ElFrame, ElFrameset},
-        data () {
+        data() {
             return {
                 content: '',
                 title: '',
@@ -57,11 +57,11 @@
                 options: []
             };
         },
-        created () {
+        created() {
             let scope = this;
             scope.throttleFn = scope.throttle(scope.updateArticle, 3000, 3000);
         },
-        mounted () {
+        mounted() {
             let scope = this;
             getGroupCache().then((data) => {
                 scope.options = data.data;
@@ -69,7 +69,7 @@
         },
         methods: {
             // 限定时间过后不执行
-            throttle (fn, delay, duration) {
+            throttle(fn, delay, duration) {
                 let timer = null;
                 let begin = +new Date();
                 return function () {
@@ -83,15 +83,15 @@
                     }
                 };
             },
-            deleteTitle () {
+            deleteTitle() {
                 let scope = this;
                 scope.title = '';
             },
-            publish () {
+            publish() {
                 let scope = this;
                 scope.throttleFn();
             },
-            updateArticle () {
+            updateArticle() {
                 let scope = this;
                 if (!scope.title) {
                     scope.$message({
@@ -139,7 +139,7 @@
                     scope.loading = false;
                 });
             },
-            goback () {
+            goback() {
                 let scope = this;
                 scope.$router.push({path: '/home-page/read'});
             }
