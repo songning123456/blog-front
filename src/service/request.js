@@ -60,3 +60,7 @@ export const getGroupCache = () => {
 export const getAllLabelName = () => {
     return axios.ajax(environment.DEV.url + '/label/queryAllLabelName', 'post');
 };
+
+export const highlightSearch = (params) => {
+    return axios.ajax(environment.DEV.url + '/es/blog/searchArticle', 'post', params);
+};

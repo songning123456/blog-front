@@ -30,6 +30,14 @@ export default new Router({
                     }
                 },
                 {
+                    path: 'search/:data',
+                    name: 'search',
+                    component: () => import('../views/main/readArticle/SearchArticle'),
+                    meta: {
+                        title: '搜索'
+                    }
+                },
+                {
                     path: 'topic',
                     name: 'topic',
                     component: () => import('../views/main/topic/Topic'),

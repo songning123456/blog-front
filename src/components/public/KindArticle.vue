@@ -4,7 +4,7 @@
             <column v-for='(item, index) in result.data' :key='index' :data='item'
                     @click.native='getDetail(item.id)'></column>
         </div>
-        <tool-loading :loading='loading'></tool-loading>
+        <tool-loading :loading='loading' v-if='result.data.length === 0'></tool-loading>
         <el-backtop target='.content-info' :visibility-height='50'></el-backtop>
     </div>
 </template>

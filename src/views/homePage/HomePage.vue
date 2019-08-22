@@ -7,11 +7,14 @@
                  </span>
                 <span class='title-font'>simple</span>
             </div>
-            <div class='middle-title'>
+            <div class='middle-title-1'>
                 <el-tabs v-model='currentPage' @tab-click='handleClick'>
                     <el-tab-pane v-for='(tab, index) in tabs' :label='tab.label' :name='tab.name'
                                  :key='index'></el-tab-pane>
                 </el-tabs>
+            </div>
+            <div class='middle-title-2'>
+                <el-input ref='elInput' suffix-icon='el-icon-search' v-model='search' placeholder='请输入搜索内容'></el-input>
             </div>
             <div class='right-title'>
                 <div class='article-button'>
@@ -48,10 +51,16 @@
                     {label: '历史', name: 'third'},
                     {label: '成长', name: 'fourth'}
                 ],
+                search: '',
                 currentPage: 'first'
             };
         },
         mounted () {
+            let scope = this;
+            scope.$nextTick(() => {
+                let doc = scope.$refs['elInput'].$vnode.elm.children[1];
+                doc.addEventListener('click', scope.searchArticle, true);
+            });
             this.handleClick();
             document.getElementsByClassName('link-popover')[0].style.display = 'none';
         },
@@ -81,6 +90,28 @@
                     document.getElementsByClassName('link-popover')[0].style.display = 'none';
                 }
             },
+            searchArticle () {
+                let scope = this;
+                scope.currentPage = '';
+                scope.jumpTo();
+            },
+            /**
+             * 跳转路由
+             */
+            jumpTo () {
+                let scope = this;
+                if (scope.search) {
+                    scope.$router.push({
+                        path: '/home-page/search/:data',
+                        name: 'search',
+                        query: {
+                            data: scope.search
+                        }
+                    });
+                } else {
+                    scope.$message.warning('请输入搜索内容');
+                }
+            },
             closeExpand () {
                 document.getElementsByClassName('link-popover')[0].style.display = 'none';
             }
@@ -108,7 +139,7 @@
             background: url('../../assets/title-bg.png') no-repeat;
 
             .left-title {
-                width: 33%;
+                width: 35%;
 
                 font-family: 'Tahoma';
                 display: flex;
@@ -129,8 +160,8 @@
                 }
             }
 
-            .middle-title {
-                width: calc(100% - 33% - 33%);
+            .middle-title-1 {
+                width: 35%;
 
                 .el-tabs__header {
                     margin: 0 0 0;
@@ -152,18 +183,25 @@
                 .el-tabs__nav-wrap::after {
                     background-color: unset;
                 }
+            }
 
+            .middle-title-2 {
+                width: 20%;
+
+                .el-input {
+                    width: 90%;
+                }
             }
 
             .right-title {
-                width: 33%;
+                width: 10%;
 
                 display: flex;
                 justify-content: flex-start;
 
                 .article-button {
                     height: 100%;
-                    width: 18%;
+                    width: 60%;
 
                     .el-button {
                         height: 100%;
@@ -172,9 +210,9 @@
                 }
 
                 .config-info {
-                    width: 1.9%;
+                    width: 10%;
                     margin-left: .02rem;
-                    border-radius: .05rem;
+                    border-radius: .1rem;
                     background-color: #409EFF;
 
                     :hover {
@@ -183,6 +221,7 @@
                     }
 
                     .el-icon-caret-bottom {
+                        width: 100%;
                         height: 100%;
                         color: white;
                         line-height: 3;
@@ -192,10 +231,10 @@
             }
 
             .link-popover {
-                width: 6.6%;
+                width: 7%;
                 z-index: 2999;
                 background: white;
-                right: 25.35rem;
+                right: 2.85rem;
                 top: 3.45rem;
                 position: absolute;
 
