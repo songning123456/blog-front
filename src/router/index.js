@@ -38,9 +38,9 @@ export default new Router({
                     }
                 },
                 {
-                    path: 'topic',
-                    name: 'topic',
-                    component: () => import('../views/main/topic/Topic'),
+                    path: 'statistics',
+                    name: 'statistics',
+                    component: () => import('../views/main/statistics/Statistics'),
                     meta: {
                         title: '话题'
                     }
