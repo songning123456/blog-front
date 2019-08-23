@@ -1,6 +1,6 @@
 <template>
     <div class='side-menu-panel'>
-        <div @mouseenter='changeStatus(true)' @mousedown='changeStatus(false)' class='side-menu'>
+        <div @mouseenter='changeStatus(true)' @mousedown='changeStatus()' class='side-menu'>
             <img src='@/assets/statistic.svg'/>
             <div class='text-style'><span>{{title}}</span></div>
         </div>
@@ -29,7 +29,11 @@
         methods: {
             changeStatus (status) {
                 let scope = this;
-                scope.sideBar.showing = status;
+                if (status) {
+                    scope.sideBar.showing = status;
+                } else {
+                    scope.sideBar.showing = !scope.sideBar.showing;
+                }
             }
         }
     };
@@ -44,10 +48,11 @@
 
         .side-menu {
             color: #409EFF;
-            margin-top: 1rem;
+            padding-top: 1rem;
             position: relative;
             z-index: 110;
             height: 100%;
+            box-shadow: 0 0 0.1rem 0 #ececec;
 
             img {
                 display: inline-block;
@@ -62,7 +67,7 @@
 
         .menu-panel {
             position: absolute;
-            top: 0;
+            top: .5rem;
             height: 100%;
             box-shadow: 0 0 0.1rem 0 #ececec;
             width: 20rem;
@@ -73,7 +78,7 @@
             transition: all .4s ease-in-out;
 
             &.show-css {
-                left: 0 !important;
+                left: 2rem !important;
             }
         }
     }
