@@ -2,7 +2,11 @@
     <div class='column'>
         <div class='title'><span>{{data.title}}</span></div>
         <div class='summary'><span>{{data.summary}}</span></div>
-        <div class='info'><span>{{data.author + ' | ' + getRecentTime()}}</span></div>
+        <div class='info'>
+            <span><a href='javascript:void(0)' target="_blank" @click.stop=''>{{data.author}}</a></span>
+            <span>{{' | '}}</span>
+            <span>{{getRecentTime()}}</span>
+        </div>
     </div>
 </template>
 
@@ -90,7 +94,20 @@
             span {
                 font-size: .7rem;
                 color: #d2d2d2;
+                padding-left: .5rem;
+            }
+
+            span:nth-child(1) {
                 padding-left: 3rem;
+
+                a {
+                    color: unset;
+                    text-decoration: unset;
+                }
+
+                :hover {
+                    color: #409eff;
+                }
             }
         }
     }

@@ -2,10 +2,12 @@
     <div class='search-article'>
         <div v-infinite-scroll='loadMore' infinite-scorll-disabled='busy' infinite-scroll-distance='10'>
             <div v-for='(item, index) in result.data' :key='index' @click='getDetail(item.id)' class='search-outer'>
+                <div class='search-title'>{{item.title}}</div>
                 <div v-for='(single, i) in item.searchResult' :key='i' class='search-inner' v-html='single'>
                 </div>
             </div>
         </div>
+        <empty-view v-if='!result.data.length'></empty-view>
         <tool-loading :loading='loading' v-if='result.data.length === 0'></tool-loading>
         <el-backtop target='.search-article' :visibility-height='50'></el-backtop>
     </div>
@@ -15,10 +17,11 @@
     import {highlightSearch} from '../../../service/request';
     import Column from '@/components/public/Column';
     import ToolLoading from '@/components/util/ToolLoading';
+    import EmptyView from '@/components/util/EmptyView';
 
     export default {
         name: 'SearchArticle',
-        components: {ToolLoading, Column},
+        components: {EmptyView, ToolLoading, Column},
         data () {
             return {
                 busy: false,
@@ -33,6 +36,12 @@
                 },
                 loading: false
             };
+        },
+        created () {
+            let scope = this;
+            if (scope.$route.query) {
+                scope.content = scope.$route.query.data;
+            }
         },
         methods: {
             getDetail (id) {
@@ -77,7 +86,6 @@
                 let scope = this;
                 scope.busy = true;
                 scope.loading = true;
-                scope.content = scope.$route.query.data;
                 setTimeout(() => {
                     scope.page.recordStartNo++;
                     scope.getHighlightArticle();
@@ -102,12 +110,18 @@
                 cursor: pointer;
             }
 
+            .search-title {
+                margin: .5rem 0;
+                color: #409eff;
+            }
+
             .search-inner {
                 width: 90%;
                 margin-left: 3rem;
             }
         }
     }
+
     .search-article::-webkit-scrollbar {
         width: 0;
     }

@@ -30,7 +30,7 @@ export default new Router({
                     }
                 },
                 {
-                    path: 'search/:data',
+                    path: 'search',
                     name: 'search',
                     component: () => import('../views/main/readArticle/SearchArticle'),
                     meta: {

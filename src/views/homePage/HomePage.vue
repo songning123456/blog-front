@@ -30,7 +30,7 @@
             </div>
         </el-frame>
         <el-frame>
-            <router-view></router-view>
+            <router-view v-if='routeAlive'></router-view>
         </el-frame>
     </el-frameset>
 </template>
@@ -51,6 +51,7 @@
                     {label: '历史', name: 'third'},
                     {label: '成长', name: 'fourth'}
                 ],
+                routeAlive: true,
                 search: '',
                 currentPage: 'first'
             };
@@ -101,8 +102,12 @@
             jumpTo () {
                 let scope = this;
                 if (scope.search) {
+                    scope.routeAlive = false;
+                    scope.$nextTick(() => {
+                        scope.routeAlive = true;
+                    });
                     scope.$router.push({
-                        path: '/home-page/search/:data',
+                        path: '/home-page/search',
                         name: 'search',
                         query: {
                             data: scope.search
