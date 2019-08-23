@@ -1,7 +1,7 @@
 <template>
     <el-frameset :rows='"6%, *"' class='read-article'>
         <el-frame class='label-info'>
-            <div class='choose-tabs'>
+            <div class='choose-tabs' ref='chooseTabs'>
                 <el-tabs v-model='currentContent' @tab-click='handleClick'>
                     <el-tab-pane v-for='(tab, index) in labelNames' :label='tab' :name='tab'
                                  :key='index'></el-tab-pane>
@@ -32,6 +32,7 @@
     import ToolLoading from '../../../components/util/ToolLoading';
     import HotArticle from '../../../components/public/HotArticle';
     import {getHotArticle, getAllLabelName} from '../../../service/request';
+    import EventUtil from '../../../utils/EventUtil';
 
     export default {
         name: 'ReadArticle',
@@ -44,7 +45,8 @@
                 hotResult: [],
                 // 判断热门文章是否显示
                 hotShow: false,
-                labelNames: []
+                labelNames: [],
+                scrollLeft: ''
             };
         },
         mounted () {
@@ -56,13 +58,17 @@
                             scope.labelNames.push(item.labelName);
                         });
                     } else {
-                        scope.$message.error(data.message ? data.message : '查询出错');
+                        scope.$message.error('查询为空');
                     }
                 } else {
                     scope.$message.error(data.message ? data.message : '查询出错');
                 }
             }).catch().finally(() => {
                 scope.handleClick();
+            });
+            scope.$nextTick(() => {
+                scope.scrollLeft = scope.$refs['chooseTabs'].children[0].children[0].children[0].children[0];
+                scope.scrollLeft.addEventListener('mousewheel', scope.mouseScroll, true);
             });
         },
         methods: {
@@ -94,6 +100,17 @@
                     scope.hotResult = data.data;
                 }).finally(() => {
                 });
+            },
+            mouseScroll (event) {
+                let scope = this;
+                let e = EventUtil.getEvent(event);
+                e.preventDefault();
+                // eslint-disable-next-line no-unused-vars
+                if (e.deltaY > 0) {
+                    scope.scrollLeft.scrollLeft += 50;
+                } else {
+                    scope.scrollLeft.scrollLeft -= 50;
+                }
             }
         }
     };
@@ -125,6 +142,10 @@
                     .el-tabs__item {
                         padding: 0 1.5rem;
                         font-size: .8rem;
+                    }
+
+                    .el-tabs__nav-scroll {
+                        /*overflow-x: auto;*/
                     }
 
                     .el-tabs__active-bar {

@@ -5,7 +5,10 @@
             <div class='hot-content' v-for='(item, index) in result' :key='index' @click='getDetail(item.id)'>
                 <div class='first'><span><img :src=getSrc(index) alt=''/></span><span
                     :title='item.title'>{{item.title}}</span></div>
-                <div class='second'><span>{{item.author + '&nbsp;&nbsp;|&nbsp;&nbsp;' + getUpdateTime(index)}}</span>
+                <div class='second'>
+                    <span><a href='javascript:void(0)' target="_blank" @click.stop=''>{{item.author}}</a></span>
+                    <span>{{' | '}}</span>
+                    <span>{{getUpdateTime(index)}}</span>
                 </div>
             </div>
         </template>
@@ -110,6 +113,21 @@
                 align-items: center;
                 font-size: .7rem;
                 color: #d2d2d2;
+
+                span:nth-child(1) {
+                    a {
+                        color: unset;
+                        text-decoration: unset;
+                    }
+
+                    :hover {
+                        color: #409eff;
+                    }
+                }
+
+                span:nth-child(2) {
+                    padding: 0 .3rem;
+                }
             }
         }
 
