@@ -3,7 +3,7 @@
         <div class='title'><span>{{data.title}}</span></div>
         <div class='summary'><span>{{data.summary}}</span></div>
         <div class='info'>
-            <span><a href='javascript:void(0)' target="_blank" @click.stop=''>{{data.author}}</a></span>
+            <span @click.stop='getIntroduction'>{{data.author}}</span>
             <span>{{' | '}}</span>
             <span>{{getRecentTime()}}</span>
         </div>
@@ -28,6 +28,16 @@
                 let scope = this;
                 let result = DateUtil.formatDate(new Date(scope.data.updateTime));
                 return result;
+            },
+            getIntroduction () {
+                let scope = this;
+                let routerData = scope.$router.resolve({
+                    path: '/introduction',
+                    query: {
+                        author: scope.data.author
+                    }
+                });
+                window.open(routerData.href, '_blank');
             }
         }
     };
@@ -100,12 +110,7 @@
             span:nth-child(1) {
                 padding-left: 3rem;
 
-                a {
-                    color: unset;
-                    text-decoration: unset;
-                }
-
-                :hover {
+                &:hover {
                     color: #409eff;
                 }
             }

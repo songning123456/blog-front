@@ -76,6 +76,13 @@ export default new Router({
             meta: {
                 title: '文章详情'
             }
+        }, {
+            path: '/introduction',
+            name: 'introduction',
+            component: () => import('../views/introduction/BloggerIntroduction'),
+            meta: {
+                title: '作者简介'
+            }
         }
     ]
 });
