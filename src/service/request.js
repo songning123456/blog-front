@@ -64,3 +64,10 @@ export const getAllLabelName = () => {
 export const highlightSearch = (params) => {
     return axios.ajax(environment.DEV.url + '/es/blog/searchArticle', 'post', params);
 };
+
+/**
+ * 获取个人简介信息
+ */
+export const getPersonalInfo = (params) => {
+    return axios.ajax(environment.DEV.url + '/personalInfo/getPersonalInfo', 'post', params);
+};
