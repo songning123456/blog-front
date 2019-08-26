@@ -5,7 +5,7 @@
                 <div class="avatar">
                     <div class='inner-border'>
                         <el-avatar shape="square"
-                                   src="https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png"></el-avatar>
+                                   :src="result.headPortrait"></el-avatar>
                     </div>
                 </div>
                 <div class='simple-info'>
@@ -105,10 +105,10 @@
                     }
                 ],
                 detail: [
-                    {url: '', info: '简历'},
-                    {url: '', info: '打印'},
-                    {url: '', info: '查看照片'},
-                    {url: '', info: '给我发电子邮件?'}
+                    {url: 'static/personalInfo.svg', info: '简历'},
+                    {url: 'static/print.svg', info: '打印'},
+                    {url: 'static/photo.svg', info: '查看照片'},
+                    {url: 'static/email.svg', info: '给我发电子邮件?'}
                 ],
                 emailInfo: [{key: '姓名', value: 'name'},
                     {key: '联系方式', value: 'telephone'},
@@ -281,8 +281,14 @@
                 .detail-content {
                     text-align: left;
                     display: inline-block;
-                    width: 8rem;
+                    width: 10rem;
                     cursor: pointer;
+
+                    img {
+                        transform: scale(1.2);
+                        position: relative;
+                        top: .2rem;
+                    }
 
                     &.detail-choose {
                         color: #409eff;

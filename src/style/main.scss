@@ -1,0 +1,68 @@
+.global-css {
+    // 表单
+    .el-form {
+        .el-form-item {
+            margin-bottom: .3rem;
+
+            .el-form-item__label {
+                font-size: .7rem;
+                line-height: 2rem;
+                padding: 0 .6rem 0 0;
+            }
+
+            .el-form-item__content {
+                line-height: 2rem;
+                font-size: .7rem;
+            }
+        }
+    }
+
+    // 按钮
+    .el-button {
+        padding: .6rem 1.8rem;
+    }
+
+    .el-card {
+        border: unset;
+
+        .el-card__header {
+            background-color: #d8edff;
+            padding: .3rem 1rem;
+            border-radius: 0.2rem 0.2rem 0 0;
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: #427BF1;
+        }
+
+        .el-card__body {
+            background-color: #ecf6ff;
+            padding: .5rem;
+        }
+    }
+
+    .el-date-editor {
+        font-size: .7rem;
+    }
+
+    .el-input {
+        width: 11rem;
+
+        input {
+            height: 2rem;
+
+            &.el-input__inner {
+                padding-left: 1.5rem;
+                padding-right: 1.5rem;
+            }
+        }
+
+        .el-input__prefix {
+            left: 0.25rem;
+
+            .el-input__icon {
+                line-height: 2rem;
+                width: 1.25rem;
+            }
+        }
+    }
+}

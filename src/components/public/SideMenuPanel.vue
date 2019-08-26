@@ -1,7 +1,7 @@
 <template>
     <div class='side-menu-panel'>
         <div @mouseenter='changeStatus(true)' @mousedown='changeStatus()' class='side-menu'>
-            <img src='@/assets/statistic.svg'/>
+            <img :src='imgSrc'/>
             <div class='text-style'><span>{{title}}</span></div>
         </div>
         <div class='menu-panel' :class='sideBar.showing ? "show-css" : ""'>
@@ -15,6 +15,10 @@
         name: 'SideMenuPanel',
         props: {
             title: '',
+            imgSrc: {
+                type: String,
+                default: ''
+            },
             sideBar: {
                 type: Object,
                 // eslint-disable-next-line vue/require-valid-default-prop
@@ -53,6 +57,7 @@
             z-index: 110;
             height: 100%;
             box-shadow: 0 0 0.1rem 0 #ececec;
+            background-color: white;
 
             img {
                 display: inline-block;
@@ -72,7 +77,7 @@
             box-shadow: 0 0 0.1rem 0 #ececec;
             width: 20rem;
             left: -20rem;
-            background: #29ff00;
+            background: white;
             box-sizing: border-box;
             z-index: 80;
             transition: all .4s ease-in-out;

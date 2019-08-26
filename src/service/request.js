@@ -77,5 +77,5 @@ export const getPersonalInfo = (params) => {
  * @param params
  */
 export const getBloggerInfo = (params) => {
-    return axios.ajax(environment.DEV.url + '/blogger/get', 'post', params);
+    return axios.ajax(environment.DEV.url + '/blogger/getBlogger', 'post', params);
 };
