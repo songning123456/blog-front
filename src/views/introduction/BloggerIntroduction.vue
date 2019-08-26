@@ -36,7 +36,7 @@
                         <div class='content' v-for='(single, i) in item.info' :key='i'>
                             <div class='inner-info'>
                                 <span>{{single.mechanism}}</span>
-                                <span>{{single.time}}</span>
+                                <span>{{single.startTime + ' ~ ' + single.endTime}}</span>
                                 <span>{{single.position}}</span>
                                 <div>{{single.introduction}}</div>
                             </div>
@@ -51,9 +51,11 @@
                     联系 && 交流
                 </div>
                 <el-form ref='emailForm' :model='emailForm' label-width='8rem'>
-                    <el-form-item v-for='(item, index) in emailInfo' :key='index' :label='item.key' :style='{height: 70 / emailInfo.length + "%"}'>
+                    <el-form-item v-for='(item, index) in emailInfo' :key='index' :label='item.key'
+                                  :style='{height: 70 / emailInfo.length + "%"}'>
                         <el-input v-model='emailForm[item.value]'
-                                  :type='item.value === "message" ? "textarea" : "text"' :placeholder = 'item.value'></el-input>
+                                  :type='item.value === "message" ? "textarea" : "text"'
+                                  :placeholder='item.value'></el-input>
                     </el-form-item>
                 </el-form>
                 <el-button type="primary" class='email-tail'>Send</el-button>
@@ -64,62 +66,16 @@
 
 <script>
     import EmptyView from '../../components/util/EmptyView';
+    import {getPersonalInfo, getBloggerInfo} from '../../service/request';
 
     export default {
         name: 'BloggerIntroduction',
         components: {EmptyView},
-        data() {
+        data () {
             return {
-                result: {
-                    id: '',
-                    userName: '夷山 龙龙 张乐',
-                    password: '',
-                    gender: '男',
-                    age: 35,
-                    profession: '程序员',
-                    telephone: '15850682190',
-                    email: '1457065856@qq.com',
-                    introduction: '从警8年他硕果累累，先后荣立个人一等功1次，二等功1次，三等功3次，嘉奖2次，2006年被评为“百姓心中好交警”，2007年被评为青年执法标兵，2008年被评为奥运交通安保标兵和“微笑北京交警之星”，2009年又荣获了首都“五一”劳动奖章,受邀参加市委政法委“学习实践科学发展观巡讲团”和北京市公安局“平凡颂”演讲报告会。孟昆玉在平凡的岗位上，做出了不平凡的业绩',
-                    updateTime: '2019-08-23 13:30:00',
-                    headPortrait: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
-                },
+                result: {},
                 resume: {
-                    data: [
-                        {
-                            type: '工作经历',
-                            info: [
-                                {
-                                    mechanism: '兰科',
-                                    position: '客源',
-                                    time: '2018-05-06 ～ 2018-09-12',
-                                    introduction: '1985年发行首张个人专辑《只知道此刻爱你》 [16]  。1990年凭借专辑《可不可以》在歌坛获得关注 [17]  。1994年获得十大劲歌金曲最受欢迎男歌星奖。1995年在央视春晚上演唱歌曲《忘情水》 [18]  。2000年被《吉尼斯世界纪录大全》评为“获奖最多的香港男歌手” [19]  。2004年第六次获得十大劲歌金曲最受欢迎男歌星奖。2016年参与填词的歌曲《原谅我》正式发行 [20]  。'
-                                },
-                                {
-                                    mechanism: '兰科',
-                                    position: '客源',
-                                    time: '2018-05-06 ～ 2018-09-12',
-                                    introduction: '1985年发行首张个人专辑《只知道此刻爱你》 [16]  。1990年凭借专辑《可不可以》在歌坛获得关注 [17]  。1994年获得十大劲歌金曲最受欢迎男歌星奖。1995年在央视春晚上演唱歌曲《忘情水》 [18]  。2000年被《吉尼斯世界纪录大全》评为“获奖最多的香港男歌手” [19]  。2004年第六次获得十大劲歌金曲最受欢迎男歌星奖。2016年参与填词的歌曲《原谅我》正式发行 [20]  。'
-                                }
-                            ]
-                        },
-                        {
-                            type: '教育经历',
-                            info: [
-                                {
-                                    position: '学生',
-                                    time: '2018-05-06 ～ 2018-09-12',
-                                    introduction: '1985年发行首张个人专辑《只知道此刻爱你》 [16]  。1990年凭借专辑《可不可以》在歌坛获得关注 [17]  。1994年获得十大劲歌金曲最受欢迎男歌星奖。1995年在央视春晚上演唱歌曲《忘情水》 [18]  。2000年被《吉尼斯世界纪录大全》评为“获奖最多的香港男歌手” [19]  。2004年第六次获得十大劲歌金曲最受欢迎男歌星奖。2016年参与填词的歌曲《原谅我》正式发行 [20]  。',
-                                    mechanism: '兰科'
-                                },
-                                {
-                                    position: '学生',
-                                    time: '2018-05-06 ～ 2018-09-12',
-                                    introduction: '1985年发行首张个人专辑《只知道此刻爱你》 [16]  。1990年凭借专辑《可不可以》在歌坛获得关注 [17]  。1994年获得十大劲歌金曲最受欢迎男歌星奖。1995年在央视春晚上演唱歌曲《忘情水》 [18]  。2000年被《吉尼斯世界纪录大全》评为“获奖最多的香港男歌手” [19]  。2004年第六次获得十大劲歌金曲最受欢迎男歌星奖。2016年参与填词的歌曲《原谅我》正式发行 [20]  。',
-                                    mechanism: '兰科'
-                                }
-                            ]
-                        }
-                    ],
+                    data: [],
                     total: 0
                 },
                 display: [
@@ -170,15 +126,62 @@
             };
         },
         methods: {
-            sureContent(index) {
+            sureContent (index) {
                 let scope = this;
                 if (scope.current !== index) {
                     scope.current = index;
                 }
+            },
+            getMyInfo () {
+                let scope = this;
+                let form = {
+                        // 暂时这样写，等数据库同步数据
+                        infoOwner: 'songning'
+                        // infoOwner: scope.$route.query.author || 'songning'
+                    }
+                ;
+                let param = {
+                    condition: form
+                };
+                getPersonalInfo(param).then((data) => {
+                    if (data.status === 200) {
+                        if (data.total > 0) {
+                            scope.resume.data = data.data;
+                            scope.resume.total = data.total;
+                        } else {
+                            scope.$message.error('查询结果为空');
+                        }
+                    } else {
+                        scope.$message.error('查询异常! ' + data.message);
+                    }
+                }).catch().finally();
+            },
+            getBlogger () {
+                let scope = this;
+                let form = {
+                    // userName: scope.$route.query.author || 'songning';
+                    userName: 'songning'
+                };
+                let param = {
+                    condition: form
+                };
+                getBloggerInfo(param).then((data) => {
+                    if (data.status === 200) {
+                        if (data.total > 0) {
+                            scope.result = data.data[0];
+                        } else {
+                            scope.$message.error('查询结果为空');
+                        }
+                    } else {
+                        scope.$message.error('查询异常! ' + data.message);
+                    }
+                }).catch().finally();
             }
         },
-        mounted() {
+        mounted () {
             this.sureContent(0);
+            this.getMyInfo();
+            this.getBlogger();
         }
     };
 </script>
@@ -225,6 +228,7 @@
                         }
                     }
                 }
+
                 .simple-info {
                     height: 70%;
                     width: 100%;
@@ -259,6 +263,7 @@
                 }
             }
         }
+
         .el-frame-right {
             height: 100%;
             width: 80%;
@@ -284,6 +289,7 @@
                     }
                 }
             }
+
             .detail-show-0 {
                 width: 100%;
                 height: calc(100% - 3rem);
@@ -355,12 +361,14 @@
                     margin: 1rem 0;
                     border-radius: .2rem;
                 }
+
                 .el-form {
                     clear: both;
                     height: 70%;
                     width: 70%;
                     float: left;
                 }
+
                 .email-tail {
                     width: 12rem;
                     float: left;

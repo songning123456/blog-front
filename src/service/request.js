@@ -71,3 +71,11 @@ export const highlightSearch = (params) => {
 export const getPersonalInfo = (params) => {
     return axios.ajax(environment.DEV.url + '/personalInfo/getPersonalInfo', 'post', params);
 };
+
+/**
+ *
+ * @param params
+ */
+export const getBloggerInfo = (params) => {
+    return axios.ajax(environment.DEV.url + '/blogger/get', 'post', params);
+};
