@@ -1,6 +1,7 @@
 <template>
-    <div class='tool-lading' v-show='loading'>
-        <img class='image' :src=url alt=''>
+    <div class='tool-loading' v-show='loading'>
+        <img class='image' v-if='normal === "vehicle"' :src=url alt=''>
+        <img class='image' v-if='normal === "spinner"' :src=url2 alt=''>
     </div>
 </template>
 
@@ -11,18 +12,23 @@
             loading: {
                 type: Boolean,
                 default: false
+            },
+            normal: {
+                type: String,
+                default: 'vehicle'
             }
         },
-        data() {
+        data () {
             return {
-                url: require('../../assets/loading.gif')
+                url: require('../../assets/loading.gif'),
+                url2: require('../../assets/spinner.gif')
             };
         }
     };
 </script>
 
 <style lang='scss'>
-    .tool-lading {
+    .tool-loading {
         top: 0;
         left: 0;
         right: 0;

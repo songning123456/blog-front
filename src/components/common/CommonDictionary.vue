@@ -9,7 +9,8 @@
                 'DICTIONARY': {
                     QUERY: '查询',
                     RESET: '重置',
-                    CHOOSE_TIME: '时间段选择'
+                    CHOOSE_TIME: '时间段选择',
+                    STATISTIC_TYPE: '统计类型'
                 }
             };
         }
