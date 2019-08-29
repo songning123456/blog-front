@@ -28,8 +28,8 @@
                             <el-form :model='form' label-width='5rem'>
                                 <el-form-item label='按类型统计'>
                                     <el-select v-model='form.type' placeholder='请选择类型'>
-                                        <el-option label='作者' value='author'></el-option>
                                         <el-option label='种类' value='kinds'></el-option>
+                                        <el-option label='作者' value='author'></el-option>
                                     </el-select>
                                 </el-form-item>
                             </el-form>
@@ -87,7 +87,7 @@
                 form: {
                     startTime: '',
                     endTime: '',
-                    type: 'author'
+                    type: 'kinds'
                 },
                 loading: false,
                 time: {
@@ -211,7 +211,7 @@
             },
             reset () {
                 let scope = this;
-                scope.form.type = 'author';
+                scope.form.type = 'kinds';
                 scope.$refs['tabPanel'].chooseType(0);
             },
             rangeTime (arg1, arg2) {

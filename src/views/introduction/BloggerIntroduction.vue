@@ -136,8 +136,8 @@
                 let scope = this;
                 let form = {
                         // 暂时这样写，等数据库同步数据
-                        infoOwner: 'songning'
-                        // infoOwner: scope.$route.query.author || 'songning'
+                        // infoOwner: 'songning'
+                        infoOwner: scope.$route.query.author || 'songning'
                     }
                 ;
                 let param = {
@@ -159,8 +159,8 @@
             getBlogger () {
                 let scope = this;
                 let form = {
-                    // userName: scope.$route.query.author || 'songning';
-                    userName: 'songning'
+                    userName: scope.$route.query.author || 'songning'
+                    // userName: 'songning'
                 };
                 let param = {
                     condition: form
@@ -196,7 +196,7 @@
             width: 20%;
             float: left;
             box-sizing: border-box;
-            background: #409eff;
+            background: #6ecadc;
 
             .inner-text {
                 width: 100%;
