@@ -1,6 +1,6 @@
 <template>
     <el-frameset :rows='"10%, *"' class='home-page'>
-        <el-frame class='above-info' @click.native='closeExpand'>
+        <el-frame class='above-info'>
             <div class='left-title'>
                   <span class='title-image'>
                      <img src='../../assets/notebook.png'/>
@@ -14,19 +14,19 @@
                 </el-tabs>
             </div>
             <div class='middle-title-2'>
-                <el-input ref='elInput' suffix-icon='el-icon-search' v-model='search' placeholder='请输入搜索内容'></el-input>
+                <el-input ref='elInput' suffix-icon='el-icon-search' v-model='search' placeholder='请输入搜索内容'
+                          @keyup.enter.native="searchArticle"></el-input>
             </div>
             <div class='right-title'>
-                <div class='article-button'>
-                    <el-button type="primary" @click.native='writeArticle'>写文章</el-button>
-                </div>
-                <div class='config-info' @click.stop='multipleChoice'>
-                    <i class='el-icon-caret-bottom'></i>
-                </div>
+                <el-button type="primary" @click.native='writeArticle'>写文章</el-button>
             </div>
-            <div class='link-popover'>
-                <div><span>登陆配置</span></div>
-                <div><span>管理配置</span></div>
+            <div class='right-title-2'>
+                <el-popover placement='bottom' trigger='click' :visible-arrow='false' popper-class='home-page-popover'>
+                    <div><span>个人信息</span></div>
+                    <div><span>登陆配置</span></div>
+                    <div><span>管理配置</span></div>
+                    <el-avatar :size="55" src="" slot='reference'></el-avatar>
+                </el-popover>
             </div>
         </el-frame>
         <el-frame>
@@ -63,7 +63,6 @@
                 doc.addEventListener('click', scope.searchArticle, true);
             });
             this.handleClick();
-            document.getElementsByClassName('link-popover')[0].style.display = 'none';
         },
         methods: {
             writeArticle () {
@@ -82,13 +81,6 @@
                     scope.$router.push({path: '/home-page/growth'});
                 } else {
                     // ...
-                }
-            },
-            multipleChoice () {
-                if (document.getElementsByClassName('link-popover')[0].style.display === 'none') {
-                    document.getElementsByClassName('link-popover')[0].style.display = 'unset';
-                } else {
-                    document.getElementsByClassName('link-popover')[0].style.display = 'none';
                 }
             },
             searchArticle () {
@@ -116,9 +108,6 @@
                 } else {
                     scope.$message.warning('请输入搜索内容');
                 }
-            },
-            closeExpand () {
-                document.getElementsByClassName('link-popover')[0].style.display = 'none';
             }
         }
     };
@@ -166,7 +155,7 @@
             }
 
             .middle-title-1 {
-                width: 35%;
+                width: 32%;
 
                 .el-tabs__header {
                     margin: 0 0 0;
@@ -199,60 +188,43 @@
             }
 
             .right-title {
-                width: 10%;
+                width: 6%;
 
-                display: flex;
-                justify-content: flex-start;
-
-                .article-button {
+                .el-button {
+                    width: 100%;
                     height: 100%;
-                    width: 60%;
-
-                    .el-button {
-                        height: 100%;
-                        width: 100%;
-                    }
                 }
 
-                .config-info {
-                    width: 10%;
-                    margin-left: .02rem;
-                    border-radius: .1rem;
-                    background-color: #409EFF;
-
-                    :hover {
-                        cursor: pointer;
-                        background-color: rgba(255, 255, 255, 0.31);
-                    }
-
-                    .el-icon-caret-bottom {
-                        width: 100%;
-                        height: 100%;
-                        color: white;
-                        line-height: 3;
-                        font-size: 10px;
-                    }
-                }
             }
 
-            .link-popover {
-                width: 7%;
-                z-index: 2999;
-                background: white;
-                right: 2.85rem;
-                top: 3.45rem;
-                position: absolute;
+            .right-title-2 {
+                width: 10%;
 
-                div {
-                    span {
-                        font-size: 15px;
-                        cursor: pointer;
-                    }
-
-                    :hover {
-                        color: #409EFF;
-                    }
+                .el-avatar {
+                    cursor: pointer;
                 }
+            }
+        }
+    }
+
+    .home-page-popover {
+        min-width: unset;
+        width: 4rem;
+        padding: 0.6rem;
+        font-size: 0.7rem;
+        margin-top: 5px !important;
+        left: 88.75rem !important;
+
+        div {
+            text-align: center;
+
+            span {
+                font-size: 15px;
+                cursor: pointer;
+            }
+
+            :hover {
+                color: #409EFF;
             }
         }
     }

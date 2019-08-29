@@ -44,22 +44,25 @@
             </div>
         </side-menu-panel>
         <div @mousedown="sideBar.showing = false" class='page-right statistic-layout'>
-            <div class='content-top'>
-                <div class='content-left'>
-                    <e-charts :option='option'></e-charts>
+            <div style='width: 100%;height: 100%' v-if='JSON.stringify(result) !== "{}"'>
+                <div class='content-top'>
+                    <div class='content-left'>
+                        <e-charts :option='option.first'></e-charts>
+                    </div>
+                    <div class='content-right'>
+                        <e-charts :option='option.second'></e-charts>
+                    </div>
                 </div>
-                <div class='content-right'>
-                    <e-charts></e-charts>
+                <div class='content-bottom'>
+                    <div class='content-left'>
+                        <e-charts :option='option.third'></e-charts>
+                    </div>
+                    <div class='content-right'>
+                        <e-charts :option='option.fourth'></e-charts>
+                    </div>
                 </div>
             </div>
-            <div class='content-bottom'>
-                <div class='content-left'>
-                    <e-charts></e-charts>
-                </div>
-                <div class='content-right'>
-                    <e-charts></e-charts>
-                </div>
-            </div>
+            <empty-view v-if='JSON.stringify(result) === "{}"'></empty-view>
         </div>
         <tool-loading :loading='loading'></tool-loading>
     </div>
@@ -71,10 +74,11 @@
     import {getHadoop} from '@/service/request';
     import ToolLoading from '@/components/util/ToolLoading';
     import ECharts from '@/components/public/ECharts';
+    import EmptyView from '@/components/util/EmptyView';
 
     export default {
         name: 'Statistics',
-        components: {ECharts, ToolLoading, TabPanel, SideMenuPanel},
+        components: {EmptyView, ECharts, ToolLoading, TabPanel, SideMenuPanel},
         data () {
             return {
                 sideBar: {
@@ -95,17 +99,69 @@
                     ]
                 },
                 option: {
-                    first: {}
+                    first: {},
+                    second: {},
+                    third: {},
+                    fourth: {}
                 },
-                charData: {
+                chartData: {
                     first: {
                         legend: [],
                         data: [],
                         legendSelected: {}
+                    },
+                    second: {
+                        xAxisData: [],
+                        seriesData: []
+                    },
+                    third: {},
+                    fourth: {
+                        xAxisData: [],
+                        seriesData: []
                     }
                 },
+                result: {},
                 imgSrc: require('../../../../static/statistic.svg')
             };
+        },
+        watch: {
+            result: {
+                handler (newVal, oldVal) {
+                    if (Object.keys(newVal).length !== 0) {
+                        let scope = this;
+                        let keyValues = newVal.map(item => {
+                            let obj = {
+                                name: item.xaxis,
+                                value: item.yaxis
+                            };
+                            return obj;
+                        });
+                        let keys = newVal.map(item => item.xaxis);
+                        let values = newVal.map(item => item.yaxis);
+
+                        scope.chartData.first.data = keyValues;
+                        scope.chartData.first.legend = keys;
+                        scope.option.first = scope.getFirstOption();
+
+                        scope.chartData.second.xAxisData = keys;
+                        scope.chartData.second.seriesData = values;
+                        scope.option.second = scope.getSecondOption();
+
+                        scope.chartData.third.xAxisData = keys;
+                        scope.chartData.third.seriesData = values;
+                        scope.option.third = scope.getThirdOption();
+
+                        scope.chartData.fourth.xAxisData = keys;
+                        scope.chartData.fourth.seriesData = values;
+                        scope.option.fourth = scope.getFourth();
+                    }
+                },
+                deep: true
+            }
+        },
+        mounted() {
+            let scope = this;
+            scope.statistic();
         },
         methods: {
             formCheck () {
@@ -127,6 +183,7 @@
             query () {
                 let scope = this;
                 scope.sideBar.showing = false;
+                scope.result = {};
                 scope.loading = true;
                 if (scope.formCheck()) {
                     scope.statistic();
@@ -140,14 +197,7 @@
                 getHadoop(param).then((data) => {
                     if (data.status === 200) {
                         if (data.total > 0) {
-                            scope.chartData.first.data = data.data.map(item => {
-                                let obj = {
-                                    name: item.xAxis,
-                                    value: item.yAxis
-                                };
-                                return obj;
-                            });
-                            scope.char.first.legend = data.data.map(item => item.xAxis);
+                            scope.result = data.data;
                         } else {
                             scope.$message.error('查询为空');
                         }
@@ -161,6 +211,7 @@
             },
             reset () {
                 let scope = this;
+                scope.form.type = 'author';
                 scope.$refs['tabPanel'].chooseType(0);
             },
             rangeTime (arg1, arg2) {
@@ -177,9 +228,142 @@
                     },
                     legend: {
                         orient: 'vertical',
+                        top: 0,
                         left: 'left',
-                        data: scope
+                        data: scope.chartData.first.legend
+                    },
+                    series: {
+                        name: '大数据统计(饼状图)',
+                        type: 'pie',
+                        radius: '55%',
+                        center: ['50%', '60%'],
+                        data: scope.chartData.first.data,
+                        itemStyle: {
+                            emphasis: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
                     }
+                };
+            },
+            getSecondOption () {
+                let scope = this;
+                return {
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'line'
+                        }
+                    },
+                    grid: {
+                        containLabel: true
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            data: scope.chartData.second.xAxisData,
+                            axisTick: {
+                                alignWithLabel: true
+                            },
+                            axisLabel: {
+                                interval: 0,
+                                rotate: 15
+                            }
+                        }
+                    ],
+                    yAxis: {
+                        name: '数量',
+                        interVal: 0,
+                        formatter: (value) => {
+                            return (value.length > 6 ? (value.slice(0, 6) + '...') : value);
+                        }
+                    },
+                    series: [
+                        {
+                            name: '大数据统计',
+                            type: 'bar',
+                            barWidth: '60%',
+                            data: scope.chartData.second.seriesData,
+                            itemStyle: {
+                                //通常情况下：
+                                normal: {
+                                    //每个柱子的颜色即为colorList数组里的每一项，如果柱子数目多于colorList的长度，则柱子颜色循环使用该数组
+                                    color: function (params) {
+                                        let colorList = ['#65d186', '#f67287', '#f29e3c', '#c05bdd', '#7a65f2']; //每根柱子的颜色
+                                        return colorList[params.dataIndex];
+                                    }
+                                },
+                                //鼠标悬停时：
+                                emphasis: {
+                                    shadowBlur: 10,
+                                    shadowOffsetX: 0,
+                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                }
+                            }
+                        }
+                    ],
+                    dataZoom: [{ //添加X轴滚动条
+                        type: 'slider',
+                        show: true,
+                        start: 0,
+                        end: 70,
+                        handleSize: 8
+                    }]
+                };
+            },
+            getThirdOption () {
+                let scope = this;
+                return {
+                    angleAxis: {
+                        type: 'category',
+                        data: scope.chartData.third.xAxisData,
+                        z: 10
+                    },
+                    radiusAxis: {},
+                    polar: {},
+                    series: [{
+                        type: 'bar',
+                        data: scope.chartData.third.seriesData,
+                        coordinateSystem: 'polar',
+                        // name: scope.form.type,
+                        // stack: scope.form.type,
+                        color: ['#49edc4']
+                    }],
+                    legend: {
+                        show: true,
+                        data: [scope.form.type]
+                    }
+                };
+            },
+            getFourth () {
+                let scope = this;
+                return {
+                    xAxis: {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: scope.chartData.fourth.xAxisData
+                    },
+                    yAxis: {
+                        name: '数量',
+                        type: 'value'
+                    },
+                    series: [{
+                        data: scope.chartData.fourth.seriesData,
+                        type: 'line',
+                        color: ['#58afed'], //折线颜色
+                        areaStyle: {
+                            color: '#3bcec6' //折线下方色块颜色
+                        }
+                    }],
+                    dataZoom: [{ //添加X轴滚动条
+                        type: 'slider',
+                        show: true,
+                        start: 0,
+                        end: 70,
+                        handleSize: 8
+                    }]
                 };
             }
         }

@@ -66,8 +66,9 @@
                 scope.chart.on('legendselectchanged', function (param) {
                     scope.$emit('legendselectchanged', param);
                 });
+                // 监听某个div的变化，然后执行相应的事件
                 let erd = elementResizeDetectorMaker();
-                erd.listenTo(this.$refs['chartRef'], () => {
+                erd.listenTo(this.$refs['ECharts'], () => {
                     if (scope.chart) {
                         scope.chart.resize();
                     }

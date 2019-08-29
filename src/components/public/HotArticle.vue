@@ -64,7 +64,7 @@
         height: 50%;
         position: fixed;
         right: 16rem;
-        top: 8rem;
+        top: 9rem;
         background: white;
 
         .hot-title {

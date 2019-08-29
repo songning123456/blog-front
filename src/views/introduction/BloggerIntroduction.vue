@@ -196,7 +196,7 @@
             width: 20%;
             float: left;
             box-sizing: border-box;
-            background: #6ecadc;
+            background: #409eff;
 
             .inner-text {
                 width: 100%;

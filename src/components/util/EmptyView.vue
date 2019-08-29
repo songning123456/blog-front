@@ -1,6 +1,6 @@
 <template>
     <div class='empty-view'>
-        <img src='../../assets/empty.png'/>
+        <img src='../../assets/empty-data.png'/>
     </div>
 </template>
 
@@ -14,11 +14,10 @@
     .empty-view {
         width: 100%;
         height: 100%;
-        background: white;
-
-        img {
-            transform: scale(.5);
-        }
+        background-color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
 </style>
