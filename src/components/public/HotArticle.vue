@@ -1,7 +1,7 @@
 <template>
     <div class='hot-article'>
         <template v-if='result.length'>
-            <div class='hot-title'><span>热门文章</span></div>
+            <div class='hot-title'><span><img :src='hotImage'/></span><span>热门文章</span></div>
             <div class='hot-content' v-for='(item, index) in result' :key='index' @click='getDetail(item.id)'>
                 <div class='first'><span><img :src=getSrc(index) alt=''/></span><span
                     :title='item.title'>{{item.title}}</span></div>
@@ -32,6 +32,11 @@
                 type: Array,
                 default: () => []
             }
+        },
+        data () {
+            return {
+                hotImage: require('../../assets/fire/hot.svg')
+            };
         },
         mounted () {
         },
@@ -66,6 +71,7 @@
         right: 16rem;
         top: 9rem;
         background: white;
+        transition: all .4s ease-in-out;
 
         .hot-title {
             width: 100%;
@@ -74,6 +80,15 @@
             justify-content: center;
             align-items: center;
             font-weight: bold;
+
+            span:nth-child(1) {
+                padding-top: .2rem;
+                padding-right: .5rem;
+
+                img {
+                    transform: scale(1.2);
+                }
+            }
         }
 
         .hot-content {

@@ -1,17 +1,17 @@
 <template>
-    <el-frameset :rows='"6%, *"' class='read-article'>
-        <el-frame class='label-info'>
+    <div class='read-article'>
+        <div class='label-info'>
             <div class='choose-tabs' ref='chooseTabs'>
                 <el-tabs v-model='currentContent' @tab-click='handleClick'>
                     <el-tab-pane v-for='(tab, index) in labelNames' :label='tab' :name='tab'
                                  :key='index'></el-tab-pane>
                 </el-tabs>
             </div>
-        </el-frame>
-        <el-frame>
+        </div>
+        <div class='circle-info'>
             <div style='height: 100%; width: 100%' v-for='(item, index) in labelNames' :key='index'
                  v-if='currentContent === item'>
-                <el-frameset :cols='"30%, *, 30%"' class='content-info'>
+                <el-frameset :cols='"30%, *, 30%"' class='content-info' id='contentInfo'>
                     <el-frame></el-frame>
                     <el-frame>
                         <kind-article :kinds='item' @hotShow='showHot'></kind-article>
@@ -21,8 +21,8 @@
                     </el-frame>
                 </el-frameset>
             </div>
-        </el-frame>
-    </el-frameset>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -66,10 +66,15 @@
             }).catch().finally(() => {
                 scope.handleClick();
             });
+            // 绑定横向滚动
             scope.$nextTick(() => {
                 scope.scrollLeft = scope.$refs['chooseTabs'].children[0].children[0].children[0].children[0];
                 scope.scrollLeft.addEventListener('mousewheel', scope.mouseScroll, true);
             });
+            // 绑定竖向滚动(吸附头部)
+            setTimeout(() => {
+                document.getElementById('contentInfo').addEventListener('mousewheel', scope.handleHeadScroll);
+            }, 1000);
         },
         methods: {
             // 等分类的文章加载完毕 右侧的热门文章才显示
@@ -101,6 +106,7 @@
                 }).finally(() => {
                 });
             },
+            // 横向滚动
             mouseScroll (event) {
                 let scope = this;
                 let e = EventUtil.getEvent(event);
@@ -111,6 +117,19 @@
                 } else {
                     scope.scrollLeft.scrollLeft -= 50;
                 }
+            },
+            // 处理头部消失滚动
+            handleHeadScroll () {
+                let height = document.getElementById('contentInfo').scrollTop;
+                if (height > 100) {
+                    document.getElementsByClassName('above-info')[0].style.marginTop = '-' + document.body.clientHeight / 200 + 'rem';
+                    document.getElementsByClassName('hot-article')[0].style.top = 9 - document.body.clientHeight / 200 + 'rem';
+                }
+                if (height === 0) {
+                    document.getElementsByClassName('above-info')[0].style.marginTop = '0rem';
+                    document.getElementsByClassName('hot-article')[0].style.top = 9 + 'rem';
+                }
+                console.log(height);
             }
         }
     };
@@ -122,6 +141,8 @@
         width: 100%;
 
         .label-info {
+            height: 6%;
+            width: 100%;
             display: flex;
             justify-content: center;
 
@@ -159,17 +180,26 @@
             }
         }
 
-        .content-info {
-            background-color: #f8f8f9;
+        .circle-info {
+            height: 94%;
+            width: 100%;
 
-            &.el-frameset {
-                overflow: auto;
+            .content-info {
+                background-color: #f8f8f9;
+
+                &.el-frameset {
+                    overflow: auto;
+
+                    .el-frame {
+                        overflow: unset;
+                    }
+                }
             }
-        }
 
-        /*隐藏滚动条*/
-        .content-info::-webkit-scrollbar {
-            width: 0;
+            /*隐藏滚动条*/
+            .content-info::-webkit-scrollbar {
+                width: 0;
+            }
         }
     }
 </style>

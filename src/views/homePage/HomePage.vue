@@ -1,6 +1,6 @@
 <template>
-    <el-frameset :rows='"10%, *"' class='home-page'>
-        <el-frame class='above-info'>
+    <div class='home-page'>
+        <div class='above-info'>
             <div class='left-title'>
                   <span class='title-image'>
                      <img src='../../assets/notebook.png'/>
@@ -28,11 +28,11 @@
                     <el-avatar :size="55" src="" slot='reference'></el-avatar>
                 </el-popover>
             </div>
-        </el-frame>
-        <el-frame>
+        </div>
+        <div class='router-view'>
             <router-view v-if='routeAlive'></router-view>
-        </el-frame>
-    </el-frameset>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -127,10 +127,14 @@
 
         .above-info {
 
+            position: relative;
+            height: 10%;
+            width: 100%;
             display: flex;
             align-items: center;
             border-bottom: 1px solid #f0f2f9;
             background: url('../../assets/title-bg.png') no-repeat;
+            transition: all .4s ease-in-out;
 
             .left-title {
                 width: 35%;
@@ -204,6 +208,12 @@
                     cursor: pointer;
                 }
             }
+        }
+
+        .router-view {
+            height: 100%;
+            width: 100%;
+            position: relative;
         }
     }
 

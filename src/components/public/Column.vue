@@ -1,7 +1,7 @@
 <template>
     <div class='column'>
         <div class='title'><span>{{data.title}}</span></div>
-        <div class='summary'><span>{{data.summary}}</span></div>
+        <div class='summary'><span v-html="data.summary"></span></div>
         <div class='info'>
             <span @click.stop='getIntroduction'>{{data.author}}</span>
             <span>{{' | '}}</span>
