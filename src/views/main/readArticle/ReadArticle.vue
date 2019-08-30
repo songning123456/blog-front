@@ -22,6 +22,7 @@
                 </el-frameset>
             </div>
         </div>
+        <float-ball></float-ball>
     </div>
 </template>
 
@@ -33,10 +34,11 @@
     import HotArticle from '../../../components/public/HotArticle';
     import {getHotArticle, getAllLabelName} from '../../../service/request';
     import EventUtil from '../../../utils/EventUtil';
+    import FloatBall from '@/components/util/FloatBall';
 
     export default {
         name: 'ReadArticle',
-        components: {HotArticle, KindArticle, ToolLoading, ElFrame, ElFrameset},
+        components: {FloatBall, HotArticle, KindArticle, ToolLoading, ElFrame, ElFrameset},
         data () {
             return {
                 // 当前分类

@@ -76,29 +76,29 @@
         }
 
         .login-info {
-            width: 24rem;
-            height: 24rem;
+            width: 384px;
+            height: 384px;
             background-color: white;
 
             .outer-image {
-                margin: .8rem;
+                margin: 12.8px;
 
                 img {
-                    max-height: 3rem;
-                    max-width: 3rem;
+                    max-height: 48px;
+                    max-width: 48px;
                 }
             }
 
             .name-image {
                 .el-input {
                     width: 80%;
-                    margin: .4rem;
+                    margin: 6.4px;
 
                     .el-input__icon {
                         img {
-                            max-height: 1rem;
-                            max-width: 1rem;
-                            padding-top: .85rem;
+                            max-height: 16px;
+                            max-width: 16px;
+                            padding-top: 13.1px;
                         }
                     }
                 }
@@ -107,13 +107,13 @@
             .password-image {
                 .el-input {
                     width: 80%;
-                    margin: .4rem;
+                    margin: 6.4px;
 
                     .el-input__icon {
                         img {
-                            max-height: 1rem;
-                            max-width: 1rem;
-                            padding-top: .85rem;
+                            max-height: 16px;
+                            max-width: 16px;
+                            padding-top: 13.1px;
                         }
                     }
                 }
@@ -121,17 +121,17 @@
 
             .password-info {
                 .el-checkbox:last-child {
-                    margin-right: 2rem;
+                    margin-right: 32px;
                 }
 
                 .el-link.el-link--primary {
-                    margin-left: 3rem;
+                    margin-left: 48px;
                 }
 
             }
 
             .login-button {
-                padding-top: 2.5rem;
+                padding-top: 40px;
 
                 .el-button {
                     width: 80%;
@@ -139,7 +139,7 @@
             }
 
             .register {
-                padding-top: 1rem;
+                padding-top: 16px;
             }
         }
     }

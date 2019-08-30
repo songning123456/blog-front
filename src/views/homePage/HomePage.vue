@@ -24,7 +24,8 @@
                 <el-popover placement='bottom' trigger='click' :visible-arrow='false' popper-class='home-page-popover'>
                     <div><span>个人信息</span></div>
                     <div><span>登陆配置</span></div>
-                    <div><span>管理配置</span></div>
+                    <div @click='blogManage'><span>管理配置</span></div>
+                    <div @click='exit'><span><img src="../../assets/exit.svg"/></span><span>退出</span></div>
                     <el-avatar :size="55" src="" slot='reference'></el-avatar>
                 </el-popover>
             </div>
@@ -69,6 +70,14 @@
             writeArticle () {
                 let scope = this;
                 scope.$router.push({path: '/edit'});
+            },
+            exit () {
+                let scope = this;
+                scope.$router.push({path: '/'});
+            },
+            blogManage () {
+                let scope = this;
+                scope.$router.push({path: '/blogConfig'});
             },
             handleClick () {
                 let scope = this;
@@ -226,14 +235,15 @@
 
     .home-page-popover {
         min-width: unset;
-        width: 4rem;
-        padding: 0.6rem;
-        font-size: 0.7rem;
+        width: 80px;
+        padding: 12px;
+        font-size: 14px;
         margin-top: 5px !important;
         left: 88.75rem !important;
 
         div {
             text-align: center;
+            padding: 2px 0;
 
             span {
                 font-size: 15px;
