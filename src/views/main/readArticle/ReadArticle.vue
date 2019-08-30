@@ -137,13 +137,14 @@
             },
             // 处理头部消失滚动
             handleHeadScroll () {
+                let scope = this;
                 let height = document.getElementById('contentInfo').scrollTop;
                 if (height > 100) {
                     document.getElementsByClassName('above-info')[0].style.marginTop = '-' + document.body.clientHeight / 200 + 'rem';
                     document.getElementsByClassName('hot-article')[0].style.top = 9 - document.body.clientHeight / 200 + 'rem';
-                    this.resolveHidden = true;
+                    scope.resolveHidden = true;
                 }
-                if (height === 0 && this.resolveHidden) {
+                if (height === 0 && scope.resolveHidden) {
                     document.getElementsByClassName('above-info')[0].style.marginTop = '0rem';
                     document.getElementsByClassName('hot-article')[0].style.top = 9 + 'rem';
                 }

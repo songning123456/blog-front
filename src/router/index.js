@@ -84,7 +84,7 @@ export default new Router({
                 title: '作者简介'
             }
         }, {
-            path: '/blogConfig',
+            path: '/blog-config',
             name: 'blogConfig',
             component: () => import('../views/config/BlogConfig'),
             meta: {

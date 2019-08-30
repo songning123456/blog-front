@@ -45,8 +45,8 @@
         data () {
             return {
                 user: {
-                    name: '',
-                    password: ''
+                    name: 'songning',
+                    password: '123456'
                 },
                 remember: false
             };
@@ -54,7 +54,16 @@
         methods: {
             switchRouter () {
                 let scope = this;
-                scope.$router.push({path: '/home-page'});
+                scope.$router.push(
+                    {
+                        path: '/home-page',
+                        name: 'homePage',
+                        params: {
+                            name: scope.user.name,
+                            password: scope.user.password
+                        }
+                    }
+                );
             }
         }
     };

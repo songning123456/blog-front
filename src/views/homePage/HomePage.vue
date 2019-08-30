@@ -21,12 +21,13 @@
                 <el-button type="primary" @click.native='writeArticle'>写文章</el-button>
             </div>
             <div class='right-title-2'>
-                <el-popover placement='bottom' trigger='click' :visible-arrow='false' popper-class='home-page-popover'>
+                <el-popover placement='bottom' v-model='infoShow' trigger='click' :visible-arrow='false'
+                            popper-class='home-page-popover'>
                     <div><span>个人信息</span></div>
                     <div><span>登陆配置</span></div>
                     <div @click='blogManage'><span>管理配置</span></div>
                     <div @click='exit'><span><img src="../../assets/exit.svg"/></span><span>退出</span></div>
-                    <el-avatar :size="55" src="" slot='reference'></el-avatar>
+                    <el-avatar :size="55" :src="owner.headPortrait || ''" slot='reference'></el-avatar>
                 </el-popover>
             </div>
         </div>
@@ -40,6 +41,7 @@
     import ReadArticle from '@/views/main/readArticle/ReadArticle';
     import ElFrameset from '@/components/layout/el-frameset';
     import ElFrame from '@/components/layout/el-frame';
+    import {getBloggerInfo} from '../../service/request';
 
     export default {
         name: 'HomePage',
@@ -52,6 +54,8 @@
                     {label: '历史', name: 'third'},
                     {label: '成长', name: 'fourth'}
                 ],
+                infoShow: false,
+                owner: {},
                 routeAlive: true,
                 search: '',
                 currentPage: 'first'
@@ -59,12 +63,26 @@
         },
         mounted () {
             let scope = this;
+            // 设置样式
             document.getElementsByClassName('above-info')[0].style.marginTop = '0rem';
+            // 绑定搜索点击事件
             scope.$nextTick(() => {
                 let doc = scope.$refs['elInput'].$vnode.elm.children[1];
                 doc.addEventListener('click', scope.searchArticle, true);
             });
+            if (Object.keys(scope.$route.params).length !== 0) {
+                let {name, password} = scope.$route.params;
+                localStorage.setItem('username', name);
+                localStorage.setItem('password', password);
+            }
+            scope.getOwnerInfo(localStorage.getItem('username'), localStorage.getItem('password'));
+            // 默认点击第一个标签
             this.handleClick();
+        },
+        watch: {
+            infoShow (newVal, oldVal) {
+                console.error(newVal);
+            }
         },
         methods: {
             writeArticle () {
@@ -77,7 +95,24 @@
             },
             blogManage () {
                 let scope = this;
-                scope.$router.push({path: '/blogConfig'});
+                scope.$router.push({path: '/blog-config'});
+            },
+            getOwnerInfo (name, password) {
+                let scope = this;
+                let form = {
+                    userName: name,
+                    password: password
+                };
+                let param = {
+                    condition: form
+                };
+                getBloggerInfo(param).then((data) => {
+                    if (data.status === 200) {
+                        if (data.total > 0) {
+                            scope.owner = data.data[0];
+                        }
+                    }
+                }).catch().finally();
             },
             handleClick () {
                 let scope = this;
