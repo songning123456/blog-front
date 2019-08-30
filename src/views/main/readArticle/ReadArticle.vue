@@ -41,12 +41,14 @@
             return {
                 // 当前分类
                 currentContent: '',
+                oldContent: '',
                 // 各分类热门文章结果集
                 hotResult: [],
                 // 判断热门文章是否显示
                 hotShow: false,
                 labelNames: [],
-                scrollLeft: ''
+                scrollLeft: '',
+                resolveHidden: true
             };
         },
         mounted () {
@@ -71,10 +73,15 @@
                 scope.scrollLeft = scope.$refs['chooseTabs'].children[0].children[0].children[0].children[0];
                 scope.scrollLeft.addEventListener('mousewheel', scope.mouseScroll, true);
             });
-            // 绑定竖向滚动(吸附头部)
-            setTimeout(() => {
-                document.getElementById('contentInfo').addEventListener('mousewheel', scope.handleHeadScroll);
-            }, 1000);
+        },
+        watch: {
+            currentContent (newVal, oldVal) {
+                let scope = this;
+                // 绑定竖向滚动(吸附头部)
+                setTimeout(() => {
+                    document.getElementById('contentInfo').addEventListener('mousewheel', scope.handleHeadScroll);
+                }, 100);
+            }
         },
         methods: {
             // 等分类的文章加载完毕 右侧的热门文章才显示
@@ -85,6 +92,10 @@
             handleClick (tab, event) {
                 let scope = this;
                 let form;
+                // 判断是否点击同一个
+                if (scope.oldContent && scope.oldContent === scope.currentContent) {
+                    return;
+                }
                 if (tab) {
                     scope.hotShow = false;
                     form = {
@@ -96,6 +107,10 @@
                         kinds: scope.labelNames[0]
                     };
                 }
+                if (document.getElementsByClassName('above-info')[0].style.marginTop !== '0rem') {
+                    scope.resolveHidden = false;
+                }
+                scope.oldContent = scope.currentContent;
                 let param = {
                     condition: form,
                     recordStartNo: 0,
@@ -124,12 +139,12 @@
                 if (height > 100) {
                     document.getElementsByClassName('above-info')[0].style.marginTop = '-' + document.body.clientHeight / 200 + 'rem';
                     document.getElementsByClassName('hot-article')[0].style.top = 9 - document.body.clientHeight / 200 + 'rem';
+                    this.resolveHidden = true;
                 }
-                if (height === 0) {
+                if (height === 0 && this.resolveHidden) {
                     document.getElementsByClassName('above-info')[0].style.marginTop = '0rem';
                     document.getElementsByClassName('hot-article')[0].style.top = 9 + 'rem';
                 }
-                console.log(height);
             }
         }
     };

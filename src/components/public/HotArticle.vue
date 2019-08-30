@@ -39,6 +39,11 @@
             };
         },
         mounted () {
+            if (document.getElementsByClassName('above-info')[0].style.marginTop !== '0rem') {
+                document.getElementsByClassName('hot-article')[0].style.top = 9 - document.body.clientHeight / 200 + 'rem';
+            } else {
+                document.getElementsByClassName('hot-article')[0].style.top = '9rem';
+            }
         },
         methods: {
             getUpdateTime (index) {
@@ -69,7 +74,7 @@
         height: 50%;
         position: fixed;
         right: 16rem;
-        top: 9rem;
+        /*top: 9rem;*/
         background: white;
         transition: all .4s ease-in-out;
 

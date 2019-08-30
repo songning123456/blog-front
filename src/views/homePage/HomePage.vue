@@ -29,7 +29,7 @@
                 </el-popover>
             </div>
         </div>
-        <div class='router-view'>
+        <div :class='currentPage === "first" ? "router-view-100" : "router-view-90"'>
             <router-view v-if='routeAlive'></router-view>
         </div>
     </div>
@@ -58,6 +58,7 @@
         },
         mounted () {
             let scope = this;
+            document.getElementsByClassName('above-info')[0].style.marginTop = '0rem';
             scope.$nextTick(() => {
                 let doc = scope.$refs['elInput'].$vnode.elm.children[1];
                 doc.addEventListener('click', scope.searchArticle, true);
@@ -210,8 +211,14 @@
             }
         }
 
-        .router-view {
+        .router-view-100 {
             height: 100%;
+            width: 100%;
+            position: relative;
+        }
+
+        .router-view-90 {
+            height: 90%;
             width: 100%;
             position: relative;
         }
