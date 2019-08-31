@@ -8,6 +8,9 @@ import 'element-ui/lib/theme-chalk/index.css';
 import mavonEditor from 'mavon-editor';
 import 'mavon-editor/dist/css/index.css';
 import infiniteScroll from 'vue-infinite-scroll';
+import Vuex from 'vuex';
+import store from './store/store';
+
 import Dictionary from './components/common/CommonDictionary';
 
 Vue.config.productionTip = false;
@@ -16,6 +19,7 @@ Vue.use(ElementUI);
 Vue.use(mavonEditor);
 Vue.use(infiniteScroll);
 Vue.use(Dictionary);
+Vue.use(Vuex);
 router.beforeEach((to, from, next) => {
     if (to.meta.title) {
         document.title = to.meta.title;
@@ -26,6 +30,7 @@ router.beforeEach((to, from, next) => {
 new Vue({
     el: '#app',
     router,
+    store,
     components: {App},
     template: '<App/>'
 });

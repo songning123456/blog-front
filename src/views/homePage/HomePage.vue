@@ -46,7 +46,7 @@
     export default {
         name: 'HomePage',
         components: {ElFrame, ElFrameset, ReadArticle},
-        data () {
+        data() {
             return {
                 tabs: [
                     {label: '阅读', name: 'first'},
@@ -54,14 +54,13 @@
                     {label: '历史', name: 'third'},
                     {label: '成长', name: 'fourth'}
                 ],
-                infoShow: false,
                 owner: {},
                 routeAlive: true,
                 search: '',
                 currentPage: 'first'
             };
         },
-        mounted () {
+        mounted() {
             let scope = this;
             // 设置样式
             document.getElementsByClassName('above-info')[0].style.marginTop = '0rem';
@@ -79,25 +78,32 @@
             // 默认点击第一个标签
             this.handleClick();
         },
-        watch: {
-            infoShow (newVal, oldVal) {
-                console.error(newVal);
+        computed: {
+            infoShow: {
+                get() {
+                    let scope = this;
+                    return scope.$store.state.showInfo;
+                },
+                set(newVal) {
+                    let scope = this;
+                    scope.$store.commit('setShowInfo', newVal);
+                }
             }
         },
         methods: {
-            writeArticle () {
+            writeArticle() {
                 let scope = this;
                 scope.$router.push({path: '/edit'});
             },
-            exit () {
+            exit() {
                 let scope = this;
                 scope.$router.push({path: '/'});
             },
-            blogManage () {
+            blogManage() {
                 let scope = this;
                 scope.$router.push({path: '/blog-config'});
             },
-            getOwnerInfo (name, password) {
+            getOwnerInfo(name, password) {
                 let scope = this;
                 let form = {
                     userName: name,
@@ -114,7 +120,7 @@
                     }
                 }).catch().finally();
             },
-            handleClick () {
+            handleClick() {
                 let scope = this;
                 if (scope.currentPage === 'first') {
                     scope.$router.push({path: '/home-page/read'});
@@ -128,7 +134,7 @@
                     // ...
                 }
             },
-            searchArticle () {
+            searchArticle() {
                 let scope = this;
                 scope.currentPage = '';
                 scope.jumpTo();
@@ -136,7 +142,7 @@
             /**
              * 跳转路由
              */
-            jumpTo () {
+            jumpTo() {
                 let scope = this;
                 if (scope.search) {
                     scope.routeAlive = false;

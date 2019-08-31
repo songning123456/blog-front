@@ -39,7 +39,7 @@
     export default {
         name: 'ReadArticle',
         components: {FloatBall, HotArticle, KindArticle, ToolLoading, ElFrame, ElFrameset},
-        data () {
+        data() {
             return {
                 // 当前分类
                 currentContent: '',
@@ -53,7 +53,7 @@
                 resolveHidden: true
             };
         },
-        mounted () {
+        mounted() {
             let scope = this;
             getAllLabelName().then((data) => {
                 if (data.status === 200) {
@@ -77,7 +77,7 @@
             });
         },
         watch: {
-            currentContent (newVal, oldVal) {
+            currentContent(newVal, oldVal) {
                 let scope = this;
                 // 绑定竖向滚动(吸附头部)
                 setTimeout(() => {
@@ -87,11 +87,11 @@
         },
         methods: {
             // 等分类的文章加载完毕 右侧的热门文章才显示
-            showHot () {
+            showHot() {
                 let scope = this;
                 scope.hotShow = true;
             },
-            handleClick (tab, event) {
+            handleClick(tab, event) {
                 let scope = this;
                 let form;
                 // 判断是否点击同一个
@@ -124,7 +124,7 @@
                 });
             },
             // 横向滚动
-            mouseScroll (event) {
+            mouseScroll(event) {
                 let scope = this;
                 let e = EventUtil.getEvent(event);
                 e.preventDefault();
@@ -136,9 +136,12 @@
                 }
             },
             // 处理头部消失滚动
-            handleHeadScroll () {
+            handleHeadScroll() {
                 let scope = this;
                 let height = document.getElementById('contentInfo').scrollTop;
+                if (scope.$store.state.showInfo) {
+                    scope.$store.commit('setShowInfo', false);
+                }
                 if (height > 100) {
                     document.getElementsByClassName('above-info')[0].style.marginTop = '-' + document.body.clientHeight / 200 + 'rem';
                     document.getElementsByClassName('hot-article')[0].style.top = 9 - document.body.clientHeight / 200 + 'rem';
