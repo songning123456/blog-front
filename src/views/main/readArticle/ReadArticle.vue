@@ -1,11 +1,9 @@
 <template>
     <div class='read-article'>
         <div class='label-info'>
-            <div class='choose-tabs' ref='chooseTabs'>
-                <el-tabs v-model='currentContent' @tab-click='handleClick'>
-                    <el-tab-pane v-for='(tab, index) in labelNames' :label='tab' :name='tab'
-                                 :key='index'></el-tab-pane>
-                </el-tabs>
+            <div class='choose-tabs'>
+                <label-panel :tabs="labelNames" ref='labelPanel' @current='chooseCurrent'
+                             @iconClick='iconClick'></label-panel>
             </div>
         </div>
         <div class='circle-info'>
@@ -34,16 +32,16 @@
     import HotArticle from '../../../components/public/HotArticle';
     import {getHotArticle, getAllLabelName} from '../../../service/request';
     import EventUtil from '../../../utils/EventUtil';
-    import FloatBall from '@/components/util/FloatBall';
+    import FloatBall from '../../../components/util/FloatBall';
+    import LabelPanel from '../../../components/public/LabelPanel';
 
     export default {
         name: 'ReadArticle',
-        components: {FloatBall, HotArticle, KindArticle, ToolLoading, ElFrame, ElFrameset},
+        components: {LabelPanel, FloatBall, HotArticle, KindArticle, ToolLoading, ElFrame, ElFrameset},
         data() {
             return {
                 // 当前分类
                 currentContent: '',
-                oldContent: '',
                 // 各分类热门文章结果集
                 hotResult: [],
                 // 判断热门文章是否显示
@@ -68,11 +66,11 @@
                     scope.$message.error(data.message ? data.message : '查询出错');
                 }
             }).catch().finally(() => {
-                scope.handleClick();
+                scope.$refs['labelPanel'].chooseLabel(0);
             });
             // 绑定横向滚动
             scope.$nextTick(() => {
-                scope.scrollLeft = scope.$refs['chooseTabs'].children[0].children[0].children[0].children[0];
+                scope.scrollLeft = scope.$refs['labelPanel'].$el.children[1];
                 scope.scrollLeft.addEventListener('mousewheel', scope.mouseScroll, true);
             });
         },
@@ -91,28 +89,24 @@
                 let scope = this;
                 scope.hotShow = true;
             },
-            handleClick(tab, event) {
+            iconClick(arg0) {
                 let scope = this;
-                let form;
-                // 判断是否点击同一个
-                if (scope.oldContent && scope.oldContent === scope.currentContent) {
-                    return;
-                }
-                if (tab) {
-                    scope.hotShow = false;
-                    form = {
-                        kinds: tab.label
-                    };
+                if (arg0 === 'before') {
+                    scope.scrollLeft.scrollLeft -= 50;
                 } else {
-                    scope.currentContent = scope.labelNames[0];
-                    form = {
-                        kinds: scope.labelNames[0]
-                    };
+                    scope.scrollLeft.scrollLeft += 50;
                 }
+            },
+            chooseCurrent(arg0) {
+                let scope = this;
+                scope.currentContent = arg0;
+                let form;
+                form = {
+                    kinds: arg0
+                };
                 if (document.getElementsByClassName('above-info')[0].style.marginTop !== '0rem') {
                     scope.resolveHidden = false;
                 }
-                scope.oldContent = scope.currentContent;
                 let param = {
                     condition: form,
                     recordStartNo: 0,
