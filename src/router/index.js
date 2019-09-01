@@ -90,6 +90,13 @@ export default new Router({
             meta: {
                 title: '管理配置'
             }
+        }, {
+            path: '/world-clock',
+            name: 'worldClock',
+            component: () => import('../views/worldClock/WordClock'),
+            meta: {
+                title: '时钟'
+            }
         }
     ]
 });

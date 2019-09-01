@@ -20,7 +20,7 @@
                 </el-frameset>
             </div>
         </div>
-        <float-ball></float-ball>
+        <float-ball @itemClick='itemClick'></float-ball>
     </div>
 </template>
 
@@ -116,6 +116,20 @@
                     scope.hotResult = data.data;
                 }).finally(() => {
                 });
+            },
+            itemClick(type) {
+                let scope = this;
+                if (type === 'first') {
+
+                } else if (type === 'second') {
+                    scope.$router.push({path: '/world-clock'});
+                } else if (type === 'third') {
+
+                } else if (type === 'fourth') {
+
+                } else {
+
+                }
             },
             // 横向滚动
             mouseScroll(event) {

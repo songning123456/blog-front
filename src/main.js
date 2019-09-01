@@ -10,6 +10,8 @@ import 'mavon-editor/dist/css/index.css';
 import infiniteScroll from 'vue-infinite-scroll';
 import Vuex from 'vuex';
 import store from './store/store';
+import VueI18n from 'vue-i18n';
+import i18n from './lang';
 
 import Dictionary from './components/common/CommonDictionary';
 
@@ -20,6 +22,9 @@ Vue.use(mavonEditor);
 Vue.use(infiniteScroll);
 Vue.use(Dictionary);
 Vue.use(Vuex);
+Vue.use(VueI18n, {
+    i18n: (key, value) => i18n.t(key, value)
+});
 router.beforeEach((to, from, next) => {
     if (to.meta.title) {
         document.title = to.meta.title;
@@ -31,6 +36,7 @@ new Vue({
     el: '#app',
     router,
     store,
+    i18n,
     components: {App},
     template: '<App/>'
 });
