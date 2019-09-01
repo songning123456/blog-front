@@ -1,6 +1,6 @@
 <template>
     <div class='week'>
-        <ul :style='{transform: "rotate(${rotates * -51.428}deg)"}'>
+        <ul :style='{transform: `rotate(${rotates * -51.428}deg)`}'>
             <li v-for='(item, index) in weekList' :key=index
                 :class='{hover: index === rotates - 1 || index === rotates + 6}'>
                 {{item}}

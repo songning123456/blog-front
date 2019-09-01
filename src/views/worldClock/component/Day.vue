@@ -1,11 +1,7 @@
 <template>
     <div class='day'>
-        <ul :style="{ transform: 'rotate(${rotates * -11.613}deg)' }">
-            <li
-                v-for="(item, index) in dayList"
-                :key="index"
-                :class="{ hover: index === rotates - 1 }"
-            >
+        <ul :style="{ transform: `rotate(${rotates * -11.613}deg)` }">
+            <li v-for="(item, index) in dayList" :key="index" :class="{ hover: index === rotates - 1 }">
                 {{ item }}
             </li>
         </ul>

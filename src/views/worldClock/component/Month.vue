@@ -1,11 +1,7 @@
 <template>
     <div class='month'>
-        <ul :style="{ transform: 'rotate(${rotates * -30}deg)' }">
-            <li
-                v-for="(item, index) in monthList"
-                :key="index"
-                :class="{ hover: index === rotates - 1 }"
-            >
+        <ul :style="{ transform: `rotate(${rotates * -30}deg)` }">
+            <li v-for="(item, index) in monthList" :key="index" :class="{ hover: index === rotates - 1 }">
                 {{ item }}
             </li>
         </ul>
