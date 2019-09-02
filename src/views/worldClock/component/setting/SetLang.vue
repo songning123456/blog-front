@@ -1,12 +1,11 @@
 <template>
     <div class='set-lang'>
-        <div class="set-title">{{ $t("settingData.lang.title") }}</div>
+        <div class="set-title">{{ $t('settingData.lang.title') }}</div>
         <div class="set-list">
             <label v-for="(item, index) in langList" :key="index"
             ><input type="radio" :value="item.value" v-model="lang"/>
                 {{item.name}}</label>
         </div>
-
     </div>
 </template>
 
@@ -15,16 +14,16 @@
         name: 'SetLang',
         computed: {
             lang: {
-                get() {
+                get () {
                     return this.$store.state.language;
                 },
-                set(lang) {
+                set (lang) {
                     this.$i18n.locale = lang;
                     this.$store.dispatch('setLanguage', lang);
                 }
             },
             langList: {
-                get() {
+                get () {
                     return this.$t('settingData.lang.list');
                 }
             }

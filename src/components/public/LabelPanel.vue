@@ -22,14 +22,14 @@
                 }
             }
         },
-        data() {
+        data () {
             return {
                 oldTab: '',
                 currentIndex: -1
             };
         },
         methods: {
-            chooseLabel(index) {
+            chooseLabel (index) {
                 let scope = this;
                 scope.currentIndex = index;
                 // 确定只能点击一次
@@ -39,10 +39,10 @@
                 scope.oldTab = scope.tabs[index];
                 scope.$emit('current', scope.tabs[index]);
             },
-            before() {
+            before () {
                 this.$emit('iconClick', 'before');
             },
-            after() {
+            after () {
                 this.$emit('iconClick', 'after');
             }
         }
@@ -66,10 +66,12 @@
         .label-center {
             float: left;
             width: 90%;
-            padding-top: .4rem;
+            padding-top: .1rem;
             white-space: nowrap;
             overflow: auto;
+
             .label-content {
+                font-size: 0.9rem;
                 width: 5rem;
                 margin: 0 .5rem;
                 text-align: center;
@@ -83,6 +85,7 @@
                 &.content-color {
                     color: #409EFF;
                 }
+
                 &:hover {
                     color: #409EFF;
                 }

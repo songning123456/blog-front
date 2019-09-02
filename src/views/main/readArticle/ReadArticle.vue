@@ -38,7 +38,7 @@
     export default {
         name: 'ReadArticle',
         components: {LabelPanel, FloatBall, HotArticle, KindArticle, ToolLoading, ElFrame, ElFrameset},
-        data() {
+        data () {
             return {
                 // 当前分类
                 currentContent: '',
@@ -51,7 +51,7 @@
                 resolveHidden: true
             };
         },
-        mounted() {
+        mounted () {
             let scope = this;
             getAllLabelName().then((data) => {
                 if (data.status === 200) {
@@ -75,7 +75,7 @@
             });
         },
         watch: {
-            currentContent(newVal, oldVal) {
+            currentContent (newVal, oldVal) {
                 let scope = this;
                 // 绑定竖向滚动(吸附头部)
                 setTimeout(() => {
@@ -85,11 +85,11 @@
         },
         methods: {
             // 等分类的文章加载完毕 右侧的热门文章才显示
-            showHot() {
+            showHot () {
                 let scope = this;
                 scope.hotShow = true;
             },
-            iconClick(arg0) {
+            iconClick (arg0) {
                 let scope = this;
                 if (arg0 === 'before') {
                     scope.scrollLeft.scrollLeft -= 50;
@@ -97,7 +97,7 @@
                     scope.scrollLeft.scrollLeft += 50;
                 }
             },
-            chooseCurrent(arg0) {
+            chooseCurrent (arg0) {
                 let scope = this;
                 scope.currentContent = arg0;
                 let form;
@@ -117,7 +117,7 @@
                 }).finally(() => {
                 });
             },
-            itemClick(type) {
+            itemClick (type) {
                 let scope = this;
                 if (type === 'first') {
 
@@ -132,7 +132,7 @@
                 }
             },
             // 横向滚动
-            mouseScroll(event) {
+            mouseScroll (event) {
                 let scope = this;
                 let e = EventUtil.getEvent(event);
                 e.preventDefault();
@@ -144,7 +144,7 @@
                 }
             },
             // 处理头部消失滚动
-            handleHeadScroll() {
+            handleHeadScroll () {
                 let scope = this;
                 let height = document.getElementById('contentInfo').scrollTop;
                 if (scope.$store.state.showInfo) {

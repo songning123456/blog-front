@@ -8,7 +8,7 @@
     export default {
         name: 'Slider',
         props: ['slider'],
-        data() {
+        data () {
             return {
                 length: 50
             };
@@ -23,18 +23,22 @@
         height: 12px;
         border-radius: 12px;
         border: 1px solid #ddd;
+
         input {
             width: 100%;
             margin: 0;
         }
+
         input[type="range"] {
             -webkit-appearance: none;
             width: 100%;
             background: transparent;
         }
+
         input[type="range"]:focus {
             outline: none;
         }
+
         input[type="range"]::-ms-track {
             width: 100%;
             cursor: pointer;
@@ -42,6 +46,7 @@
             border-color: transparent;
             color: transparent;
         }
+
         input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
             border: 1px solid #ddd;

@@ -7,6 +7,7 @@
         <Week :week="week"></Week>
         <Day :day="day"></Day>
         <Month :month="month"></Month>
+        <set-wrap></set-wrap>
     </div>
 </template>
 
@@ -18,11 +19,12 @@
     import Week from './component/Week';
     import Day from './component/Day';
     import Month from './component/Month';
+    import SetWrap from '@/views/worldClock/component/setting/SetWrap';
 
     export default {
         name: 'WordClock',
-        components: {Month, Day, Week, Apm, Hour, Minute, Second},
-        data() {
+        components: {SetWrap, Month, Day, Week, Apm, Hour, Minute, Second},
+        data () {
             return {
                 second: '',
                 minute: '',
@@ -34,7 +36,7 @@
             };
         },
         methods: {
-            start() {
+            start () {
                 let scope = this;
                 setInterval(() => {
                     let date = new Date();
@@ -42,8 +44,8 @@
                     scope.minute = date.getMinutes();
                     scope.hour = date.getHours();
                     scope.week = date.getDay();
-                    scope.day = date.getDay();
-                    scope.month = date.getMonth();
+                    scope.day = date.getDate();
+                    scope.month = date.getMonth() + 1;
                     if (scope.hour > 12) {
                         scope.apm = 2;
                     } else {
@@ -52,8 +54,12 @@
                 }, 1000);
             }
         },
-        created() {
+        created () {
+            document.getElementsByTagName('html')[0].style.overflow = 'hidden';
             this.start();
+        },
+        destroyed () {
+            document.getElementsByTagName('html')[0].style.overflow = 'auto';
         }
     };
 </script>
@@ -62,6 +68,10 @@
     .word-clock {
         width: 100%;
         height: 100%;
+        background-color: black;
+        overflow-x: hidden;
+        overflow-y: hidden;
+
         ul {
             list-style-type: none;
             padding: 0;
@@ -74,6 +84,7 @@
             height: 60px;
             width: 60px;
             transition: 0.1s 0.1s ease-in;
+
             li {
                 position: absolute;
                 height: 60px;
@@ -82,6 +93,7 @@
                 text-align: center;
                 font-size: 14px;
                 line-height: 20px;
+
                 &.hover {
                     text-shadow: rgb(255, 255, 255) 0px 0px 10px,
                     rgb(255, 255, 255) 0px 0px 20px, rgb(255, 0, 222) 0px 0px 30px,

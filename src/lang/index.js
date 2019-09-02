@@ -19,11 +19,12 @@ const messages = {
     }
 };
 
-export function getLanguage() {
+export function getLanguage () {
     const chooseLanguage = Cookies.get('language');
     if (chooseLanguage) {
         return chooseLanguage;
     }
+    // 获取当前浏览器语言
     const language = (
         navigator.language || navigator.browserLanguage
     ).toLowerCase();

@@ -12,6 +12,7 @@ import Vuex from 'vuex';
 import store from './store/store';
 import VueI18n from 'vue-i18n';
 import i18n from './lang';
+import './style/iconfont/iconfont.css';
 
 import Dictionary from './components/common/CommonDictionary';
 

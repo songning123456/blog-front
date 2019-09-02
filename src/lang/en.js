@@ -197,7 +197,7 @@ export default {
         'December'
     ],
     settingData: {
-        title: 'Word Clock',
+        title: 'World Clock',
         lang: {
             title: 'Switch Language',
             list: [
