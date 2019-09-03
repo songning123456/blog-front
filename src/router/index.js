@@ -98,9 +98,9 @@ export default new Router({
                 title: '时钟'
             }
         }, {
-            path: '/b-map',
-            name: 'BMap',
-            component: () => import('../components/public/BMap'),
+            path: '/simple-map',
+            name: 'simpleMap',
+            component: () => import('../views/map/SimpleMap'),
             meta: {
                 title: '地图信息'
             }
