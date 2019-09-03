@@ -124,7 +124,7 @@
                 } else if (type === 'second') {
                     scope.$router.push({path: '/world-clock'});
                 } else if (type === 'third') {
-
+                    scope.$router.push({path: '/b-map'});
                 } else if (type === 'fourth') {
 
                 } else {

@@ -117,11 +117,11 @@
                 }
 
                 .download-all {
-                    background-image: url('../../assets/unknown.svg');
+                    background-image: url('../../assets/map.svg');
                 }
 
                 .download-selected {
-                    background-image: url('../../assets/unknown.svg');
+                    background-image: url('../../assets/music.svg');
                 }
 
                 a {

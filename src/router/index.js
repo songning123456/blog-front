@@ -97,6 +97,14 @@ export default new Router({
             meta: {
                 title: '时钟'
             }
+        }, {
+            path: '/b-map',
+            name: 'BMap',
+            component: () => import('../components/public/BMap'),
+            meta: {
+                title: '地图信息'
+            }
         }
     ]
-});
+})
+;
