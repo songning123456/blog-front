@@ -4,9 +4,7 @@
         <div class="target" v-drag>
             <label class="main-ball el-icon-rank" for="check"></label>
             <div class='inner-content'>
-                123333
-                1231231
-                123123
+                <slot name='popoverInfo'></slot>
             </div>
         </div>
     </div>
