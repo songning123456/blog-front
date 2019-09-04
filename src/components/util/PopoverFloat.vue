@@ -106,9 +106,10 @@
             opacity: 0;
             width: 200px;
             height: 200px;
-            background: blue;
+            background-color: white;
+            border-radius: 12px;
             transform: scale(1) translate(-15px, -210px);
-            transition: opacity 1s linear;
+            transition: opacity .3s linear;
         }
 
         :checked + .target .inner-content {
@@ -165,18 +166,6 @@
                 -webkit-transform: skewX(-0.1953125deg) skewY(-0.1953125deg);
                 transform: skewX(-0.1953125deg) skewY(-0.1953125deg);
             }
-        }
-
-        @keyframes fadenum { /*设置内容由显示变为隐藏*/
-
-            0% {
-                opacity: 1;
-            }
-
-            100% {
-                opacity: 0;
-            }
-
         }
     }
 

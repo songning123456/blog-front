@@ -1,8 +1,29 @@
 <template>
     <div class='simple-map'>
         <tool-loading :loading='loading'></tool-loading>
-<!--        <div id='simpleMap'></div>-->
-        <popover-float></popover-float>
+        <div id='simpleMap'></div>
+        <popover-float>
+            <div slot='popoverInfo' class='map-info'>
+                <el-form :model='city' label-width='50px'>
+                    <el-form-item label='省份'>
+                        <el-input :value='city.province || "暂无"' :readonly='true'></el-input>
+                    </el-form-item>
+                    <el-form-item label='城市'>
+                        <el-input :value='city.name || "暂无"' :readonly='true'></el-input>
+                    </el-form-item>
+                    <el-form-item label='精度'>
+                        <el-input :value='city.longitude || "暂无"' :readonly='true'></el-input>
+                    </el-form-item>
+                    <el-form-item label='维度'>
+                        <el-input :value='city.latitude || "暂无"' :readonly='true'></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <img title='切换样式' class='switch' src='../../assets/switch.svg' @click='switchStyle'/>
+                        <img title='退出' class='exit' src='../../assets/exitMap.svg' @click='exitMap'/>
+                    </el-form-item>
+                </el-form>
+            </div>
+        </popover-float>
     </div>
 </template>
 
@@ -17,7 +38,8 @@
         data () {
             return {
                 city: {
-                    name: '',
+                    province: '', // 省份
+                    name: '', // 市名
                     latitude: '', // 维度
                     longitude: '' // 精度
                 },
@@ -42,6 +64,7 @@
                 scope.loading = true;
                 let promise = new Promise((resolve, reject) => {
                     geolocation.getCurrentPosition((position) => {
+                        scope.city.province = position.address.province;
                         scope.city.name = position.address.city;
                         scope.city.latitude = position.latitude;
                         scope.city.longitude = position.longitude;
@@ -74,6 +97,13 @@
                 map.setCurrentCity(data.name);
                 //地图风格
                 map.setMapStyle({style: 'midnight'});
+            },
+            switchStyle () {
+
+            },
+            exitMap () {
+                let scope = this;
+                scope.$router.push({path: '/home-page/read'});
             }
         }
     };
@@ -89,6 +119,41 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
+        }
+
+        .map-info {
+            width: 100%;
+            height: 100%;
+
+            .el-form {
+                .el-form-item {
+                    margin-bottom: 1px;
+
+                    .el-input {
+                        width: 85%;
+
+                        .el-input__inner {
+                            height: 30px;
+                        }
+                    }
+
+                    img {
+
+                        cursor: pointer;
+
+                        &.switch {
+                            position: relative;
+                            right: 2rem;
+                            transform: scale(1.5);
+                        }
+
+                        &.exit {
+                            position: relative;
+                            transform: scale(1.2);
+                        }
+                    }
+                }
+            }
         }
     }
 
