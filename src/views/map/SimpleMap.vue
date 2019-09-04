@@ -1,21 +1,27 @@
 <template>
     <div class='simple-map'>
-        <div id='simpleMap'></div>
+        <tool-loading :loading='loading'></tool-loading>
+<!--        <div id='simpleMap'></div>-->
+        <popover-float></popover-float>
     </div>
 </template>
 
 <script>
     import BMap from 'BMap';
+    import PopoverFloat from '@/components/util/PopoverFloat';
+    import ToolLoading from '@/components/util/ToolLoading';
 
     export default {
         name: 'SimpleMap',
+        components: {ToolLoading, PopoverFloat},
         data () {
             return {
                 city: {
                     name: '',
                     latitude: '', // 维度
                     longitude: '' // 精度
-                }
+                },
+                loading: false
             };
         },
         mounted () {
@@ -24,6 +30,8 @@
                 scope.initMap(data);
             }).catch((error) => {
                 scope.$message.error({message: error, duration: 1000});
+            }).finally(() => {
+                scope.loading = false;
             });
         },
         methods: {
@@ -31,6 +39,7 @@
                 // 定义获取城市方法
                 const geolocation = new BMap.Geolocation();
                 let scope = this;
+                scope.loading = true;
                 let promise = new Promise((resolve, reject) => {
                     geolocation.getCurrentPosition((position) => {
                         scope.city.name = position.address.city;
@@ -65,9 +74,6 @@
                 map.setCurrentCity(data.name);
                 //地图风格
                 map.setMapStyle({style: 'midnight'});
-            },
-            floatingTap () {
-
             }
         }
     };
