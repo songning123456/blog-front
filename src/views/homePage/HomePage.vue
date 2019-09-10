@@ -34,6 +34,7 @@
         <div :class='currentPage === "first" ? "router-view-100" : "router-view-90"'>
             <router-view v-if='routeAlive'></router-view>
         </div>
+        <simple-music :listen-music='$store.state.listenMusic'></simple-music>
     </div>
 </template>
 
@@ -42,11 +43,12 @@
     import ElFrameset from '@/components/layout/el-frameset';
     import ElFrame from '@/components/layout/el-frame';
     import {getBloggerInfo} from '../../service/request';
+    import SimpleMusic from '@/views/music/SimpleMusic';
 
     export default {
         name: 'HomePage',
-        components: {ElFrame, ElFrameset, ReadArticle},
-        data() {
+        components: {SimpleMusic, ElFrame, ElFrameset, ReadArticle},
+        data () {
             return {
                 tabs: [
                     {label: '阅读', name: 'first'},
@@ -60,7 +62,7 @@
                 currentPage: 'first'
             };
         },
-        mounted() {
+        mounted () {
             let scope = this;
             // 设置样式
             document.getElementsByClassName('above-info')[0].style.marginTop = '0rem';
@@ -80,30 +82,30 @@
         },
         computed: {
             infoShow: {
-                get() {
+                get () {
                     let scope = this;
                     return scope.$store.state.showInfo;
                 },
-                set(newVal) {
+                set (newVal) {
                     let scope = this;
                     scope.$store.commit('setShowInfo', newVal);
                 }
             }
         },
         methods: {
-            writeArticle() {
+            writeArticle () {
                 let scope = this;
                 scope.$router.push({path: '/edit'});
             },
-            exit() {
+            exit () {
                 let scope = this;
                 scope.$router.push({path: '/'});
             },
-            blogManage() {
+            blogManage () {
                 let scope = this;
                 scope.$router.push({path: '/blog-config'});
             },
-            getOwnerInfo(name, password) {
+            getOwnerInfo (name, password) {
                 let scope = this;
                 let form = {
                     userName: name,
@@ -120,7 +122,7 @@
                     }
                 }).catch().finally();
             },
-            handleClick() {
+            handleClick () {
                 let scope = this;
                 if (scope.currentPage === 'first') {
                     scope.$router.push({path: '/home-page/read'});
@@ -134,7 +136,7 @@
                     // ...
                 }
             },
-            searchArticle() {
+            searchArticle () {
                 let scope = this;
                 scope.currentPage = '';
                 scope.jumpTo();
@@ -142,7 +144,7 @@
             /**
              * 跳转路由
              */
-            jumpTo() {
+            jumpTo () {
                 let scope = this;
                 if (scope.search) {
                     scope.routeAlive = false;

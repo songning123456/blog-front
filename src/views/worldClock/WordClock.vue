@@ -55,11 +55,7 @@
             }
         },
         created () {
-            document.getElementsByTagName('html')[0].style.overflow = 'hidden';
             this.start();
-        },
-        destroyed () {
-            document.getElementsByTagName('html')[0].style.overflow = 'auto';
         }
     };
 </script>

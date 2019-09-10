@@ -126,7 +126,7 @@
                 } else if (type === 'third') {
                     scope.$router.push({path: '/simple-map'});
                 } else if (type === 'fourth') {
-
+                    scope.$store.commit('setListenMusic', true);
                 } else {
 
                 }
