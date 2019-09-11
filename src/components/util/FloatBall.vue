@@ -109,7 +109,7 @@
                 z-index: 2;
 
                 .table {
-                    background-image: url('../../assets/wallpaper.svg');
+                    background-image: url('../../assets/switch.svg');
                 }
 
                 .card {

@@ -1,6 +1,6 @@
 <template>
     <div class='blogger-introduction'>
-        <div class='el-frame-left'>
+        <div class='el-frame-left' style='visibility: hidden'>
             <div class='inner-text'>
                 <div class="avatar">
                     <div class='inner-border'>
@@ -81,7 +81,7 @@
                 display: [
                     {
                         key: '作者',
-                        value: 'userName'
+                        value: 'author'
                     },
                     {
                         key: '性别',
@@ -112,7 +112,7 @@
                 ],
                 emailInfo: [{key: '姓名', value: 'name'},
                     {key: '联系方式', value: 'telephone'},
-                    {key: '电子邮箱', value: 'email'},
+                    {key: '你的电子邮箱', value: 'your email'},
                     {key: '主题', value: 'subject'},
                     {key: '信息', value: 'message'}],
                 emailForm: {
@@ -137,7 +137,7 @@
                 let form = {
                         // 暂时这样写，等数据库同步数据
                         // infoOwner: 'songning'
-                        infoOwner: scope.$route.query.author || 'songning'
+                        author: scope.$route.query.author || 'songning'
                     }
                 ;
                 let param = {
@@ -159,8 +159,7 @@
             getBlogger () {
                 let scope = this;
                 let form = {
-                    userName: scope.$route.query.author || 'songning'
-                    // userName: 'songning'
+                    author: scope.$route.query.author || 'songning'
                 };
                 let param = {
                     condition: form
