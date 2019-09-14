@@ -1,6 +1,6 @@
 <template>
     <div class='blogger-introduction'>
-        <div class='el-frame-left' style='visibility: hidden'>
+        <div class='el-frame-left'>
             <div class='inner-text'>
                 <div class="avatar">
                     <div class='inner-border'>
@@ -52,26 +52,27 @@
                 </div>
                 <el-form ref='emailForm' :model='emailForm' label-width='8rem'>
                     <el-form-item v-for='(item, index) in emailInfo' :key='index' :label='item.key'
-                                  :style='{height: 70 / emailInfo.length + "%"}'>
+                                  :style='{height: 100 / emailInfo.length + "%"}'>
                         <el-input v-model='emailForm[item.value]'
-                                  :type='item.value === "message" ? "textarea" : "text"'
-                                  :placeholder='item.value'></el-input>
+                                  :type='item.key === "邮件内容" ? "textarea" : "text"'></el-input>
                     </el-form-item>
                 </el-form>
-                <el-button type="primary" class='email-tail'>Send</el-button>
+                <el-button type="primary" class='email-tail' @click='sendMail'>Send</el-button>
             </div>
         </div>
+        <tool-loading :loading='loading'></tool-loading>
     </div>
 </template>
 
 <script>
     import EmptyView from '../../components/util/EmptyView';
-    import {getPersonalInfo, getBloggerInfo} from '../../service/request';
+    import {getPersonalInfo, getBloggerInfo, sendSimpleMail} from '../../service/request';
+    import ToolLoading from '../../components/util/ToolLoading';
 
     export default {
         name: 'BloggerIntroduction',
-        components: {EmptyView},
-        data () {
+        components: {ToolLoading, EmptyView},
+        data() {
             return {
                 result: {},
                 resume: {
@@ -110,29 +111,31 @@
                     {url: 'static/photo.svg', info: '查看照片'},
                     {url: 'static/email.svg', info: '给我发电子邮件?'}
                 ],
-                emailInfo: [{key: '姓名', value: 'name'},
-                    {key: '联系方式', value: 'telephone'},
-                    {key: '你的电子邮箱', value: 'your email'},
-                    {key: '主题', value: 'subject'},
-                    {key: '信息', value: 'message'}],
+                emailInfo: [
+                    {key: '发件人', value: 'from'},
+                    {key: '收件人', value: 'to'},
+                    {key: '邮件主题', value: 'subject'},
+                    {key: '邮件内容', value: 'text'},
+                    {key: '邮件附件', value: ''}
+                ],
                 emailForm: {
-                    name: '',
-                    telephone: '',
-                    email: '',
+                    from: '',
+                    to: '',
                     subject: '',
-                    message: ''
+                    text: ''
                 },
-                current: ''
+                current: '',
+                loading: false
             };
         },
         methods: {
-            sureContent (index) {
+            sureContent(index) {
                 let scope = this;
                 if (scope.current !== index) {
                     scope.current = index;
                 }
             },
-            getMyInfo () {
+            getMyInfo() {
                 let scope = this;
                 let form = {
                         // 暂时这样写，等数据库同步数据
@@ -156,7 +159,29 @@
                     }
                 }).catch().finally();
             },
-            getBlogger () {
+            sendMail() {
+                let scope = this;
+                let form = {
+                    from: scope.emailForm.from,
+                    to: scope.emailForm.to,
+                    subject: scope.emailForm.subject,
+                    text: scope.emailForm.text
+                };
+                let param = {
+                    condition: form
+                };
+                scope.loading = true;
+                sendSimpleMail(param).then((data) => {
+                    if (data.status === 200) {
+                        scope.$message.success('邮件发送成功');
+                    } else {
+                        scope.$message.error('邮件发送失败');
+                    }
+                }).catch().finally(() => {
+                    scope.loading = false;
+                });
+            },
+            getBlogger() {
                 let scope = this;
                 let form = {
                     author: scope.$route.query.author || 'songning'
@@ -177,7 +202,7 @@
                 }).catch().finally();
             }
         },
-        mounted () {
+        mounted() {
             this.sureContent(0);
             this.getMyInfo();
             this.getBlogger();
@@ -369,7 +394,6 @@
 
                 .el-form {
                     clear: both;
-                    height: 70%;
                     width: 70%;
                     float: left;
                 }

@@ -83,3 +83,7 @@ export const getBloggerInfo = (params) => {
 export const getHadoop = (params) => {
     return axios.ajax(environment.DEV.url + '/statistic/hadoop', 'post', params);
 };
+
+export const sendSimpleMail = (params) => {
+    return axios.ajax(environment.DEV.url + '/mail/send', 'post', params);
+};
