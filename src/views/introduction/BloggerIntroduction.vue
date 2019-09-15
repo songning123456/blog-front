@@ -51,8 +51,7 @@
                     联系 && 交流
                 </div>
                 <el-form ref='emailForm' :model='emailForm' label-width='8rem'>
-                    <el-form-item v-for='(item, index) in emailInfo' :key='index' :label='item.key'
-                                  :style='{height: 100 / emailInfo.length + "%"}'>
+                    <el-form-item v-for='(item, index) in emailInfo' :key='index' :label='item.key'>
                         <el-input v-model='emailForm[item.value]'
                                   :type='item.key === "邮件内容" ? "textarea" : "text"'></el-input>
                     </el-form-item>
@@ -112,17 +111,17 @@
                     {url: 'static/email.svg', info: '给我发电子邮件?'}
                 ],
                 emailInfo: [
-                    {key: '发件人', value: 'from'},
-                    {key: '收件人', value: 'to'},
+                    {key: '发件人', value: 'sender'},
+                    {key: '收件人', value: 'recipient'},
                     {key: '邮件主题', value: 'subject'},
-                    {key: '邮件内容', value: 'text'},
+                    {key: '邮件内容', value: 'content'},
                     {key: '邮件附件', value: ''}
                 ],
                 emailForm: {
-                    from: '',
-                    to: '',
+                    sender: '',
+                    recipient: '',
                     subject: '',
-                    text: ''
+                    content: ''
                 },
                 current: '',
                 loading: false
@@ -159,13 +158,33 @@
                     }
                 }).catch().finally();
             },
+            checkForm() {
+                let scope = this;
+                let reg = /^\\w+\\@+[0-9a-zA-Z]+\\.(com|com.cn|edu|hk|cn|net)$/;
+                if (!scope.emailForm.from) {
+                    scope.$message.warning('邮件发件人不能为空');
+                    return false;
+                } else if (!reg.test(scope.emailForm.from)) {
+                    scope.$message.warning('邮件格式错误');
+                    return false;
+                } else if (!scope.emailForm.subject) {
+                    scope.$message.warning('邮件主题不能为空');
+                    return false;
+                } else if (!scope.emailForm.text) {
+                    scope.$message.warning('邮件文本不能为空');
+                    return false;
+                }
+            },
             sendMail() {
                 let scope = this;
+                if (!scope.checkForm()) {
+                    return;
+                }
                 let form = {
-                    from: scope.emailForm.from,
-                    to: scope.emailForm.to,
+                    sender: scope.emailForm.from,
+                    recipient: scope.emailForm.to,
                     subject: scope.emailForm.subject,
-                    text: scope.emailForm.text
+                    content: scope.emailForm.text
                 };
                 let param = {
                     condition: form
@@ -177,7 +196,9 @@
                     } else {
                         scope.$message.error('邮件发送失败');
                     }
-                }).catch().finally(() => {
+                }).catch(() => {
+                    scope.$message.error('邮件发送失败');
+                }).finally(() => {
                     scope.loading = false;
                 });
             },
