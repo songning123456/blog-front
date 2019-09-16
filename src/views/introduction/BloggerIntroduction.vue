@@ -160,20 +160,21 @@
             },
             checkForm() {
                 let scope = this;
-                let reg = /^\\w+\\@+[0-9a-zA-Z]+\\.(com|com.cn|edu|hk|cn|net)$/;
-                if (!scope.emailForm.from) {
+                let reg = /^([0-9A-Za-z_\\.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/g;
+                if (!scope.emailForm.sender) {
                     scope.$message.warning('邮件发件人不能为空');
                     return false;
-                } else if (!reg.test(scope.emailForm.from)) {
+                } else if (!reg.test(scope.emailForm.sender)) {
                     scope.$message.warning('邮件格式错误');
                     return false;
                 } else if (!scope.emailForm.subject) {
                     scope.$message.warning('邮件主题不能为空');
                     return false;
-                } else if (!scope.emailForm.text) {
+                } else if (!scope.emailForm.content) {
                     scope.$message.warning('邮件文本不能为空');
                     return false;
                 }
+                return true;
             },
             sendMail() {
                 let scope = this;
@@ -181,10 +182,10 @@
                     return;
                 }
                 let form = {
-                    sender: scope.emailForm.from,
-                    recipient: scope.emailForm.to,
+                    sender: scope.emailForm.sender,
+                    recipient: scope.emailForm.recipient,
                     subject: scope.emailForm.subject,
-                    content: scope.emailForm.text
+                    content: scope.emailForm.content
                 };
                 let param = {
                     condition: form
