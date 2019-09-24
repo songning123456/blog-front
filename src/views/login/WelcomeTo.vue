@@ -50,31 +50,38 @@
                     name: 'test',
                     password: '123456'
                 },
-                remember: false
+                remember: false,
+                loading: false
             };
         },
         methods: {
             switchRouter () {
                 let scope = this;
+                scope.loading = true;
                 let param = {
                     username: scope.user.name,
                     password: scope.user.password
                 };
+                // 如果存在token时，先删除
                 if (localStorage.token) {
                     localStorage.removeItem('token');
                 }
                 loginBlog(param).then((data) => {
-                    scope.$router.push(
-                        {
-                            path: '/home-page',
-                            name: 'homePage',
-                            params: {
-                                name: scope.user.name,
-                                password: scope.user.password
+                    if (data.status === 200) {
+                        scope.$router.push(
+                            {
+                                path: '/home-page',
+                                name: 'homePage',
+                                params: {
+                                    name: scope.user.name,
+                                    password: scope.user.password
+                                }
                             }
-                        }
-                    );
-                }).catch().finally();
+                        );
+                    }
+                }).catch().finally(() => {
+                    scope.loading = false;
+                });
             }
         }
     };

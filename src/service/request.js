@@ -80,6 +80,10 @@ export const loginBlog = (params) => {
     return axios.ajax('/login', 'post', params);
 };
 
+/**
+ * 退出
+ * @returns {*|Promise<any>}
+ */
 export const exitBlog = () => {
     return axios.ajax('/logout', 'get');
 };

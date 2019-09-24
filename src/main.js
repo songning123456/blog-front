@@ -17,6 +17,13 @@ import './style/iconfont/iconfont.css';
 import Dictionary from './components/common/CommonDictionary';
 
 Vue.config.productionTip = false;
+Vue.prototype.$msg = function (msg = '', type = 'warning', duration = 1000) {
+    this.$message({
+        type: type,
+        message: msg,
+        duration: duration
+    });
+};
 
 Vue.use(ElementUI);
 Vue.use(mavonEditor);
