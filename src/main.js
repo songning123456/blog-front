@@ -33,7 +33,7 @@ router.beforeEach((to, from, next) => {
     next();
 });
 /* eslint-disable no-new */
-new Vue({
+let vue = new Vue({
     el: '#app',
     router,
     store,
@@ -41,3 +41,5 @@ new Vue({
     components: {App},
     template: '<App/>'
 });
+
+export default vue;

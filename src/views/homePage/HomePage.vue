@@ -42,7 +42,7 @@
     import ReadArticle from '@/views/main/readArticle/ReadArticle';
     import ElFrameset from '@/components/layout/el-frameset';
     import ElFrame from '@/components/layout/el-frame';
-    import {getBloggerInfo} from '../../service/request';
+    import {getBloggerInfo, exitBlog} from '../../service/request';
     import SimpleMusic from '@/views/music/SimpleMusic';
 
     export default {
@@ -99,7 +99,12 @@
             },
             exit () {
                 let scope = this;
-                scope.$router.push({path: '/'});
+                exitBlog().then((data) => {
+                    if (data.status === 200) {
+                        scope.$router.push({path: '/'});
+                        localStorage.removeItem('token');
+                    }
+                }).catch().finally();
             },
             blogManage () {
                 let scope = this;

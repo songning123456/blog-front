@@ -1,26 +1,17 @@
 import axios from '../configure/ajax/index';
-import environment from '../configure/devOrProduct';
 
 /**
  * 发布文章
  */
 export const publishArticle = (params) => {
-    return axios.ajax(environment.DEV.esUrl + '/blog/insertArticle', 'post', params);
+    return axios.ajax('/es/blog/insertArticle', 'post', params);
 };
 
 /**
  * 根据种类获取摘要信息
  */
 export const getAbstract = (params) => {
-    return axios.ajax(environment.DEV.esUrl + '/blog/queryAbstract', 'post', params);
-};
-
-/**
- * 查询总数
- * @returns {*|Promise|Promise<any>}
- */
-export const getAllCount = () => {
-    return axios.ajax(environment.DEV.esUrl + '/blog/queryAllCount', 'post');
+    return axios.ajax('/es/blog/queryAbstract', 'post', params);
 };
 
 /**
@@ -29,7 +20,7 @@ export const getAllCount = () => {
  * @returns {*|Promise|Promise<any>}
  */
 export const getContent = (params) => {
-    return axios.ajax(environment.DEV.esUrl + '/blog/queryContent', 'post', params);
+    return axios.ajax('/es/blog/queryContent', 'post', params);
 };
 
 /**
@@ -38,15 +29,7 @@ export const getContent = (params) => {
  * @returns {*|Promise|Promise<any>}
  */
 export const getHotArticle = (params) => {
-    return axios.ajax(environment.DEV.esUrl + '/blog/queryHotArticle', 'post', params);
-};
-
-/**
- *
- * @returns {*|Promise|Promise<any>}
- */
-export const getLabelCache = () => {
-    return axios.ajax(environment.DEV.url + '/label/queryLabelCache', 'post');
+    return axios.ajax('/es/blog/queryHotArticle', 'post', params);
 };
 
 /**
@@ -54,22 +37,22 @@ export const getLabelCache = () => {
  * @returns {*|Promise|Promise<any>}
  */
 export const getGroupCache = () => {
-    return axios.ajax(environment.DEV.url + '/label/queryGroupCache', 'post');
+    return axios.ajax('/label/queryGroupCache', 'post');
 };
 
 export const getAllLabelName = () => {
-    return axios.ajax(environment.DEV.url + '/label/queryAllLabelName', 'post');
+    return axios.ajax('/label/queryAllLabelName', 'post');
 };
 
 export const highlightSearch = (params) => {
-    return axios.ajax(environment.DEV.esUrl + '/blog/searchArticle', 'post', params);
+    return axios.ajax('/es/blog/searchArticle', 'post', params);
 };
 
 /**
  * 获取个人简介信息
  */
 export const getPersonalInfo = (params) => {
-    return axios.ajax(environment.DEV.url + '/personalInfo/getPersonalInfo', 'post', params);
+    return axios.ajax('/personalInfo/getPersonalInfo', 'post', params);
 };
 
 /**
@@ -77,13 +60,26 @@ export const getPersonalInfo = (params) => {
  * @param params
  */
 export const getBloggerInfo = (params) => {
-    return axios.ajax(environment.DEV.url + '/blogger/getBlogger', 'post', params);
+    return axios.ajax('/blogger/getBlogger', 'post', params);
 };
 
 export const getHadoop = (params) => {
-    return axios.ajax(environment.DEV.url + '/statistic/hadoop', 'post', params);
+    return axios.ajax('/statistic/hadoop', 'post', params);
 };
 
 export const sendSimpleMail = (params) => {
-    return axios.ajax(environment.DEV.url + '/mail/send', 'post', params);
+    return axios.ajax('/mail/send', 'post', params);
+};
+
+/**
+ * 登陆
+ * @param params
+ * @returns {*|Promise<any>}
+ */
+export const loginBlog = (params) => {
+    return axios.ajax('/login', 'post', params);
+};
+
+export const exitBlog = () => {
+    return axios.ajax('/logout', 'get');
 };

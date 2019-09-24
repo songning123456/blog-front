@@ -40,12 +40,14 @@
 
 <script>
 
+    import {loginBlog} from '../../service/request';
+
     export default {
         name: 'WelcomeTo',
         data () {
             return {
                 user: {
-                    name: 'songning',
+                    name: 'test',
                     password: '123456'
                 },
                 remember: false
@@ -54,16 +56,25 @@
         methods: {
             switchRouter () {
                 let scope = this;
-                scope.$router.push(
-                    {
-                        path: '/home-page',
-                        name: 'homePage',
-                        params: {
-                            name: scope.user.name,
-                            password: scope.user.password
+                let param = {
+                    username: scope.user.name,
+                    password: scope.user.password
+                };
+                if (localStorage.token) {
+                    localStorage.removeItem('token');
+                }
+                loginBlog(param).then((data) => {
+                    scope.$router.push(
+                        {
+                            path: '/home-page',
+                            name: 'homePage',
+                            params: {
+                                name: scope.user.name,
+                                password: scope.user.password
+                            }
                         }
-                    }
-                );
+                    );
+                }).catch().finally();
             }
         }
     };

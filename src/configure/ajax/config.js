@@ -1,17 +1,15 @@
-import axios from 'axios';
 
-// 开发环境
-axios.setConfig = function (config, supportOld) {
-    // axios.defaults.baseURL = config.BASE_URL;
-    if (supportOld) { // 适配旧版本
-        axios.defaults.timeout = config.AJAX_TIMEOUT;
-        // // 解决跨域时丢失 cookie 问题,设置请求超时时间
-        axios.defaults.withCredentials = false;
-    } else {
-        for (let key in config) {
-            axios.defaults[key] = config[key];
-        }
-    }
+// 发布模式配置
+// let production = {
+//     REQUEST_BASE_URL: 'http://2c4918n171.wicp.vip:30881/blog-server',
+//     AJAX_TIMEOUT: 30000
+// };
+
+// 开发模式配置
+let dev = {
+    REQUEST_BASE_URL: 'http://localhost:8072',
+    AJAX_TIMEOUT: 100000
 };
 
-export default axios;
+let Config = dev;
+export default Config;
