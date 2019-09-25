@@ -55,8 +55,33 @@
             };
         },
         methods: {
+            // 表单验证
+            formCheck () {
+                let scope = this;
+                if (!scope.user.name) {
+                    scope.$msg('用户名不能为空', 'error');
+                    return false;
+                }
+                if (scope.user.name.length > 50) {
+                    scope.$msg('用户名不符合规范', 'error');
+                    return false;
+                }
+                if (!scope.user.password) {
+                    scope.$msg('密码不能为空', 'error');
+                    return false;
+                }
+                if (scope.user.password.length > 50) {
+                    scope.$msg('密码不符合规范', 'error');
+                    return false;
+                }
+                return true;
+            },
+            // 登陆
             switchRouter () {
                 let scope = this;
+                if (!scope.formCheck()) {
+                    return;
+                }
                 scope.loading = true;
                 let param = {
                     username: scope.user.name,
@@ -68,14 +93,18 @@
                 }
                 loginBlog(param).then((data) => {
                     if (data.status === 200) {
+                        // 保存用户名和密码
+                        if (!localStorage.getItem('username')) {
+                            localStorage.setItem('username', scope.user.name);
+                        }
+                        if (!localStorage.getItem('password')) {
+                            localStorage.setItem('password', scope.user.password);
+                        }
+                        // 跳转路由
                         scope.$router.push(
                             {
                                 path: '/home-page',
-                                name: 'homePage',
-                                params: {
-                                    name: scope.user.name,
-                                    password: scope.user.password
-                                }
+                                name: 'homePage'
                             }
                         );
                     }

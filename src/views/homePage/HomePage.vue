@@ -71,12 +71,8 @@
                 let doc = scope.$refs['elInput'].$vnode.elm.children[1];
                 doc.addEventListener('click', scope.searchArticle, true);
             });
-            if (Object.keys(scope.$route.params).length !== 0) {
-                let {name, password} = scope.$route.params;
-                localStorage.setItem('username', name);
-                localStorage.setItem('password', password);
-            }
-            scope.getOwnerInfo(localStorage.getItem('username'), localStorage.getItem('password'));
+            // 获取个人信息(头像)
+            scope.getOwnerInfo(localStorage.getItem('username'));
             // 默认点击第一个标签
             this.handleClick();
         },
@@ -110,11 +106,10 @@
                 let scope = this;
                 scope.$router.push({path: '/blog-config'});
             },
-            getOwnerInfo (name, password) {
+            getOwnerInfo (name) {
                 let scope = this;
                 let form = {
-                    userName: name,
-                    password: password
+                    author: name
                 };
                 let param = {
                     condition: form
@@ -164,7 +159,7 @@
                         }
                     });
                 } else {
-                    scope.$message.warning('请输入搜索内容');
+                    scope.$msg('请输入搜索内容', 'warning');
                 }
             }
         }
@@ -246,6 +241,10 @@
 
                 .el-input {
                     width: 90%;
+
+                    .el-icon-search {
+                        cursor: pointer;
+                    }
                 }
             }
 

@@ -34,7 +34,7 @@ const httpRequest = function (resolve, reject, config, isRetry, customize, respo
                 localStorage.token = response.data.Authorization;
             }
             resolve(response.data);
-        } else if (response.status === 203) {
+        } else if (response.status === 401) {
             // 强制跳转到登陆页面
             Vue.$router.push({path: '/'});
             resolve(response.data.result ? response.data.result : response.data);

@@ -1,7 +1,14 @@
 <template>
     <div class='column'>
+        <div class='tag'>
+            <el-badge :value="12">
+                <el-button size="mini"><img src="../../assets/like.svg"/></el-button>
+            </el-badge>
+            <el-badge :value="5">
+                <el-button size="mini"><img src="../../assets/dislike.svg"></el-button>
+            </el-badge>
+        </div>
         <div class='title'><span>{{data.title}}</span></div>
-        <div class='summary'><span v-html="data.summary"></span></div>
         <div class='info'>
             <span @click.stop='getIntroduction'>{{data.author}}</span>
             <span>{{' | '}}</span>
@@ -46,36 +53,37 @@
 <style lang='scss'>
     .column {
         width: 100%;
-        height: 7rem;
+        height: 5rem;
         background: white;
         margin: .2rem 0;
 
         &.column:hover {
-            background-color: #f8f8f9;
+            background-color: #fbfbfc;
             cursor: pointer;
         }
 
-        .title {
+        .tag {
             width: 100%;
             height: 30%;
             display: flex;
             align-items: center;
             justify-content: flex-start;
 
-            span {
-                text-align: left;
-                padding-left: 3rem;
-                padding-top: .9rem;
-                font-size: inherit;
-                font-weight: 600;
-                width: 65%;
-                overflow: hidden; /*内容会被修剪，并且其余内容是不可见的*/
-                text-overflow: ellipsis; /*显示省略符号来代表被修剪的文本。*/
-                white-space: nowrap; /*文本不换行*/
+            .el-bag {
+                padding: 0 .5rem;
+
+                img:nth-child(1) {
+                    transform: scale(1.5);
+                }
+
+                img:nth-child(2) {
+                    transform: scale(1.8);
+                }
             }
+
         }
 
-        .summary {
+        .title {
             width: 100%;
             height: 40%;
             display: flex;
@@ -84,10 +92,10 @@
 
             span {
                 text-align: left;
-                padding-left: 2rem;
-                font-size: unset;
-                font-weight: 400;
-                width: 89%;
+                font-size: 1rem;
+                font-weight: 600;
+                padding-left: 1.2rem;
+                width: 85%;
                 overflow: hidden; /*内容会被修剪，并且其余内容是不可见的*/
                 text-overflow: ellipsis; /*显示省略符号来代表被修剪的文本。*/
                 white-space: nowrap; /*文本不换行*/
@@ -108,7 +116,7 @@
             }
 
             span:nth-child(1) {
-                padding-left: 3rem;
+                padding-left: 1.2rem;
 
                 &:hover {
                     color: #409eff;
