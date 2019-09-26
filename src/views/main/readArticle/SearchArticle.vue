@@ -1,11 +1,8 @@
 <template>
     <div class='search-article'>
         <div v-infinite-scroll='loadMore' infinite-scorll-disabled='busy' infinite-scroll-distance='10'>
-            <div v-for='(item, index) in result.data' :key='index' @click='getDetail(item.id)' class='search-outer'>
-                <div class='search-title'>{{item.title}}</div>
-                <div v-for='(single, i) in item.searchResult' :key='i' class='search-inner' v-html='single'>
-                </div>
-            </div>
+            <column-popover v-for='(item, index) in result.data' :key='index' :data='item'
+                            @detail='getDetail'></column-popover>
         </div>
         <empty-view v-if='!result.data.length'></empty-view>
         <tool-loading :loading='loading' v-if='result.data.length === 0'></tool-loading>
@@ -18,10 +15,11 @@
     import Column from '@/components/public/Column';
     import ToolLoading from '@/components/util/ToolLoading';
     import EmptyView from '@/components/util/EmptyView';
+    import ColumnPopover from '@/components/public/ColumnPopover';
 
     export default {
         name: 'SearchArticle',
-        components: {EmptyView, ToolLoading, Column},
+        components: {ColumnPopover, EmptyView, ToolLoading, Column},
         data () {
             return {
                 busy: false,
@@ -100,26 +98,7 @@
         width: 100%;
         height: 100%;
         overflow: auto;
-
-        .search-outer {
-            width: 70%;
-            margin: .2rem 0 0 14rem;
-            border: 1px solid #eae6e6;
-
-            :hover {
-                cursor: pointer;
-            }
-
-            .search-title {
-                margin: .5rem 0;
-                color: #409eff;
-            }
-
-            .search-inner {
-                width: 90%;
-                margin-left: 3rem;
-            }
-        }
+        background-color: #f8f8f9;
     }
 
     .search-article::-webkit-scrollbar {

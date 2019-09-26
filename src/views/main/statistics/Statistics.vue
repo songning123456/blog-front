@@ -121,7 +121,7 @@
                     }
                 },
                 result: {},
-                imgSrc: require('../../../../static/statistic.svg')
+                imgSrc: require('../../../assets/statistic.svg')
             };
         },
         watch: {

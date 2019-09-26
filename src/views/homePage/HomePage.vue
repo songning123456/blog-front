@@ -109,7 +109,7 @@
             getOwnerInfo (name) {
                 let scope = this;
                 let form = {
-                    author: name
+                    username: name
                 };
                 let param = {
                     condition: form

@@ -1,14 +1,12 @@
 <template>
     <div class='column'>
         <div class='tag'>
-            <el-badge :value="12">
-                <el-button size="mini"><img src="../../assets/like.svg"/></el-button>
-            </el-badge>
-            <el-badge :value="5">
-                <el-button size="mini"><img src="../../assets/dislike.svg"></el-button>
-            </el-badge>
+            <div class='like-tag' v-if="likeTag === 1" @click="sureTag"><img
+                src="../../assets/like.svg"/><span>{{sum}}</span></div>
+            <div class="dislike-tag" v-else @click="sureTag"><img src="../../assets/dislike.svg"><span>{{sum}}</span>
+            </div>
         </div>
-        <div class='title'><span>{{data.title}}</span></div>
+        <div class='title'><span @click="detail">{{data.title}}</span></div>
         <div class='info'>
             <span @click.stop='getIntroduction'>{{data.author}}</span>
             <span>{{' | '}}</span>
@@ -19,6 +17,7 @@
 
 <script>
     import DateUtil from '../../utils/DateUtil';
+    import {getTag, updateTag} from '../../service/request';
 
     export default {
         name: 'Column',
@@ -30,11 +29,55 @@
                 }
             }
         },
+        data () {
+            return {
+                likeTag: 0,
+                sum: 0
+            };
+        },
+        mounted () {
+            let scope = this;
+            let form = {
+                username: localStorage.getItem('username'),
+                articleId: scope.data.id
+            };
+            let param = {
+                condition: form
+            };
+            getTag(param).then((data) => {
+                if (data.status === 200) {
+                    scope.likeTag = data.data[0].love;
+                    scope.sum = data.dataExt.tags;
+                }
+            }).catch().finally();
+        },
         methods: {
+            sureTag () {
+                let scope = this;
+                let form = {
+                    username: localStorage.getItem('username'),
+                    articleId: scope.data.id,
+                    love: scope.likeTag
+                };
+                let param = {
+                    condition: form
+                };
+                updateTag(param).then((data) => {
+                    if (data.status === 200) {
+                        scope.likeTag = data.data[0].love;
+                        scope.sum = data.dataExt.tags;
+                    }
+                }).catch().finally();
+            },
             getRecentTime () {
                 let scope = this;
                 let result = DateUtil.formatDate(new Date(scope.data.updateTime));
                 return result;
+            },
+            // 点击标题进入文章详情
+            detail () {
+                let scope = this;
+                scope.$emit('detail', scope.data.id);
             },
             getIntroduction () {
                 let scope = this;
@@ -66,18 +109,40 @@
             width: 100%;
             height: 30%;
             display: flex;
-            align-items: center;
+            align-items: flex-end;
             justify-content: flex-start;
+            padding-left: 1.2rem;
 
-            .el-bag {
-                padding: 0 .5rem;
+            .like-tag {
+                border: 1px solid #ddd;
+                height: 70%;
 
-                img:nth-child(1) {
-                    transform: scale(1.5);
+                img {
+                    padding: 0 .1rem;
                 }
 
-                img:nth-child(2) {
-                    transform: scale(1.8);
+                span {
+                    font-size: .7rem;
+                    position: relative;
+                    bottom: .1rem;
+                    color: #6cbd45;
+                    padding: 0 .1rem 0 0;
+                }
+            }
+
+            .dislike-tag {
+                border: 1px solid #ddd;
+                height: 70%;
+
+                img {
+                    padding: 0 .1rem;
+                }
+
+                span {
+                    font-size: .7rem;
+                    position: relative;
+                    bottom: .1rem;
+                    padding: 0 .1rem 0 0;
                 }
             }
 
@@ -99,6 +164,11 @@
                 overflow: hidden; /*内容会被修剪，并且其余内容是不可见的*/
                 text-overflow: ellipsis; /*显示省略符号来代表被修剪的文本。*/
                 white-space: nowrap; /*文本不换行*/
+
+                &:hover {
+                    color: #409eff;
+                    text-decoration: underline;
+                }
             }
         }
 

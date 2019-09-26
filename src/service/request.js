@@ -87,3 +87,21 @@ export const loginBlog = (params) => {
 export const exitBlog = () => {
     return axios.ajax('/logout', 'get');
 };
+
+/**
+ * 获取点赞状态
+ * @param params
+ * @returns {*|Promise|Promise<any>}
+ */
+export const getTag = (params) => {
+    return axios.ajax('/tag/get', 'post', params);
+};
+
+/**
+ *
+ * @param params
+ * @returns {*|Promise|Promise<any>}
+ */
+export const updateTag = (params) => {
+    return axios.ajax('/tag/update', 'post', params);
+};
