@@ -4,14 +4,14 @@ import axios from '../configure/ajax/index';
  * 发布文章
  */
 export const publishArticle = (params) => {
-    return axios.ajax('/es/blog/insertArticle', 'post', params);
+    return axios.ajax('/blog/insertArticle', 'post', params);
 };
 
 /**
  * 根据种类获取摘要信息
  */
 export const getAbstract = (params) => {
-    return axios.ajax('/es/blog/queryAbstract', 'post', params);
+    return axios.ajax('/blog/queryAbstract', 'post', params);
 };
 
 /**
@@ -20,7 +20,7 @@ export const getAbstract = (params) => {
  * @returns {*|Promise|Promise<any>}
  */
 export const getContent = (params) => {
-    return axios.ajax('/es/blog/queryContent', 'post', params);
+    return axios.ajax('/blog/queryContent', 'post', params);
 };
 
 /**
@@ -29,7 +29,7 @@ export const getContent = (params) => {
  * @returns {*|Promise|Promise<any>}
  */
 export const getHotArticle = (params) => {
-    return axios.ajax('/es/blog/queryHotArticle', 'post', params);
+    return axios.ajax('/blog/queryHotArticle', 'post', params);
 };
 
 /**
@@ -45,7 +45,7 @@ export const getAllLabelName = () => {
 };
 
 export const highlightSearch = (params) => {
-    return axios.ajax('/es/blog/searchArticle', 'post', params);
+    return axios.ajax('/blog/searchArticle', 'post', params);
 };
 
 /**
