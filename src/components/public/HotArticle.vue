@@ -122,6 +122,11 @@
                     overflow: hidden;
                     text-overflow: ellipsis;
                     white-space: nowrap;
+
+                    &:hover {
+                        text-decoration: underline;
+                        color: #409eff;
+                    }
                 }
             }
 

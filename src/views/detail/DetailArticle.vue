@@ -1,25 +1,21 @@
 <template>
     <div class='detail-article'>
-        <el-frameset :cols='"20%, * , 20%"'>
-            <el-frame></el-frame>
-            <el-frame class='read-detail'>
-                <div class='title'>
-                    <div class='top'>{{result.title}}</div>
-                    <div class='bottom'>
+        <div class='article-content'>
+            <div class='title'>
+                <div class='top'>{{result.title}}</div>
+                <div class='bottom'>
                         <span>
                         {{result.author + '&nbsp;&nbsp;|&nbsp;&nbsp;' + updateTime}}
                     </span>
-                    </div>
                 </div>
-                <div class='interval'></div>
-                <div class='content'>
-                    <mavon-editor v-model='content' :defaultOpen='"preview"' :editable='false' :subfield='false'
-                                  :toolbarsFlag='false' :boxShadow='false' :shortCut='false'></mavon-editor>
-                </div>
-            </el-frame>
-            <el-frame></el-frame>
-        </el-frameset>
-        <el-backtop target=".read-detail" :visibility-height='50'></el-backtop>
+            </div>
+            <div class='content'>
+                <mavon-editor v-model='content' :defaultOpen='"preview"' :editable='false' :subfield='false'
+                              :toolbarsFlag='false' :boxShadow='false' :shortCut='false'></mavon-editor>
+            </div>
+        </div>
+        <el-backtop target=".article-content" :visibility-height='50'></el-backtop>
+        <tool-loading :loading="loading"></tool-loading>
     </div>
 </template>
 
@@ -28,13 +24,16 @@
     import ElFrameset from '@/components/layout/el-frameset';
     import ElFrame from '@/components/layout/el-frame';
     import DateUtil from '../../utils/DateUtil';
+    import EmptyView from '@/components/util/EmptyView';
+    import ToolLoading from '@/components/util/ToolLoading';
 
     export default {
         name: 'DetailArticle',
-        components: {ElFrame, ElFrameset},
+        components: {ToolLoading, EmptyView, ElFrame, ElFrameset},
         data () {
             return {
-                result: {}
+                result: {},
+                loading: false
             };
         },
         mounted () {
@@ -45,6 +44,7 @@
             let param = {
                 condition: form
             };
+            scope.loading = true;
             getContent(param).then((data) => {
                 if (data.status === 200) {
                     if (data.total > 0) {
@@ -53,6 +53,7 @@
                 }
             }).catch(() => {
             }).finally(() => {
+                scope.loading = false;
             });
         },
         computed: {
@@ -76,62 +77,63 @@
     .detail-article {
         width: 100%;
         height: 100%;
+        overflow: auto;
 
-        .read-detail {
+        // 修改滚动条样式
+        &::-webkit-scrollbar {
+            width: 10px;
+            height: 15px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background-color: rgb(239, 239, 239);
+            border-radius: 2px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: #bfbfbf;
+            border-radius: 10px;
+
+            &:hover {
+                background: #a5a5a5;
+            }
+        }
+
+        &::-webkit-scrollbar-corner {
+            background: #179a16;
+        }
+
+        .article-content {
+            width: 50%;
+            height: 100%;
+            margin-left: 25%;
+
             .title {
                 width: 100%;
-                height: 20%;
-                background-image: url("../../assets/detail-article.png");
-                background-position: 1.5rem -2.25rem;
+                height: 10%;
 
                 .top {
-                    height: 80%;
+                    height: 70%;
                     width: 100%;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    font-size: 30px;
+                    font-size: 1.5rem;
+                    font-weight: 700;
+                    line-height: 5rem;
                 }
 
                 .bottom {
-                    height: 20%;
+                    height: 30%;
                     width: 100%;
+                    font-size: 15px;
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    font-size: 15px;
-
-                    span {
-                        padding-left: 7rem;
-                    }
                 }
-            }
-
-            .interval {
-                width: 100%;
-                height: 2%;
             }
 
             .content {
                 width: 100%;
-                height: 78%;
-
-                .v-note-wrapper {
-                    .v-note-panel {
-                        border: unset;
-
-                        .v-note-show {
-                            .v-show-content {
-                                background: unset;
-                            }
-                        }
-                    }
-                }
+                height: 90%;
             }
-        }
-
-        .read-detail::-webkit-scrollbar {
-            width: 0;
         }
     }
 </style>

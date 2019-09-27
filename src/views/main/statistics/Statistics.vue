@@ -159,7 +159,7 @@
                 deep: true
             }
         },
-        mounted() {
+        mounted () {
             let scope = this;
             scope.statistic();
         },
@@ -167,15 +167,15 @@
             formCheck () {
                 let scope = this;
                 if (!scope.form.startTime) {
-                    scope.$message.error('开始时间不能为空!');
+                    scope.$msg('开始时间不能为空!');
                     return false;
                 }
                 if (!scope.form.endTime) {
-                    scope.$message.error('结束时间不能为空!');
+                    scope.$msg('结束时间不能为空!');
                     return false;
                 }
                 if (Date.parse(scope.form.endTime) <= Date.parse(scope.form.startTime)) {
-                    scope.$message.error('开始时间不能大于结束时间');
+                    scope.$msg('开始时间不能大于结束时间!');
                     return false;
                 }
                 return true;
@@ -199,10 +199,10 @@
                         if (data.total > 0) {
                             scope.result = data.data;
                         } else {
-                            scope.$message.error('查询为空');
+                            scope.$msg('查询为空!');
                         }
                     } else {
-                        scope.$message.error(data.message ? data.message : '查询出错');
+                        scope.$msg(data.message ? data.message : '查询出错');
                     }
                 }).catch().finally(() => {
                         scope.loading = false;

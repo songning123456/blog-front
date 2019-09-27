@@ -59,8 +59,16 @@
                 owner: {},
                 routeAlive: true,
                 search: '',
-                currentPage: 'first'
+                currentPage: ''
             };
+        },
+        created () {
+            let scope = this;
+            if (sessionStorage.getItem('currentPage')) {
+                scope.currentPage = sessionStorage.getItem('currentPage');
+            } else {
+                scope.currentPage = 'first';
+            }
         },
         mounted () {
             let scope = this;
@@ -124,6 +132,7 @@
             },
             handleClick () {
                 let scope = this;
+                sessionStorage.setItem('currentPage', scope.currentPage);
                 if (scope.currentPage === 'first') {
                     scope.$router.push({path: '/home-page/read'});
                 } else if (scope.currentPage === 'second') {

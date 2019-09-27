@@ -1,12 +1,12 @@
 <template>
-    <div class='column'>
+    <div class='column' @click="detail">
         <div class='tag'>
-            <div class='like-tag' v-if="likeTag === 1" @click="sureTag"><img
+            <div class='like-tag' v-if="likeTag === 1" @click.stop="sureTag"><img
                 src="../../assets/like.svg"/><span>{{sum}}</span></div>
-            <div class="dislike-tag" v-else @click="sureTag"><img src="../../assets/dislike.svg"><span>{{sum}}</span>
+            <div class="dislike-tag" v-else @click.stop="sureTag"><img src="../../assets/dislike.svg"><span>{{sum}}</span>
             </div>
         </div>
-        <div class='title'><span @click="detail">{{data.title}}</span></div>
+        <div class='title'><span>{{data.title}}</span></div>
         <div class='info'>
             <span @click.stop='getIntroduction'>{{data.author}}</span>
             <span>{{' | '}}</span>

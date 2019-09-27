@@ -59,19 +59,19 @@
             formCheck () {
                 let scope = this;
                 if (!scope.user.name) {
-                    scope.$msg('用户名不能为空', 'error');
+                    scope.$msg('用户名不能为空');
                     return false;
                 }
                 if (scope.user.name.length > 50) {
-                    scope.$msg('用户名不符合规范', 'error');
+                    scope.$msg('用户名不符合规范');
                     return false;
                 }
                 if (!scope.user.password) {
-                    scope.$msg('密码不能为空', 'error');
+                    scope.$msg('密码不能为空');
                     return false;
                 }
                 if (scope.user.password.length > 50) {
-                    scope.$msg('密码不符合规范', 'error');
+                    scope.$msg('密码不符合规范');
                     return false;
                 }
                 return true;

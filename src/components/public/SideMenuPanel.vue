@@ -61,6 +61,7 @@
 
             img {
                 display: inline-block;
+                transform: scale(1.5);
             }
 
             .text-style {

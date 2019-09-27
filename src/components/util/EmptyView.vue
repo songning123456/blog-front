@@ -18,6 +18,10 @@
         display: flex;
         justify-content: center;
         align-items: center;
+
+        img {
+            transform: scale(.5);
+        }
     }
 
 </style>
