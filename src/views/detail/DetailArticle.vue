@@ -14,7 +14,7 @@
                               :toolbarsFlag='false' :boxShadow='false' :shortCut='false'></mavon-editor>
             </div>
         </div>
-        <el-backtop target=".article-content" :visibility-height='50'></el-backtop>
+        <el-backtop target=".detail-article" :visibility-height='50'></el-backtop>
         <tool-loading :loading="loading"></tool-loading>
     </div>
 </template>
