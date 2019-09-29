@@ -22,15 +22,15 @@
                     document.onmousemove = function (e) {
                         let left = e.pageX - disX;
                         let top = e.pageY - disY;
-                        if (top < -120) {
-                            top = -120;
-                        } else if (top > 870) {
-                            top = 870;
+                        if (top < -20) {
+                            top = -20;
+                        } else if (top > 800) {
+                            top = 800;
                         }
-                        if (left < -1840) {
-                            left = -1840;
-                        } else if (left > 400) {
-                            left = 400;
+                        if (left < -1800) {
+                            left = -1800;
+                        } else if (left > 25) {
+                            left = 25;
                         }
                         el.style.left = left + 'px';
                         el.style.top = top + 'px';

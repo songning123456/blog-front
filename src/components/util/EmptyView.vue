@@ -1,6 +1,6 @@
 <template>
     <div class='empty-view'>
-        <img src='../../assets/empty-data.png'/>
+        <img src='../../assets/empty-search.png'/>
     </div>
 </template>
 

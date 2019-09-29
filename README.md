@@ -36,3 +36,4 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 # 参考博客 https://github.com/SleepyOcean/
 # word-clock https://blog.csdn.net/weixin_33807284/article/details/91364596 https://juejin.im/post/5cbdbea3f265da037875967f
 # ( * 上线存在风险)百度地图密钥 eiySHWfELLn2G0pcLw5cgUV5upA8eUuq
+# loading icon => https://loading.io/

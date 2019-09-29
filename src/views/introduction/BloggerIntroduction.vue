@@ -71,7 +71,7 @@
     export default {
         name: 'BloggerIntroduction',
         components: {ToolLoading, EmptyView},
-        data() {
+        data () {
             return {
                 result: {},
                 resume: {
@@ -128,13 +128,13 @@
             };
         },
         methods: {
-            sureContent(index) {
+            sureContent (index) {
                 let scope = this;
                 if (scope.current !== index) {
                     scope.current = index;
                 }
             },
-            getMyInfo() {
+            getMyInfo () {
                 let scope = this;
                 let form = {
                         // 暂时这样写，等数据库同步数据
@@ -151,32 +151,32 @@
                             scope.resume.data = data.data;
                             scope.resume.total = data.total;
                         } else {
-                            scope.$message.error('查询结果为空');
+                            scope.$msg('查询结果为空');
                         }
                     } else {
-                        scope.$message.error('查询异常! ' + data.message);
+                        scope.$msg('查询异常! ' + data.message);
                     }
                 }).catch().finally();
             },
-            checkForm() {
+            checkForm () {
                 let scope = this;
                 let reg = /^([0-9A-Za-z_\\.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/g;
                 if (!scope.emailForm.sender) {
-                    scope.$message.warning('邮件发件人不能为空');
+                    scope.$msg('邮件发件人不能为空', 'warning');
                     return false;
                 } else if (!reg.test(scope.emailForm.sender)) {
-                    scope.$message.warning('邮件格式错误');
+                    scope.$msg('邮件格式错误', 'warning');
                     return false;
                 } else if (!scope.emailForm.subject) {
-                    scope.$message.warning('邮件主题不能为空');
+                    scope.$msg('邮件主题不能为空', 'warning');
                     return false;
                 } else if (!scope.emailForm.content) {
-                    scope.$message.warning('邮件文本不能为空');
+                    scope.$msg('邮件文本不能为空', 'warning');
                     return false;
                 }
                 return true;
             },
-            sendMail() {
+            sendMail () {
                 let scope = this;
                 if (!scope.checkForm()) {
                     return;
@@ -193,17 +193,17 @@
                 scope.loading = true;
                 sendSimpleMail(param).then((data) => {
                     if (data.status === 200) {
-                        scope.$message.success('邮件发送成功');
+                        scope.$msg('邮件发送成功', 'success');
                     } else {
-                        scope.$message.error('邮件发送失败');
+                        scope.$msg('邮件发送失败');
                     }
                 }).catch(() => {
-                    scope.$message.error('邮件发送失败');
+                    scope.$msg('邮件发送失败');
                 }).finally(() => {
                     scope.loading = false;
                 });
             },
-            getBlogger() {
+            getBlogger () {
                 let scope = this;
                 let form = {
                     author: scope.$route.query.author || 'songning'
@@ -216,15 +216,15 @@
                         if (data.total > 0) {
                             scope.result = data.data[0];
                         } else {
-                            scope.$message.error('查询结果为空');
+                            scope.$msg('查询结果为空');
                         }
                     } else {
-                        scope.$message.error('查询异常! ' + data.message);
+                        scope.$msg('查询异常! ' + data.message);
                     }
                 }).catch().finally();
             }
         },
-        mounted() {
+        mounted () {
             this.sureContent(0);
             this.getMyInfo();
             this.getBlogger();

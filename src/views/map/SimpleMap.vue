@@ -51,7 +51,7 @@
             scope.sureCity().then((data) => {
                 scope.initMap(data);
             }).catch((error) => {
-                scope.$message.error({message: error, duration: 1000});
+                scope.$msg(error);
             }).finally(() => {
                 scope.loading = false;
             });

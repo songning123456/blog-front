@@ -78,10 +78,7 @@
                             }
                         }
                     } else {
-                        scope.$message({
-                            type: 'error',
-                            message: data.message ? data.message : 'Function-getAbstract 查询异常!'
-                        });
+                        scope.$msg(data.message ? data.message : 'Function-getAbstract 查询异常!');
                     }
                 }).catch(() => {
 

@@ -1,6 +1,6 @@
 <template>
     <div class='tool-loading' v-show='loading'>
-        <img class='image' v-if='normal === "vehicle"' :src=url alt=''>
+        <img class='image' v-if='normal === "face"' :src=url alt=''>
         <img class='image' v-if='normal === "spinner"' :src=url2 alt=''>
     </div>
 </template>
@@ -15,7 +15,7 @@
             },
             normal: {
                 type: String,
-                default: 'vehicle'
+                default: 'face'
             }
         },
         data () {
@@ -41,12 +41,9 @@
             top: 0;
             left: 0;
             right: 0;
-            bottom: 0;
-            width: 255px;
-            height: 170px;
+            bottom: 3rem;
             margin: auto;
             position: absolute;
-            background-size: 100% 100%;
         }
     }
 

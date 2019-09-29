@@ -3,10 +3,10 @@
         <input type="checkbox" id="check">
         <div class="target" v-drag>
             <label class="main-ball el-icon-more" for="check"></label>
-            <div class='icon-item-table' @click='itemClicked("first")'><a class='table'></a></div>
-            <div class='icon-item-card' @click='itemClicked("second")'><a class='card'></a></div>
-            <div class='icon-item-download-all' @click='itemClicked("third")'><a class='download-all'></a></div>
-            <div class='icon-item-download-selected' @click='itemClicked("fourth")'><a class='download-selected'></a>
+            <div class='icon-item-first' @click='itemClicked("first")'><a class='first'></a></div>
+            <div class='icon-item-second' @click='itemClicked("second")'><a class='second'></a></div>
+            <div class='icon-item-third' @click='itemClicked("third")'><a class='third'></a></div>
+            <div class='icon-item-fourth' @click='itemClicked("fourth")'><a class='fourth'></a>
             </div>
         </div>
     </div>
@@ -108,19 +108,19 @@
             [class*="icon-item-"] {
                 z-index: 2;
 
-                .table {
+                .first {
                     background-image: url('../../assets/switch.svg');
                 }
 
-                .card {
+                .second {
                     background-image: url('../../assets/time.svg');
                 }
 
-                .download-all {
+                .third {
                     background-image: url('../../assets/map.svg');
                 }
 
-                .download-selected {
+                .fourth {
                     background-image: url('../../assets/music.svg');
                 }
 
@@ -177,19 +177,19 @@
             animation: jello 1s;
         }
 
-        :checked + .target .icon-item-table {
+        :checked + .target .icon-item-first {
             transform: scale(1) translate(-60px, 15px);
         }
 
-        :checked + .target .icon-item-card {
+        :checked + .target .icon-item-second {
             transform: scale(1) translate(-28px, 60px);
         }
 
-        :checked + .target .icon-item-download-all {
+        :checked + .target .icon-item-third {
             transform: scale(1) translate(28px, 60px);
         }
 
-        :checked + .target .icon-item-download-selected {
+        :checked + .target .icon-item-fourth {
             transform: scale(1) translate(60px, 15px);
         }
 

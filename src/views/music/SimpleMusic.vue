@@ -60,19 +60,11 @@
             screenfullClick () {
                 let scope = this;
                 if (!screenfull.enabled) {
-                    scope.$message({
-                        type: 'warning',
-                        message: 'Your browser does not support!',
-                        duration: 1000
-                    });
+                    scope.$msg('Your browser does not support!', 'warning');
                     return false;
                 }
                 if (scope.smallscreen) {
-                    scope.$message({
-                        type: 'warning',
-                        message: '请先切换至正常大小!',
-                        duration: 1000
-                    });
+                    scope.$msg('请先切换至正常大小!', 'warning');
                     return;
                 }
                 screenfull.toggle();

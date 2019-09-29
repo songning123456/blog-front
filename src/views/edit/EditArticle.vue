@@ -46,7 +46,7 @@
     export default {
         name: 'EditArticle',
         components: {ToolLoading, ElFrame, ElFrameset},
-        data() {
+        data () {
             return {
                 content: '',
                 title: '',
@@ -57,11 +57,11 @@
                 options: []
             };
         },
-        created() {
+        created () {
             let scope = this;
             scope.throttleFn = scope.throttle(scope.updateArticle, 3000, 3000);
         },
-        mounted() {
+        mounted () {
             let scope = this;
             getGroupCache().then((data) => {
                 scope.options = data.data;
@@ -69,7 +69,7 @@
         },
         methods: {
             // 限定时间过后不执行
-            throttle(fn, delay, duration) {
+            throttle (fn, delay, duration) {
                 let timer = null;
                 let begin = +new Date();
                 return function () {
@@ -83,38 +83,22 @@
                     }
                 };
             },
-            deleteTitle() {
+            deleteTitle () {
                 let scope = this;
                 scope.title = '';
             },
-            publish() {
+            publish () {
                 let scope = this;
                 scope.throttleFn();
             },
-            updateArticle() {
+            updateArticle () {
                 let scope = this;
                 if (!scope.title) {
-                    scope.$message({
-                        type: 'error',
-                        message: '标题不能为空!',
-                        duration: 1000
-                    });
+                    scope.$msg('标题不能为空!');
                     return;
                 }
                 if (!scope.content) {
-                    scope.$message({
-                        type: 'error',
-                        message: '文本不能为空!',
-                        duration: 1000
-                    });
-                    return;
-                }
-                if (!scope.selected) {
-                    scope.$message({
-                        type: 'error',
-                        message: '请选择标签!',
-                        duration: 1000
-                    });
+                    scope.$msg('文本不能为空!');
                     return;
                 }
                 let form = {
@@ -139,7 +123,7 @@
                     scope.loading = false;
                 });
             },
-            goback() {
+            goback () {
                 let scope = this;
                 scope.$router.push({path: '/home-page/read'});
             }

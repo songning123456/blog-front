@@ -74,7 +74,7 @@
                             scope.busy = true;
                         }
                     } else {
-                        scope.$message.error(data.message ? data.message : 'Function-highlightSearch 查询异常!');
+                        scope.$msg(data.message ? data.message : 'Function-highlightSearch 查询异常!');
                     }
                 }).catch().finally(() => {
                     scope.loading = false;

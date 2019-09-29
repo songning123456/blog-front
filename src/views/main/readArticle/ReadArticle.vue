@@ -60,10 +60,10 @@
                             scope.labelNames.push(item.labelName);
                         });
                     } else {
-                        scope.$message.error('查询为空');
+                        scope.$msg('查询为空');
                     }
                 } else {
-                    scope.$message.error(data.message ? data.message : '查询出错');
+                    scope.$msg(data.message ? data.message : '查询出错');
                 }
             }).catch().finally(() => {
                 scope.$refs['labelPanel'].chooseLabel(0);
