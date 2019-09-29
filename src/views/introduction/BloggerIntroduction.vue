@@ -22,9 +22,9 @@
         <div class=el-frame-right>
             <div class='detail-header'>
                 <div v-for='(item, index) in detail' :key='index' class='detail-content'
-                     :class='current === index ? "detail-choose" : ""'>
-                    <img :src='item.url'/>
-                    <span @click='sureContent(index)'>{{item.info}}</span>
+                     :class='current === index ? "detail-choose" : ""' @click='sureContent(index)'>
+                    <img class="inner-img" :src='current === index ? item.url1 : item.url2'/>
+                    <span>{{item.info}}</span>
                 </div>
             </div>
             <div v-if='current === 0' class='detail-show-0'>
@@ -44,7 +44,11 @@
                     </div>
                 </el-scrollbar>
             </div>
+            <div v-else-if='current === 1' class='detail-show-2'>
+                <empty-view></empty-view>
+            </div>
             <div v-else-if='current === 2' class='detail-show-2'>
+                <empty-view></empty-view>
             </div>
             <div v-else-if=' current === 3' class='detail-show-3'>
                 <div class='email-head'>
@@ -105,10 +109,10 @@
                     }
                 ],
                 detail: [
-                    {url: 'static/personalInfo.svg', info: '简历'},
-                    {url: 'static/print.svg', info: '打印'},
-                    {url: 'static/photo.svg', info: '查看照片'},
-                    {url: 'static/email.svg', info: '给我发电子邮件?'}
+                    {url1: 'static/personalInfo/special.svg', url2: 'static/personalInfo/common.svg', info: '简历'},
+                    {url1: 'static/print/special.svg', url2: 'static/print/common.svg', info: '打印'},
+                    {url1: 'static/photo/special.svg', url2: 'static/photo/common.svg', info: '查看照片'},
+                    {url1: 'static/mail/special.svg', url2: 'static/mail/common.svg', info: '给我发电子邮件?'}
                 ],
                 emailInfo: [
                     {key: '发件人', value: 'sender'},
@@ -327,17 +331,37 @@
                 .detail-content {
                     text-align: left;
                     display: inline-block;
-                    width: 10rem;
                     cursor: pointer;
-
-                    img {
-                        transform: scale(1.2);
-                        position: relative;
-                        top: .2rem;
-                    }
 
                     &.detail-choose {
                         color: #409eff;
+                    }
+                }
+
+                .detail-content:nth-child(1) {
+                    width: 3.4rem;
+                    margin-right: 6.6rem;
+                }
+
+                .detail-content:nth-child(2) {
+                    width: 3.4rem;
+                    margin-right: 6.6rem;
+                }
+
+                .detail-content:nth-child(3) {
+                    width: 5.6rem;
+                    margin-right: 4.4rem;
+                    .inner-img {
+                        position: relative;
+                        top: .1rem;
+                    }
+                }
+
+                .detail-content:nth-child(4) {
+                    width: 9rem;
+                    .inner-img {
+                        position: relative;
+                        top: .12rem;
                     }
                 }
             }
