@@ -6,7 +6,16 @@
 
 <script>
     export default {
-        name: 'App'
+        name: 'App',
+        methods: {
+            resize () {
+                document.documentElement.style.fontSize = document.documentElement.offsetWidth / (1920 / 20) + 'px';
+            }
+        },
+        mounted () {
+            this.resize();
+            window.addEventListener('resize', this.resize);
+        }
     };
 </script>
 

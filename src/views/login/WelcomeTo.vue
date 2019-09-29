@@ -91,6 +91,7 @@
                 if (localStorage.token) {
                     localStorage.removeItem('token');
                 }
+                sessionStorage.setItem('currentPage', 'first');
                 loginBlog(param).then((data) => {
                     if (data.status === 200) {
                         // 保存用户名和密码
