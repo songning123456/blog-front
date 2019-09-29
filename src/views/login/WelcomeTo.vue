@@ -47,7 +47,7 @@
         data () {
             return {
                 user: {
-                    name: 'test',
+                    name: 'songning',
                     password: '123456'
                 },
                 remember: false,
@@ -95,12 +95,8 @@
                 loginBlog(param).then((data) => {
                     if (data.status === 200) {
                         // 保存用户名和密码
-                        if (!localStorage.getItem('username')) {
-                            localStorage.setItem('username', scope.user.name);
-                        }
-                        if (!localStorage.getItem('password')) {
-                            localStorage.setItem('password', scope.user.password);
-                        }
+                        localStorage.setItem('username', scope.user.name);
+                        localStorage.setItem('password', scope.user.password);
                         // 跳转路由
                         scope.$router.push(
                             {
