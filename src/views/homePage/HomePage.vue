@@ -87,6 +87,10 @@
             scope.getOwnerInfo(sessionStorage.getItem('username'));
             // 默认点击第一个标签
             this.handleClick();
+            // 判断设置栏状态，默认进入页面时 是关闭状态
+            if (scope.$store.state.showInfo) {
+                scope.$store.commit('setShowInfo', false);
+            }
         },
         computed: {
             infoShow: {
