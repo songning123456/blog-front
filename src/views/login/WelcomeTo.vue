@@ -44,19 +44,30 @@
 
     export default {
         name: 'WelcomeTo',
-        data () {
+        data() {
             return {
                 user: {
-                    name: 'songning',
-                    password: '123456'
+                    name: '',
+                    password: ''
                 },
                 remember: false,
                 loading: false
             };
         },
+        mounted() {
+            let scope = this;
+            // 回到登录页面时, 判断是否记住密码
+            if (localStorage.getItem('username')) {
+                scope.remember = true;
+                scope.user.name = localStorage.getItem('username');
+            }
+            if (localStorage.getItem('password')) {
+                scope.user.password = localStorage.getItem('password');
+            }
+        },
         methods: {
             // 表单验证
-            formCheck () {
+            formCheck() {
                 let scope = this;
                 if (!scope.user.name) {
                     scope.$msg('用户名不能为空');
@@ -77,7 +88,7 @@
                 return true;
             },
             // 登陆
-            switchRouter () {
+            switchRouter() {
                 let scope = this;
                 if (!scope.formCheck()) {
                     return;
@@ -95,13 +106,27 @@
                 loginBlog(param).then((data) => {
                     if (data.status === 200) {
                         // 保存用户名和密码
-                        localStorage.setItem('username', scope.user.name);
-                        localStorage.setItem('password', scope.user.password);
+                        if (scope.remember) {
+                            localStorage.setItem('username', scope.user.name);
+                            localStorage.setItem('password', scope.user.password);
+                        } else {
+                            // 如果不记住密码， 则删除 记住密码时保存的 用户名 和 密码
+                            if (localStorage.getItem('username')) {
+                                localStorage.removeItem('username');
+                            }
+                            if (localStorage.getItem('password')) {
+                                localStorage.removeItem('password');
+                            }
+                        }
                         // 跳转路由
                         scope.$router.push(
                             {
                                 path: '/home-page',
-                                name: 'homePage'
+                                name: 'homePage',
+                                query: {
+                                    username: scope.user.name,
+                                    password: scope.user.password
+                                }
                             }
                         );
                     }

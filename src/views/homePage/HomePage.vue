@@ -1,5 +1,5 @@
 <template>
-    <div class='home-page'>
+    <div class='home-page' @click="modifyShow">
         <div class='above-info'>
             <div class='left-title'>
                   <span class='title-image'>
@@ -21,13 +21,14 @@
                 <el-button type="primary" @click.native='writeArticle'>写文章</el-button>
             </div>
             <div class='right-title-2'>
-                <el-popover placement='bottom' v-model='infoShow' trigger='click' :visible-arrow='false'
+                <el-popover placement='bottom' v-model='infoShow' trigger='manual' :visible-arrow='false'
                             popper-class='home-page-popover'>
                     <div><span>个人信息</span></div>
                     <div><span>登陆配置</span></div>
                     <div @click='blogManage'><span>管理配置</span></div>
-                    <div @click='exit'><span><img src="../../assets/exit.svg"/></span><span>退出</span></div>
-                    <el-avatar :size="55" :src="owner.headPortrait || ''" slot='reference'></el-avatar>
+                    <div @click='exit'><span>退出</span></div>
+                    <el-avatar :size="50" :src="owner.headPortrait || ''" slot='reference'
+                               @click.native.stop='isShow'></el-avatar>
                 </el-popover>
             </div>
         </div>
@@ -48,7 +49,7 @@
     export default {
         name: 'HomePage',
         components: {SimpleMusic, ElFrame, ElFrameset, ReadArticle},
-        data () {
+        data() {
             return {
                 tabs: [
                     {label: '阅读', name: 'first'},
@@ -62,7 +63,7 @@
                 currentPage: ''
             };
         },
-        created () {
+        created() {
             let scope = this;
             if (sessionStorage.getItem('currentPage')) {
                 scope.currentPage = sessionStorage.getItem('currentPage');
@@ -70,7 +71,7 @@
                 scope.currentPage = 'first';
             }
         },
-        mounted () {
+        mounted() {
             let scope = this;
             // 设置样式
             document.getElementsByClassName('above-info')[0].style.marginTop = '0rem';
@@ -80,41 +81,61 @@
                 doc.addEventListener('click', scope.searchArticle, true);
             });
             // 获取个人信息(头像)
-            scope.getOwnerInfo(localStorage.getItem('username'));
+            if (scope.$route.path === '/home-page') {
+                sessionStorage.setItem('username', scope.$route.query.username);
+            }
+            scope.getOwnerInfo(sessionStorage.getItem('username'));
             // 默认点击第一个标签
             this.handleClick();
         },
         computed: {
             infoShow: {
-                get () {
+                get() {
                     let scope = this;
                     return scope.$store.state.showInfo;
                 },
-                set (newVal) {
+                set(newVal) {
                     let scope = this;
                     scope.$store.commit('setShowInfo', newVal);
                 }
             }
         },
         methods: {
-            writeArticle () {
+            // 跳转到文章编辑页面
+            writeArticle() {
                 let scope = this;
                 scope.$router.push({path: '/edit'});
             },
-            exit () {
+            // 判断设置栏状态
+            isShow() {
+                let scope = this;
+                scope.$store.commit('setShowInfo', !scope.$store.state.showInfo);
+            },
+            // 其他body 点击事件 关闭 设置栏
+            modifyShow() {
+                let scope = this;
+                if (scope.$store.state.showInfo) {
+                    scope.$store.commit('setShowInfo', false);
+                }
+            },
+            // 退出到登陆页面
+            exit() {
                 let scope = this;
                 exitBlog().then((data) => {
                     if (data.status === 200) {
                         scope.$router.push({path: '/'});
+                        // 删除token
                         localStorage.removeItem('token');
+                        // 隐藏 设置栏
+                        scope.$store.commit('setShowInfo', false);
                     }
                 }).catch().finally();
             },
-            blogManage () {
+            blogManage() {
                 let scope = this;
                 scope.$router.push({path: '/blog-config'});
             },
-            getOwnerInfo (name) {
+            getOwnerInfo(name) {
                 let scope = this;
                 let form = {
                     username: name
@@ -130,7 +151,7 @@
                     }
                 }).catch().finally();
             },
-            handleClick () {
+            handleClick() {
                 let scope = this;
                 sessionStorage.setItem('currentPage', scope.currentPage);
                 if (scope.currentPage === 'first') {
@@ -145,7 +166,7 @@
                     // ...
                 }
             },
-            searchArticle () {
+            searchArticle() {
                 let scope = this;
                 scope.currentPage = '';
                 scope.jumpTo();
@@ -153,7 +174,7 @@
             /**
              * 跳转路由
              */
-            jumpTo () {
+            jumpTo() {
                 let scope = this;
                 if (scope.search) {
                     scope.routeAlive = false;
@@ -295,7 +316,7 @@
         padding: 12px;
         font-size: 14px;
         margin-top: 5px !important;
-        left: 88.75rem !important;
+        left: 87.75rem !important;
 
         div {
             text-align: center;

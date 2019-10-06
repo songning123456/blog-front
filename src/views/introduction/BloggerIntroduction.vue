@@ -75,7 +75,7 @@
     export default {
         name: 'BloggerIntroduction',
         components: {ToolLoading, EmptyView},
-        data () {
+        data() {
             return {
                 result: {},
                 resume: {
@@ -132,13 +132,13 @@
             };
         },
         methods: {
-            sureContent (index) {
+            sureContent(index) {
                 let scope = this;
                 if (scope.current !== index) {
                     scope.current = index;
                 }
             },
-            getMyInfo () {
+            getMyInfo() {
                 let scope = this;
                 let form = {
                         // 暂时这样写，等数据库同步数据
@@ -162,7 +162,7 @@
                     }
                 }).catch().finally();
             },
-            checkForm () {
+            checkForm() {
                 let scope = this;
                 let reg = /^([0-9A-Za-z_\\.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/g;
                 if (!scope.emailForm.sender) {
@@ -180,7 +180,7 @@
                 }
                 return true;
             },
-            sendMail () {
+            sendMail() {
                 let scope = this;
                 if (!scope.checkForm()) {
                     return;
@@ -207,7 +207,7 @@
                     scope.loading = false;
                 });
             },
-            getBlogger () {
+            getBlogger() {
                 let scope = this;
                 let form = {
                     author: scope.$route.query.author || 'songning'
@@ -228,7 +228,7 @@
                 }).catch().finally();
             }
         },
-        mounted () {
+        mounted() {
             this.sureContent(0);
             this.getMyInfo();
             this.getBlogger();
@@ -338,19 +338,30 @@
                     }
                 }
 
+                .detail-content {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                    span {
+                        padding-left: .3rem;
+                    }
+                }
+
                 .detail-content:nth-child(1) {
-                    width: 3.4rem;
+                    width: 4rem;
                     margin-right: 6.6rem;
                 }
 
                 .detail-content:nth-child(2) {
-                    width: 3.4rem;
+                    width: 4rem;
                     margin-right: 6.6rem;
                 }
 
                 .detail-content:nth-child(3) {
-                    width: 5.6rem;
+                    width: 6rem;
                     margin-right: 4.4rem;
+
                     .inner-img {
                         position: relative;
                         top: .1rem;
@@ -358,7 +369,8 @@
                 }
 
                 .detail-content:nth-child(4) {
-                    width: 9rem;
+                    width: 9.4rem;
+
                     .inner-img {
                         position: relative;
                         top: .12rem;

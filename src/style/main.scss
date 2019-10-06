@@ -64,5 +64,14 @@
                 width: 1.25rem;
             }
         }
+
+        .el-input__suffix {
+            .el-input__suffix-inner {
+                .el-icon-arrow-up:before {
+                    position: relative;
+                    bottom: .4rem;
+                }
+            }
+        }
     }
 }

@@ -151,8 +151,9 @@
                     scope.$store.commit('setShowInfo', false);
                 }
                 if (height > 100) {
-                    document.getElementsByClassName('above-info')[0].style.marginTop = '-' + document.body.clientHeight / 200 + 'rem';
-                    document.getElementsByClassName('hot-article')[0].style.top = 9 - document.body.clientHeight / 200 + 'rem';
+                    let size = document.getElementsByTagName('html')[0].style.fontSize.slice(0, -2) * 10;
+                    document.getElementsByClassName('above-info')[0].style.marginTop = '-' + document.body.clientHeight / size + 'rem';
+                    document.getElementsByClassName('hot-article')[0].style.top = 9 - document.body.clientHeight / size + 'rem';
                     scope.resolveHidden = true;
                 }
                 if (height === 0 && scope.resolveHidden) {

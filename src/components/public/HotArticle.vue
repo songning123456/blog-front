@@ -6,7 +6,7 @@
                 <div class='first'><span><img :src=getSrc(index) alt=''/></span><span
                     :title='item.title'>{{item.title}}</span></div>
                 <div class='second'>
-                    <span><a href='javascript:void(0)' target="_blank" @click.stop=''>{{item.author}}</a></span>
+                    <span><a href='javascript:void(0)' target="_blank" @click='getIntroduction(item.author)'>{{item.author}}</a></span>
                     <span>{{' | '}}</span>
                     <span>{{getUpdateTime(index)}}</span>
                 </div>
@@ -33,12 +33,12 @@
                 default: () => []
             }
         },
-        data () {
+        data() {
             return {
                 hotImage: require('../../assets/fire/hot.svg')
             };
         },
-        mounted () {
+        mounted() {
             if (document.getElementsByClassName('above-info')[0].style.marginTop !== '0rem') {
                 document.getElementsByClassName('hot-article')[0].style.top = 9 - document.body.clientHeight / 200 + 'rem';
             } else {
@@ -46,14 +46,24 @@
             }
         },
         methods: {
-            getUpdateTime (index) {
+            getUpdateTime(index) {
                 let scope = this;
                 return DateUtil.formatDate(new Date(scope.result[index].updateTime));
             },
-            getSrc (index) {
+            getIntroduction(author) {
+                let scope = this;
+                let routerData = scope.$router.resolve({
+                    path: '/introduction',
+                    query: {
+                        author: author
+                    }
+                });
+                window.open(routerData.href, '_blank');
+            },
+            getSrc(index) {
                 return require('../../assets/fire/fire' + index + '.svg');
             },
-            getDetail (id) {
+            getDetail(id) {
                 let scope = this;
                 let routerData = scope.$router.resolve({
                     path: '/detail',
@@ -70,10 +80,10 @@
 
 <style lang='scss'>
     .hot-article {
-        width: 13%;
+        width: 18%;
         height: 50%;
         position: fixed;
-        right: 16rem;
+        right: 10rem;
         /*top: 9rem;*/
         background: white;
         transition: all .4s ease-in-out;
@@ -140,6 +150,8 @@
                 color: #d2d2d2;
 
                 span:nth-child(1) {
+                    width: 40%;
+
                     a {
                         color: unset;
                         text-decoration: unset;
@@ -151,7 +163,11 @@
                 }
 
                 span:nth-child(2) {
-                    padding: 0 .3rem;
+                    width: 5%;
+                }
+
+                span:nth-child(3) {
+                    width: 55%;
                 }
             }
         }

@@ -3,7 +3,8 @@
         <div class='tag'>
             <div class='like-tag' v-if="likeTag === 1" @click.stop="sureTag"><img
                 src="../../assets/like.svg"/><span>{{sum}}</span></div>
-            <div class="dislike-tag" v-else @click.stop="sureTag"><img src="../../assets/dislike.svg"><span>{{sum}}</span>
+            <div class="dislike-tag" v-else @click.stop="sureTag"><img
+                src="../../assets/dislike.svg"><span>{{sum}}</span>
             </div>
         </div>
         <div class='title'><span>{{data.title}}</span></div>
@@ -24,21 +25,21 @@
         props: {
             data: {
                 type: Object,
-                default () {
+                default() {
                     return {};
                 }
             }
         },
-        data () {
+        data() {
             return {
                 likeTag: 0,
                 sum: 0
             };
         },
-        mounted () {
+        mounted() {
             let scope = this;
             let form = {
-                username: localStorage.getItem('username'),
+                username: sessionStorage.getItem('username'),
                 articleId: scope.data.id
             };
             let param = {
@@ -52,10 +53,10 @@
             }).catch().finally();
         },
         methods: {
-            sureTag () {
+            sureTag() {
                 let scope = this;
                 let form = {
-                    username: localStorage.getItem('username'),
+                    username: sessionStorage.getItem('username'),
                     articleId: scope.data.id,
                     love: scope.likeTag
                 };
@@ -69,17 +70,17 @@
                     }
                 }).catch().finally();
             },
-            getRecentTime () {
+            getRecentTime() {
                 let scope = this;
                 let result = DateUtil.formatDate(new Date(scope.data.updateTime));
                 return result;
             },
             // 点击标题进入文章详情
-            detail () {
+            detail() {
                 let scope = this;
                 scope.$emit('detail', scope.data.id);
             },
-            getIntroduction () {
+            getIntroduction() {
                 let scope = this;
                 let routerData = scope.$router.resolve({
                     path: '/introduction',
@@ -116,15 +117,18 @@
             .like-tag {
                 border: 1px solid #ddd;
                 height: 70%;
+                padding: .1rem;
 
                 img {
                     padding: 0 .1rem;
+                    position: relative;
+                    bottom: .08rem;
                 }
 
                 span {
                     font-size: .7rem;
                     position: relative;
-                    bottom: .1rem;
+                    bottom: .2rem;
                     color: #6cbd45;
                     padding: 0 .1rem 0 0;
                 }
@@ -133,15 +137,18 @@
             .dislike-tag {
                 border: 1px solid #ddd;
                 height: 70%;
+                padding: .1rem;
 
                 img {
                     padding: 0 .1rem;
+                    position: relative;
+                    bottom: .08rem;
                 }
 
                 span {
                     font-size: .7rem;
                     position: relative;
-                    bottom: .1rem;
+                    bottom: .2rem;
                     padding: 0 .1rem 0 0;
                 }
             }

@@ -2,7 +2,7 @@
     <div class='detail-article'>
         <div class='article-content'>
             <div class='title'>
-                <div class='top'>{{result.title}}</div>
+                <div class='top'><span>{{result.title}}</span></div>
                 <div class='bottom'>
                         <span>
                         {{result.author + '&nbsp;&nbsp;|&nbsp;&nbsp;' + updateTime}}
@@ -30,13 +30,13 @@
     export default {
         name: 'DetailArticle',
         components: {ToolLoading, EmptyView, ElFrame, ElFrameset},
-        data () {
+        data() {
             return {
                 result: {},
                 loading: false
             };
         },
-        mounted () {
+        mounted() {
             let scope = this;
             let form = {
                 id: scope.$route.query.id
@@ -58,14 +58,14 @@
         },
         computed: {
             content: {
-                get () {
+                get() {
                     let scope = this;
                     return scope.result.content;
                 },
-                set () {
+                set() {
                 }
             },
-            updateTime () {
+            updateTime() {
                 let scope = this;
                 return DateUtil.formatDate(new Date(scope.result.updateTime));
             }
@@ -115,9 +115,14 @@
                 .top {
                     height: 70%;
                     width: 100%;
-                    font-size: 1.5rem;
-                    font-weight: 700;
-                    line-height: 5rem;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                    span {
+                        font-size: 1.5rem;
+                        font-weight: 700;
+                    }
                 }
 
                 .bottom {
@@ -133,6 +138,11 @@
             .content {
                 width: 100%;
                 height: 90%;
+
+                .v-note-wrapper .v-note-panel .v-note-show .v-show-content.scroll-style::-webkit-scrollbar, .v-note-wrapper .v-note-panel .v-note-show .v-show-content-html.scroll-style::-webkit-scrollbar {
+                    width: 0;
+                }
+
             }
         }
     }
