@@ -105,3 +105,16 @@ export const getTag = (params) => {
 export const updateTag = (params) => {
     return axios.ajax('/tag/update', 'post', params);
 };
+
+/**
+ * 模糊查询系统配置
+ * @param params
+ * @returns {*|Promise|Promise<unknown>}
+ */
+export const getSystemConfigLike = (params) => {
+    return axios.ajax('/systemConfig/getLike', 'post', params);
+};
+
+export const updateSystemConfig = (params) => {
+    return axios.ajax('/systemConfig/update', 'post', params);
+};
