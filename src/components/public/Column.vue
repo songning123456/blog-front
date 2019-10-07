@@ -7,7 +7,7 @@
                 src="../../assets/dislike.svg"><span>{{sum}}</span>
             </div>
         </div>
-        <div class='title'><span>{{data.title}}</span></div>
+        <div class='title'><span class='modify-txt'><span>{{data.title}}</span></span></div>
         <div class='info'>
             <span @click.stop='getIntroduction'>{{data.author}}</span>
             <span>{{' | '}}</span>
@@ -162,7 +162,7 @@
             align-items: center;
             justify-content: flex-start;
 
-            span {
+            .modify-txt {
                 text-align: left;
                 font-size: 1rem;
                 font-weight: 600;
@@ -172,9 +172,11 @@
                 text-overflow: ellipsis; /*显示省略符号来代表被修剪的文本。*/
                 white-space: nowrap; /*文本不换行*/
 
-                &:hover {
-                    color: #409eff;
-                    text-decoration: underline;
+                span {
+                    &:hover {
+                        color: #409eff;
+                        text-decoration: underline;
+                    }
                 }
             }
         }

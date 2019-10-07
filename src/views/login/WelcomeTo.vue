@@ -117,16 +117,14 @@
                             if (localStorage.getItem('password')) {
                                 localStorage.removeItem('password');
                             }
+                            // 临时保存 用户名(home-page 获取个人头像)
+                            sessionStorage.setItem('username', scope.user.name);
                         }
                         // 跳转路由
                         scope.$router.push(
                             {
                                 path: '/home-page',
-                                name: 'homePage',
-                                query: {
-                                    username: scope.user.name,
-                                    password: scope.user.password
-                                }
+                                name: 'homePage'
                             }
                         );
                     }

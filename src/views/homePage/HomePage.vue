@@ -80,10 +80,6 @@
                 let doc = scope.$refs['elInput'].$vnode.elm.children[1];
                 doc.addEventListener('click', scope.searchArticle, true);
             });
-            // 获取个人信息(头像)
-            if (scope.$route.path === '/home-page') {
-                sessionStorage.setItem('username', scope.$route.query.username);
-            }
             scope.getOwnerInfo(sessionStorage.getItem('username'));
             // 默认点击第一个标签
             this.handleClick();
