@@ -25,21 +25,21 @@
         props: {
             data: {
                 type: Object,
-                default() {
+                default () {
                     return {};
                 }
             }
         },
-        data() {
+        data () {
             return {
                 likeTag: 0,
                 sum: 0
             };
         },
-        mounted() {
+        mounted () {
             let scope = this;
             let form = {
-                username: sessionStorage.getItem('username'),
+                username: localStorage.getItem('username') || sessionStorage.getItem('username'),
                 articleId: scope.data.id
             };
             let param = {
@@ -53,10 +53,10 @@
             }).catch().finally();
         },
         methods: {
-            sureTag() {
+            sureTag () {
                 let scope = this;
                 let form = {
-                    username: sessionStorage.getItem('username'),
+                    username: localStorage.getItem('username') || sessionStorage.getItem('username'),
                     articleId: scope.data.id,
                     love: scope.likeTag
                 };
@@ -70,17 +70,17 @@
                     }
                 }).catch().finally();
             },
-            getRecentTime() {
+            getRecentTime () {
                 let scope = this;
                 let result = DateUtil.formatDate(new Date(scope.data.updateTime));
                 return result;
             },
             // 点击标题进入文章详情
-            detail() {
+            detail () {
                 let scope = this;
                 scope.$emit('detail', scope.data.id);
             },
-            getIntroduction() {
+            getIntroduction () {
                 let scope = this;
                 let routerData = scope.$router.resolve({
                     path: '/introduction',
