@@ -133,7 +133,9 @@
             },
             blogManage () {
                 let scope = this;
-                scope.$router.push({path: '/blog-config'});
+                scope.currentPage = '';
+                scope.$store.commit('setShowInfo', false);
+                scope.$router.push({path: '/home-page/blog-config'});
             },
             getOwnerInfo (name) {
                 let scope = this;

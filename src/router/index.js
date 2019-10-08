@@ -60,6 +60,13 @@ export default new Router({
                     meta: {
                         title: '成长'
                     }
+                }, {
+                    path: 'blog-config',
+                    name: 'blogConfig',
+                    component: () => import('../views/config/BlogConfig'),
+                    meta: {
+                        title: '管理配置'
+                    }
                 }
             ]
         }, {
@@ -82,13 +89,6 @@ export default new Router({
             component: () => import('../views/introduction/BloggerIntroduction'),
             meta: {
                 title: '作者简介'
-            }
-        }, {
-            path: '/blog-config',
-            name: 'blogConfig',
-            component: () => import('../views/config/BlogConfig'),
-            meta: {
-                title: '管理配置'
             }
         }, {
             path: '/world-clock',
