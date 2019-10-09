@@ -34,6 +34,7 @@
     import EventUtil from '../../../utils/EventUtil';
     import FloatBall from '../../../components/util/FloatBall';
     import LabelPanel from '../../../components/public/LabelPanel';
+    import ResponseUtil from '../../../utils/ResponseUtil';
 
     export default {
         name: 'ReadArticle',
@@ -54,18 +55,14 @@
         mounted () {
             let scope = this;
             getSelectedLabel().then((data) => {
-                if (data.status === 200) {
-                    if (data.total > 0) {
-                        data.data.forEach(item => {
-                            scope.labelNames.push(item.labelName);
-                        });
-                    } else {
-                        scope.$msg('查询为空');
-                    }
-                } else {
-                    scope.$msg(data.message ? data.message : '查询出错');
-                }
-            }).catch().finally(() => {
+                ResponseUtil.response(data, '获取关注标签').then((data) => {
+                    data.data.forEach(item => {
+                        scope.labelNames.push(item.labelName);
+                    });
+                }).catch(message => {
+                    scope.$msg(message);
+                });
+            }).finally(() => {
                 scope.$refs['labelPanel'].chooseLabel(0);
             });
             // 绑定横向滚动

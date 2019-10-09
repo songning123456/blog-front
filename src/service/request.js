@@ -44,6 +44,10 @@ export const getSelectedLabel = () => {
     return axios.ajax('/label/querySelected', 'get');
 };
 
+export const getAllLabel = () => {
+    return axios.ajax('/label/all', 'get');
+};
+
 export const highlightSearch = (params) => {
     return axios.ajax('/blog/searchArticle', 'post', params);
 };
