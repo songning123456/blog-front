@@ -33,12 +33,12 @@
                 default: () => []
             }
         },
-        data() {
+        data () {
             return {
                 hotImage: require('../../assets/fire/hot.svg')
             };
         },
-        mounted() {
+        mounted () {
             if (document.getElementsByClassName('above-info')[0].style.marginTop !== '0rem') {
                 document.getElementsByClassName('hot-article')[0].style.top = 9 - document.body.clientHeight / 200 + 'rem';
             } else {
@@ -46,11 +46,11 @@
             }
         },
         methods: {
-            getUpdateTime(index) {
+            getUpdateTime (index) {
                 let scope = this;
                 return DateUtil.formatDate(new Date(scope.result[index].updateTime));
             },
-            getIntroduction(author) {
+            getIntroduction (author) {
                 let scope = this;
                 let routerData = scope.$router.resolve({
                     path: '/introduction',
@@ -60,10 +60,10 @@
                 });
                 window.open(routerData.href, '_blank');
             },
-            getSrc(index) {
+            getSrc (index) {
                 return require('../../assets/fire/fire' + index + '.svg');
             },
-            getDetail(id) {
+            getDetail (id) {
                 let scope = this;
                 let routerData = scope.$router.resolve({
                     path: '/detail',
@@ -97,7 +97,7 @@
             font-weight: bold;
 
             span:nth-child(1) {
-                padding-top: .2rem;
+                padding-top: .4rem;
                 padding-right: .5rem;
 
                 img {
@@ -123,11 +123,11 @@
                 align-items: center;
 
                 span:nth-child(1) {
-                    width: 15%;
+                    width: 10%;
                 }
 
                 span:nth-child(2) {
-                    width: 85%;
+                    width: 90%;
                     text-align: left;
                     overflow: hidden;
                     text-overflow: ellipsis;
@@ -143,15 +143,13 @@
             .second {
                 height: 40%;
                 width: 100%;
-                display: flex;
-                justify-content: center;
-                align-items: center;
                 font-size: .7rem;
                 color: #d2d2d2;
+                display: flex;
+                justify-content: flex-start;
 
                 span:nth-child(1) {
-                    width: 40%;
-
+                    padding-left: 2rem;
                     a {
                         color: unset;
                         text-decoration: unset;
@@ -163,11 +161,7 @@
                 }
 
                 span:nth-child(2) {
-                    width: 5%;
-                }
-
-                span:nth-child(3) {
-                    width: 55%;
+                    padding: 0 .2rem;
                 }
             }
         }

@@ -66,21 +66,16 @@
         .label-center {
             float: left;
             width: 90%;
-            padding-top: .1rem;
             white-space: nowrap;
             overflow: auto;
+            padding-bottom: .2rem;
 
             .label-content {
-                font-size: 0.9rem;
-                width: 5rem;
-                margin: 0 .5rem;
+                font-size: 0.75rem;
+                padding: 0 .5rem;
                 text-align: center;
                 display: inline-block;
                 box-sizing: border-box;
-                // 文本溢出隐藏
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
 
                 &.content-color {
                     color: #409EFF;

@@ -40,8 +40,8 @@ export const getGroupCache = () => {
     return axios.ajax('/label/queryGroupCache', 'post');
 };
 
-export const getAllLabelName = () => {
-    return axios.ajax('/label/queryAllLabelName', 'post');
+export const getSelectedLabel = () => {
+    return axios.ajax('/label/querySelected', 'get');
 };
 
 export const highlightSearch = (params) => {

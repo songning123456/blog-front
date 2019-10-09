@@ -30,7 +30,7 @@
     import KindArticle from '../../../components/public/KindArticle';
     import ToolLoading from '../../../components/util/ToolLoading';
     import HotArticle from '../../../components/public/HotArticle';
-    import {getHotArticle, getAllLabelName} from '../../../service/request';
+    import {getHotArticle, getSelectedLabel} from '../../../service/request';
     import EventUtil from '../../../utils/EventUtil';
     import FloatBall from '../../../components/util/FloatBall';
     import LabelPanel from '../../../components/public/LabelPanel';
@@ -53,7 +53,7 @@
         },
         mounted () {
             let scope = this;
-            getAllLabelName().then((data) => {
+            getSelectedLabel().then((data) => {
                 if (data.status === 200) {
                     if (data.total > 0) {
                         data.data.forEach(item => {
@@ -171,7 +171,7 @@
         width: 100%;
 
         .label-info {
-            height: 6%;
+            height: 4%;
             width: 100%;
             display: flex;
             justify-content: center;
@@ -211,7 +211,7 @@
         }
 
         .circle-info {
-            height: 94%;
+            height: 96%;
             width: 100%;
 
             .content-info {
