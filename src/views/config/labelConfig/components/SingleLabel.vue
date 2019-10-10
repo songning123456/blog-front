@@ -1,5 +1,5 @@
 <template>
-    <div class='single-label'>
+    <div class='single-label' :class='isChosen ? "un-normal-border" : "normal-border"'>
         <div class='first'>
             <el-image :src='labelPhoto' lazy></el-image>
         </div>
@@ -15,13 +15,13 @@
             </span>
         </div>
         <div class='fourth'>
-            <attention-button :is-attention='isAttention'></attention-button>
+            <attention-button :is-attention='isAttention' @click.native='modifyAttention'></attention-button>
         </div>
     </div>
 </template>
 
 <script>
-    import {labelStatistic} from '../../../../service/request';
+    import {labelStatistic, updateAttention} from '../../../../service/request';
     import AttentionButton from './AttentionButton';
 
     export default {
@@ -35,6 +35,10 @@
             labelPhoto: {
                 type: String,
                 default: ''
+            },
+            isChosen: {
+                type: Boolean,
+                default: false
             }
         },
         data () {
@@ -59,6 +63,30 @@
                     scope.isAttention = data.data[0].isAttention;
                 });
             });
+        },
+        methods: {
+            modifyAttention () {
+                let scope = this;
+                let attention;
+                if (scope.isAttention === 1) {
+                    attention = 0;
+                } else {
+                    attention = 1;
+                }
+                let form = {
+                    attention: attention,
+                    labelName: scope.labelName
+                };
+                let param = {
+                    condition: form
+                };
+                updateAttention(param).then(data => {
+                    scope.$response(data).then(data => {
+                        scope.numOfAttention = data.data[0].attentionTotal;
+                        scope.isAttention = data.data[0].isAttention;
+                    });
+                });
+            }
         }
     };
 </script>
@@ -67,10 +95,16 @@
     .single-label {
         height: 10rem;
         width: 9rem;
-        border: 1px solid #ddd;
         float: left;
         margin: 0.65rem 0 0.65rem 1.3rem;
         cursor: pointer;
+
+        &.normal-border {
+            border: 1px solid #ddd;
+        }
+        &.un-normal-border {
+            border: 1px solid #3cb40e;
+        }
 
         .first {
             width: 100%;
@@ -94,7 +128,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: .8rem;
+            font-size: .7rem;
+            color: #909090;
 
             .third-1 {
                 width: 50%;

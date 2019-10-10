@@ -102,7 +102,8 @@
                 if (localStorage.token) {
                     localStorage.removeItem('token');
                 }
-                sessionStorage.setItem('currentPage', 'first');
+                // 登陆时默认进入阅读
+                sessionStorage.setItem('homePage', 'read');
                 loginBlog(param).then((data) => {
                     if (data.status === 200) {
                         // 保存用户名和密码

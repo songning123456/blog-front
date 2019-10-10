@@ -32,7 +32,7 @@
                 </el-popover>
             </div>
         </div>
-        <div :class='currentPage === "first" ? "router-view-100" : "router-view-90"'>
+        <div :class='currentPage === "read" ? "router-view-100" : "router-view-90"'>
             <router-view v-if='routeAlive'></router-view>
         </div>
         <simple-music :listen-music='$store.state.listenMusic'></simple-music>
@@ -52,10 +52,10 @@
         data () {
             return {
                 tabs: [
-                    {label: '阅读', name: 'first'},
-                    {label: '统计', name: 'second'},
-                    {label: '历史', name: 'third'},
-                    {label: '成长', name: 'fourth'}
+                    {label: '阅读', name: 'read'},
+                    {label: '统计', name: 'statistics'},
+                    {label: '历史', name: 'history'},
+                    {label: '成长', name: 'growth'}
                 ],
                 owner: {},
                 routeAlive: true,
@@ -65,10 +65,10 @@
         },
         created () {
             let scope = this;
-            if (sessionStorage.getItem('currentPage')) {
-                scope.currentPage = sessionStorage.getItem('currentPage');
+            if (sessionStorage.getItem('homePage')) {
+                scope.currentPage = sessionStorage.getItem('homePage');
             } else {
-                scope.currentPage = 'first';
+                scope.currentPage = 'read';
             }
         },
         mounted () {
@@ -133,9 +133,8 @@
             },
             blogManage () {
                 let scope = this;
-                scope.currentPage = '';
                 scope.$store.commit('setShowInfo', false);
-                scope.$router.push({path: '/home-page/blog-config'});
+                scope.$homePage('blogConfig');
             },
             getOwnerInfo (name) {
                 let scope = this;
@@ -155,22 +154,10 @@
             },
             handleClick () {
                 let scope = this;
-                sessionStorage.setItem('currentPage', scope.currentPage);
-                if (scope.currentPage === 'first') {
-                    scope.$router.push({path: '/home-page/read'});
-                } else if (scope.currentPage === 'second') {
-                    scope.$router.push({path: '/home-page/statistics'});
-                } else if (scope.currentPage === 'third') {
-                    scope.$router.push({path: '/home-page/history'});
-                } else if (scope.currentPage === 'fourth') {
-                    scope.$router.push({path: '/home-page/growth'});
-                } else {
-                    // ...
-                }
+                scope.$homePage(scope.currentPage);
             },
             searchArticle () {
                 let scope = this;
-                scope.currentPage = '';
                 scope.jumpTo();
             },
             /**

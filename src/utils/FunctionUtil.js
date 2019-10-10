@@ -27,4 +27,23 @@ FunctionUtil.getValueByLabel = function (arr, srcKey, srcValue, targetKey) {
     }
 };
 
+/**
+ * 驼峰转下划线
+ * @param param
+ * @returns {string}
+ */
+FunctionUtil.camelToUnderline = function (param) {
+    return param.replace(/([A-Z])/g, '-$1').toLowerCase();
+};
+
+/**
+ * 下划线转驼峰
+ * @param param
+ */
+FunctionUtil.underlineToCamel = function (param) {
+    return param.replace(/_(\w)/g, function (all, letter) {
+        return letter.toUpperCase();
+    });
+};
+
 export default FunctionUtil;

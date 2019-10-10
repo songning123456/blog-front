@@ -126,3 +126,7 @@ export const updateSystemConfig = (params) => {
 export const labelStatistic = (params) => {
     return axios.ajax('/label/statistic', 'post', params);
 };
+
+export const updateAttention = (params) => {
+    return axios.ajax('/label/updateAttention', 'post', params);
+};

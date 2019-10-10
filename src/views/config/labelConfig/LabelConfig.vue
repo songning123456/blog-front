@@ -2,7 +2,7 @@
     <div class='label-config'>
         <div class='label-content'>
             <single-label v-for='(item, index) in result' :key='index' :label-name='item.labelName'
-                          :label-photo='item.labelPhoto'></single-label>
+                          :label-photo='item.labelPhoto' :is-chosen='isChosen === index' @click.native='isChosen = index'></single-label>
         </div>
         <tool-loading :loading='loading'></tool-loading>
     </div>
@@ -20,7 +20,8 @@
         data () {
             return {
                 result: [],
-                loading: false
+                loading: false,
+                isChosen: ''
             };
         },
         mounted () {
