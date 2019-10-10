@@ -44,8 +44,8 @@ export const getSelectedLabel = () => {
     return axios.ajax('/label/querySelected', 'get');
 };
 
-export const getAllLabel = () => {
-    return axios.ajax('/label/all', 'get');
+export const getAllLabel = (params) => {
+    return axios.ajax('/label/all', 'post', params);
 };
 
 export const highlightSearch = (params) => {

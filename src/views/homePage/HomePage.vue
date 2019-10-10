@@ -104,6 +104,7 @@
             // 跳转到文章编辑页面
             writeArticle () {
                 let scope = this;
+                scope.currentPage = '';
                 scope.$router.push({path: '/edit'});
             },
             // 判断设置栏状态
@@ -134,6 +135,7 @@
             blogManage () {
                 let scope = this;
                 scope.$store.commit('setShowInfo', false);
+                scope.currentPage = '';
                 scope.$homePage('blogConfig');
             },
             getOwnerInfo (name) {
@@ -158,6 +160,7 @@
             },
             searchArticle () {
                 let scope = this;
+                scope.currentPage = '';
                 scope.jumpTo();
             },
             /**

@@ -35,7 +35,7 @@
         bottom: 0;
         z-index: 2000;
         position: absolute;
-        background-color: white;
+        background-color: #ffffffcf;
 
         .image {
             top: 0;
