@@ -17,11 +17,40 @@ import './style/iconfont/iconfont.css';
 import Dictionary from './components/common/CommonDictionary';
 
 Vue.config.productionTip = false;
+// 注册全局提示消息
 Vue.prototype.$msg = function (msg = '', type = 'error', duration = 1000) {
     this.$message({
         type: type,
         message: msg,
         duration: duration
+    });
+};
+// 注册全局响应返回状态
+Vue.prototype.$response = function (data, message = '') {
+    let msg = '';
+    if (message) {
+        msg = '【' + message + '】';
+    }
+    return new Promise((resolve) => {
+        if (data.status === 200) {
+            if (data.total > 0) {
+                let result = {};
+                if (data.data) {
+                    result.data = data.data;
+                }
+                if (data.dataExt) {
+                    result.dataExt = data.dataExt;
+                }
+                if (data.total) {
+                    result.total = data.total;
+                }
+                resolve(result);
+            } else {
+                this.$msg(msg + '查询为空');
+            }
+        } else {
+            this.$msg('查询失败' + data.message);
+        }
     });
 };
 

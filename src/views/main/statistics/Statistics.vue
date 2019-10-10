@@ -195,16 +195,10 @@
                     condition: scope.form
                 };
                 getHadoop(param).then((data) => {
-                    if (data.status === 200) {
-                        if (data.total > 0) {
-                            scope.result = data.data;
-                        } else {
-                            scope.$msg('查询为空!');
-                        }
-                    } else {
-                        scope.$msg(data.message ? data.message : '查询出错');
-                    }
-                }).catch().finally(() => {
+                    scope.$response(data, '大数据统计').then(data => {
+                        scope.result = data.data;
+                    });
+                }).finally(() => {
                         scope.loading = false;
                     }
                 );

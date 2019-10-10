@@ -122,3 +122,7 @@ export const getSystemConfigLike = (params) => {
 export const updateSystemConfig = (params) => {
     return axios.ajax('/systemConfig/update', 'post', params);
 };
+
+export const labelStatistic = (params) => {
+    return axios.ajax('/label/statistic', 'post', params);
+};

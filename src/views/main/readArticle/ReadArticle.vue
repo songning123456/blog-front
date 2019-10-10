@@ -34,7 +34,6 @@
     import EventUtil from '../../../utils/EventUtil';
     import FloatBall from '../../../components/util/FloatBall';
     import LabelPanel from '../../../components/public/LabelPanel';
-    import ResponseUtil from '../../../utils/ResponseUtil';
 
     export default {
         name: 'ReadArticle',
@@ -55,12 +54,10 @@
         mounted () {
             let scope = this;
             getSelectedLabel().then((data) => {
-                ResponseUtil.response(data, '获取关注标签').then((data) => {
+                scope.$response(data, '获取关注标签').then(data => {
                     data.data.forEach(item => {
                         scope.labelNames.push(item.labelName);
                     });
-                }).catch(message => {
-                    scope.$msg(message);
                 });
             }).finally(() => {
                 scope.$refs['labelPanel'].chooseLabel(0);
