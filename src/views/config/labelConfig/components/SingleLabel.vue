@@ -58,8 +58,8 @@
             };
             labelStatistic(param).then(data => {
                 scope.$response(data).then(data => {
-                    scope.numOfAttention = data.data[0].attentionTotal;
-                    scope.numOfArticle = data.data[0].articleTotal;
+                    scope.numOfAttention = data.data[0].numOfAttention;
+                    scope.numOfArticle = data.data[0].numOfArticle;
                     scope.isAttention = data.data[0].isAttention;
                 });
             });

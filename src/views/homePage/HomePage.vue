@@ -154,11 +154,9 @@
                     condition: form
                 };
                 getBloggerInfo(param).then((data) => {
-                    if (data.status === 200) {
-                        if (data.total > 0) {
-                            scope.owner = data.data[0];
-                        }
-                    }
+                    scope.$response(data).then(data => {
+                        scope.owner = data.data[0];
+                    });
                 }).catch().finally();
             },
             handleClick() {
