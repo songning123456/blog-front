@@ -26,6 +26,7 @@
                     <div><span>个人信息</span></div>
                     <div><span>登陆配置</span></div>
                     <div @click='blogManage'><span>管理配置</span></div>
+                    <div @click='enterExperiment'><span>实验室</span></div>
                     <div @click='exit'><span>退出</span></div>
                     <el-avatar :src="owner.headPortrait || ''" slot='reference'
                                @click.native.stop='isShow'></el-avatar>
@@ -49,7 +50,7 @@
     export default {
         name: 'HomePage',
         components: {SimpleMusic, ElFrame, ElFrameset, ReadArticle},
-        data () {
+        data() {
             return {
                 tabs: [
                     {label: '阅读', name: 'read'},
@@ -63,7 +64,7 @@
                 currentPage: ''
             };
         },
-        created () {
+        created() {
             let scope = this;
             if (sessionStorage.getItem('homePage')) {
                 scope.currentPage = sessionStorage.getItem('homePage');
@@ -71,7 +72,7 @@
                 scope.currentPage = 'read';
             }
         },
-        mounted () {
+        mounted() {
             let scope = this;
             // 设置样式
             document.getElementsByClassName('above-info')[0].style.marginTop = '0rem';
@@ -90,11 +91,11 @@
         },
         computed: {
             infoShow: {
-                get () {
+                get() {
                     let scope = this;
                     return scope.$store.state.showInfo;
                 },
-                set (newVal) {
+                set(newVal) {
                     let scope = this;
                     scope.$store.commit('setShowInfo', newVal);
                 }
@@ -102,25 +103,25 @@
         },
         methods: {
             // 跳转到文章编辑页面
-            writeArticle () {
+            writeArticle() {
                 let scope = this;
                 scope.currentPage = '';
                 scope.$router.push({path: '/edit'});
             },
             // 判断设置栏状态
-            isShow () {
+            isShow() {
                 let scope = this;
                 scope.$store.commit('setShowInfo', !scope.$store.state.showInfo);
             },
             // 其他body 点击事件 关闭 设置栏
-            modifyShow () {
+            modifyShow() {
                 let scope = this;
                 if (scope.$store.state.showInfo) {
                     scope.$store.commit('setShowInfo', false);
                 }
             },
             // 退出到登陆页面
-            exit () {
+            exit() {
                 let scope = this;
                 exitBlog().then((data) => {
                     if (data.status === 200) {
@@ -132,13 +133,19 @@
                     }
                 }).catch().finally();
             },
-            blogManage () {
+            blogManage() {
                 let scope = this;
                 scope.$store.commit('setShowInfo', false);
                 scope.currentPage = '';
                 scope.$homePage('blogConfig');
             },
-            getOwnerInfo (name) {
+            enterExperiment() {
+                let scope = this;
+                scope.$router.push({
+                    path: '/experiment/lazy-experiment'
+                });
+            },
+            getOwnerInfo(name) {
                 let scope = this;
                 let form = {
                     username: name
@@ -154,11 +161,11 @@
                     }
                 }).catch().finally();
             },
-            handleClick () {
+            handleClick() {
                 let scope = this;
                 scope.$homePage(scope.currentPage);
             },
-            searchArticle () {
+            searchArticle() {
                 let scope = this;
                 scope.currentPage = '';
                 scope.jumpTo();
@@ -166,7 +173,7 @@
             /**
              * 跳转路由
              */
-            jumpTo () {
+            jumpTo() {
                 let scope = this;
                 if (scope.search) {
                     scope.routeAlive = false;

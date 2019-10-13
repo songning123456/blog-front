@@ -70,6 +70,24 @@ export default new Router({
                 }
             ]
         }, {
+            path: '/experiment',
+            name: 'experiment',
+            component: () => import('../views/experiment/Experiment'),
+            meta: {
+                title: '实验'
+            },
+            children: [
+                {
+                    path: 'lazy-experiment',
+                    name: 'lazyExperiment',
+                    component: () => import('../views/experiment/lazy/LazyExperiment'),
+                    meta: {
+                        title: '懒加载实验'
+                    }
+                }
+            ]
+
+        }, {
             path: '/edit',
             name: 'edit',
             component: () => import('../views/edit/EditArticle'),
