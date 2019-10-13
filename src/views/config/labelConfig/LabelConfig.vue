@@ -27,8 +27,8 @@
     import EmptyView from '../../../components/util/EmptyView';
     import SingleLabel from '../../../views/config/labelConfig/components/SingleLabel';
     import {getAllLabel} from '../../../service/request';
-    import ToolLoading from '@/components/util/ToolLoading';
-    import MultipleLabel from '@/views/config/labelConfig/components/MultipleLabel';
+    import ToolLoading from '../../../components/util/ToolLoading';
+    import MultipleLabel from './components/MultipleLabel';
 
     export default {
         name: 'LabelConfig',

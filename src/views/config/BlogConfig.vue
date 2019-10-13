@@ -16,7 +16,7 @@
 
     import SystemConfig from '../../views/config/systemConfig/SystemConfig';
     import LabelButton from '../../components/util/LabelButton';
-    import LabelConfig from '@/views/config/labelConfig/LabelConfig';
+    import LabelConfig from '../../views/config/labelConfig/LabelConfig';
 
     export default {
         name: 'BlogConfig',

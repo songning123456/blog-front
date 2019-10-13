@@ -7,7 +7,7 @@
 </template>
 
 <script>
-    import SingleLabel from '@/views/config/labelConfig/components/SingleLabel';
+    import SingleLabel from './SingleLabel';
     export default {
         name: 'MultipleLabel',
         components: {SingleLabel},
