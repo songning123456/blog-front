@@ -16,7 +16,8 @@
         </div>
         <div class='display'>
             <div class='label-content'>
-                <multiple-label :data='result' ></multiple-label>
+                <single-label v-for='(item, index) in result' :key='index' :data='item' :is-chosen='isChosen === index'
+                              @click.native='isChosen = index' @updateParam='updateIsAttention'></single-label>
             </div>
         </div>
         <tool-loading :loading='loading'></tool-loading>
@@ -26,20 +27,20 @@
 <script>
     import EmptyView from '../../../components/util/EmptyView';
     import SingleLabel from '../../../views/config/labelConfig/components/SingleLabel';
-    import {getAllLabel} from '../../../service/request';
+    import {getAllLabel, updateAttention} from '../../../service/request';
     import ToolLoading from '../../../components/util/ToolLoading';
-    import MultipleLabel from './components/MultipleLabel';
 
     export default {
         name: 'LabelConfig',
-        components: {MultipleLabel, ToolLoading, SingleLabel, EmptyView},
+        components: {ToolLoading, SingleLabel, EmptyView},
         data () {
             return {
                 result: [],
                 loading: false,
                 form: {
                     labelName: ''
-                }
+                },
+                isChosen: ''
             };
         },
         mounted () {
@@ -77,6 +78,14 @@
                     });
                 }).finally(() => {
                     scope.loading = false;
+                });
+            },
+            updateIsAttention (param) {
+                let scope = this;
+                updateAttention(param).then(data => {
+                    if (data.status === 200) {
+                        scope.search();
+                    }
                 });
             }
         }
