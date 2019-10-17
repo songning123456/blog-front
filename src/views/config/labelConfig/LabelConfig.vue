@@ -83,9 +83,9 @@
             updateIsAttention (param) {
                 let scope = this;
                 updateAttention(param).then(data => {
-                    if (data.status === 200) {
-                        scope.search();
-                    }
+                    scope.$response(data, '更新关注标签').then(data => {
+                        scope.result = data.data;
+                    });
                 });
             }
         }
