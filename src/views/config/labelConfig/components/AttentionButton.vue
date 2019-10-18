@@ -1,6 +1,6 @@
 <template>
     <div class='attention-button'>
-        <div class='no-attention' v-if='isAttention === 0'>
+        <div class='no-attention' v-if='!isAttention'>
             <span>关注</span>
         </div>
         <div class='yes-attention' v-else>
