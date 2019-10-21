@@ -1,10 +1,17 @@
 <template>
     <div class='attention-button'>
-        <div class='no-attention' v-if='!isAttention'>
-            <span>关注</span>
+        <div v-if='!loading' class='no-loading'>
+            <div class='no-attention' v-if='!isAttention'>
+                <span>关注</span>
+            </div>
+            <div class='yes-attention' v-else>
+                <span>已关注</span>
+            </div>
         </div>
-        <div class='yes-attention' v-else>
-            <span>已关注</span>
+        <div v-else class='yes-loading'>
+            <div class='loading'>
+                <img src='../../../../assets/attentionLoading.gif' />
+            </div>
         </div>
     </div>
 </template>
@@ -17,6 +24,11 @@
             isAttention: {
                 type: Number,
                 default: 0
+            },
+            // 是否正在加载
+            loading: {
+                type: Boolean,
+                default: false
             }
         }
     };
@@ -29,27 +41,48 @@
         float: left;
         font-size: .65rem;
 
-        .yes-attention {
+        .no-loading {
             width: 100%;
             height: 100%;
-            border: 1px solid #3cb40e;
-            background-color: #3cb40e;
-            color: white;
-            box-sizing: border-box;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+
+            .yes-attention {
+                width: 100%;
+                height: 100%;
+                border: 1px solid #3cb40e;
+                background-color: #3cb40e;
+                color: white;
+                box-sizing: border-box;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .no-attention {
+                width: 100%;
+                height: 100%;
+                border: 1px solid #3cb40e;
+                box-sizing: border-box;
+                color: #3cb40e;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
         }
 
-        .no-attention {
+        .yes-loading {
             width: 100%;
             height: 100%;
-            border: 1px solid #3cb40e;
-            box-sizing: border-box;
-            color: #3cb40e;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+
+            .loading {
+                width: 100%;
+                height: 100%;
+                border: 1px solid #3cb40e;
+                box-sizing: border-box;
+                color: #3cb40e;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
         }
     }
 

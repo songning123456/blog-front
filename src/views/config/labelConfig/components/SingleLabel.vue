@@ -15,7 +15,8 @@
             </span>
         </div>
         <div class='fourth'>
-            <attention-button :is-attention='data.isAttention' @click.native='modifyAttention'></attention-button>
+            <attention-button :is-attention='data.isAttention' @click.native='modifyAttention'
+                              :loading='loading.status'></attention-button>
         </div>
     </div>
 </template>
@@ -38,9 +39,17 @@
                 default: false
             }
         },
+        data () {
+            return {
+                loading: {
+                    status: false
+                }
+            };
+        },
         methods: {
             modifyAttention () {
                 let scope = this;
+                scope.loading.status = true;
                 let attention;
                 if (scope.data.isAttention === 1) {
                     attention = 0;
@@ -54,7 +63,7 @@
                 let param = {
                     condition: form
                 };
-                scope.$emit('updateParam', param);
+                scope.$emit('updateParam', param, scope.loading);
             }
         }
     };

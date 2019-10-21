@@ -80,12 +80,14 @@
                     scope.loading = false;
                 });
             },
-            updateIsAttention (param) {
+            updateIsAttention (param, loading) {
                 let scope = this;
                 updateAttention(param).then(data => {
                     scope.$response(data, '更新关注标签').then(data => {
                         scope.result = data.data;
                     });
+                }).finally(() => {
+                    loading.status = false;
                 });
             }
         }
