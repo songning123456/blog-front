@@ -5,11 +5,11 @@
             <div class='content'>
                 <el-form :inline="true" :model='form'>
                     <el-form-item label='标签名称'>
-                        <el-input v-model='form.labelName' placeholder='标签名称' clearable></el-input>
+                        <el-input v-model='form.labelFuzzyName' placeholder='标签名称' clearable @keyup.enter.native='query'></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" @click="query">查询</el-button>
-                        <el-button @click="reset">重置</el-button>
+                        <el-button type="primary" @click.stop="query">查询</el-button>
+                        <el-button @click.stop="reset">重置</el-button>
                     </el-form-item>
                 </el-form>
             </div>
@@ -51,7 +51,7 @@
             query () {
                 let scope = this;
                 let form = {
-                    labelName: scope.form.labelName
+                    labelFuzzyName: scope.form.labelFuzzyName
                 };
                 let param = {
                     condition: form
@@ -61,14 +61,14 @@
             reset () {
                 let scope = this;
                 scope.form = {
-                    labelName: ''
+                    labelFuzzyName: ''
                 };
                 let param = {
                     condition: scope.form
                 };
                 scope.search(param);
             },
-            search (param = {condition: {labelName: ''}}) {
+            search (param = {condition: {labelFuzzyName: ''}}) {
                 let scope = this;
                 scope.loading = true;
                 scope.result = [];
@@ -82,6 +82,7 @@
             },
             updateIsAttention (param, loading) {
                 let scope = this;
+                param.condition.labelFuzzyName = scope.form.labelFuzzyName || '';
                 updateAttention(param).then(data => {
                     scope.$response(data, '更新关注标签').then(data => {
                         scope.result = data.data;

@@ -142,7 +142,7 @@
             enterExperiment() {
                 let scope = this;
                 scope.$router.push({
-                    path: '/experiment/lazy-experiment'
+                    path: '/experiment'
                 });
             },
             getOwnerInfo(name) {
