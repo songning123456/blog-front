@@ -69,12 +69,12 @@
 </template>
 
 <script>
-    import SideMenuPanel from '@/components/public/SideMenuPanel';
-    import TabPanel from '@/components/public/TabPanel';
-    import {getHadoop} from '@/service/request';
-    import ToolLoading from '@/components/util/ToolLoading';
-    import ECharts from '@/components/public/ECharts';
-    import EmptyView from '@/components/util/EmptyView';
+    import SideMenuPanel from '../../../components/public/SideMenuPanel';
+    import TabPanel from '../../../components/public/TabPanel';
+    import {getHadoop} from '../../../service/request';
+    import ToolLoading from '../../../components/util/ToolLoading';
+    import ECharts from '../../../components/public/ECharts';
+    import EmptyView from '../../../components/util/EmptyView';
 
     export default {
         name: 'Statistics',
@@ -141,6 +141,13 @@
 
                         scope.chartData.first.data = keyValues;
                         scope.chartData.first.legend = keys;
+                        keys.forEach((key, i) => {
+                            if (i < 8) {
+                                scope.chartData.first.legendSelected[keys[i]] = true;
+                            } else {
+                                scope.chartData.first.legendSelected[keys[i]] = false;
+                            }
+                        });
                         scope.option.first = scope.getFirstOption();
 
                         scope.chartData.second.xAxisData = keys;
@@ -221,10 +228,13 @@
                         formatter: '{a} <br/>{b} : {c} ({d}%)'
                     },
                     legend: {
+                        type: 'scroll',
                         orient: 'vertical',
                         top: 0,
                         left: 'left',
-                        data: scope.chartData.first.legend
+                        pageButtonPosition: 'end',
+                        data: scope.chartData.first.legend,
+                        selected: scope.chartData.first.legendSelected
                     },
                     series: {
                         name: '大数据统计(饼状图)',
@@ -286,7 +296,7 @@
                                     //每个柱子的颜色即为colorList数组里的每一项，如果柱子数目多于colorList的长度，则柱子颜色循环使用该数组
                                     color: function (params) {
                                         let colorList = ['#65d186', '#f67287', '#f29e3c', '#c05bdd', '#7a65f2']; //每根柱子的颜色
-                                        return colorList[params.dataIndex];
+                                        return colorList[params.dataIndex % colorList.length];
                                     }
                                 },
                                 //鼠标悬停时：
@@ -302,7 +312,7 @@
                         type: 'slider',
                         show: true,
                         start: 0,
-                        end: 70,
+                        end: parseInt(scope.chartData.second.xAxisData.length / 30),
                         handleSize: 8
                     }]
                 };
@@ -323,7 +333,10 @@
                         coordinateSystem: 'polar',
                         // name: scope.form.type,
                         // stack: scope.form.type,
-                        color: ['#49edc4']
+                        color: function (params) {
+                            let colorList = ['#65d186', '#f67287', '#f29e3c', '#c05bdd', '#7a65f2']; //每根柱子的颜色
+                            return colorList[params.dataIndex % colorList.length];
+                        }
                     }],
                     legend: {
                         show: true,
@@ -355,7 +368,7 @@
                         type: 'slider',
                         show: true,
                         start: 0,
-                        end: 70,
+                        end: parseInt(scope.chartData.fourth.xAxisData.length / 4),
                         handleSize: 8
                     }]
                 };

@@ -1,225 +1,141 @@
 <template>
     <div class='edit-article'>
-        <el-frameset :rows='"8%, *"'>
-            <!--标题-->
-            <el-frame class='title'>
-                <span class='span-first'>
-                    <img src='../../assets/article-title.svg' alt=""/>
-                    <el-input v-model="title" placeholder="请输入标题">
-                              <i slot="suffix" class="el-input__icon el-icon-error" v-show='title !== ""'
-                                 @click='deleteTitle'></i>
-                    </el-input>
-                </span>
-                <span class='span-second'>
-                    <img src='../../assets/标签.svg' alt=""/>
-                    <el-select v-model='selected' placeholder='请选择标签' clearable>
-                        <el-option-group v-for='(group, index) in options' :key='index' :label='group.label'>
-                            <el-option v-for='item in group.options' :key='item.value' :label='item.label'
-                                       :value='item.value'></el-option>
-                        </el-option-group>
-                    </el-select>
-                </span>
-                <span class='span-third'>
-                    <img src='../../assets/发布.svg' @click='publish' title="发布文章" alt=""/>
-                </span>
-                <span class='span-fourth'>
-                    <img src='../../assets/返回.svg' @click='goback' title='返回首页' alt=""/>
-                </span>
-            </el-frame>
-            <el-frame>
-                <mavon-editor v-model='content'></mavon-editor>
-            </el-frame>
-        </el-frameset>
-        <el-dialog title='标签选择' :visible.sync='enableLabel' width='18%' top='30vh'>
-
+        <mavon-editor v-model='form.content'></mavon-editor>
+        <el-dialog title='标题简介' :visible.sync='dialog.title' width='25%' top='24vh' :close-on-click-modal='false'
+                   :before-close='cancelTitle'>
+            <el-form :model='form' :label-width="labelWidth">
+                <el-form-item label='文章标题'>
+                    <el-input v-model="form.title" placeholder='请输入文章标题'></el-input>
+                </el-form-item>
+                <el-form-item label="文章简介">
+                    <el-input type='textarea' v-model='form.summary' placeholder='请输入文章简介'></el-input>
+                </el-form-item>
+            </el-form>
+            <span slot='footer'>
+                <el-button @click='cancelTitle'>取消</el-button>
+                <el-button type="primary" @click='sureTitle'>确定</el-button>
+            </span>
         </el-dialog>
-        <tool-loading :loading='loading'></tool-loading>
+        <el-dialog title='标签' :visible.sync='dialog.label' width='70%'></el-dialog>
+        <float-menu :menus='menus' @itemClick='chooseItem'></float-menu>
     </div>
 </template>
 
 <script>
-    import {publishArticle, getGroupCache} from '../../service/request';
-    import ElFrameset from '../../components/layout/el-frameset';
-    import ElFrame from '../../components/layout/el-frame';
-    import ToolLoading from '../../components/util/ToolLoading';
+    import FloatMenu from '../../components/util/FloatMenu';
+    import uuidv1 from 'uuid/v1';
 
     export default {
         name: 'EditArticle',
-        components: {ToolLoading, ElFrame, ElFrameset},
+        components: {FloatMenu},
         data () {
+            let id1 = uuidv1();
+            let id2 = uuidv1();
+            let id3 = uuidv1();
+            let id4 = uuidv1();
             return {
-                content: '',
-                title: '',
-                loading: false,
-                throttleFn: null,
-                enableLabel: false,
-                selected: '',
-                options: []
+                labelWidth: '4rem',
+                dialog: {
+                    title: false,
+                    label: false
+                },
+                form: {
+                    title: '',
+                    summary: '',
+                    content: ''
+                },
+                menus: [
+                    {
+                        id: id1,
+                        image: require('../../assets/edit/article.svg'),
+                        title: '标题简介'
+                    },
+                    {
+                        id: id2,
+                        image: require('../../assets/edit/label.svg'),
+                        title: '文章标签'
+                    },
+                    {
+                        id: id3,
+                        image: require('../../assets/edit/publish.svg'),
+                        title: '发布文章'
+                    }, {
+                        id: id4,
+                        image: require('../../assets/edit/return.svg'),
+                        title: '返回首页'
+                    }]
             };
         },
-        created () {
-            let scope = this;
-            scope.throttleFn = scope.throttle(scope.updateArticle, 3000, 3000);
-        },
-        mounted () {
-            let scope = this;
-            getGroupCache().then((data) => {
-                scope.options = data.data;
-            }).finally();
-        },
         methods: {
-            // 限定时间过后不执行
-            throttle (fn, delay, duration) {
-                let timer = null;
-                let begin = +new Date();
-                return function () {
-                    let scope = this;
-                    let args = arguments;
-                    let current = +new Date();
-                    clearTimeout(timer);
-                    if (current - begin >= duration) {
-                        fn.apply(scope, args);
-                        begin = current;
-                    }
-                };
-            },
-            deleteTitle () {
+            chooseItem (menu) {
                 let scope = this;
-                scope.title = '';
+                switch (menu.title) {
+                    case '标题简介':
+                        scope.dialog.title = true;
+                        break;
+                    case '文章标签':
+                        //...
+                        break;
+                    case '发布文章':
+                        //...
+                        break;
+                    case '返回首页':
+                        scope.$homePage('read');
+                        break;
+                    default:
+                        break;
+                }
             },
-            publish () {
+            cancelTitle () {
                 let scope = this;
-                scope.throttleFn();
+                scope.dialog.title = false;
+                setTimeout(() => {
+                    scope.form.title = '';
+                    scope.form.summary = '';
+                }, 300);
             },
-            updateArticle () {
+            formCheck () {
                 let scope = this;
-                if (!scope.title) {
-                    scope.$msg('标题不能为空!');
+                if (!scope.form.title) {
+                    scope.$msg('标题不能为空');
+                    return false;
+                }
+                if (!scope.form.summary) {
+                    scope.$msg('摘要不能为空');
+                    return false;
+                }
+                return true;
+            },
+            sureTitle () {
+                let scope = this;
+                if (!scope.formCheck()) {
                     return;
                 }
-                if (!scope.content) {
-                    scope.$msg('文本不能为空!');
-                    return;
-                }
-                let form = {
-                    content: scope.content,
-                    title: scope.title,
-                    readTimes: 0,
-                    author: 'songning'
-                };
-                form.kinds = scope.selected;
-                // 设置摘要
-                if (scope.content.length > 25) {
-                    form.summary = scope.content.slice(0, 25);
-                } else {
-                    form.summary = scope.content;
-                }
-                let params = {
-                    condition: form
-                };
-                scope.loading = true;
-                publishArticle(params).then(() => {
-                }).finally(() => {
-                    scope.loading = false;
-                });
-            },
-            goback () {
-                let scope = this;
-                scope.$homePage('read');
+                scope.dialog.title = false;
             }
         }
     };
 </script>
 
-<style lang="scss">
+<style lang='scss' scoped>
     .edit-article {
-        height: 100%;
         width: 100%;
-
-        .title {
-            display: flex;
-            align-items: center;
-            background-color: #f8f8f9;
-
-            .span-first {
-                width: 35%;
-                padding-left: .5rem;
-                display: flex;
-                align-items: center;
-
-                img {
-                    transform: scale(.8);
-                }
-
-                .el-input {
-                    width: 90%;
-                    margin-left: .3rem;
-
-                    span {
-                        width: unset;
-                        padding-left: unset;
-                        text-align: unset;
-                    }
-                }
-            }
-
-            .span-second {
-                width: 30%;
-                text-align: left;
-                padding-left: .5rem;
-                display: flex;
-                align-items: center;
-
-                img {
-                    cursor: pointer;
-                }
-
-                .el-select {
-                    margin-left: .2rem;
-                }
-            }
-
-            .span-third {
-                width: 20%;
-                text-align: right;
-
-                img {
-                    cursor: pointer;
-                }
-            }
-
-            .span-fourth {
-                width: 15%;
-                text-align: left;
-                padding-left: 2rem;
-
-                img {
-                    cursor: pointer;
-                }
-            }
-        }
+        height: 100%;
 
         .markdown-body {
             height: 100%;
         }
 
-        .label-choose {
-            height: 1.5rem;
+        .el-dialog__wrapper {
+            /deep/ .el-dialog {
+                /deep/ .el-dialog__body {
+                    padding: 15px 10px 0 10px;
+                }
 
-            div:nth-child(1) {
-                float: left;
-                width: 50%;
-                height: 100%;
-                line-height: 1.4rem;
-            }
-
-            div:nth-child(2) {
-                float: right;
-                width: 50%;
-                height: 100%;
-                line-height: 1.4rem;
+                /deep/ .el-dialog__footer {
+                    padding: 0 20px 20px;
+                }
             }
         }
     }
-
 </style>

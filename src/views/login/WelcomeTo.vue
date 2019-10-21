@@ -9,13 +9,13 @@
                 <el-row>登陆</el-row>
             </el-row>
             <el-row class='name-image'>
-                <el-input placeholder="请输入用户名" v-model="user.name" clearable>
+                <el-input placeholder="请输入用户名" v-model="user.name" clearable @keyup.enter.native='switchRouter'>
                     <i slot="prefix" class="el-input__icon">
                         <img src='../../assets/头像inner.png'/></i>
                 </el-input>
             </el-row>
             <el-row class='password-image'>
-                <el-input placeholder="请输入密码" v-model="user.password" show-password>
+                <el-input placeholder="请输入密码" v-model="user.password" show-password @keyup.enter.native='switchRouter'>
                     <i slot="prefix" class="el-input__icon">
                         <img src='../../assets/密码.png'/></i>
                 </el-input>
