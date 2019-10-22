@@ -38,7 +38,7 @@
                 result: [],
                 loading: false,
                 form: {
-                    labelName: ''
+                    labelFuzzyName: ''
                 },
                 isChosen: ''
             };
