@@ -8,15 +8,11 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
     state: {
         showInfo: false,
-        listenMusic: false,
         language: getLanguage()
     },
     mutations: {
         setShowInfo (state, showInfo) {
             state.showInfo = showInfo;
-        },
-        setListenMusic: (state, listenMusic) => {
-            state.listenMusic = listenMusic;
         },
         SET_LANGUAGE: (state, language) => {
             state.language = language;

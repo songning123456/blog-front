@@ -36,20 +36,18 @@
         <div :class='currentPage === "read" ? "router-view-100" : "router-view-90"'>
             <router-view v-if='routeAlive'></router-view>
         </div>
-        <simple-music :listen-music='$store.state.listenMusic'></simple-music>
     </div>
 </template>
 
 <script>
-    import ReadArticle from '@/views/main/readArticle/ReadArticle';
-    import ElFrameset from '@/components/layout/el-frameset';
-    import ElFrame from '@/components/layout/el-frame';
+    import ReadArticle from '../../views/main/readArticle/ReadArticle';
+    import ElFrameset from '../../components/layout/el-frameset';
+    import ElFrame from '../../components/layout/el-frame';
     import {getBloggerInfo, exitBlog} from '../../service/request';
-    import SimpleMusic from '@/views/music/SimpleMusic';
 
     export default {
         name: 'HomePage',
-        components: {SimpleMusic, ElFrame, ElFrameset, ReadArticle},
+        components: {ElFrame, ElFrameset, ReadArticle},
         data() {
             return {
                 tabs: [

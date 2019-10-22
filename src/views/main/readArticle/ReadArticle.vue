@@ -20,7 +20,7 @@
                 </el-frameset>
             </div>
         </div>
-        <float-ball @itemClick='itemClick'></float-ball>
+        <float-menu :menus='menus' @itemClick='chooseItem'></float-menu>
     </div>
 </template>
 
@@ -32,13 +32,18 @@
     import HotArticle from '../../../components/public/HotArticle';
     import {getHotArticle, getSelectedLabel} from '../../../service/request';
     import EventUtil from '../../../utils/EventUtil';
-    import FloatBall from '../../../components/util/FloatBall';
     import LabelPanel from '../../../components/public/LabelPanel';
+    import uuidv1 from 'uuid/v1';
+    import FloatMenu from '../../../components/util/FloatMenu';
 
     export default {
         name: 'ReadArticle',
-        components: {LabelPanel, FloatBall, HotArticle, KindArticle, ToolLoading, ElFrame, ElFrameset},
+        components: {FloatMenu, LabelPanel, HotArticle, KindArticle, ToolLoading, ElFrame, ElFrameset},
         data () {
+            let id1 = uuidv1();
+            let id2 = uuidv1();
+            let id3 = uuidv1();
+            let id4 = uuidv1();
             return {
                 // 当前分类
                 currentContent: '',
@@ -48,7 +53,28 @@
                 hotShow: false,
                 labelNames: [],
                 scrollLeft: '',
-                resolveHidden: true
+                resolveHidden: true,
+                menus: [
+                    {
+                        id: id1,
+                        image: require('../../../assets/time.svg'),
+                        title: '休眠时钟'
+                    },
+                    {
+                        id: id2,
+                        image: require('../../../assets/map.svg'),
+                        title: '定位地图'
+                    },
+                    {
+                        id: id3,
+                        image: require('../../../assets/unknown.svg'),
+                        title: '未知1'
+                    }, {
+                        id: id4,
+                        image: require('../../../assets/unknown.svg'),
+                        title: '未知2'
+                    }
+                ]
             };
         },
         mounted () {
@@ -111,18 +137,23 @@
                 }).finally(() => {
                 });
             },
-            itemClick (type) {
+            chooseItem (menu) {
                 let scope = this;
-                if (type === 'first') {
-
-                } else if (type === 'second') {
-                    scope.$router.push({path: '/world-clock'});
-                } else if (type === 'third') {
-                    scope.$router.push({path: '/simple-map'});
-                } else if (type === 'fourth') {
-                    scope.$store.commit('setListenMusic', true);
-                } else {
-
+                switch (menu.title) {
+                    case '休眠时钟':
+                        scope.$router.push({path: '/world-clock'});
+                        break;
+                    case '定位地图':
+                        scope.$router.push({path: '/simple-map'});
+                        break;
+                    case '未知1':
+                        scope.$msg('暂未开通此功能1');
+                        break;
+                    case '未知2':
+                        scope.$msg('暂未开通此功能2');
+                        break;
+                    default:
+                        break;
                 }
             },
             // 横向滚动
