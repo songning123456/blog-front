@@ -14,13 +14,18 @@ import VueI18n from 'vue-i18n';
 import i18n from './lang';
 import './style/iconfont/iconfont.css';
 import VueLazyComponent from '@xunlei/vue-lazy-component';
+import ZMessage from './configure/util/ZMessage';
 
 import Dictionary from './components/common/CommonDictionary';
 
 Vue.config.productionTip = false;
+
+// 自定义配置
+ZMessage.setConfig({max: 1, isQueue: false, showNewest: true});
+Vue.prototype.$message = ZMessage;
 // 注册全局提示消息
 Vue.prototype.$msg = function (msg = '', type = 'error', duration = 1000) {
-    this.$message({
+    ZMessage({
         type: type,
         message: msg,
         duration: duration
