@@ -52,7 +52,10 @@ Vue.prototype.$response = function (data, message = '') {
                 }
                 resolve(result);
             } else {
-                this.$msg(msg + '查询为空');
+                // 排除无限加载 默认多加载一次的情况
+                if (message !== 'infiniteScroll') {
+                    this.$msg(msg + '查询为空');
+                }
             }
         } else {
             this.$msg('查询失败' + data.message);

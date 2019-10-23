@@ -65,7 +65,7 @@
                     condition: form
                 };
                 getAbstract(param).then((data) => {
-                    scope.$response(data).then(data => {
+                    scope.$response(data, 'infiniteScroll').then(data => {
                         scope.result.total = data.total;
                         if (data.data.length > 0) {
                             data.data.forEach(item => {
