@@ -71,7 +71,7 @@
 <script>
     import SideMenuPanel from '../../../components/public/SideMenuPanel';
     import TabPanel from '../../../components/public/TabPanel';
-    import {getHadoop} from '../../../service/request';
+    import {getHadoop, insertHistoryInfo} from '../../../service/request';
     import ToolLoading from '../../../components/util/ToolLoading';
     import ECharts from '../../../components/public/ECharts';
     import EmptyView from '../../../components/util/EmptyView';
@@ -169,6 +169,11 @@
         mounted () {
             let scope = this;
             scope.statistic();
+            insertHistoryInfo({condition: {title: scope.COMMON_MAP.HISTORY.STATISTIC}}).then(data => {
+                if (data.status !== 200) {
+                    scope.$msg('插入历史信息失败!');
+                }
+            });
         },
         methods: {
             formCheck () {

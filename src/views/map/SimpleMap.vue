@@ -29,8 +29,9 @@
 
 <script>
     import BMap from 'BMap';
-    import PopoverFloat from '@/components/util/PopoverFloat';
-    import ToolLoading from '@/components/util/ToolLoading';
+    import PopoverFloat from '../../components/util/PopoverFloat';
+    import ToolLoading from '../../components/util/ToolLoading';
+    import {insertHistoryInfo} from '../../service/request';
 
     export default {
         name: 'SimpleMap',
@@ -54,6 +55,11 @@
                 scope.$msg(error);
             }).finally(() => {
                 scope.loading = false;
+            });
+            insertHistoryInfo({condition: {title: scope.COMMON_MAP.HISTORY.SIMPLE_MAP}}).then(data => {
+                if (data.status !== 200) {
+                    scope.$msg('插入历史信息失败!');
+                }
             });
         },
         methods: {

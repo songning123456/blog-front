@@ -19,7 +19,8 @@
     import Week from './component/Week';
     import Day from './component/Day';
     import Month from './component/Month';
-    import SetWrap from '@/views/worldClock/component/setting/SetWrap';
+    import SetWrap from './component/setting/SetWrap';
+    import {insertHistoryInfo} from '../../service/request';
 
     export default {
         name: 'WordClock',
@@ -34,6 +35,14 @@
                 day: '',
                 month: ''
             };
+        },
+        mounted () {
+            let scope = this;
+            insertHistoryInfo({condition: {title: scope.COMMON_MAP.HISTORY.SIMPLE_CLOCK}}).then(data => {
+                if (data.status !== 200) {
+                    scope.$msg('插入历史信息失败!');
+                }
+            });
         },
         methods: {
             start () {
