@@ -65,21 +65,17 @@
                     condition: form
                 };
                 getAbstract(param).then((data) => {
-                    if (data.status === 200) {
-                        if (data.total > 0) {
-                            scope.result.total = data.total;
-                            if (data.data.length > 0) {
-                                data.data.forEach(item => {
-                                    scope.result.data.push(item);
-                                });
-                                scope.busy = false;
-                            } else {
-                                scope.busy = true;
-                            }
+                    scope.$response(data).then(data => {
+                        scope.result.total = data.total;
+                        if (data.data.length > 0) {
+                            data.data.forEach(item => {
+                                scope.result.data.push(item);
+                            });
+                            scope.busy = false;
+                        } else {
+                            scope.busy = true;
                         }
-                    } else {
-                        scope.$msg(data.message ? data.message : 'Function-getAbstract 查询异常!');
-                    }
+                    });
                 }).catch(() => {
 
                 }).finally(() => {

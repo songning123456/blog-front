@@ -24,6 +24,19 @@ export const getContent = (params) => {
 };
 
 /**
+ * 插入历史信息
+ * @param params
+ * @returns {*|Promise|Promise<any>}
+ */
+export const insertHistoryInfo = (params) => {
+    return axios.ajax('/history/insert', 'post', params);
+};
+
+export const getHistoryInfo = (params) => {
+    return axios.ajax('/history/get', 'post', params);
+};
+
+/**
  * 获取热门文章
  * @param params
  * @returns {*|Promise|Promise<any>}

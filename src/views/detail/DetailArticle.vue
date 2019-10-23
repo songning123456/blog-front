@@ -20,7 +20,7 @@
 </template>
 
 <script>
-    import {getContent} from '../../service/request.js';
+    import {getContent, insertHistoryInfo} from '../../service/request.js';
     import ElFrameset from '@/components/layout/el-frameset';
     import ElFrame from '@/components/layout/el-frame';
     import DateUtil from '../../utils/DateUtil';
@@ -30,21 +30,21 @@
     export default {
         name: 'DetailArticle',
         components: {ToolLoading, EmptyView, ElFrame, ElFrameset},
-        data() {
+        data () {
             return {
                 result: {},
                 loading: false
             };
         },
-        mounted() {
+        mounted () {
             let scope = this;
-            let form = {
-                id: scope.$route.query.id
-            };
-            let param = {
-                condition: form
-            };
+            // 根据文章id 获取文章内容
             scope.loading = true;
+            let param = {
+                condition: {
+                    id: scope.$route.query.id
+                }
+            };
             getContent(param).then((data) => {
                 if (data.status === 200) {
                     if (data.total > 0) {
@@ -55,17 +55,29 @@
             }).finally(() => {
                 scope.loading = false;
             });
+            // 插入记录，表明当时做了什么,插入到历史记录表中
+            let params = {
+                condition: {
+                    articleId: scope.$route.query.id,
+                    title: scope.COMMON_MAP.HISTORY.READ_ARTICLE
+                }
+            };
+            insertHistoryInfo(params).then(data => {
+                if (data.status !== 200) {
+                    scope.$msg('插入历史信息失败!');
+                }
+            });
         },
         computed: {
             content: {
-                get() {
+                get () {
                     let scope = this;
                     return scope.result.content;
                 },
-                set() {
+                set () {
                 }
             },
-            updateTime() {
+            updateTime () {
                 let scope = this;
                 return DateUtil.formatDate(new Date(scope.result.updateTime));
             }
