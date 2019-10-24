@@ -9,7 +9,7 @@
                                 {{COMMON_MAP.DICTIONARY.CHOOSE_TIME}}
                             </div>
                             <tab-panel :tabs='time.choose' @rangeTime='rangeTime' ref='tabPanel'
-                                       format='yyyy-MM-dd hh:mm:ss'></tab-panel>
+                                       format='yyyy-MM-dd hh:mm:ss' :index='3'></tab-panel>
                             <el-form :model='form' label-width='5rem'>
                                 <el-form-item label='开始时间'>
                                     <el-date-picker type='datetime' placeholder='请选择开始时间' v-model='form.startTime'

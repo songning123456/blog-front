@@ -24,6 +24,10 @@
             format: {
                 type: String,
                 default: 'yyyyMMddHHmmss'
+            },
+            index: {
+                type: Number,
+                default: 0
             }
         },
         data () {
@@ -68,7 +72,7 @@
         mounted () {
             let scope = this;
             // 默认执行
-            scope.chooseType(0);
+            scope.chooseType(scope.index);
         }
     };
 </script>

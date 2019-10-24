@@ -8,10 +8,8 @@
                 <span class='title-font'>simple</span>
             </div>
             <div class='middle-title-1'>
-                <el-tabs v-model='currentPage' @tab-click='handleClick'>
-                    <el-tab-pane v-for='(tab, index) in tabs' :label='tab.label' :name='tab.name'
-                                 :key='index'></el-tab-pane>
-                </el-tabs>
+                <span class='main-title' v-for='(tab, index) in tabs' :key='index' @click='handleClick(tab.name)'
+                      :class='{"is-blue": currentPage === tab.name}'>{{tab.label}}</span>
             </div>
             <div class='middle-title-2'>
                 <el-input ref='elInput' suffix-icon='el-icon-search' v-model='search' placeholder='请输入搜索内容'
@@ -48,7 +46,7 @@
     export default {
         name: 'HomePage',
         components: {ElFrame, ElFrameset, ReadArticle},
-        data() {
+        data () {
             return {
                 tabs: [
                     {label: '阅读', name: 'read'},
@@ -62,7 +60,7 @@
                 currentPage: ''
             };
         },
-        created() {
+        created () {
             let scope = this;
             if (sessionStorage.getItem('homePage')) {
                 scope.currentPage = sessionStorage.getItem('homePage');
@@ -70,7 +68,7 @@
                 scope.currentPage = 'read';
             }
         },
-        mounted() {
+        mounted () {
             let scope = this;
             // 设置样式
             document.getElementsByClassName('above-info')[0].style.marginTop = '0rem';
@@ -81,7 +79,7 @@
             });
             scope.getOwnerInfo(localStorage.getItem('username') || sessionStorage.getItem('username'));
             // 默认点击第一个标签
-            this.handleClick();
+            this.handleClick(scope.currentPage);
             // 判断设置栏状态，默认进入页面时 是关闭状态
             if (scope.$store.state.showInfo) {
                 scope.$store.commit('setShowInfo', false);
@@ -89,11 +87,11 @@
         },
         computed: {
             infoShow: {
-                get() {
+                get () {
                     let scope = this;
                     return scope.$store.state.showInfo;
                 },
-                set(newVal) {
+                set (newVal) {
                     let scope = this;
                     scope.$store.commit('setShowInfo', newVal);
                 }
@@ -101,25 +99,25 @@
         },
         methods: {
             // 跳转到文章编辑页面
-            writeArticle() {
+            writeArticle () {
                 let scope = this;
                 scope.currentPage = '';
                 scope.$router.push({path: '/edit'});
             },
             // 判断设置栏状态
-            isShow() {
+            isShow () {
                 let scope = this;
                 scope.$store.commit('setShowInfo', !scope.$store.state.showInfo);
             },
             // 其他body 点击事件 关闭 设置栏
-            modifyShow() {
+            modifyShow () {
                 let scope = this;
                 if (scope.$store.state.showInfo) {
                     scope.$store.commit('setShowInfo', false);
                 }
             },
             // 退出到登陆页面
-            exit() {
+            exit () {
                 let scope = this;
                 exitBlog().then((data) => {
                     if (data.status === 200) {
@@ -131,19 +129,19 @@
                     }
                 }).catch().finally();
             },
-            blogManage() {
+            blogManage () {
                 let scope = this;
                 scope.$store.commit('setShowInfo', false);
                 scope.currentPage = '';
                 scope.$homePage('blogConfig');
             },
-            enterExperiment() {
+            enterExperiment () {
                 let scope = this;
                 scope.$router.push({
                     path: '/experiment'
                 });
             },
-            getOwnerInfo(name) {
+            getOwnerInfo (name) {
                 let scope = this;
                 let form = {
                     username: name
@@ -157,11 +155,14 @@
                     });
                 }).catch().finally();
             },
-            handleClick() {
+            handleClick (type) {
                 let scope = this;
-                scope.$homePage(scope.currentPage);
+                if (scope.currentPage !== type) {
+                    scope.currentPage = type;
+                    scope.$homePage(scope.currentPage);
+                }
             },
-            searchArticle() {
+            searchArticle () {
                 let scope = this;
                 scope.currentPage = '';
                 scope.jumpTo();
@@ -169,7 +170,7 @@
             /**
              * 跳转路由
              */
-            jumpTo() {
+            jumpTo () {
                 let scope = this;
                 if (scope.search) {
                     scope.routeAlive = false;
@@ -239,25 +240,19 @@
             .middle-title-1 {
                 width: 32%;
 
-                .el-tabs__header {
-                    margin: 0 0 0;
-
-                    .el-tabs__nav-scroll {
-                        display: flex;
-                        justify-content: center;
-                    }
-                }
-
-                .el-tabs--top .el-tabs__item.is-top {
+                .main-title {
+                    padding: 0.2rem .9rem;
+                    font-weight: 500;
                     font-size: 1.2rem;
-                }
 
-                .el-tabs__active-bar {
-                    background-color: unset;
-                }
+                    &.is-blue {
+                        color: #409EFF;
+                    }
 
-                .el-tabs__nav-wrap::after {
-                    background-color: unset;
+                    &:hover {
+                        color: #409EFF;
+                        cursor: pointer;
+                    }
                 }
             }
 
