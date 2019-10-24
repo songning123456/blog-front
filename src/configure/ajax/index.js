@@ -92,16 +92,13 @@ axios.ajax = function (url, method, params, form = false, customize = {}, respon
         if (method && method.toLowerCase() === 'get') {
             config.params = params;
         } else {
-            // 如果已经登陆直接用json请求，否则用formData格式请求
-            if (localStorage.token) {
-                config.data = params;
+            // 只有登陆接口用FormData
+            if (params.length === 2 && params.username && params.password) {
+                const formData = new FormData();
+                Object.keys(params).forEach(key => formData.append(key, params[key]));
+                config.data = formData;
             } else {
-                // JSON 转换为 FormData
-                if (params) {
-                    const formData = new FormData();
-                    Object.keys(params).forEach(key => formData.append(key, params[key]));
-                    config.data = formData;
-                }
+                config.data = params;
             }
         }
         httpRequest(resolve, reject, config, false, customize, responseState);

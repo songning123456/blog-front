@@ -128,10 +128,10 @@ export const updateSystemConfig = (params) => {
     return axios.ajax('/systemConfig/update', 'post', params);
 };
 
-export const labelStatistic = (params) => {
-    return axios.ajax('/label/statistic', 'post', params);
-};
-
 export const updateAttention = (params) => {
     return axios.ajax('/label/updateAttention', 'post', params);
+};
+
+export const existUser = (params) => {
+    return axios.ajax('/users/exist', 'post', params);
 };
