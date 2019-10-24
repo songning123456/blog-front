@@ -32,7 +32,7 @@
                 <el-button type="primary" @click.native='switchRouter'>登陆</el-button>
             </el-row>
             <el-row class='register'>
-                <el-link type="primary">立即注册</el-link>
+                <el-link type="primary" @click='register'>立即注册</el-link>
             </el-row>
         </div>
     </div>
@@ -44,7 +44,7 @@
 
     export default {
         name: 'WelcomeTo',
-        data() {
+        data () {
             return {
                 user: {
                     name: '',
@@ -54,7 +54,7 @@
                 loading: false
             };
         },
-        mounted() {
+        mounted () {
             let scope = this;
             // 回到登录页面时, 判断是否记住密码
             if (localStorage.getItem('username')) {
@@ -67,7 +67,7 @@
         },
         methods: {
             // 表单验证
-            formCheck() {
+            formCheck () {
                 let scope = this;
                 if (!scope.user.name) {
                     scope.$msg('用户名不能为空');
@@ -88,7 +88,7 @@
                 return true;
             },
             // 登陆
-            switchRouter() {
+            switchRouter () {
                 let scope = this;
                 if (!scope.formCheck()) {
                     return;
@@ -121,17 +121,25 @@
                             // 临时保存 用户名(home-page 获取个人头像)
                             sessionStorage.setItem('username', scope.user.name);
                         }
-                        // 跳转路由
-                        scope.$router.push(
-                            {
-                                path: '/home-page',
-                                name: 'homePage'
-                            }
-                        );
+                        if (scope.$route.query.redirect) {
+                            scope.$router.push(scope.$route.query.redirect);
+                        } else {
+                            // 跳转路由
+                            scope.$router.push(
+                                {
+                                    path: '/home-page',
+                                    name: 'homePage'
+                                }
+                            );
+                        }
                     }
                 }).catch().finally(() => {
                     scope.loading = false;
                 });
+            },
+            register () {
+                let scope = this;
+                scope.$router.push({path: '/register'});
             }
         }
     };

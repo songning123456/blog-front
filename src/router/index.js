@@ -10,7 +10,8 @@ export default new Router({
             name: 'WelcomeTo',
             component: () => import('../views/login/WelcomeTo'),
             meta: {
-                title: '欢迎登陆'
+                title: '欢迎登陆',
+                requireAuth: false
             }
         },
         {
@@ -18,7 +19,8 @@ export default new Router({
             name: 'homePage',
             component: () => import('../views/homePage/HomePage'),
             meta: {
-                title: '主页'
+                title: '主页',
+                requireAuth: true
             },
             children: [
                 {
@@ -26,7 +28,8 @@ export default new Router({
                     name: 'read',
                     component: () => import('../views/main/readArticle/ReadArticle'),
                     meta: {
-                        title: '阅读'
+                        title: '阅读',
+                        requireAuth: true
                     }
                 },
                 {
@@ -34,7 +37,8 @@ export default new Router({
                     name: 'search',
                     component: () => import('../views/main/readArticle/SearchArticle'),
                     meta: {
-                        title: '搜索'
+                        title: '搜索',
+                        requireAuth: true
                     }
                 },
                 {
@@ -42,7 +46,8 @@ export default new Router({
                     name: 'statistics',
                     component: () => import('../views/main/statistics/Statistics'),
                     meta: {
-                        title: '话题'
+                        title: '话题',
+                        requireAuth: true
                     }
                 },
                 {
@@ -50,7 +55,8 @@ export default new Router({
                     name: 'history',
                     component: () => import('../views/main/history/History'),
                     meta: {
-                        title: '历史'
+                        title: '历史',
+                        requireAuth: true
                     }
                 },
                 {
@@ -58,14 +64,16 @@ export default new Router({
                     name: 'growth',
                     component: () => import('../views/main/growth/Growth'),
                     meta: {
-                        title: '成长'
+                        title: '成长',
+                        requireAuth: true
                     }
                 }, {
                     path: 'blog-config',
                     name: 'blogConfig',
                     component: () => import('../views/config/BlogConfig'),
                     meta: {
-                        title: '管理配置'
+                        title: '管理配置',
+                        requireAuth: true
                     }
                 }
             ]
@@ -74,7 +82,8 @@ export default new Router({
             name: 'experiment',
             component: () => import('../views/experiment/Experiment'),
             meta: {
-                title: '实验'
+                title: '实验',
+                requireAuth: true
             },
             children: [
                 {
@@ -82,7 +91,8 @@ export default new Router({
                     name: 'lazyExperiment',
                     component: () => import('../views/experiment/lazy/LazyExperiment'),
                     meta: {
-                        title: '懒加载实验'
+                        title: '懒加载实验',
+                        requireAuth: true
                     }
                 }
             ]
@@ -92,35 +102,48 @@ export default new Router({
             name: 'edit',
             component: () => import('../views/edit/EditArticle'),
             meta: {
-                title: '文章编辑'
+                title: '文章编辑',
+                requireAuth: true
             }
         }, {
             path: '/detail',
             name: 'detail',
             component: () => import('../views/detail/DetailArticle'),
             meta: {
-                title: '文章详情'
+                title: '文章详情',
+                requireAuth: true
             }
         }, {
             path: '/introduction',
             name: 'introduction',
             component: () => import('../views/introduction/BloggerIntroduction'),
             meta: {
-                title: '作者简介'
+                title: '作者简介',
+                requireAuth: true
             }
         }, {
             path: '/world-clock',
             name: 'worldClock',
             component: () => import('../views/worldClock/WordClock'),
             meta: {
-                title: '时钟'
+                title: '时钟',
+                requireAuth: true
             }
         }, {
             path: '/simple-map',
             name: 'simpleMap',
             component: () => import('../views/map/SimpleMap'),
             meta: {
-                title: '地图信息'
+                title: '地图信息',
+                requireAuth: true
+            }
+        }, {
+            path: '/register',
+            name: 'register',
+            component: () => import('../views/register/Register'),
+            meta: {
+                title: '注册',
+                requireAuth: false
             }
         }
     ]

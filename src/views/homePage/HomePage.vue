@@ -157,10 +157,8 @@
             },
             handleClick (type) {
                 let scope = this;
-                if (scope.currentPage !== type) {
-                    scope.currentPage = type;
-                    scope.$homePage(scope.currentPage);
-                }
+                scope.currentPage = type;
+                scope.$homePage(scope.currentPage);
             },
             searchArticle () {
                 let scope = this;

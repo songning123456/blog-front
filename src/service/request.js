@@ -45,14 +45,6 @@ export const getHotArticle = (params) => {
     return axios.ajax('/blog/queryHotArticle', 'post', params);
 };
 
-/**
- *
- * @returns {*|Promise|Promise<any>}
- */
-export const getGroupCache = () => {
-    return axios.ajax('/label/queryGroupCache', 'post');
-};
-
 export const getSelectedLabel = () => {
     return axios.ajax('/label/querySelected', 'get');
 };

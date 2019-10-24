@@ -95,7 +95,29 @@ router.beforeEach((to, from, next) => {
     if (to.meta.title) {
         document.title = to.meta.title;
     }
-    next();
+    // 输入存在的页面
+    if (to.matched.length > 0) {
+        // 判断是否需要 登陆权限
+        if (to.matched.some(record => record.meta.requireAuth)) {
+            // 判断token是否存在(即 是否已经登陆)
+            if (localStorage.token) {
+                next();
+            } else {
+                // 如果还未登陆，则登陆后在重定向到此路由
+                next({
+                    path: '/',
+                    query: {
+                        redirect: to.fullPath
+                    }
+                });
+            }
+        } else {
+            next();
+        }
+    } else {
+        // 不存在的页面
+        from.name ? next({name: from.name}) : next('/');
+    }
 });
 /* eslint-disable no-new */
 let vue = new Vue({
