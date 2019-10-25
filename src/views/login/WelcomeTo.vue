@@ -94,10 +94,9 @@
                     return;
                 }
                 scope.loading = true;
-                let param = {
-                    username: scope.user.name,
-                    password: scope.user.password
-                };
+                let param = new FormData();
+                param.append('username', scope.user.name);
+                param.append('password', scope.user.password);
                 // 如果存在token时，先删除
                 if (localStorage.token) {
                     localStorage.removeItem('token');

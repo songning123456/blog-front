@@ -92,14 +92,7 @@ axios.ajax = function (url, method, params, form = false, customize = {}, respon
         if (method && method.toLowerCase() === 'get') {
             config.params = params;
         } else {
-            // 只有登陆接口用FormData
-            if (params.length === 2 && params.username && params.password) {
-                const formData = new FormData();
-                Object.keys(params).forEach(key => formData.append(key, params[key]));
-                config.data = formData;
-            } else {
-                config.data = params;
-            }
+            config.data = params;
         }
         httpRequest(resolve, reject, config, false, customize, responseState);
     });
