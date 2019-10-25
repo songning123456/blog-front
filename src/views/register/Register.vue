@@ -12,13 +12,14 @@
             </el-form>
             <div class='register-button'>
                 <el-button>上一步</el-button>
-                <el-button type="primary" @click='nextStep'>下一步</el-button>
+                <el-button type="primary" @click='nextStep(1)'>下一步</el-button>
             </div>
         </div>
         <div class='register-second' v-else-if='step === 2'>
             <h2>个人信息</h2>
-            <el-upload class='avatar-uploader' action="https://jsonplaceholder.typicode.com/posts/">
-                <img v-if="form.headPortrait" :src="form.headPortrait" class="avatar" alt=""/>
+            <el-upload class='avatar-uploader' accept="image/*" action='' :limit='1'
+                       :before-upload="beforeUpload">
+                <img v-if="imgBlob" :src="imgBlob" class="avatar" alt=""/>
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
             <el-form :model='form' :label-width="labelWidth">
@@ -40,7 +41,7 @@
             </el-form>
             <div class='register-button'>
                 <el-button>上一步</el-button>
-                <el-button type="primary" @click='nextStep'>下一步</el-button>
+                <el-button type="primary" @click='nextStep(2)'>下一步</el-button>
             </div>
         </div>
     </div>
@@ -74,8 +75,8 @@
                     age: 25,
                     gender: '男',
                     headPortrait: ''
-
                 },
+                imgBlob: '',
                 labelWidth: '4rem',
                 step: 2,
                 menu: [[{label: '用户名', value: 'username'}, {label: '密码', value: 'password'}, {
@@ -151,13 +152,20 @@
             }
         },
         methods: {
-            nextStep () {
+            nextStep (type) {
                 let scope = this;
-                scope.formCheck().then(res => {
-                    if (res) {
-                        scope.step = 2;
-                    }
-                });
+                if (type === 1) {
+                    scope.formCheck().then(res => {
+                        if (res) {
+                            scope.step = 2;
+                        }
+                    });
+                }
+            },
+            beforeUpload (file) {
+                let scope = this;
+                scope.imgBlob = URL.createObjectURL(file);
+                return false;
             },
             formCheck () {
                 let scope = this;
