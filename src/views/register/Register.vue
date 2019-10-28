@@ -19,7 +19,7 @@
             <h2>个人信息</h2>
             <el-upload class='avatar-uploader' accept="image/*" action='' :limit='1'
                        :before-upload="beforeUpload">
-                <img v-if="imgBlob" :src="imgBlob" class="avatar" alt=""/>
+                <img v-if="image.imgBlob" :src="image.imgBlob" class="avatar" alt=""/>
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
             <el-form :model='form' :label-width="labelWidth">
@@ -41,7 +41,7 @@
             </el-form>
             <div class='register-button'>
                 <el-button @click='previousStep(1)'>上一步</el-button>
-                <el-button type="primary" @click='nextStep(0)'>保存信息</el-button>
+                <el-button type="primary" @click='nextStep(0)' :loading='loading'>保存信息</el-button>
             </div>
         </div>
     </div>
@@ -49,7 +49,8 @@
 
 <script>
     import PopoverItem from '../../components/public/PopoverItem';
-    import {existUser} from '../../service/request';
+    import {existUser, saveImage, saveUser} from '../../service/request';
+    import FunctionUtil from '@/utils/FunctionUtil';
 
     // 正则表达式
     const REG1 = /^[0-9a-zA-Z]{8,20}$/;
@@ -68,17 +69,22 @@
                     password2: 'fengying123456',
                     realName: '冯影',
                     author: '安静的猫',
-                    email: '159578432891@163.com',
+                    email: '15957843289@163.com',
                     motto: '做一只躺猫',
                     profession: '学生',
-                    telephone: '159578432891',
+                    telephone: '15957843289',
                     age: 21,
                     gender: '女',
                     headPortrait: ''
                 },
-                imgBlob: '',
+                image: {
+                    imgBlob: '',
+                    filename: '',
+                    files: ''
+                },
                 labelWidth: '4rem',
                 step: 1,
+                loading: false,
                 menu: [[{label: '用户名', value: 'username'}, {label: '密码', value: 'password'}, {
                     label: '确认密码',
                     value: 'password2'
@@ -177,11 +183,30 @@
                 });
             },
             save () {
-
+                let scope = this;
+                scope.loading = true;
+                let formData = new FormData();
+                formData.append('file', scope.image.files, scope.image.filename);
+                // 在服务器中生成 图片文件
+                saveImage(formData).then(data => {
+                    scope.$response(data).then(data => {
+                        // 获取服务器中图片路径
+                        scope.form.headPortrait = data.data[0].imageSrc;
+                    });
+                }).finally(() => {
+                    scope.loading = false;
+                });
+                // 保存users表
+                let userParam = FunctionUtil.getObjByAttribute(scope.form, ['username', 'password']);
+                if (JSON.stringify(userParam) !== '{}') {
+                    saveUser(userParam);
+                }
             },
             beforeUpload (file) {
                 let scope = this;
-                scope.imgBlob = URL.createObjectURL(file);
+                scope.image.imgBlob = URL.createObjectURL(file);
+                scope.image.filename = file.name;
+                scope.image.files = file;
                 return false;
             },
             formCheck (type) {
@@ -226,7 +251,7 @@
                     });
                 } else if (type === 0) {
                     return new Promise((resolve) => {
-                        if (!scope.imgBlob) {
+                        if (!scope.image.imgBlob) {
                             resolve({
                                 message: '头像不能为空',
                                 value: false

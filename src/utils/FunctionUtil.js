@@ -46,4 +46,14 @@ FunctionUtil.underlineToCamel = function (param) {
     });
 };
 
+FunctionUtil.getObjByAttribute = function (object = {}, array = []) {
+    let result = {};
+    if (JSON.stringify(object) !== '{}' && array.length !== 0) {
+        array.forEach(item => {
+            result[item] = object[item];
+        });
+    }
+    return result;
+};
+
 export default FunctionUtil;

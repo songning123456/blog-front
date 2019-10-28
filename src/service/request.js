@@ -132,6 +132,19 @@ export const updateAttention = (params) => {
     return axios.ajax('/label/updateAttention', 'post', params);
 };
 
+/**
+ * 判断是否存在此用户
+ * @param params
+ * @returns {*|Promise|Promise<any>}
+ */
 export const existUser = (params) => {
     return axios.ajax('/users/exist', 'post', params);
+};
+
+export const saveUser = (params) => {
+    return axios.ajax('/users/save', 'post', params);
+};
+
+export const saveImage = (params) => {
+    return axios.ajax('/image/save', 'post', params);
 };
