@@ -30,7 +30,7 @@ const httpRequest = function (resolve, reject, config, isRetry, customize, respo
         // 请求接口正确且成功时
         if (response.status === 200 || response.data.status === 200) {
             // 第一次登陆时token还未生成
-            if (!localStorage.token) {
+            if (!localStorage.token && response.data && response.data.Authorization) {
                 localStorage.token = response.data.Authorization;
             }
             resolve(response.data);
