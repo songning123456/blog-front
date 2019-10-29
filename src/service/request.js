@@ -148,3 +148,19 @@ export const saveUser = (params) => {
 export const saveImage = (params) => {
     return axios.ajax('/image/save', 'post', params);
 };
+
+export const saveSystemConfig = (params) => {
+    return axios.ajax('/systemConfig/save', 'post', params);
+};
+
+export const saveBlogger = (params) => {
+    return axios.ajax('/blogger/save', 'post', params);
+};
+
+export const saveLabelRelation = (params) => {
+    return axios.ajax('/label/saveLabelRelation', 'post', params);
+};
+
+export const getLabelConfig = () => {
+    return axios.ajax('/label/getLabelConfig', 'get');
+};

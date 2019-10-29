@@ -46,6 +46,11 @@ FunctionUtil.underlineToCamel = function (param) {
     });
 };
 
+/**
+ * 根据属性获取对象
+ * @param object
+ * @param array
+ */
 FunctionUtil.getObjByAttribute = function (object = {}, array = []) {
     let result = {};
     if (JSON.stringify(object) !== '{}' && array.length !== 0) {

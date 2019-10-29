@@ -41,6 +41,13 @@
             </el-form>
             <div class='register-button'>
                 <el-button @click='previousStep(1)'>上一步</el-button>
+                <el-button type="primary" @click='nextStep(3)'>下一步</el-button>
+            </div>
+        </div>
+        <div class='register-third' v-else-if='step === 3'>
+            <h2>标签选择</h2>
+            <div class='register-button'>
+                <el-button @click='previousStep(2)'>上一步</el-button>
                 <el-button type="primary" @click='nextStep(0)' :loading='loading'>保存信息</el-button>
             </div>
         </div>
@@ -49,7 +56,15 @@
 
 <script>
     import PopoverItem from '../../components/public/PopoverItem';
-    import {existUser, saveImage, saveUser} from '../../service/request';
+    import {
+        existUser,
+        saveImage,
+        saveUser,
+        saveSystemConfig,
+        saveBlogger,
+        saveLabelRelation,
+        getLabelConfig
+    } from '../../service/request';
     import FunctionUtil from '@/utils/FunctionUtil';
 
     // 正则表达式
@@ -76,6 +91,10 @@
                     age: 21,
                     gender: '女',
                     headPortrait: ''
+                },
+                labelInfo: {
+                    result: [],
+                    total: ''
                 },
                 image: {
                     imgBlob: '',
@@ -174,6 +193,12 @@
                     if (res.value) {
                         if (type === 0) {
                             scope.save();
+                        } else if (type === 3) {
+                            scope.labelInfo = {
+                                result: res.data,
+                                total: res.total
+                            };
+                            scope.step = type;
                         } else {
                             scope.step = type;
                         }
@@ -192,6 +217,12 @@
                     scope.$response(data).then(data => {
                         // 获取服务器中图片路径
                         scope.form.headPortrait = data.data[0].imageSrc;
+                        // 保存blogger信息
+                        let array = ['username', 'realName', 'author', 'email', 'motto', 'profession', 'telephone', 'age', 'gender', 'headPortrait'];
+                        let bloggerParam = FunctionUtil.getObjByAttribute(scope.form, array);
+                        if (JSON.stringify(systemConfigParam) !== '{}') {
+                            saveBlogger(bloggerParam);
+                        }
                     });
                 }).finally(() => {
                     scope.loading = false;
@@ -199,7 +230,16 @@
                 // 保存users表
                 let userParam = FunctionUtil.getObjByAttribute(scope.form, ['username', 'password']);
                 if (JSON.stringify(userParam) !== '{}') {
-                    saveUser(userParam);
+                    saveUser({condition: userParam}).then(data => {
+                        if (data.status === 200) {
+                            saveLabelRelation(userParam);
+                        }
+                    });
+                }
+                // 保存系统配置表
+                let systemConfigParam = FunctionUtil.getObjByAttribute(scope.form, ['username']);
+                if (JSON.stringify(systemConfigParam) !== '{}') {
+                    saveSystemConfig({condition: systemConfigParam});
                 }
             },
             beforeUpload (file) {
@@ -249,7 +289,7 @@
                             });
                         });
                     });
-                } else if (type === 0) {
+                } else if (type === 3) {
                     return new Promise((resolve) => {
                         if (!scope.image.imgBlob) {
                             resolve({
@@ -298,10 +338,21 @@
                                 message: '以1开头的11位电话号码',
                                 value: false
                             });
+                            return;
                         }
-                        resolve({
-                            value: true
+                        getLabelConfig().then(data => {
+                            scope.$response(data).then(data => {
+                                resolve({
+                                    data: data.data,
+                                    total: data.total,
+                                    value: true
+                                });
+                            });
                         });
+                    });
+                } else if (type === 0) {
+                    return new Promise(resolve => {
+
                     });
                 }
             }
@@ -402,6 +453,20 @@
                 position: relative;
                 top: 20rem;
                 right: 24rem;
+            }
+        }
+
+        .register-third {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            .register-button {
+                position: relative;
+                top: 8rem;
+                right: 18rem;
             }
         }
     }
