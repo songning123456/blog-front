@@ -1,7 +1,7 @@
 <template>
     <div class='register'>
         <div class='register-first' v-if='step === 1'>
-            <h2>登陆信息</h2>
+            <div class='header'>登陆信息</div>
             <el-form :model='form' :label-width='labelWidth'>
                 <popover-item v-for='(item, index) in menu[0]' :key='index' :label-name='item.label'
                               :show='warning[item.value].show'
@@ -16,7 +16,9 @@
             </div>
         </div>
         <div class='register-second' v-else-if='step === 2'>
-            <h2>个人信息</h2>
+            <div class='header'>
+                个人信息
+            </div>
             <el-upload class='avatar-uploader' accept="image/*" action='' :limit='1'
                        :before-upload="beforeUpload">
                 <img v-if="image.imgBlob" :src="image.imgBlob" class="avatar" alt=""/>
@@ -45,7 +47,16 @@
             </div>
         </div>
         <div class='register-third' v-else-if='step === 3'>
-            <h2>标签选择</h2>
+            <div class='header'>标签选择</div>
+            <el-table :data='tableData'>
+                <el-table-column prop="index" label="ID"></el-table-column>
+                <el-table-column prop="labelName" label="标签名称"></el-table-column>
+                <el-table-column label="是否关注">
+                    <template slot-scope='scope'>
+                        <el-switch v-model="scope.row.attention"></el-switch>
+                    </template>
+                </el-table-column>
+            </el-table>
             <div class='register-button'>
                 <el-button @click='previousStep(2)'>上一步</el-button>
                 <el-button type="primary" @click='nextStep(0)' :loading='loading'>保存信息</el-button>
@@ -101,7 +112,7 @@
                     filename: '',
                     files: ''
                 },
-                labelWidth: '4rem',
+                labelWidth: '5rem',
                 step: 1,
                 loading: false,
                 menu: [[{label: '用户名', value: 'username'}, {label: '密码', value: 'password'}, {
@@ -176,6 +187,19 @@
                 deep: true
             }
         },
+        computed: {
+            tableData () {
+                let scope = this;
+                let result = scope.labelInfo.result.map((item, index) => {
+                    return {
+                        index: index + 1,
+                        labelName: item.labelName,
+                        attention: false
+                    };
+                });
+                return result;
+            }
+        },
         methods: {
             // 0,1; 0 跳转到登录页 1返回上一步
             previousStep (type) {
@@ -241,6 +265,19 @@
                 if (JSON.stringify(systemConfigParam) !== '{}') {
                     saveSystemConfig({condition: systemConfigParam});
                 }
+                // 保存label-relation信息
+                let labelRelationParam = scope.tableData.map(item => {
+                    let obj = {};
+                    obj.labelName = item.labelName;
+                    if (item.attention) {
+                        obj.attention = 1;
+                    } else {
+                        obj.attention = 0;
+                    }
+                    obj.username = scope.form.username;
+                    return obj;
+                });
+                saveLabelRelation({condition: labelRelationParam});
             },
             beforeUpload (file) {
                 let scope = this;
@@ -368,42 +405,50 @@
         .register-first {
             width: 100%;
             height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            padding: 0 24rem;
+            box-sizing: border-box;
 
-            h2 {
-                position: relative;
-                bottom: 15rem;
-                left: 17rem;
+            .header {
+                height: 25%;
+                text-align: center;
+                line-height: 15rem;
+                font-weight: bold;
+                font-size: 1.2rem;
             }
 
             .el-form {
-                width: 28rem;
-                position: relative;
-                bottom: 5rem;
-                float: left;
+                height: 25%;
+                margin-left: 15%;
+                width: 70%;
+
+                .el-form-item {
+                    margin-bottom: 1.1rem;
+                }
             }
 
             .register-button {
-                position: relative;
-                top: 8rem;
-                right: 18rem;
+                height: 50%;
+                text-align: center;
             }
         }
 
         .register-second {
             width: 100%;
             height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            padding: 0 24rem;
+            box-sizing: border-box;
+
+            .header {
+                height: 5%;
+                text-align: center;
+                font-weight: bold;
+                font-size: 1.2rem;
+                line-height: 2.4rem;
+            }
 
             .avatar-uploader {
-
-                position: relative;
-                bottom: 13.5rem;
-                left: 13rem;
+                height: 25%;
+                text-align: center;
 
                 .el-upload {
                     border: 1px dashed #d9d9d9;
@@ -433,16 +478,15 @@
 
             }
 
-            h2 {
-                position: relative;
-                bottom: 20rem;
-                left: 20rem;
-            }
-
             .el-form {
-                position: relative;
-                right: 5rem;
-                top: 5rem;
+
+                height: 56%;
+                width: 70%;
+                margin-left: 15%;
+
+                .el-form-item {
+                    margin-bottom: 1.1rem;
+                }
 
                 .register-gender {
                     padding-right: 18rem;
@@ -450,23 +494,53 @@
             }
 
             .register-button {
-                position: relative;
-                top: 20rem;
-                right: 24rem;
+                text-align: center;
             }
         }
 
         .register-third {
             width: 100%;
             height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            padding: 0 24rem;
+            box-sizing: border-box;
+
+            .header {
+                height: 5%;
+                text-align: center;
+                line-height: 2.5rem;
+                font-weight: bold;
+                font-size: 1.2rem;
+            }
+
+            .el-table {
+                height: 88%;
+                overflow: auto;
+
+                // 修改滚动条样式
+                &::-webkit-scrollbar {
+                    width: 10px;
+                    height: 15px;
+                }
+
+                &::-webkit-scrollbar-track {
+                    background-color: white;
+                    border-radius: 2px;
+                }
+
+                &::-webkit-scrollbar-thumb {
+                    background: #bfbfbf;
+                    border-radius: 10px;
+
+                    &:hover {
+                        background: #a5a5a5;
+                    }
+                }
+            }
 
             .register-button {
-                position: relative;
-                top: 8rem;
-                right: 18rem;
+                height: 7%;
+                text-align: center;
+                padding-top: .5rem;
             }
         }
     }
