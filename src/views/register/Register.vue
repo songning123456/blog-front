@@ -59,9 +59,10 @@
             </el-table>
             <div class='register-button'>
                 <el-button @click='previousStep(2)'>上一步</el-button>
-                <el-button type="primary" @click='nextStep(0)' :loading='loading'>保存信息</el-button>
+                <el-button type="primary" @click='nextStep(0)'>保存信息</el-button>
             </div>
         </div>
+        <tool-loading :loading="loading" normal="spinner"></tool-loading>
     </div>
 </template>
 
@@ -77,6 +78,7 @@
         getLabelConfig
     } from '../../service/request';
     import FunctionUtil from '@/utils/FunctionUtil';
+    import ToolLoading from '@/components/util/ToolLoading';
 
     // 正则表达式
     const REG1 = /^[0-9a-zA-Z]{8,20}$/;
@@ -86,7 +88,7 @@
 
     export default {
         name: 'Register',
-        components: {PopoverItem},
+        components: {ToolLoading, PopoverItem},
         data () {
             return {
                 form: {
@@ -114,6 +116,13 @@
                 },
                 labelWidth: '5rem',
                 step: 1,
+                load: {
+                    image: false,
+                    blogger: false,
+                    user: false,
+                    labelRelation: false,
+                    systemConfig: false
+                },
                 loading: false,
                 menu: [[{label: '用户名', value: 'username'}, {label: '密码', value: 'password'}, {
                     label: '确认密码',
@@ -185,6 +194,21 @@
                     scope.warning.telephone.show = !newVal.telephone.length || !REG4.test(newVal.telephone);
                 },
                 deep: true
+            },
+            load: {
+                handler (newVal, oldVal) {
+                    let scope = this;
+                    let result = Object.keys(newVal).map(item => {
+                        return newVal[item];
+                    });
+                    if (result.findIndex(value => value === true) === -1) {
+                        scope.loading = false;
+                    }
+                    if (result.findIndex(value => value === false) === -1) {
+                        scope.loading = true;
+                    }
+                },
+                deep: true
             }
         },
         computed: {
@@ -233,51 +257,68 @@
             },
             save () {
                 let scope = this;
-                scope.loading = true;
+                scope.load = {
+                    image: true,
+                    blogger: true,
+                    user: true,
+                    labelRelation: true,
+                    systemConfig: true
+                };
                 let formData = new FormData();
                 formData.append('file', scope.image.files, scope.image.filename);
                 // 在服务器中生成 图片文件
                 saveImage(formData).then(data => {
                     scope.$response(data).then(data => {
+                        scope.load.image = false;
                         // 获取服务器中图片路径
                         scope.form.headPortrait = data.data[0].imageSrc;
                         // 保存blogger信息
                         let array = ['username', 'realName', 'author', 'email', 'motto', 'profession', 'telephone', 'age', 'gender', 'headPortrait'];
                         let bloggerParam = FunctionUtil.getObjByAttribute(scope.form, array);
                         if (JSON.stringify(systemConfigParam) !== '{}') {
-                            saveBlogger(bloggerParam);
+                            saveBlogger({condition: bloggerParam}).then(data => {
+                                if (data.status === 200) {
+                                    scope.load.blogger = false;
+                                }
+                            });
                         }
                     });
-                }).finally(() => {
-                    scope.loading = false;
                 });
                 // 保存users表
                 let userParam = FunctionUtil.getObjByAttribute(scope.form, ['username', 'password']);
                 if (JSON.stringify(userParam) !== '{}') {
                     saveUser({condition: userParam}).then(data => {
                         if (data.status === 200) {
-                            saveLabelRelation(userParam);
+                            scope.load.user = false;
+                            // 保存label-relation信息
+                            let labelRelationParam = scope.tableData.map(item => {
+                                let obj = {};
+                                obj.labelName = item.labelName;
+                                if (item.attention) {
+                                    obj.attention = 1;
+                                } else {
+                                    obj.attention = 0;
+                                }
+                                obj.username = scope.form.username;
+                                return obj;
+                            });
+                            saveLabelRelation({condition: labelRelationParam}).then(data => {
+                                if (data.status === 200) {
+                                    scope.load.labelRelation = false;
+                                }
+                            });
                         }
                     });
                 }
-                // 保存系统配置表
+                // 保存system-config表
                 let systemConfigParam = FunctionUtil.getObjByAttribute(scope.form, ['username']);
                 if (JSON.stringify(systemConfigParam) !== '{}') {
-                    saveSystemConfig({condition: systemConfigParam});
+                    saveSystemConfig({condition: systemConfigParam}).then(data => {
+                        if (data.status === 200) {
+                            scope.load.systemConfig = false;
+                        }
+                    });
                 }
-                // 保存label-relation信息
-                let labelRelationParam = scope.tableData.map(item => {
-                    let obj = {};
-                    obj.labelName = item.labelName;
-                    if (item.attention) {
-                        obj.attention = 1;
-                    } else {
-                        obj.attention = 0;
-                    }
-                    obj.username = scope.form.username;
-                    return obj;
-                });
-                saveLabelRelation({condition: labelRelationParam});
             },
             beforeUpload (file) {
                 let scope = this;
@@ -389,7 +430,24 @@
                     });
                 } else if (type === 0) {
                     return new Promise(resolve => {
-
+                        let attentions = scope.tableData.filter(item => {
+                            return item.attention === true;
+                        });
+                        if (attentions.length === 0) {
+                            resolve({
+                                message: '请先选择关注标签',
+                                value: false
+                            });
+                        } else if (attentions.length > 0 && attentions.length < 5) {
+                            resolve({
+                                message: '至少选择5个关注标签',
+                                value: false
+                            });
+                        } else {
+                            resolve({
+                                value: true
+                            });
+                        }
                     });
                 }
             }
