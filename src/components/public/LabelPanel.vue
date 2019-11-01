@@ -25,25 +25,25 @@
         data () {
             return {
                 oldTab: '',
-                currentIndex: -1
+                currentIndex: -1,
+                showIcon: false
             };
         },
-        computed: {
-            // eslint-disable-next-line vue/return-in-computed-property
-            showIcon () {
-                let scope = this;
-                scope.$nextTick(() => {
+        watch: {
+            tabs: {
+                handler (newVal, oldVal) {
+                    let scope = this;
                     let total = document.getElementsByClassName('label-center')[0].offsetWidth;
                     let all = 0;
-                    // eslint-disable-next-line vue/no-async-in-computed-properties
                     setTimeout(() => {
                         let array = [...document.getElementsByClassName('label-content')];
                         array.forEach(item => {
                             all += (item.offsetWidth + 20);
                         });
-                        return all > total;
-                    }, 500);
-                });
+                        scope.showIcon = all > total;
+                    }, 100);
+                },
+                deep: true
             }
         },
         methods: {
