@@ -63,6 +63,18 @@
             </div>
         </div>
         <tool-loading :loading="loading" normal="spinner"></tool-loading>
+        <div class='register-success' v-if='register.success'>
+            <div class='count-down'>
+                <span class='digital'>{{second}}</span>
+                <span class='text'>s后自动跳转到主页...</span>
+            </div>
+            <img src='../../assets/registerSuccess.svg'/>
+            <h4>注册成功</h4>
+        </div>
+        <div class='register-fail' v-if='register.fail'>
+            <img src='../../assets/registerFail.svg'/>
+            <h4>注册失败</h4>
+        </div>
     </div>
 </template>
 
@@ -105,17 +117,28 @@
                     gender: '女',
                     headPortrait: ''
                 },
+                // (第三步的)标签信息
                 labelInfo: {
                     result: [],
                     total: ''
                 },
+                // 注册 成功 还是 失败
+                register: {
+                    success: false,
+                    fail: false
+                },
+                //倒计时 秒
+                second: '',
+                // 上传的头像
                 image: {
                     imgBlob: '',
                     filename: '',
                     files: ''
                 },
                 labelWidth: '5rem',
+                // 步骤
                 step: 1,
+                // 各个save的加载状况
                 load: {
                     image: false,
                     blogger: false,
@@ -123,7 +146,9 @@
                     labelRelation: false,
                     systemConfig: false
                 },
+                //总的加载状况
                 loading: false,
+                // label信息
                 menu: [[{label: '用户名', value: 'username'}, {label: '密码', value: 'password'}, {
                     label: '确认密码',
                     value: 'password2'
@@ -134,6 +159,7 @@
                     label: '座右铭',
                     value: 'motto'
                 }, {label: '职业', value: 'profession'}, {label: '电话', value: 'telephone'}]],
+                // 右侧的警告信息
                 warning: {
                     username: {
                         title: '用户名必须符合0-9,a-z,A-Z且长度>8,<20',
@@ -201,8 +227,11 @@
                     let result = Object.keys(newVal).map(item => {
                         return newVal[item];
                     });
+                    // 全部 加载成功(注册成功)
                     if (result.findIndex(value => value === true) === -1) {
                         scope.loading = false;
+                        // 注册成功后3s 跳转到主页
+                        scope.autoJump();
                     }
                     if (result.findIndex(value => value === false) === -1) {
                         scope.loading = true;
@@ -254,6 +283,25 @@
                         scope.$msg(res.message);
                     }
                 });
+            },
+            // 自动跳转页面
+            autoJump () {
+                let scope = this;
+                const TIME_COUNT = 3;
+                if (!scope.timer) {
+                    scope.second = TIME_COUNT;
+                    scope.register.success = true;
+                    scope.timer = setInterval(() => {
+                        if (scope.second > 0 && scope.second <= TIME_COUNT) {
+                            scope.second--;
+                        } else {
+                            scope.register.success = false;
+                            clearInterval(scope.timer);
+                            scope.timer = null;
+                            scope.$router.push({path: '/'});
+                        }
+                    }, 1000);
+                }
             },
             save () {
                 let scope = this;
@@ -599,6 +647,55 @@
                 height: 7%;
                 text-align: center;
                 padding-top: .5rem;
+            }
+        }
+
+        .register-success, .register-fail {
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 2000;
+            position: absolute;
+            background-color: rgb(255, 255, 255);
+
+            .count-down {
+                height: 5rem;
+                position: absolute;
+                top: 12rem;
+                left: 0;
+                right: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                .digital {
+                    font-size: 3rem;
+                    padding: 0 1rem;
+                }
+
+                .text {
+                    padding-top: 1rem;
+                }
+            }
+
+            img {
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 3rem;
+                margin: auto;
+                position: absolute;
+            }
+
+            h4 {
+                height: 1.2rem;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: -1rem;
+                margin: auto;
+                position: absolute;
             }
         }
     }
