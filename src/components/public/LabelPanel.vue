@@ -1,13 +1,13 @@
 <template>
     <div class='label-panel'>
-        <div class='left-icon' @click='before'><i class='el-icon-arrow-left'></i></div>
+        <div class='left-icon' @click='before' v-show="showIcon"><i class='el-icon-arrow-left'></i></div>
         <div class='label-center'>
             <div class='label-content' v-for='(item, index) in tabs' :key='index' @click="chooseLabel(index)"
                  :class='currentIndex === index ? "content-color" : "" '>
                 {{item}}
             </div>
         </div>
-        <div class='right-icon' @click='after'><i class='el-icon-arrow-right'></i></div>
+        <div class='right-icon' @click='after' v-show="showIcon"><i class='el-icon-arrow-right'></i></div>
     </div>
 </template>
 
@@ -27,6 +27,24 @@
                 oldTab: '',
                 currentIndex: -1
             };
+        },
+        computed: {
+            // eslint-disable-next-line vue/return-in-computed-property
+            showIcon () {
+                let scope = this;
+                scope.$nextTick(() => {
+                    let total = document.getElementsByClassName('label-center')[0].offsetWidth;
+                    let all = 0;
+                    // eslint-disable-next-line vue/no-async-in-computed-properties
+                    setTimeout(() => {
+                        let array = [...document.getElementsByClassName('label-content')];
+                        array.forEach(item => {
+                            all += (item.offsetWidth + 20);
+                        });
+                        return all > total;
+                    }, 500);
+                });
+            }
         },
         methods: {
             chooseLabel (index) {

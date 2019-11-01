@@ -26,7 +26,7 @@
                     <div @click='blogManage'><span>管理配置</span></div>
                     <div @click='enterExperiment'><span>实验室</span></div>
                     <div @click='exit'><span>退出</span></div>
-                    <el-avatar :src="owner.headPortrait || ''" slot='reference'
+                    <el-avatar :src="avatar" slot='reference'
                                @click.native.stop='isShow'></el-avatar>
                 </el-popover>
             </div>
@@ -41,6 +41,7 @@
     import ReadArticle from '../../views/main/readArticle/ReadArticle';
     import ElFrameset from '../../components/layout/el-frameset';
     import ElFrame from '../../components/layout/el-frame';
+    import config from '../../utils/ConfigUtil';
     import {getBloggerInfo, exitBlog} from '../../service/request';
 
     export default {
@@ -94,6 +95,15 @@
                 set (newVal) {
                     let scope = this;
                     scope.$store.commit('setShowInfo', newVal);
+                }
+            },
+            avatar () {
+                let scope = this;
+                if (JSON.stringify(scope.owner) !== '{}') {
+                    let src = config.getImageOriginal() + encodeURIComponent(scope.owner.headPortrait);
+                    return src;
+                } else {
+                    return '';
                 }
             }
         },

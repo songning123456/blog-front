@@ -60,5 +60,30 @@ FunctionUtil.getObjByAttribute = function (object = {}, array = []) {
     }
     return result;
 };
+/**
+ * 对象转json字符串
+ */
+FunctionUtil.objectToJson = (object) => {
+    try {
+        return JSON.stringify(object);
+    } catch (e) {
+        console.error('JSON.stringify 出错！');
+    }
+    return '';
+};
+/**
+ * json字符串转对象
+ */
+FunctionUtil.jsonToObject = (json) => {
+    if (typeof json === 'object') {
+        return json;
+    }
+    try {
+        return JSON.parse(json);
+    } catch (e) {
+        console.error('JSON.parse 出错！');
+    }
+    return null;
+};
 
 export default FunctionUtil;

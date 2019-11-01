@@ -1,6 +1,7 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue';
+import axios from 'axios';
 import App from './App';
 import router from './router';
 import ElementUI from 'element-ui';
@@ -15,6 +16,7 @@ import i18n from './lang';
 import './style/iconfont/iconfont.css';
 import VueLazyComponent from '@xunlei/vue-lazy-component';
 import ZMessage from './configure/util/ZMessage';
+import Config from '../src/utils/ConfigUtil';
 
 import Dictionary from './components/common/CommonDictionary';
 
@@ -118,6 +120,14 @@ router.beforeEach((to, from, next) => {
         // 不存在的页面
         from.name ? next({name: from.name}) : next('/');
     }
+});
+/**
+ * 获取配置项
+ */
+axios.get('../static/config/blog-config.json').then(({data}) => {
+    Config.setConfig(data);
+}).catch(e => {
+    console.error('获取simple-blog 基本配置失败! ', e.message);
 });
 /* eslint-disable no-new */
 let vue = new Vue({

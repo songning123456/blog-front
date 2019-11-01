@@ -11,7 +11,7 @@
             </div>
             <div class='content'>
                 <mavon-editor v-model='content' :defaultOpen='"preview"' :editable='false' :subfield='false'
-                              :toolbarsFlag='false' :boxShadow='false' :shortCut='false'></mavon-editor>
+                              :toolbarsFlag='false' :boxShadow='false' :shortCut='false' :transition="false"></mavon-editor>
             </div>
         </div>
         <el-backtop target=".detail-article" :visibility-height='50'></el-backtop>

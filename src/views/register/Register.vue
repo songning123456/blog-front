@@ -368,13 +368,16 @@
                     });
                 }
             },
+            // 上传操作
             beforeUpload (file) {
                 let scope = this;
                 scope.image.imgBlob = URL.createObjectURL(file);
                 scope.image.filename = file.name;
                 scope.image.files = file;
+                // 组织默认上传地址
                 return false;
             },
+            //表单验证
             formCheck (type) {
                 let scope = this;
                 if (type === 2) {
@@ -400,6 +403,7 @@
                             });
                             return;
                         }
+                        // 判断用户是否存在
                         existUser({condition: {username: scope.form.username}}).then(data => {
                             scope.$response(data).then(data => {
                                 if (data.data[0].isExist) {
@@ -466,6 +470,7 @@
                             });
                             return;
                         }
+                        // 获取标签配置
                         getLabelConfig().then(data => {
                             scope.$response(data).then(data => {
                                 resolve({
