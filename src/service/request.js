@@ -141,26 +141,13 @@ export const existUser = (params) => {
     return axios.ajax('/users/exist', 'post', params);
 };
 
-export const saveUser = (params) => {
-    return axios.ajax('/users/save', 'post', params);
-};
-
 export const saveImage = (params) => {
     return axios.ajax('/image/save', 'post', params);
 };
 
-export const saveSystemConfig = (params) => {
-    return axios.ajax('/systemConfig/save', 'post', params);
-};
-
-export const saveBlogger = (params) => {
-    return axios.ajax('/blogger/save', 'post', params);
-};
-
-export const saveLabelRelation = (params) => {
-    return axios.ajax('/label/saveLabelRelation', 'post', params);
-};
-
 export const getLabelConfig = () => {
     return axios.ajax('/label/getLabelConfig', 'get');
+};
+export const registerAll = (params) => {
+    return axios.ajax('/register/all', 'post', params);
 };

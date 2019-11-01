@@ -72,6 +72,10 @@
             <h4>注册成功</h4>
         </div>
         <div class='register-fail' v-if='register.fail'>
+            <div class='count-down'>
+                <span class='digital'>{{second}}</span>
+                <span class='text'>s后自动跳转到主页...</span>
+            </div>
             <img src='../../assets/registerFail.svg'/>
             <h4>注册失败</h4>
         </div>
@@ -83,14 +87,10 @@
     import {
         existUser,
         saveImage,
-        saveUser,
-        saveSystemConfig,
-        saveBlogger,
-        saveLabelRelation,
-        getLabelConfig
+        getLabelConfig,
+        registerAll
     } from '../../service/request';
-    import FunctionUtil from '@/utils/FunctionUtil';
-    import ToolLoading from '@/components/util/ToolLoading';
+    import ToolLoading from '../../components/util/ToolLoading';
 
     // 正则表达式
     const REG1 = /^[0-9a-zA-Z]{8,20}$/;
@@ -138,14 +138,6 @@
                 labelWidth: '5rem',
                 // 步骤
                 step: 1,
-                // 各个save的加载状况
-                load: {
-                    image: false,
-                    blogger: false,
-                    user: false,
-                    labelRelation: false,
-                    systemConfig: false
-                },
                 //总的加载状况
                 loading: false,
                 // label信息
@@ -220,24 +212,6 @@
                     scope.warning.telephone.show = !newVal.telephone.length || !REG4.test(newVal.telephone);
                 },
                 deep: true
-            },
-            load: {
-                handler (newVal, oldVal) {
-                    let scope = this;
-                    let result = Object.keys(newVal).map(item => {
-                        return newVal[item];
-                    });
-                    // 全部 加载成功(注册成功)
-                    if (result.findIndex(value => value === true) === -1) {
-                        scope.loading = false;
-                        // 注册成功后3s 跳转到主页
-                        scope.autoJump();
-                    }
-                    if (result.findIndex(value => value === false) === -1) {
-                        scope.loading = true;
-                    }
-                },
-                deep: true
             }
         },
         computed: {
@@ -284,18 +258,18 @@
                     }
                 });
             },
-            // 自动跳转页面
-            autoJump () {
+            // 自动跳转页面 type => success, fail
+            autoJump (type) {
                 let scope = this;
                 const TIME_COUNT = 3;
                 if (!scope.timer) {
                     scope.second = TIME_COUNT;
-                    scope.register.success = true;
+                    scope.register[type] = true;
                     scope.timer = setInterval(() => {
                         if (scope.second > 0 && scope.second <= TIME_COUNT) {
                             scope.second--;
                         } else {
-                            scope.register.success = false;
+                            scope.register[type] = false;
                             clearInterval(scope.timer);
                             scope.timer = null;
                             scope.$router.push({path: '/'});
@@ -305,68 +279,43 @@
             },
             save () {
                 let scope = this;
-                scope.load = {
-                    image: true,
-                    blogger: true,
-                    user: true,
-                    labelRelation: true,
-                    systemConfig: true
-                };
                 let formData = new FormData();
                 formData.append('file', scope.image.files, scope.image.filename);
+                scope.loading = true;
                 // 在服务器中生成 图片文件
                 saveImage(formData).then(data => {
-                    scope.$response(data).then(data => {
-                        scope.load.image = false;
+                    if (data.status === 200 && data.total > 0) {
                         // 获取服务器中图片路径
                         scope.form.headPortrait = data.data[0].imageSrc;
-                        // 保存blogger信息
-                        let array = ['username', 'realName', 'author', 'email', 'motto', 'profession', 'telephone', 'age', 'gender', 'headPortrait'];
-                        let bloggerParam = FunctionUtil.getObjByAttribute(scope.form, array);
-                        if (JSON.stringify(systemConfigParam) !== '{}') {
-                            saveBlogger({condition: bloggerParam}).then(data => {
-                                if (data.status === 200) {
-                                    scope.load.blogger = false;
-                                }
-                            });
-                        }
-                    });
+                        scope.form.labelVOS = scope.tableData.map(item => {
+                            let obj = {};
+                            obj.labelName = item.labelName;
+                            if (item.attention) {
+                                obj.attention = 1;
+                            } else {
+                                obj.attention = 0;
+                            }
+                            return obj;
+                        });
+                        registerAll({condition: scope.form}).then(data => {
+                            scope.loading = false;
+                            if (data.status === 200) {
+                                scope.autoJump('success');
+                            } else {
+                                scope.autoJump('fail');
+                            }
+                        }).catch(e => {
+                            scope.loading = false;
+                            scope.autoJump('fail');
+                        });
+                    } else {
+                        scope.loading = false;
+                        scope.autoJump('fail');
+                    }
+                }).catch(e => {
+                    scope.loading = false;
+                    scope.autoJump('fail');
                 });
-                // 保存users表
-                let userParam = FunctionUtil.getObjByAttribute(scope.form, ['username', 'password']);
-                if (JSON.stringify(userParam) !== '{}') {
-                    saveUser({condition: userParam}).then(data => {
-                        if (data.status === 200) {
-                            scope.load.user = false;
-                            // 保存label-relation信息
-                            let labelRelationParam = scope.tableData.map(item => {
-                                let obj = {};
-                                obj.labelName = item.labelName;
-                                if (item.attention) {
-                                    obj.attention = 1;
-                                } else {
-                                    obj.attention = 0;
-                                }
-                                obj.username = scope.form.username;
-                                return obj;
-                            });
-                            saveLabelRelation({condition: labelRelationParam}).then(data => {
-                                if (data.status === 200) {
-                                    scope.load.labelRelation = false;
-                                }
-                            });
-                        }
-                    });
-                }
-                // 保存system-config表
-                let systemConfigParam = FunctionUtil.getObjByAttribute(scope.form, ['username']);
-                if (JSON.stringify(systemConfigParam) !== '{}') {
-                    saveSystemConfig({condition: systemConfigParam}).then(data => {
-                        if (data.status === 200) {
-                            scope.load.systemConfig = false;
-                        }
-                    });
-                }
             },
             // 上传操作
             beforeUpload (file) {
