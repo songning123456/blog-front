@@ -28,16 +28,26 @@ const httpRequest = function (resolve, reject, config, isRetry, customize, respo
     axios.defaults.timeout = Config.AJAX_TIMEOUT;
     axios(config).then(response => {
         // 请求接口正确且成功时
-        if (response.status === 200 || response.data.status === 200) {
+        if (response.data.status === 200) {
             // 第一次登陆时token还未生成
             if (!localStorage.token && response.data && response.data.Authorization) {
                 localStorage.token = response.data.Authorization;
             }
             resolve(response.data);
-        } else if (response.status === 401) {
-            // 强制跳转到登陆页面
-            Vue.$router.push({path: '/'});
-            resolve(response.data.result ? response.data.result : response.data);
+        } else if (response.data.status === 401) {
+            axios.ajax('/logout', 'get').then(data => {
+                if (data.status === 200) {
+                    // 强制跳转到登陆页面
+                    Vue.$router.push({path: '/'});
+                    // 删除token
+                    localStorage.removeItem('token');
+                    // 隐藏 设置栏
+                    Vue.$store.commit('setShowInfo', false);
+                    setTimeout(() => {
+                        Vue.$msg('token无效,请重新登陆!', 'error', 2000);
+                    }, 300);
+                }
+            });
         } else {
             // 请求接口错误或不成功时
             resolve(response.data.result ? response.data.result : response.data);
