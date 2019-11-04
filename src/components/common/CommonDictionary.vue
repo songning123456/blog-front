@@ -16,7 +16,8 @@
                     READ_ARTICLE: '阅读文章',
                     SIMPLE_CLOCK: '休眠时钟',
                     SIMPLE_MAP: '定位地图',
-                    STATISTIC: '大数据统计'
+                    STATISTIC: '大数据统计',
+                    REGISTER: '注冊用戶信息'
                 }
             };
         }

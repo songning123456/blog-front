@@ -88,7 +88,8 @@
         existUser,
         saveImage,
         getLabelConfig,
-        registerAll
+        registerAll,
+        insertHistoryInfo
     } from '../../service/request';
     import ToolLoading from '../../components/util/ToolLoading';
 
@@ -300,6 +301,16 @@
                         registerAll({condition: scope.form}).then(data => {
                             scope.loading = false;
                             if (data.status === 200) {
+                                let param = {
+                                    condition: {
+                                        title: scope.COMMON_MAP.HISTORY.REGISTER
+                                    }
+                                };
+                                insertHistoryInfo(param).then(data => {
+                                    if (data.status !== 200) {
+                                        scope.$msg('插入历史信息失败!');
+                                    }
+                                });
                                 scope.autoJump('success');
                             } else {
                                 scope.autoJump('fail');

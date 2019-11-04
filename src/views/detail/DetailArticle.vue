@@ -21,11 +21,11 @@
 
 <script>
     import {getContent, insertHistoryInfo} from '../../service/request.js';
-    import ElFrameset from '@/components/layout/el-frameset';
-    import ElFrame from '@/components/layout/el-frame';
+    import ElFrameset from '../../components/layout/el-frameset';
+    import ElFrame from '../../components/layout/el-frame';
     import DateUtil from '../../utils/DateUtil';
-    import EmptyView from '@/components/util/EmptyView';
-    import ToolLoading from '@/components/util/ToolLoading';
+    import EmptyView from '../../components/util/EmptyView';
+    import ToolLoading from '../../components/util/ToolLoading';
 
     export default {
         name: 'DetailArticle',
