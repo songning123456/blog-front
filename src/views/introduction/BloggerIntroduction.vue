@@ -69,8 +69,9 @@
 
 <script>
     import EmptyView from '../../components/util/EmptyView';
-    import {getPersonalInfo, getBloggerInfo, sendSimpleMail} from '../../service/request';
+    import {getBloggerInfo, getPersonalInfo, sendSimpleMail} from '../../service/request';
     import ToolLoading from '../../components/util/ToolLoading';
+    import config from '../../utils/ConfigUtil';
 
     export default {
         name: 'BloggerIntroduction',
@@ -130,6 +131,16 @@
                 current: '',
                 loading: false
             };
+        },
+        computed: {
+            avatar () {
+                let scope = this;
+                if (JSON.stringify(scope.owner) !== '{}') {
+                    return config.getImageOriginal() + encodeURIComponent(scope.result.headPortrait);
+                } else {
+                    return '';
+                }
+            }
         },
         methods: {
             sureContent(index) {

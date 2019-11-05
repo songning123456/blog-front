@@ -35,6 +35,7 @@ const httpRequest = function (resolve, reject, config, isRetry, customize, respo
             }
             resolve(response.data);
         } else if (response.data.status === 401) {
+            // 退出登陆
             axios.ajax('/logout', 'get').then(data => {
                 if (data.status === 200) {
                     // 强制跳转到登陆页面
@@ -50,7 +51,7 @@ const httpRequest = function (resolve, reject, config, isRetry, customize, respo
             });
         } else {
             // 请求接口错误或不成功时
-            resolve(response.data.result ? response.data.result : response.data);
+            resolve(response.data);
         }
     }).catch(error => {
         reject(error);
