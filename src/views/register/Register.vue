@@ -105,17 +105,17 @@
         data () {
             return {
                 form: {
-                    username: 'fengying123456',
-                    password: 'fengying123456',
-                    password2: 'fengying123456',
-                    realName: '冯影',
-                    author: '安静的猫',
-                    email: '15957843289@163.com',
-                    motto: '做一只躺猫',
-                    profession: '学生',
-                    telephone: '15957843289',
-                    age: 21,
-                    gender: '女',
+                    username: '',
+                    password: '',
+                    password2: '',
+                    realName: '',
+                    author: '',
+                    email: '',
+                    motto: '',
+                    profession: '',
+                    telephone: '',
+                    age: 25,
+                    gender: '男',
                     headPortrait: ''
                 },
                 // (第三步的)标签信息
