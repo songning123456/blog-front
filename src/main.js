@@ -2,8 +2,6 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue';
 import axios from 'axios';
-import App from './App';
-import router from './router';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import mavonEditor from 'mavon-editor';
@@ -17,6 +15,8 @@ import './style/iconfont/iconfont.css';
 import VueLazyComponent from '@xunlei/vue-lazy-component';
 import ZMessage from './configure/util/ZMessage';
 import Config from '../src/utils/ConfigUtil';
+import router from './router';
+import App from './App';
 
 import Dictionary from './components/common/CommonDictionary';
 
