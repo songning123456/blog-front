@@ -32,7 +32,7 @@
     .popover-item {
         display: flex;
         align-items: center;
-        left: 28.5rem;
+        left: 65.5rem;
         padding: 10px;
         background-color: #fef0f0;
         color: #f56c6c;

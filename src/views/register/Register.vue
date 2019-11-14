@@ -148,10 +148,11 @@
                 }], [{label: '真实姓名', value: 'realName'}, {label: '笔名', value: 'author'}, {
                     label: '电子邮件',
                     value: 'email'
-                }, {
-                    label: '座右铭',
-                    value: 'motto'
-                }, {label: '职业', value: 'profession'}, {label: '电话', value: 'telephone'}]],
+                },
+                    {label: '座右铭', value: 'motto'}, {label: '职业', value: 'profession'}, {
+                        label: '电话',
+                        value: 'telephone'
+                    }]],
                 // 右侧的警告信息
                 warning: {
                     username: {
@@ -468,7 +469,7 @@
     };
 </script>
 
-<style lang='scss'>
+<style lang='scss' scoped>
     .register {
         width: 100%;
         height: 100%;
@@ -487,7 +488,7 @@
                 font-size: 1.2rem;
             }
 
-            .el-form {
+            /deep/ .el-form {
                 height: 25%;
                 margin-left: 15%;
                 width: 70%;
@@ -517,7 +518,7 @@
                 line-height: 2.4rem;
             }
 
-            .avatar-uploader {
+            /deep/ .avatar-uploader {
                 height: 25%;
                 text-align: center;
 
@@ -549,7 +550,7 @@
 
             }
 
-            .el-form {
+            /deep/ .el-form {
 
                 height: 56%;
                 width: 70%;
@@ -583,7 +584,7 @@
                 font-size: 1.2rem;
             }
 
-            .el-table {
+            /deep/ .el-table {
                 height: 88%;
                 overflow: auto;
 
