@@ -152,9 +152,7 @@
             getMyInfo() {
                 let scope = this;
                 let form = {
-                        // 暂时这样写，等数据库同步数据
-                        // infoOwner: 'songning'
-                        author: scope.$route.query.author || 'songning'
+                        userId: scope.$route.query.userId
                     }
                 ;
                 let param = {
@@ -221,7 +219,7 @@
             getBlogger() {
                 let scope = this;
                 let form = {
-                    author: scope.$route.query.author || 'songning'
+                    userId: scope.$route.query.userId
                 };
                 let param = {
                     condition: form

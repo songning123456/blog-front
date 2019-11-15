@@ -85,7 +85,7 @@
                 let routerData = scope.$router.resolve({
                     path: '/introduction',
                     query: {
-                        author: scope.data.author
+                        userId: scope.data.userId
                     }
                 });
                 window.open(routerData.href, '_blank');

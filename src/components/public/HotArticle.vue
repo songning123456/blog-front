@@ -6,7 +6,7 @@
                 <div class='first'><span><img :src=getSrc(index) alt=''/></span><span
                     :title='item.title'>{{item.title}}</span></div>
                 <div class='second'>
-                    <span><a href='javascript:void(0)' target="_blank" @click='getIntroduction(item.author)'>{{item.author}}</a></span>
+                    <span @click.stop='getIntroduction(item.userId)'>{{item.author}}</span>
                     <span>{{' | '}}</span>
                     <span @click.stop="$router.push({path: '/world-clock'})">{{getUpdateTime(index)}}</span>
                 </div>
@@ -50,12 +50,12 @@
                 let scope = this;
                 return DateUtil.formatDate(new Date(scope.result[index].updateTime));
             },
-            getIntroduction (author) {
+            getIntroduction (userId) {
                 let scope = this;
                 let routerData = scope.$router.resolve({
                     path: '/introduction',
                     query: {
-                        author: author
+                        userId: userId
                     }
                 });
                 window.open(routerData.href, '_blank');
@@ -151,12 +151,7 @@
                 span:nth-child(1) {
                     padding-left: 2rem;
 
-                    a {
-                        color: unset;
-                        text-decoration: unset;
-                    }
-
-                    :hover {
+                    &:hover {
                         color: #409eff;
                     }
                 }
