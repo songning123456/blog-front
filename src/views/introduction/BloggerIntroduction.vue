@@ -5,7 +5,7 @@
                 <div class="avatar">
                     <div class='inner-border'>
                         <el-avatar shape="square"
-                                   :src="result.headPortrait"></el-avatar>
+                                   :src="avatar"></el-avatar>
                     </div>
                 </div>
                 <div class='simple-info'>
@@ -28,8 +28,8 @@
                 </div>
             </div>
             <div v-if='current === 0' class='detail-show-0'>
-                <empty-view v-if='JSON.stringify(resume) === "{}"'></empty-view>
-                <el-scrollbar class='detail-inner-info'>
+                <empty-view v-if='resume.total === 0'></empty-view>
+                <el-scrollbar class='detail-inner-info' v-else>
                     <div class='past-info' v-for='(item, index) in resume.data' :key='index'
                          :style='{height: (item.info.length ? item.info.length * 12 + 2.5 : 0) + "rem"}'>
                         <div class='title'>{{item.type}}</div>
@@ -110,10 +110,10 @@
                     }
                 ],
                 detail: [
-                    {url1: 'static/personalInfo/special.svg', url2: 'static/personalInfo/common.svg', info: '简历'},
-                    {url1: 'static/print/special.svg', url2: 'static/print/common.svg', info: '打印'},
-                    {url1: 'static/photo/special.svg', url2: 'static/photo/common.svg', info: '查看照片'},
-                    {url1: 'static/mail/special.svg', url2: 'static/mail/common.svg', info: '给我发电子邮件?'}
+                    {url1: 'static/images/personalInfo/special.svg', url2: 'static/images/personalInfo/common.svg', info: '简历'},
+                    {url1: 'static/images/print/special.svg', url2: 'static/images/print/common.svg', info: '打印'},
+                    {url1: 'static/images/photo/special.svg', url2: 'static/images/photo/common.svg', info: '查看照片'},
+                    {url1: 'static/images/mail/special.svg', url2: 'static/images/mail/common.svg', info: '给我发电子邮件?'}
                 ],
                 emailInfo: [
                     {key: '发件人', value: 'sender'},
@@ -135,7 +135,7 @@
         computed: {
             avatar () {
                 let scope = this;
-                if (JSON.stringify(scope.owner) !== '{}') {
+                if (JSON.stringify(scope.result) !== '{}') {
                     return config.getImageOriginal() + encodeURIComponent(scope.result.headPortrait);
                 } else {
                     return '';
@@ -247,7 +247,7 @@
     };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
     .blogger-introduction {
         width: 100%;
         height: 100%;
@@ -431,7 +431,8 @@
 
                                     span:nth-child(3) {
                                         display: block;
-                                        padding-bottom: .8rem;
+                                        padding-top: .4rem;
+                                        padding-bottom: .4rem;
                                     }
                                 }
                             }
