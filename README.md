@@ -29,6 +29,8 @@ npm test
 
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
 
+#### good blog
+```
 # 设计师网址导航: https://hao.uisdc.com/
 # 在VPS上搭建WordPress博客网站: https://juejin.im/post/5d230469e51d454f72302581
 # 基于Vue的markdown编辑器: https://github.com/hinesboy/mavonEditor
@@ -38,3 +40,17 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 # ( * 上线存在风险)百度地图密钥 eiySHWfELLn2G0pcLw5cgUV5upA8eUuq
 # loading icon => https://loading.io/
 # vue-view-lazy：基于vue2.x懒加载解决方案 => https://juejin.im/post/5b013ac2518825672034563f
+```
+
+#### 如何打开项目前端页面
+```
+ npm run build
+ http-server dist
+ chrome -> '生成的ip' + '/index.html'
+ 
+ OR
+ 
+ npm run build
+ git commit & push
+ chrome -> https://songning123456.github.io/blog-front/dist/#/
+```
