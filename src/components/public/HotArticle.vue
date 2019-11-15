@@ -8,7 +8,7 @@
                 <div class='second'>
                     <span><a href='javascript:void(0)' target="_blank" @click='getIntroduction(item.author)'>{{item.author}}</a></span>
                     <span>{{' | '}}</span>
-                    <span>{{getUpdateTime(index)}}</span>
+                    <span @click.stop="$router.push({path: '/world-clock'})">{{getUpdateTime(index)}}</span>
                 </div>
             </div>
         </template>
@@ -150,12 +150,19 @@
 
                 span:nth-child(1) {
                     padding-left: 2rem;
+
                     a {
                         color: unset;
                         text-decoration: unset;
                     }
 
                     :hover {
+                        color: #409eff;
+                    }
+                }
+
+                span:nth-child(3) {
+                    &:hover {
                         color: #409eff;
                     }
                 }

@@ -1,6 +1,6 @@
 <template>
     <div class='side-menu-panel'>
-        <div @mouseenter='changeStatus(true)' @mousedown='changeStatus()' class='side-menu'>
+        <div @mouseenter='changeStatus(true)' @mousedown.stop='changeStatus()' class='side-menu'>
             <img :src='imgSrc'/>
             <div class='text-style'><span>{{title}}</span></div>
         </div>

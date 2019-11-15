@@ -11,7 +11,7 @@
         <div class='info'>
             <span @click.stop='getIntroduction'>{{data.author}}</span>
             <span>{{' | '}}</span>
-            <span>{{getRecentTime()}}</span>
+            <span @click.stop='jumpClock'>{{getRecentTime()}}</span>
         </div>
     </div>
 </template>
@@ -89,6 +89,10 @@
                     }
                 });
                 window.open(routerData.href, '_blank');
+            },
+            jumpClock () {
+                let scope = this;
+                scope.$router.push({path: '/world-clock'});
             }
         }
     };
@@ -116,7 +120,7 @@
 
             .like-tag {
                 border: 1px solid #ddd;
-                height: 70%;
+                height: 65%;
                 padding: .1rem;
 
                 img {
@@ -136,7 +140,7 @@
 
             .dislike-tag {
                 border: 1px solid #ddd;
-                height: 70%;
+                height: 65%;
                 padding: .1rem;
 
                 img {
@@ -197,6 +201,12 @@
             span:nth-child(1) {
                 padding-left: 1.2rem;
 
+                &:hover {
+                    color: #409eff;
+                }
+            }
+
+            span:nth-child(3) {
                 &:hover {
                     color: #409eff;
                 }
