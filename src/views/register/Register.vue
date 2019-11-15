@@ -304,7 +304,8 @@
                             if (data.status === 200) {
                                 let param = {
                                     condition: {
-                                        title: scope.COMMON_MAP.HISTORY.REGISTER
+                                        title: scope.COMMON_MAP.HISTORY.REGISTER,
+                                        username: scope.form.username
                                     }
                                 };
                                 insertHistoryInfo(param).then(data => {

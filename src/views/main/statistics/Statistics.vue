@@ -168,12 +168,7 @@
         },
         mounted () {
             let scope = this;
-            scope.statistic();
-            insertHistoryInfo({condition: {title: scope.COMMON_MAP.HISTORY.STATISTIC}}).then(data => {
-                if (data.status !== 200) {
-                    scope.$msg('插入历史信息失败!');
-                }
-            });
+            scope.sideBar.showing = true;
         },
         methods: {
             formCheck () {
@@ -212,6 +207,12 @@
                     });
                 }).finally(() => {
                         scope.loading = false;
+                        // 插入历史信息
+                        insertHistoryInfo({condition: {title: scope.COMMON_MAP.HISTORY.STATISTIC}}).then(data => {
+                            if (data.status !== 200) {
+                                scope.$msg('插入历史信息失败!');
+                            }
+                        });
                     }
                 );
             },
