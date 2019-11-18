@@ -145,6 +145,14 @@ export default new Router({
                 title: '注册',
                 requireAuth: false
             }
+        }, {
+            path: '/modify-info',
+            name: 'modifyInfo',
+            component: () => import('../views/modifyInfo/ModifyInfo'),
+            meta: {
+                title: '注册',
+                requireAuth: false
+            }
         }
     ]
 })

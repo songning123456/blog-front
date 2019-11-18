@@ -7,7 +7,8 @@
                               :show='warning[item.value].show'
                               :title='warning[item.value].title'>
                     <el-input slot='popoverItem' v-model='form[item.value]' :placeholder='item.label'
-                              clearable="" :show-password="item.value.indexOf('password') > -1"></el-input>
+                              clearable="" :show-password="item.value.indexOf('password') > -1"
+                              @change="promptInfo(item.value)"></el-input>
                 </popover-item>
             </el-form>
             <div class='register-button'>
@@ -29,7 +30,7 @@
                               :show='warning[item.value].show'
                               :title='warning[item.value].title'>
                     <el-input slot='popoverItem' v-model='form[item.value]' :placeholder='item.label'
-                              clearable="" :show-password="item.value.indexOf('password') > -1"></el-input>
+                              clearable="" :show-password="item.value.indexOf('password') > -1" @change="promptInfo(item.value)"></el-input>
                 </popover-item>
                 <el-form-item label='年龄'>
                     <el-slider v-model='form.age' show-input :min='18'></el-slider>
@@ -194,28 +195,6 @@
                 }
             };
         },
-        watch: {
-            form: {
-                handler (newVal, oldVal) {
-                    let scope = this;
-                    // 登陆信息
-                    scope.warning.username.show = !REG1.test(newVal.username);
-                    scope.warning.password.show = !REG1.test(newVal.password);
-                    if (!(newVal.password && !newVal.password2)) {
-                        scope.warning.password2.show = newVal.password !== newVal.password2;
-                    } else {
-                        scope.warning.password2.show = !!newVal.password2;
-                    }
-                    scope.warning.realName.show = !newVal.realName.length || !REG2.test(newVal.realName);
-                    scope.warning.author.show = !newVal.author.length || !REG2.test(newVal.author);
-                    scope.warning.email.show = !newVal.email.length || !REG3.test(newVal.email);
-                    scope.warning.motto.show = !newVal.motto.length;
-                    scope.warning.profession.show = !newVal.profession.length || !REG2.test(newVal.profession);
-                    scope.warning.telephone.show = !newVal.telephone.length || !REG4.test(newVal.telephone);
-                },
-                deep: true
-            }
-        },
         computed: {
             tableData () {
                 let scope = this;
@@ -277,6 +256,42 @@
                             scope.$router.push({path: '/'});
                         }
                     }, 1000);
+                }
+            },
+            promptInfo (type) {
+                let scope = this;
+                switch (type) {
+                    case 'username':
+                        scope.warning.username.show = !REG1.test(scope.form.username);
+                        break;
+                    case 'password':
+                        scope.warning.password.show = !REG1.test(scope.form.password);
+                        break;
+                    case 'password2':
+                        if (!(scope.form.password && !scope.form.password2)) {
+                            scope.warning.password2.show = scope.form.password !== scope.form.password2;
+                        } else {
+                            scope.warning.password2.show = !!scope.form.password2;
+                        }
+                        break;
+                    case 'realName':
+                        scope.warning.realName.show = !scope.form.realName.length || !REG2.test(scope.form.realName);
+                        break;
+                    case 'author':
+                        scope.warning.author.show = !scope.form.author.length || !REG2.test(scope.form.author);
+                        break;
+                    case 'email':
+                        scope.warning.email.show = !scope.form.email.length || !REG3.test(scope.form.email);
+                        break;
+                    case 'motto':
+                        scope.warning.motto.show = !scope.form.motto.length;
+                        break;
+                    case 'profession':
+                        scope.warning.profession.show = !scope.form.profession.length || !REG2.test(scope.form.profession);
+                        break;
+                    case 'telephone':
+                        scope.warning.telephone.show = !scope.form.telephone.length || !REG4.test(scope.form.telephone);
+                        break;
                 }
             },
             save () {

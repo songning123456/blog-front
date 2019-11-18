@@ -13,7 +13,7 @@
 </template>
 
 <script>
-    import Column from '@/components/public/Column';
+    import Column from '../../components/public/Column';
 
     export default {
         name: 'ColumnPopover',

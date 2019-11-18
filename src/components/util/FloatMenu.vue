@@ -3,7 +3,8 @@
         <div class="target" :class="{'checked': checked}" v-drag>
             <div class="main-ball" @mouseup="checkedStatus"
                  :style="menus.length===1 ? 'background-image: url(' + menus[0].image + ')' : ''"
-                 :class="{'el-icon-more': menus.length !== 1}">
+                 :class="{'el-icon-more': menus.length !== 1}"
+                 :title='menus.length===1 ? menus[0].title : "展开"'>
             </div>
             <div class='icon-item' @click='itemClicked(menu)' v-for="(menu, index) in menus" :key="index"
                  v-if="menus.length > 1"

@@ -58,11 +58,13 @@
             let scope = this;
             // 回到登录页面时, 判断是否记住密码
             if (localStorage.getItem('username')) {
-                scope.remember = true;
                 scope.user.name = localStorage.getItem('username');
             }
             if (localStorage.getItem('password')) {
                 scope.user.password = localStorage.getItem('password');
+            }
+            if (localStorage.getItem('username') && localStorage.getItem('password')) {
+                scope.remember = true;
             }
         },
         methods: {

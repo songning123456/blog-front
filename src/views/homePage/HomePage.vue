@@ -21,11 +21,11 @@
             <div class='right-title-2'>
                 <el-popover placement='bottom' v-model='infoShow' trigger='manual' :visible-arrow='false'
                             popper-class='home-page-popover'>
-                    <div><span>个人信息</span></div>
-                    <div><span>登陆配置</span></div>
-                    <div @click='blogManage'><span>管理配置</span></div>
-                    <div @click='enterExperiment'><span>实验室</span></div>
-                    <div @click='exit'><span>退出</span></div>
+                    <div @click.stop='modifyInfo'><span>个人信息</span></div>
+<!--                    <div><span>登陆配置</span></div>-->
+                    <div @click.stop='blogManage'><span>管理配置</span></div>
+<!--                    <div @click.stop='enterExperiment'><span>实验室</span></div>-->
+                    <div @click.stop='exit'><span>退出</span></div>
                     <el-avatar :src="avatar" slot='reference'
                                @click.native.stop='isShow'></el-avatar>
                 </el-popover>
@@ -149,6 +149,12 @@
                 let scope = this;
                 scope.$router.push({
                     path: '/experiment'
+                });
+            },
+            modifyInfo() {
+                let scope = this;
+                scope.$router.push({
+                    path: '/modify-info'
                 });
             },
             getOwnerInfo (name) {

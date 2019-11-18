@@ -1,18 +1,64 @@
 <template>
     <div class="modify-info">
         <div class="sub-menu">
-            <div class="main-col"></div>
-            <div class="info-col"></div>
-            <div class="info-col"></div>
-            <div class="info-col"></div>
+            <div class="main-col">
+                <img src="../../assets/modifyInfo.svg" alt=""/>
+            </div>
+            <div class="info-col" @click.stop="changeSubMenu(0)" :class='currentMenu===0 ? "active":""'>
+                <img src="../../assets/modifyUser.svg" alt=""/>
+                <span>注册信息</span>
+            </div>
+            <div class="info-col" @click.stop="changeSubMenu(1)" :class='currentMenu===1 ? "active":""'>
+                <img src="../../assets/modifyBlogger.svg" alt=""/>
+                <span>个人简介</span>
+            </div>
+            <div class="info-col" @click.stop="changeSubMenu(2)" :class='currentMenu===2 ? "active":""'>
+                <img src="../../assets/modifyPersonal.svg" alt=""/>
+                <span>工作经历</span>
+            </div>
         </div>
-        <div class="content-panel"></div>
+        <div class="content-panel">
+            <modify-user v-if="currentMenu===0"></modify-user>
+            <modify-blogger v-if="currentMenu===1"></modify-blogger>
+            <modify-personal v-if="currentMenu===2"></modify-personal>
+        </div>
+        <float-menu :menus="menu" @itemClick='chooseItem'></float-menu>
     </div>
 </template>
 
 <script>
+    import FloatMenu from '../../components/util/FloatMenu';
+    import ModifyUser from './components/ModifyUser';
+    import ModifyBlogger from './components/ModifyBlogger';
+    import ModifyPersonal from './components/ModifyPersonal';
+
     export default {
-        name: 'ModifyInfo'
+        name: 'ModifyInfo',
+        components: {ModifyPersonal, ModifyBlogger, ModifyUser, FloatMenu},
+        data () {
+            return {
+                currentMenu: 0,
+                menu: [
+                    {
+                        id: '退出',
+                        image: require('../../assets/exit.svg'),
+                        title: '返回首页'
+                    }
+                ]
+            };
+        },
+        methods: {
+            changeSubMenu (current) {
+                let scope = this;
+                scope.currentMenu = current;
+            },
+            chooseItem (menu) {
+                let scope = this;
+                if (menu.id === '退出') {
+                    scope.$homePage('read');
+                }
+            }
+        }
     };
 </script>
 
@@ -21,6 +67,7 @@
         width: 100%;
         height: 100%;
         position: relative;
+        background-color: #f8f8f9;
 
         .sub-menu {
             background: #fff;
@@ -44,7 +91,7 @@
                 }
 
                 &:hover,
-                &.actived {
+                &.active {
                     background: #e2efff;
 
                     span {
@@ -65,6 +112,7 @@
                 text-align: center;
                 width: 100%;
                 padding: 0.8rem 0;
+                border-bottom: 1px solid #f0f2f9;
 
                 img {
                     width: 1.6rem;
