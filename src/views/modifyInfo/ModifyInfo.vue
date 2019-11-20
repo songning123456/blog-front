@@ -18,9 +18,9 @@
             </div>
         </div>
         <div class="content-panel">
-            <modify-user v-if="currentMenu===0"></modify-user>
-            <modify-blogger v-if="currentMenu===1"></modify-blogger>
-            <modify-personal v-if="currentMenu===2"></modify-personal>
+            <modify-user v-show="currentMenu===0"></modify-user>
+            <modify-blogger v-show="currentMenu===1"></modify-blogger>
+            <modify-personal v-show="currentMenu===2"></modify-personal>
         </div>
         <float-menu :menus="menu" @itemClick='chooseItem'></float-menu>
     </div>

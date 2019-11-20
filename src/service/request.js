@@ -151,3 +151,6 @@ export const getLabelConfig = () => {
 export const registerAll = (params) => {
     return axios.ajax('/register/all', 'post', params);
 };
+export const modifyUser = (params) => {
+    return axios.ajax('/users/modify', 'post', params);
+};

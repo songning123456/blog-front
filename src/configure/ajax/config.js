@@ -1,7 +1,7 @@
 let Config = {};
 
 let MODE_PATTERN = {
-    pro: 'http://122.51.193.191:8072',
+    pro: 'http://simgple-blog.xyz/server/',
     dev: 'http://localhost:8072'
 };
 

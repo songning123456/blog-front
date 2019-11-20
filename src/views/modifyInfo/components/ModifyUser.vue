@@ -1,9 +1,14 @@
 <template>
     <div class='modify-user'>
         <div class="content">
-            <h2>修改密码</h2>
+            <div class="inner-title">
+                <span>修改密码</span>
+            </div>
             <div class="inner-content">
                 <el-form :model="form" status-icon :rules="rules" ref="ruleForm" :label-width='labelWidth'>
+                    <el-form-item label="原始密码" prop="oldPassword">
+                        <el-input type="password" v-model="form.oldPassword" autocomplete="off"></el-input>
+                    </el-form-item>
                     <el-form-item label="新密码" prop="password">
                         <el-input type="password" v-model="form.password" autocomplete="off"></el-input>
                     </el-form-item>
@@ -17,16 +22,30 @@
                 </el-form>
             </div>
         </div>
+        <tool-loading :loading="loading" normal="spinner"></tool-loading>
     </div>
 </template>
 
 <script>
+    import {modifyUser} from '../../../service/request';
+    import ToolLoading from '../../../components/util/ToolLoading';
+
     const REG = /^[0-9a-zA-Z]{8,20}$/;
 
     export default {
         name: 'ModifyUser',
+        components: {ToolLoading},
         data () {
             let scope = this;
+            let validateOldPass = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请输入原始密码'));
+                } else if (!REG.test(value)) {
+                    callback(new Error('密码必须符合0-9,a-z,A-Z且长度>8,<20'));
+                } else {
+                    callback();
+                }
+            };
             let validatePass = (rule, value, callback) => {
                 if (value === '') {
                     callback(new Error('请输入新密码'));
@@ -50,11 +69,16 @@
             };
             return {
                 form: {
+                    oldPassword: '',
                     password: '',
                     checkPassword: ''
                 },
+                loading: false,
                 labelWidth: '5rem',
                 rules: {
+                    oldPassword: [
+                        {validator: validateOldPass, trigger: 'blur'}
+                    ],
                     password: [
                         {validator: validatePass, trigger: 'blur'}
                     ],
@@ -69,9 +93,27 @@
                 let scope = this;
                 scope.$refs['ruleForm'].validate((valid) => {
                     if (valid) {
-                        alert('submit!');
+                        let params = {
+                            condition: {
+                                oldPassword: scope.form.oldPassword,
+                                password: scope.form.password
+                            }
+                        };
+                        scope.loading = true;
+                        modifyUser(params).then(data => {
+                            if (data.status === 200) {
+                                scope.$msg('修改成功', 'success');
+                                localStorage.setItem('username', '');
+                                localStorage.setItem('password', '');
+                            } else {
+                                scope.$msg('修改失败 ' + data.message);
+                            }
+                        }).catch(e => {
+                            scope.$msg('修改失败 ' + e);
+                        }).finally(() => {
+                            scope.loading = false;
+                        });
                     } else {
-                        console.log('error submit!!');
                         return false;
                     }
                 });
@@ -97,11 +139,20 @@
             height: 40%;
             background-color: white;
 
+            .inner-title {
+                height: 3rem;
+                font-weight: 500;
+                font-size: 1.3rem;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
             .inner-content {
                 display: flex;
                 justify-content: center;
                 align-items: flex-start;
-                height: calc(100% - 2rem);
+                height: calc(100% - 3rem);
 
                 .el-form {
                     width: 60%;
