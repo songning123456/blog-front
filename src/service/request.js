@@ -72,6 +72,10 @@ export const getBloggerInfo = (params) => {
     return axios.ajax('/blogger/getBlogger', 'post', params);
 };
 
+export const updateBlogger = (params) => {
+    return axios.ajax('/blogger/update', 'post', params);
+};
+
 export const getHadoop = (params) => {
     return axios.ajax('/statistic/hadoop', 'post', params);
 };

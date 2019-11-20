@@ -22,9 +22,10 @@
                 <el-popover placement='bottom' v-model='infoShow' trigger='manual' :visible-arrow='false'
                             popper-class='home-page-popover'>
                     <div @click.stop='modifyInfo'><span>个人信息</span></div>
-<!--                    <div><span>登陆配置</span></div>-->
+                    <!--                    <div><span>登陆配置</span></div>-->
                     <div @click.stop='blogManage'><span>管理配置</span></div>
-<!--                    <div @click.stop='enterExperiment'><span>实验室</span></div>-->
+                    <!--                    <div @click.stop='enterExperiment'><span>实验室</span></div>-->
+                    <div @click.stop="about"><span>关于</span></div>
                     <div @click.stop='exit'><span>退出</span></div>
                     <el-avatar :src="avatar" slot='reference'
                                @click.native.stop='isShow'></el-avatar>
@@ -78,7 +79,7 @@
                 let doc = scope.$refs['elInput'].$vnode.elm.children[1];
                 doc.addEventListener('click', scope.searchArticle, true);
             });
-            scope.getOwnerInfo(localStorage.getItem('username') || sessionStorage.getItem('username'));
+            scope.getOwnerInfo();
             // 默认点击第一个标签
             this.handleClick(scope.currentPage);
             // 判断设置栏状态，默认进入页面时 是关闭状态
@@ -145,27 +146,24 @@
                 scope.currentPage = '';
                 scope.$homePage('blogConfig');
             },
+            about () {
+                window.open('https://github.com/songning123456/', '_blank');
+            },
             enterExperiment () {
                 let scope = this;
                 scope.$router.push({
                     path: '/experiment'
                 });
             },
-            modifyInfo() {
+            modifyInfo () {
                 let scope = this;
                 scope.$router.push({
                     path: '/modify-info'
                 });
             },
-            getOwnerInfo (name) {
+            getOwnerInfo () {
                 let scope = this;
-                let form = {
-                    username: name
-                };
-                let param = {
-                    condition: form
-                };
-                getBloggerInfo(param).then((data) => {
+                getBloggerInfo({condition: {}}).then((data) => {
                     scope.$response(data).then(data => {
                         scope.owner = data.data[0];
                     });
