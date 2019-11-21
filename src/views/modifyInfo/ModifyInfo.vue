@@ -71,11 +71,8 @@
 
         .sub-menu {
             background: #fff;
-            position: relative;
-            width: 40px;
+            width: 2rem;
             height: 100%;
-            z-index: 110;
-            border-top: 1px solid #f0f2f9;
             border-right: 1px solid #f0f2f9;
             cursor: pointer;
             float: left;
@@ -122,9 +119,9 @@
         }
 
         .content-panel {
-            position: absolute;
+            float: left;
             height: 100%;
-            width: 100%;
+            width: calc(100% - 2rem - 1px);
             top: 0;
         }
     }
