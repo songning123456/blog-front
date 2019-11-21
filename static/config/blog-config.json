@@ -1,5 +1,10 @@
 {
     "Image": {
-        "originalUrl": "http://simple-blog.xyz/server/image/original?url="
+        "pro": {
+            "originalUrl": "http://simple-blog.xyz/server/image/original?url="
+        },
+        "dev": {
+            "originalUrl": "http://localhost:8072/image/original?url="
+        }
     }
 }

@@ -70,7 +70,7 @@
 </template>
 
 <script>
-    import {getBloggerInfo, updateBlogger} from '../../../service/request';
+    import {getBloggerInfo, saveImage, updateBlogger} from '../../../service/request';
     import config from '../../../utils/ConfigUtil';
     import ToolLoading from '../../../components/util/ToolLoading';
 
@@ -175,7 +175,7 @@
                             return;
                         }
                         if (scope.form.author === scope.copy.author) {
-                            scope.$msg('修改信息不能与原始信息相同');
+                            scope.$msg('作者信息不能与原始信息相同');
                             return;
                         }
                         break;
@@ -185,7 +185,7 @@
                             return;
                         }
                         if (scope.form.profession === scope.copy.profession) {
-                            scope.$msg('修改信息不能与原始信息相同');
+                            scope.$msg('职业信息不能与原始信息相同');
                             return;
                         }
                         break;
@@ -195,7 +195,7 @@
                             return;
                         }
                         if (scope.form.telephone === scope.copy.telephone) {
-                            scope.$msg('修改信息不能与原始信息相同');
+                            scope.$msg('电话号码信息不能与原始信息相同');
                             return;
                         }
                         break;
@@ -205,7 +205,7 @@
                             return;
                         }
                         if (scope.form.email === scope.copy.email) {
-                            scope.$msg('修改信息不能与原始信息相同');
+                            scope.$msg('电子邮件信息不能与原始信息相同');
                             return;
                         }
                         break;
@@ -215,7 +215,7 @@
                             return;
                         }
                         if (scope.form.motto === scope.copy.motto) {
-                            scope.$msg('修改信息不能与原始信息相同');
+                            scope.$msg('座右铭信息不能与原始信息相同');
                             return;
                         }
                         break;
@@ -225,19 +225,29 @@
                             return;
                         }
                         if (scope.form.realName === scope.copy.realName) {
-                            scope.$msg('修改信息不能与原始信息相同');
+                            scope.$msg('真实姓名信息不能与原始信息相同');
                             return;
                         }
                         break;
                     case 'age':
                         if (scope.form.age === scope.copy.age) {
-                            scope.$msg('修改信息不能与原始信息相同');
+                            scope.$msg('年龄信息不能与原始信息相同');
                             return;
                         }
                         break;
                     case 'gender':
                         if (scope.form.gender === scope.copy.gender) {
-                            scope.$msg('修改信息不能与原始信息相同');
+                            scope.$msg('性别信息不能与原始信息相同');
+                            return;
+                        }
+                        break;
+                    case 'headPortrait':
+                        if (!scope.form.headPortrait) {
+                            scope.$msg('头像url不能为空');
+                            return;
+                        }
+                        if (scope.form.headPortrait === scope.copy.headPortrait) {
+                            scope.$msg('头像信息不能与原始信息相同');
                             return;
                         }
                         break;
@@ -266,6 +276,16 @@
                 scope.image.imgBlob = URL.createObjectURL(file);
                 scope.image.filename = file.name;
                 scope.image.files = file;
+                let formData = new FormData();
+                formData.append('file', scope.image.files, scope.image.filename);
+                saveImage(formData).then(data => {
+                    if (data.status === 200 && data.total > 0) {
+                        // 获取服务器中图片路径
+                        scope.form.headPortrait = data.data[0].imageSrc;
+                    } else {
+                        scope.$msg('上传图片失败 ' + data.message);
+                    }
+                });
                 // 阻止默认上传地址
                 return false;
             }

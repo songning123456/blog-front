@@ -17,12 +17,23 @@ _config_.setConfig = function (config) {
     image = Image;
 };
 
+_config_.getSource = function (obj) {
+    if (location.hostname === 'songning123456.github.io') {
+        return obj.pro;
+    } else if (location.hostname === 'localhost') {
+        return obj.dev;
+    } else {
+        return obj.pro;
+    }
+};
+
 /**
  * 返回原始图片url
  * @returns {*}
  */
 _config_.getImageOriginal = function () {
-    return image.originalUrl;
+    let param = _config_.getSource(image);
+    return param.originalUrl;
 };
 
 export default _config_;
