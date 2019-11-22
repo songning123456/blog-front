@@ -58,12 +58,22 @@ export const highlightSearch = (params) => {
 };
 
 /**
- * 获取个人简介信息
+ * 他人获取作者简介信息
  */
 export const getPersonalInfo = (params) => {
     return axios.ajax('/personalInfo/getPersonalInfo', 'post', params);
 };
 
+export const updatePersonalInformation = (params) => {
+    return axios.ajax('/personalInfo/update', 'post', params);
+};
+
+/**
+ * 获取个人简介信息
+ */
+export const getMyInfo = (params) => {
+    return axios.ajax('/personalInfo/getMyInfo', 'post', params);
+};
 /**
  *
  * @param params
