@@ -2,16 +2,30 @@
     <div class="modify-personal">
         <div class="layout-left">
             <el-button type="success" plain @click='choose(1)'>预览</el-button>
-            <el-button type="warning" plain @click='choose(2)'>新增</el-button>
+            <el-button type="warning" plain @click='choose(3)'>新增</el-button>
         </div>
         <div class="layout-right">
-            <div class="content" v-show="current === 1">
+            <div class="content" v-if="current === 1">
                 <el-scrollbar>
                     <single-info v-for="(item, index) in result" :key="index" :info="item"
                                  @update="updateInfo"></single-info>
                 </el-scrollbar>
             </div>
-            <empty-view v-show="current === 0"></empty-view>
+            <div class="add" v-else-if="current === 2">
+                <add-info @add="addInfo"></add-info>
+            </div>
+            <div class="finished" v-else-if="current === 3">
+                <div class="first-content">
+                    <img src="../../../assets/registerSuccess.svg"/>
+                </div>
+                <div class="second-content">
+                    <span>{{second}}s 是否继续新增?</span>
+                </div>
+                <div class="third-content">
+                    <el-button type="primary" size="small" @click="yOrN = true">是</el-button>
+                    <el-button size="small" @click="yOrN = false">否</el-button>
+                </div>
+            </div>
         </div>
         <tool-loading :loading="loading" normal="spinner"></tool-loading>
     </div>
@@ -20,43 +34,83 @@
 <script>
     import SingleInfo from './children/SingleInfo';
     import EmptyView from '../../../components/util/EmptyView';
-    import {getMyInfo, updatePersonalInformation} from '../../../service/request';
+    import {addMyInfo, getMyInfo, updatePersonalInformation} from '../../../service/request';
     import ToolLoading from '../../../components/util/ToolLoading';
+    import AddInfo from './children/AddInfo';
 
     export default {
         name: 'ModifyPersonal',
-        components: {ToolLoading, EmptyView, SingleInfo},
+        components: {AddInfo, ToolLoading, EmptyView, SingleInfo},
         data () {
             return {
-                current: 1, // 空白展示
+                current: 0, // 空白展示
                 loading: false,
-                result: []
+                result: [],
+                second: 3,
+                yOrN: null
             };
         },
         mounted () {
             let scope = this;
-            getMyInfo({condition: {}}).then(data => {
-                scope.$response(data).then(data => {
-                    scope.result = data.data;
-                });
-            });
+            scope.choose(1);
         },
         methods: {
             choose (type) {
                 let scope = this;
+                if (type === 1 && scope.current !== 1) {
+                    scope.loading = true;
+                    getMyInfo({condition: {}}).then(data => {
+                        scope.$response(data).then(data => {
+                            scope.result = data.data;
+                        });
+                    }).finally(() => {
+                        scope.loading = false;
+                    });
+                }
                 scope.current = type;
+                if (type === 3) {
+                    scope.autoJump();
+                }
+            },
+            autoJump () {
+                let scope = this;
+                const TIME_COUNT = 3;
+                if (!scope.timer) {
+                    scope.second = TIME_COUNT;
+                    scope.timer = setInterval(() => {
+                        if (scope.second > 0 && scope.second <= TIME_COUNT) {
+                            scope.second--;
+                        } else {
+                            clearInterval(scope.timer);
+                            scope.timer = null;
+
+                            scope.choose(1);
+                        }
+                    }, 1000);
+                }
             },
             updateInfo (form) {
                 let scope = this;
                 scope.loading = true;
                 updatePersonalInformation({condition: form}).then(data => {
                     scope.$response(data, '更新个人信息').then(data => {
-                        scope.$response(data).then(data => {
-                            scope.result = data.data;
-                        });
+                        scope.result = data.data;
                     });
                 }).finally(() => {
                     scope.loading = false;
+                });
+            },
+            addInfo (form) {
+                let scope = this;
+                scope.loading = true;
+                addMyInfo({condition: form}).then(data => {
+                    if (data.status === 200) {
+                        scope.$msg('添加信息成功', 'success');
+                    }
+                }).finally(() => {
+                    scope.loading = false;
+                    scope.current = 3;
+                    scope.autoJump();
                 });
             }
         }
@@ -100,6 +154,42 @@
             .content {
                 width: 40%;
                 height: 90%;
+            }
+
+            .add {
+                width: 25rem;
+                height: 28rem;
+                background: white;
+            }
+
+            .finished {
+                width: 25rem;
+                height: 8rem;
+                background: white;
+
+                .first-content {
+                    height: 30%;
+                    width: 100%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: flex-end;
+                }
+
+                .second-content {
+                    height: 30%;
+                    width: 100%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+
+                .third-content {
+                    height: 40%;
+                    width: 100%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
             }
         }
     }

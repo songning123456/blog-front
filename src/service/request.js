@@ -68,6 +68,9 @@ export const updatePersonalInformation = (params) => {
     return axios.ajax('/personalInfo/update', 'post', params);
 };
 
+export const addMyInfo = (params) => {
+    return axios.ajax('/personalInfo/add', 'post', params);
+};
 /**
  * 获取个人简介信息
  */

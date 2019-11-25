@@ -34,29 +34,13 @@
                 <div class="title">
                     <el-select v-model="form.infoType" placeholder="请选择" :disabled="disabled.infoType">
                         <el-option v-for="(item, index) in options" :key="index" :label="item.label"
-                                   :value="item.value"></el-option>
+                                   :value="item.value" popper-class='title-popper'></el-option>
                     </el-select>
                     <div class='modify-icon' v-if="disabled.infoType">
                         <i class="el-icon-edit" @click.stop="edit('infoType')"></i>
                     </div>
                     <div class="no-modify-icon" v-else>
                         <span @click.stop="save('infoType')">保存</span><span @click.stop="cancel('infoType')">取消</span>
-                    </div>
-                </div>
-                <div class="display">
-                    <el-button type="text" size="small" @click.stop="status = 'display'">返回</el-button>
-                </div>
-            </div>
-            <div class="second-content">
-                <div class='time'>
-                    <el-date-picker v-model="timeRange" type="daterange" value-format="yyyy-MM-dd" range-separator="至"
-                                    start-placeholder="开始日期" end-placeholder="结束日期"
-                                    :disabled="disabled.timeRange"></el-date-picker>
-                    <div class='modify-icon' v-if="disabled.timeRange">
-                        <i class="el-icon-edit" @click.stop="edit('timeRange')"></i>
-                    </div>
-                    <div class="no-modify-icon" v-else>
-                        <span @click.stop="save('timeRange')">保存</span><span @click.stop="cancel('timeRange')">取消</span>
                     </div>
                 </div>
                 <div class="mechanism">
@@ -68,8 +52,43 @@
                         <span @click.stop="save('mechanism')">保存</span><span @click.stop="cancel('mechanism')">取消</span>
                     </div>
                 </div>
+                <div class="display">
+                    <el-button type="text" size="small" @click.stop="status = 'display'">返回</el-button>
+                </div>
+            </div>
+            <div class="second-content">
+                <div class='time'>
+                    <div class="start-time">
+                        <el-date-picker
+                            v-model="form.startTime" :picker-options="pickerOptionsStart"
+                            type="date" :disabled="disabled.startTime"
+                            placeholder="开始日期">
+                        </el-date-picker>
+                        <div class='modify-icon' v-if="disabled.startTime">
+                            <i class="el-icon-edit" @click.stop="edit('startTime')"></i>
+                        </div>
+                        <div class="no-modify-icon" v-else>
+                            <span @click.stop="save('startTime')">保存</span><span
+                            @click.stop="cancel('startTime')">取消</span>
+                        </div>
+                    </div>
+                    <div class="end-time">
+                        <el-date-picker
+                            v-model="form.endTime"
+                            type="date" :disabled="disabled.endTime" :picker-options="pickerOptionsEnd"
+                            placeholder="结束日期">
+                        </el-date-picker>
+                        <div class='modify-icon' v-if="disabled.endTime">
+                            <i class="el-icon-edit" @click.stop="edit('endTime')"></i>
+                        </div>
+                        <div class="no-modify-icon" v-else>
+                            <span @click.stop="save('endTime')">保存</span><span
+                            @click.stop="cancel('endTime')">取消</span>
+                        </div>
+                    </div>
+                </div>
                 <div class='position'>
-                    <el-input v-model="form.position" placeholder="请输入内容" :disabled="disabled.position"></el-input>
+                    <el-input v-model="form.position" :disabled="disabled.position"></el-input>
                     <div class='modify-icon' v-if="disabled.position">
                         <i class="el-icon-edit" @click.stop="edit('position')"></i>
                     </div>
@@ -109,7 +128,6 @@
         mounted () {
             let scope = this;
             scope.form = Object.assign({}, scope.info);
-            scope.timeRange = [scope.formatDate(scope.info.startTime), scope.formatDate(scope.info.endTime)];
         },
         data () {
             return {
@@ -124,10 +142,30 @@
                         label: '工作经历'
                     }
                 ],
-                timeRange: [],
+                // 开始时间不能大于结束时间
+                pickerOptionsStart: {
+                    disabledDate: time => {
+                        if (this.form.endTime) {
+                            return (
+                                time.getTime() > new Date(this.form.endTime).getTime()
+                            );
+                        }
+                    }
+                },
+                //结束时间不能小于开始时间
+                pickerOptionsEnd: {
+                    disabledDate: time => {
+                        if (this.form.startTime) {
+                            return (
+                                time.getTime() < new Date(this.form.startTime).getTime()
+                            );
+                        }
+                    }
+                },
                 form: {},
                 disabled: {
-                    timeRange: true,
+                    startTime: true,
+                    endTime: true,
                     introduction: true,
                     position: true,
                     infoType: true,
@@ -149,14 +187,6 @@
                         scope.$refs.editInfo.style.display = 'none';
                     }, 1000);
                 }
-            },
-            timeRange: {
-                handler (newVal, oldVal) {
-                    let scope = this;
-                    scope.form.startTime = newVal[0];
-                    scope.form.endTime = newVal[1];
-                },
-                deep: true
             }
         },
         methods: {
@@ -178,16 +208,6 @@
                             return;
                         }
                         break;
-                    case 'timeRange':
-                        if (!scope.timeRange || !scope.timeRange.length || !scope.timeRange[0] || !scope.timeRange[1]) {
-                            scope.$msg('请输入有效时间');
-                            return;
-                        }
-                        if (scope.form.startTime === scope.timeRange[0] && scope.form.endTime === scope.timeRange[1]) {
-                            scope.$msg('请输入不同信息');
-                            return;
-                        }
-                        break;
                     case 'position':
                         if (scope.form[type] === scope.info[type]) {
                             scope.$msg('请输入不同信息');
@@ -195,6 +215,18 @@
                         }
                         if (!scope.form[type]) {
                             scope.$msg('请输入有效信息');
+                            return;
+                        }
+                        break;
+                    case 'startTime':
+                        if (!scope.form[type]) {
+                            scope.$msg('请输入开始日期');
+                            return;
+                        }
+                        break;
+                    case 'endTime':
+                        if (!scope.form[type]) {
+                            scope.$msg('请输入结束日期');
                             return;
                         }
                         break;
@@ -222,6 +254,7 @@
                         break;
                 }
                 scope.disabled[type] = true;
+                scope.form.infoId = scope.info.infoId;
                 scope.$emit('update', scope.form);
             },
             cancel (type) {
@@ -237,7 +270,7 @@
     };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
     .single-info {
         width: 100%;
         height: 12rem;
@@ -406,7 +439,16 @@
                 width: 100%;
 
                 .title {
-                    width: 90%;
+                    width: 60%;
+                    height: 100%;
+                    float: left;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+
+                .mechanism {
+                    width: 30%;
                     height: 100%;
                     float: left;
                     display: flex;
@@ -429,7 +471,7 @@
                 width: 100%;
 
                 .time {
-                    width: 50%;
+                    width: 70%;
                     height: 100%;
                     float: left;
                     display: flex;
@@ -437,19 +479,36 @@
                     align-items: center;
                     padding-left: 1.8rem;
                     box-sizing: border-box;
-                }
 
-                .mechanism {
-                    width: 30%;
-                    height: 100%;
-                    float: left;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
+                    .start-time {
+                        width: 50%;
+                        height: 100%;
+                        float: left;
+                        display: flex;
+                        justify-content: flex-start;
+                        align-items: center;
+
+                        .el-date-editor.el-input {
+                            width: 7rem;
+                        }
+                    }
+
+                    .end-time {
+                        width: 50%;
+                        height: 100%;
+                        float: left;
+                        display: flex;
+                        justify-content: flex-start;
+                        align-items: center;
+
+                        .el-date-editor.el-input {
+                            width: 7rem;
+                        }
+                    }
                 }
 
                 .position {
-                    width: 20%;
+                    width: 30%;
                     height: 100%;
                     float: left;
                     display: flex;
@@ -477,11 +536,11 @@
                     width: 90%;
                     height: 90%;
 
-                    .el-textarea {
+                    /deep/ .el-textarea {
                         textarea {
                             &::-webkit-scrollbar {
-                                width: 10px;
-                                height: 15px;
+                                width: 5px;
+                                height: 7px;
                             }
 
                             &::-webkit-scrollbar-track {
@@ -500,6 +559,15 @@
                         }
                     }
                 }
+            }
+        }
+    }
+
+    .el-select-dropdown {
+        .el-scrollbar {
+
+            .el-scrollbar__wrap {
+                margin-bottom: unset !important;
             }
         }
     }
