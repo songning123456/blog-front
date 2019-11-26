@@ -6,7 +6,7 @@
             </div>
             <div class="info-col" @click.stop="changeSubMenu(0)" :class='currentMenu===0 ? "active":""'>
                 <img src="../../assets/modifyUser.svg" alt=""/>
-                <span>注册信息</span>
+                <span>用户信息</span>
             </div>
             <div class="info-col" @click.stop="changeSubMenu(1)" :class='currentMenu===1 ? "active":""'>
                 <img src="../../assets/modifyBlogger.svg" alt=""/>
@@ -14,7 +14,7 @@
             </div>
             <div class="info-col" @click.stop="changeSubMenu(2)" :class='currentMenu===2 ? "active":""'>
                 <img src="../../assets/modifyPersonal.svg" alt=""/>
-                <span>工作经历</span>
+                <span>生活经历</span>
             </div>
         </div>
         <div class="content-panel">

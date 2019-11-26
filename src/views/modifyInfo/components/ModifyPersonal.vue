@@ -2,7 +2,7 @@
     <div class="modify-personal">
         <div class="layout-left">
             <el-button type="success" plain @click='choose(1)'>预览</el-button>
-            <el-button type="warning" plain @click='choose(3)'>新增</el-button>
+            <el-button type="warning" plain @click='choose(2)'>新增</el-button>
         </div>
         <div class="layout-right">
             <div class="content" v-if="current === 1">
@@ -22,8 +22,8 @@
                     <span>{{second}}s 是否继续新增?</span>
                 </div>
                 <div class="third-content">
-                    <el-button type="primary" size="small" @click="yOrN = true">是</el-button>
-                    <el-button size="small" @click="yOrN = false">否</el-button>
+                    <el-button type="primary" size="small" @click="jump('yes')">是</el-button>
+                    <el-button size="small" @click="jump('no')">否</el-button>
                 </div>
             </div>
         </div>
@@ -47,7 +47,7 @@
                 loading: false,
                 result: [],
                 second: 3,
-                yOrN: null
+                timer: null
             };
         },
         mounted () {
@@ -72,6 +72,16 @@
                     scope.autoJump();
                 }
             },
+            jump (type) {
+                let scope = this;
+                clearInterval(scope.timer);
+                scope.timer = null;
+                if (type === 'yes') {
+                    scope.choose(2);
+                } else if (type === 'no') {
+                    scope.choose(1);
+                }
+            },
             autoJump () {
                 let scope = this;
                 const TIME_COUNT = 3;
@@ -83,7 +93,6 @@
                         } else {
                             clearInterval(scope.timer);
                             scope.timer = null;
-
                             scope.choose(1);
                         }
                     }, 1000);
@@ -158,7 +167,7 @@
 
             .add {
                 width: 25rem;
-                height: 28rem;
+                height: 25rem;
                 background: white;
             }
 

@@ -5,14 +5,14 @@
             <el-form ref="form" :label-width="labelWidth" :modal="form">
                 <el-form-item v-for="(item, index) in display" :key="index" :label="item.key">
                     <el-input v-model="form[item.value]" :type="item.value === 'introduction' ? 'textarea' : 'text'"
-                              clearable
+                              clearable placeholder='请输入信息'
                               v-if="item.value !== 'infoType' && item.value !== 'startTime' && item.value !== 'endTime'"></el-input>
                     <el-select v-model="form[item.value]" placeholder="请选择" v-else-if="item.value === 'infoType'">
                         <el-option v-for="item in options" :key="item.value" :label="item.label"
                                    :value="item.value"></el-option>
                     </el-select>
                     <el-date-picker v-else v-model="form[item.value]" type="date"
-                                    placeholder="请输入" value-format="yyyy-MM-dd"
+                                    placeholder="请输入日期" value-format="yyyy-MM-dd"
                                     :picker-options="item.value === 'startTime' ? pickerOptionsStart : pickerOptionsEnd"></el-date-picker>
                 </el-form-item>
             </el-form>
@@ -25,14 +25,12 @@
 </template>
 
 <script>
-    const REG = /^([\u4e00-\u9fa5]|[a-zA-Z0-9]){1,20}$/;
 
     export default {
         name: 'AddInfo',
         data () {
             return {
                 form: {
-                    author: '',
                     infoType: '',
                     mechanism: '',
                     position: '',
@@ -71,7 +69,7 @@
                     }
                 ],
                 display: [
-                    {key: '笔名', value: 'author'}, {key: '信息类型', value: 'infoType'}, {key: '学校/公司', value: 'mechanism'},
+                    {key: '信息类型', value: 'infoType'}, {key: '学校/公司', value: 'mechanism'},
                     {key: '职位', value: 'position'}, {key: '开始日期', value: 'startTime'}, {
                         key: '结束日期',
                         value: 'endTime'
@@ -85,10 +83,6 @@
         methods: {
             formCheck () {
                 let scope = this;
-                if (!scope.form.author || !REG.test(scope.form.author)) {
-                    scope.$msg('笔名必须符合汉字,英文');
-                    return false;
-                }
                 if (!scope.form.infoType) {
                     scope.$msg('请选择信息类型');
                     return false;
@@ -125,7 +119,6 @@
             reset () {
                 let scope = this;
                 scope.form = {
-                    author: '',
                     infoType: '',
                     mechanism: '',
                     position: '',
@@ -174,7 +167,7 @@
             width: 100%;
             height: 10%;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
         }
     }
