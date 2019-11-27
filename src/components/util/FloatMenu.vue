@@ -115,7 +115,7 @@
         position: absolute;
         right: -0.6rem;
         top: 3.5rem;
-        z-index: 2005;
+        z-index: 2002;
         pointer-events: none;
 
         .target {
