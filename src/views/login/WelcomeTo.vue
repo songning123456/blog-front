@@ -25,11 +25,11 @@
                     <el-checkbox v-model="remember">记住密码</el-checkbox>
                 </el-col>
                 <el-col :span='12'>
-                    <el-link type="primary">忘记密码?</el-link>
+                    <el-link type="primary" @click="forgotPassword">忘记密码?</el-link>
                 </el-col>
             </el-row>
             <el-row class='login-button'>
-                <el-button type="primary" @click.native='switchRouter'>登陆</el-button>
+                <el-button type="primary" @click.native='switchRouter' :loading="loading">登陆</el-button>
             </el-row>
             <el-row class='register'>
                 <el-link type="primary" @click='register'>立即注册</el-link>
@@ -42,6 +42,9 @@
 
     import {loginBlog} from '../../service/request';
 
+    let keyFlag = true;
+    const REG = /^[0-9a-zA-Z]{8,20}$/;
+
     export default {
         name: 'WelcomeTo',
         data () {
@@ -53,6 +56,16 @@
                 remember: false,
                 loading: false
             };
+        },
+        created () {
+            let scope = this;
+            document.addEventListener('keydown', scope.handleKeyDown);
+            document.addEventListener('keyup', scope.handleKeyUp);
+        },
+        destroyed () {
+            let scope = this;
+            document.removeEventListener('keydown', scope.handleKeyDown);
+            document.removeEventListener('keyup', scope.handleKeyUp);
         },
         mounted () {
             let scope = this;
@@ -75,7 +88,7 @@
                     scope.$msg('用户名不能为空');
                     return false;
                 }
-                if (scope.user.name.length > 50) {
+                if (!REG.test(scope.user.name)) {
                     scope.$msg('用户名不符合规范');
                     return false;
                 }
@@ -83,7 +96,7 @@
                     scope.$msg('密码不能为空');
                     return false;
                 }
-                if (scope.user.password.length > 50) {
+                if (!REG.test(scope.user.password)) {
                     scope.$msg('密码不符合规范');
                     return false;
                 }
@@ -141,9 +154,31 @@
                     scope.loading = false;
                 });
             },
+            forgotPassword () {
+                let scope = this;
+                scope.$msg('暂未开通此功能');
+            },
             register () {
                 let scope = this;
                 scope.$router.push({path: '/register'});
+            },
+            handleKeyDown (e) {
+                let scope = this;
+                let key = window.event.keyCode ? window.event.keyCode : window.event.which;
+                if (key === 13) {
+                    if (keyFlag) {
+                        scope.switchRouter();
+                        keyFlag = -false;
+                    }
+                    e.preventDefault();
+                }
+            },
+            handleKeyUp (e) {
+                let key = window.event.keyCode ? window.event.keyCode : window.event.which;
+                if (key === 13) {
+                    keyFlag = true;
+                    e.preventDefault();
+                }
             }
         }
     };

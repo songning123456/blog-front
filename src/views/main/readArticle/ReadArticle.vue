@@ -147,10 +147,10 @@
                         scope.$router.push({path: '/simple-map'});
                         break;
                     case '未知1':
-                        scope.$msg('暂未开通此功能1');
+                        scope.$msg('暂未开通此功能');
                         break;
                     case '未知2':
-                        scope.$msg('暂未开通此功能2');
+                        scope.$msg('暂未开通此功能');
                         break;
                     default:
                         break;
