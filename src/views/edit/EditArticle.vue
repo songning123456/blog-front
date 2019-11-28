@@ -7,14 +7,14 @@
                         <el-input v-model="form.title" placeholder='请输入文章标题' clearable></el-input>
                     </el-form-item>
                 </el-form>
-                <el-button type="success" plain @click="dialog.label = true">选择标签</el-button>
+                <el-button type="success" plain @click="dialog.label = true" icon="el-icon-price-tag">选择标签</el-button>
             </div>
             <div class="second">
-                <el-button type="primary" plain @click="publishArticle">发布</el-button>
-                <el-button type="info" plain @click="$homePage('read')">返回</el-button>
+                <el-button type="primary" plain @click="publishArticle" icon="el-icon-thumb">发布</el-button>
+                <el-button type="info" plain @click="$homePage('read')" icon="el-icon-position">返回</el-button>
             </div>
         </div>
-        <mavon-editor v-model='form.content'></mavon-editor>
+        <mavon-editor v-model='form.content' @imgAdd='addImage' @imgDel='delImage' ref="md"></mavon-editor>
         <el-dialog title='标签' :visible.sync='dialog.label' width='50%' :close-on-click-modal='false'
                    :before-close='cancelLabel' class='summary-dialog' top="5vh">
             <multi-label @chosen='(arg0) => form.labelName = arg0' ref='multiLabel'></multi-label>
@@ -35,17 +35,19 @@
     import FloatMenu from '../../components/util/FloatMenu';
     import MultiLabel from '../../components/public/MultiLabel';
     import ToolLoading from '../../components/util/ToolLoading';
-    import {publishArticle, getBloggerInfo} from '../../service/request';
+    import Config from '../../utils/ConfigUtil';
+    import {publishArticle, getBloggerInfo, saveImage, deleteImage} from '../../service/request';
 
     export default {
         name: 'EditArticle',
         components: {ToolLoading, MultiLabel, FloatMenu},
         data () {
             return {
-                labelWidth: '4rem',
+                labelWidth: '5rem',
                 dialog: {
                     label: false
                 },
+                img: [],
                 form: {
                     title: '',
                     content: '',
@@ -103,6 +105,30 @@
                 let scope = this;
                 scope.$refs['multiLabel'].query(scope.form.labelFuzzyName);
             },
+            addImage (pos, file) {
+                let scope = this;
+                let formData = new FormData();
+                formData.append('file', file, file.filename);
+                formData.append('dir', 'article');
+                saveImage(formData).then(data => {
+                    if (data.status === 200 && data.total > 0) {
+                        let src = Config.getImageOriginal() + data.data[0].imageSrc;
+                        scope.$refs['md'].$img2Url(pos, src);
+                    }
+                });
+            },
+            delImage (params) {
+                let scope = this;
+                let url = params[0];
+                let imageName = url.split('\\')[5];
+                deleteImage({condition: {imageName: imageName}}).then(data => {
+                    if (data.status === 200) {
+                        scope.$msg('删除图片成功', 'success');
+                    } else {
+                        scope.$msg(data.message);
+                    }
+                });
+            },
             publishArticle () {
                 let scope = this;
                 if (!scope.formCheck(1)) {
@@ -154,6 +180,7 @@
         .title {
             height: 8%;
             width: 100%;
+            background: url("../../assets/articleBg.png");
 
             .first {
                 width: 50%;

@@ -161,6 +161,9 @@ export const existUser = (params) => {
 export const saveImage = (params) => {
     return axios.ajax('/image/save', 'post', params);
 };
+export const deleteImage = (params) => {
+    return axios.ajax('/image/delete', 'post', params);
+};
 
 export const getLabelConfig = () => {
     return axios.ajax('/label/getLabelConfig', 'get');

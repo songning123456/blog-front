@@ -278,6 +278,7 @@
                 scope.image.files = file;
                 let formData = new FormData();
                 formData.append('file', scope.image.files, scope.image.filename);
+                formData.append('dir', 'avatar');
                 saveImage(formData).then(data => {
                     if (data.status === 200 && data.total > 0) {
                         // 获取服务器中图片路径

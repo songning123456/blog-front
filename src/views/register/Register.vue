@@ -298,6 +298,7 @@
                 let scope = this;
                 let formData = new FormData();
                 formData.append('file', scope.image.files, scope.image.filename);
+                formData.append('dir', 'avatar');
                 scope.loading = true;
                 // 在服务器中生成 图片文件
                 saveImage(formData).then(data => {
