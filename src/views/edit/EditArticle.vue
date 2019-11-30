@@ -16,7 +16,7 @@
         </div>
         <mavon-editor v-model='form.content' @imgAdd='addImage' @imgDel='delImage' ref="md"></mavon-editor>
         <el-dialog title='标签' :visible.sync='dialog.label' width='50%' :close-on-click-modal='false'
-                   :before-close='cancelLabel' class='summary-dialog' top="5vh">
+                   :before-close='cancelLabel' class='summary-dialog' top="8vh">
             <multi-label @chosen='(arg0) => form.labelName = arg0' ref='multiLabel'></multi-label>
             <span slot='footer'>
                 <el-input placeholder='搜索标签' v-model='form.labelFuzzyName' @keyup.enter.native='queryLabel'>
@@ -234,7 +234,7 @@
                 /deep/ .el-dialog {
                     /deep/ .el-dialog__body {
                         .multi-label {
-                            height: 34rem;
+                            height: 30rem;
                             overflow: auto;
 
                             &::-webkit-scrollbar {

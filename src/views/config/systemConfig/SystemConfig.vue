@@ -241,11 +241,11 @@
 
         .title {
             width: 100%;
-            height: 5%;
+            height: 7%;
             display: flex;
             justify-content: flex-start;
             align-items: center;
-            font-size: 1.2rem;
+            font-size: 1rem;
             font-family: PingFangSC-Regular;
             font-weight: 400;
         }
@@ -284,7 +284,7 @@
 
         .display {
             width: 100%;
-            height: 79%;
+            height: 77%;
 
             .el-table {
                 height: 100%;

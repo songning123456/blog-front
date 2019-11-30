@@ -317,18 +317,18 @@
 
     .home-page-popover {
         min-width: unset;
-        width: 80px;
-        padding: 12px;
-        font-size: 14px;
-        margin-top: 5px !important;
+        width: 4rem;
+        padding: 0.6rem;
+        font-size: 0.7rem;
+        margin-top: 0.25rem !important;
         left: 88.75rem !important;
 
         div {
             text-align: center;
-            padding: 2px 0;
+            padding: 0.1rem 0;
 
             span {
-                font-size: 15px;
+                font-size: 0.75rem;
                 cursor: pointer;
             }
 

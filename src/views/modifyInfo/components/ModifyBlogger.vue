@@ -337,7 +337,7 @@
                             align-items: center;
 
                             .el-input, .el-slider, .el-radio-group, .modify-headPortrait {
-                                width: 80%;
+                                width: 78%;
                                 float: left;
                             }
 
@@ -354,7 +354,7 @@
                             }
 
                             .modify-icon-true {
-                                width: 20%;
+                                width: 22%;
                                 height: 100%;
                                 font-size: 1.2rem;
                                 float: left;
@@ -366,7 +366,7 @@
                             }
 
                             .modify-icon-false {
-                                width: 20%;
+                                width: 22%;
                                 height: 100%;
                                 float: left;
 

@@ -85,8 +85,19 @@
                 };
                 scope.refreshModal = true;
             },
+            formCheck() {
+                let scope = this;
+                if (!scope.form.systemConfig && !scope.form.labelConfig) {
+                    scope.$msg('请先选择缓存内容', 'warning');
+                    return false;
+                }
+                return true;
+            },
             sureCache() {
                 let scope = this;
+                if (!scope.formCheck()) {
+                    return;
+                }
                 scope.refreshModal = false;
                 scope.loading = true;
                 refreshCache({condition: scope.form}).then(data => {

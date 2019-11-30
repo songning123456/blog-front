@@ -222,7 +222,7 @@
                         img {
                             max-height: 16px;
                             max-width: 16px;
-                            padding-top: 13.1px;
+                            padding-top: 0.6rem;
                         }
                     }
                 }
@@ -237,7 +237,7 @@
                         img {
                             max-height: 16px;
                             max-width: 16px;
-                            padding-top: 13.1px;
+                            padding-top: 0.6rem;
                         }
                     }
                 }

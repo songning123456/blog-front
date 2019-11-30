@@ -551,11 +551,11 @@
                 }
 
                 .avatar-uploader-icon {
-                    font-size: 28px;
+                    font-size: 1.4rem;
                     color: #8c939d;
-                    width: 178px;
-                    height: 178px;
-                    line-height: 178px;
+                    width: 8.9rem;
+                    height: 8.9rem;
+                    line-height: 8.9rem;
                     text-align: center;
                 }
 
