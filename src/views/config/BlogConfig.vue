@@ -1,7 +1,7 @@
 <template>
     <div class='blog-config'>
         <div class='config-left'>
-            <div class="refresh-cache" v-if="permission === 'ADMIN'">
+            <div class="refresh-cache">
                 <div class="button" @click="refresh"><span>刷新缓存</span></div>
             </div>
             <label-button v-for='(item, index) in tabsForm' :key='index' :label='item.label'
@@ -14,6 +14,9 @@
         </div>
         <el-dialog :close-on-click-modal='false' title="请选择缓存刷新" :visible.sync="refreshModal" width="20%" top="25vh">
             <el-form ref="form" :model="form" :label-width="labelWidth">
+                <el-form-item label="标签配置缓存" v-if="permission === 'ADMIN'">
+                    <el-switch v-model="form.labelConfig" @change="changeStatus($event, 'labelConfig')"></el-switch>
+                </el-form-item>
                 <el-form-item v-for='(item, index) in cacheForm' :key="index" :label="item.label"
                 :style="item.name === 'all' ? 'font-weight:600' : ''">
                     <el-switch v-model="form[item.name]" @change="changeStatus($event, item.name)"></el-switch>
@@ -47,13 +50,14 @@
                     {label: '标签配置', name: 'labelConfig'}
                 ],
                 cacheForm: [
-                    {label: '系统配置', name: 'systemConfig'},
-                    {label: '标签配置', name: 'labelConfig'},
+                    {label: '系统配置缓存', name: 'systemConfig'},
+                    {label: '关注标签缓存', name: 'personalAttentionLabel'},
                     {label: '以上全部', name: 'all'}
                 ],
                 form: {
                     systemConfig: false,
                     labelConfig: false,
+                    personalAttentionLabel: false,
                     all: false
                 },
                 loading: false,
@@ -81,13 +85,14 @@
                 scope.form = {
                     systemConfig: false,
                     labelConfig: false,
+                    personalAttentionLabel: false,
                     all: false
                 };
                 scope.refreshModal = true;
             },
             formCheck() {
                 let scope = this;
-                if (!scope.form.systemConfig && !scope.form.labelConfig) {
+                if (!scope.form.systemConfig && !scope.form.labelConfig && !scope.form.personalAttentionLabel) {
                     scope.$msg('请先选择缓存内容', 'warning');
                     return false;
                 }
@@ -124,6 +129,11 @@
                                 scope.form.labelConfig = true;
                             }, 200);
                         }
+                        if (!scope.form.personalAttentionLabel) {
+                            setTimeout(() => {
+                                scope.form.personalAttentionLabel = true;
+                            }, 200);
+                        }
                     } else {
                         if (scope.form.systemConfig) {
                             setTimeout(() => {
@@ -135,14 +145,24 @@
                                 scope.form.labelConfig = false;
                             }, 200);
                         }
+                        if (scope.form.personalAttentionLabel) {
+                            setTimeout(() => {
+                                scope.form.personalAttentionLabel = false;
+                            }, 200);
+                        }
                     }
                 } else {
-                    if (scope.form.labelConfig && scope.form.systemConfig) {
+                    if (scope.form.labelConfig && scope.form.systemConfig && scope.form.personalAttentionLabel) {
                         setTimeout(() => {
                             scope.form.all = true;
                         }, 200);
                     }
-                    if (!scope.form.labelConfig && !scope.form.systemConfig) {
+                    if (!scope.form.labelConfig && !scope.form.systemConfig && !scope.form.personalAttentionLabel) {
+                        setTimeout(() => {
+                            scope.form.all = false;
+                        }, 200);
+                    }
+                    if (!$event && scope.form.all === true) {
                         setTimeout(() => {
                             scope.form.all = false;
                         }, 200);
@@ -204,7 +224,7 @@
         .el-dialog {
 
             .el-dialog__body {
-                padding: 1.5rem 1rem 0 1rem;
+                padding: 0.5rem 1rem 0.5rem 1rem;
                 .el-form {
                     .el-form-item {
                         margin-bottom: unset;
