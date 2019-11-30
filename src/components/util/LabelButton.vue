@@ -28,11 +28,10 @@
 <style lang='scss'>
     .label-button {
         height: 2.5rem;
-        width: 8rem;
+        width: 85%;
+        padding: 7.5% 7.5% 0 7.5%;
         display: flex;
         justify-content: center;
-        float: left;
-        padding: .8rem 0 0 .8rem;
 
         .normal-button {
             width: 100%;

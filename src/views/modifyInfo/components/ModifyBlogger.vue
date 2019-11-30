@@ -147,7 +147,7 @@
         mounted () {
             let scope = this;
             getBloggerInfo({condition: {}}).then(data => {
-                scope.$response(data).then(data => {
+                scope.$response(data, '获取个人简介').then(data => {
                     scope.form = data.data[0];
                     scope.copy = Object.assign({}, scope.form);
                 });
@@ -257,7 +257,7 @@
                 };
                 scope.loading = true;
                 updateBlogger(params).then(data => {
-                    scope.$response(data).then(data => {
+                    scope.$response(data, '更新个人简介').then(data => {
                         scope.form = data.data[0];
                     });
                 }).catch(e => {

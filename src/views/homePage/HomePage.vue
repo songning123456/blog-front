@@ -164,7 +164,7 @@
             getOwnerInfo () {
                 let scope = this;
                 getBloggerInfo({condition: {}}).then((data) => {
-                    scope.$response(data).then(data => {
+                    scope.$response(data, '获取个人信息').then(data => {
                         scope.owner = data.data[0];
                     });
                 }).catch().finally();

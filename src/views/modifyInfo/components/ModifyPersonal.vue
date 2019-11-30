@@ -60,7 +60,7 @@
                 if (type === 1 && scope.current !== 1) {
                     scope.loading = true;
                     getMyInfo({condition: {}}).then(data => {
-                        scope.$response(data).then(data => {
+                        scope.$response(data, '获取个人信息').then(data => {
                             scope.result = data.data;
                         });
                     }).finally(() => {

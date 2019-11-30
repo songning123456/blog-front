@@ -383,7 +383,7 @@
                         }
                         // 判断用户是否存在
                         existUser({condition: {username: scope.form.username}}).then(data => {
-                            scope.$response(data).then(data => {
+                            scope.$response(data, '判断用户是否存在').then(data => {
                                 if (data.data[0].isExist) {
                                     resolve({
                                         message: '用户名已存在',
@@ -450,7 +450,7 @@
                         }
                         // 获取标签配置
                         getLabelConfig().then(data => {
-                            scope.$response(data).then(data => {
+                            scope.$response(data, '获取标签配置').then(data => {
                                 resolve({
                                     data: data.data,
                                     total: data.total,

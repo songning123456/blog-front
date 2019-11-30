@@ -174,3 +174,16 @@ export const registerAll = (params) => {
 export const modifyUser = (params) => {
     return axios.ajax('/users/modify', 'post', params);
 };
+
+export const getUserPermission = (params) => {
+    return axios.ajax('/users/getPermission', 'post', params);
+};
+
+/**
+ * 刷新缓存
+ * @param params
+ * @returns {*|Promise|Promise<unknown>}
+ */
+export const refreshCache = (params) => {
+    return axios.ajax('/cache/refresh', 'post', params);
+};
