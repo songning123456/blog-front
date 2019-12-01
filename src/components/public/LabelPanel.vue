@@ -33,12 +33,16 @@
             tabs: {
                 handler (newVal, oldVal) {
                     let scope = this;
+                    let step = 20;
+                    if (document.getElementsByTagName('html')[0] && document.getElementsByTagName('html')[0].style && document.getElementsByTagName('html')[0].style.fontSize) {
+                        step = +document.getElementsByTagName('html')[0].style.fontSize.slice(0, -2);
+                    }
                     let total = document.getElementsByClassName('label-center')[0].offsetWidth;
                     let all = 0;
                     setTimeout(() => {
                         let array = [...document.getElementsByClassName('label-content')];
                         array.forEach(item => {
-                            all += (item.offsetWidth + 20);
+                            all += (item.offsetWidth + step);
                         });
                         scope.showIcon = all > total;
                     }, 100);
