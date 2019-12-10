@@ -1,6 +1,6 @@
 <template>
     <div class='edit-article'>
-        <div class="title">
+        <div class="title" :style="{backgroundImage: 'url(' +bgUrl + ')'}">
             <div class="first">
                 <el-form :model='form' :label-width="labelWidth">
                     <el-form-item label='文章标题'>
@@ -55,7 +55,8 @@
                     labelFuzzyName: '',
                     author: ''
                 },
-                loading: false
+                loading: false,
+                bgUrl: require('../../assets/articleBg.png')
             };
         },
         mounted () {
@@ -180,7 +181,6 @@
         .title {
             height: 8%;
             width: 100%;
-            background: url("../../assets/articleBg.png");
 
             .first {
                 width: 50%;

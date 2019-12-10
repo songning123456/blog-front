@@ -1,6 +1,6 @@
 <template>
     <div class='home-page' @click="modifyShow">
-        <div class='above-info'>
+        <div class='above-info' :style="{backgroundImage: 'url(' +bgUrl + ')'}">
             <div class='left-title'>
                   <span class='title-image'>
                      <img src='../../assets/notebook.png'/>
@@ -59,7 +59,8 @@
                 owner: {},
                 routeAlive: true,
                 search: '',
-                currentPage: ''
+                currentPage: '',
+                bgUrl: require('../../assets/title-bg.png')
             };
         },
         created () {
@@ -224,7 +225,7 @@
             display: flex;
             align-items: center;
             border-bottom: 1px solid #f0f2f9;
-            background: url('../../assets/title-bg.png') no-repeat;
+            background: no-repeat;
             transition: all .4s ease-in-out;
 
             .left-title {

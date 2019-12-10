@@ -40,6 +40,7 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 # ( * 上线存在风险)百度地图密钥 eiySHWfELLn2G0pcLw5cgUV5upA8eUuq
 # loading icon => https://loading.io/
 # vue-view-lazy：基于vue2.x懒加载解决方案 => https://juejin.im/post/5b013ac2518825672034563f
+# vue2.0 vue-cli打包背景图路径问题汇总解决方法 => https://blog.csdn.net/ddwddw4/article/details/82384397
 ```
 
 #### 如何打开项目前端页面
