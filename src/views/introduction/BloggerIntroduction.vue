@@ -48,7 +48,10 @@
                 <empty-view></empty-view>
             </div>
             <div v-else-if='current === 2' class='detail-show-2'>
-                <empty-view></empty-view>
+                <div class="container" v-if="swiperList.length > 0">
+                    <image-swiper :swiper-list="swiperList"></image-swiper>
+                </div>
+                <empty-view v-if="swiperList.length === 0"></empty-view>
             </div>
             <div v-else-if=' current === 3' class='detail-show-3'>
                 <div class='email-head'>
@@ -69,20 +72,22 @@
 
 <script>
     import EmptyView from '../../components/util/EmptyView';
-    import {getBloggerInfo, getPersonalInfo, sendSimpleMail} from '../../service/request';
+    import {getBloggerInfo, getPersonalInfo, sendSimpleMail, getAlbum} from '../../service/request';
     import ToolLoading from '../../components/util/ToolLoading';
     import config from '../../utils/ConfigUtil';
+    import ImageSwiper from '@/components/public/ImageSwiper';
 
     export default {
         name: 'BloggerIntroduction',
-        components: {ToolLoading, EmptyView},
-        data() {
+        components: {ImageSwiper, ToolLoading, EmptyView},
+        data () {
             return {
                 result: {},
                 resume: {
                     data: [],
                     total: 0
                 },
+                swiperList: [],
                 display: [
                     {
                         key: '作者',
@@ -110,9 +115,13 @@
                     }
                 ],
                 detail: [
-                    {url1: 'static/images/personalInfo/special.svg', url2: 'static/images/personalInfo/common.svg', info: '简历'},
+                    {
+                        url1: 'static/images/personalInfo/special.svg',
+                        url2: 'static/images/personalInfo/common.svg',
+                        info: '简历'
+                    },
                     {url1: 'static/images/print/special.svg', url2: 'static/images/print/common.svg', info: '打印'},
-                    {url1: 'static/images/photo/special.svg', url2: 'static/images/photo/common.svg', info: '查看照片'},
+                    {url1: 'static/images/photo/special.svg', url2: 'static/images/photo/common.svg', info: '相册'},
                     {url1: 'static/images/mail/special.svg', url2: 'static/images/mail/common.svg', info: '给我发电子邮件?'}
                 ],
                 emailInfo: [
@@ -143,18 +152,17 @@
             }
         },
         methods: {
-            sureContent(index) {
+            sureContent (index) {
                 let scope = this;
                 if (scope.current !== index) {
                     scope.current = index;
                 }
             },
-            getMyInfo() {
+            getMyInfo () {
                 let scope = this;
                 let form = {
-                        userId: scope.$route.query.userId
-                    }
-                ;
+                    userId: scope.$route.query.userId
+                };
                 let param = {
                     condition: form
                 };
@@ -171,7 +179,7 @@
                     }
                 }).catch().finally();
             },
-            checkForm() {
+            checkForm () {
                 let scope = this;
                 let reg = /^([0-9A-Za-z_\\.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/g;
                 if (!scope.emailForm.sender) {
@@ -189,7 +197,7 @@
                 }
                 return true;
             },
-            sendMail() {
+            sendMail () {
                 let scope = this;
                 if (!scope.checkForm()) {
                     return;
@@ -216,7 +224,21 @@
                     scope.loading = false;
                 });
             },
-            getBlogger() {
+            getBloggerAlbum () {
+                let scope = this;
+                let form = {
+                    userId: scope.$route.query.userId
+                };
+                let param = {
+                    condition: form
+                };
+                getAlbum(param).then(data => {
+                    scope.$response(data, '获取个人相册').then(data => {
+                        scope.swiperList = data.data;
+                    });
+                });
+            },
+            getBlogger () {
                 let scope = this;
                 let form = {
                     userId: scope.$route.query.userId
@@ -237,10 +259,11 @@
                 }).catch().finally();
             }
         },
-        mounted() {
+        mounted () {
             this.sureContent(0);
             this.getMyInfo();
             this.getBlogger();
+            this.getBloggerAlbum();
         }
     };
 </script>
@@ -442,6 +465,17 @@
             .detail-show-2 {
                 width: 100%;
                 height: calc(100% - 3rem);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                .container {
+                    width: 70%;
+                    height: 70%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
             }
 
             .detail-show-3 {

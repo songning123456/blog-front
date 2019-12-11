@@ -164,8 +164,8 @@ export const saveImage = (params) => {
 export const operateAlbum = (params) => {
     return axios.ajax('/image/operateAlbum', 'post', params);
 };
-export const getAlbum = () => {
-    return axios.ajax('/image/get', 'get');
+export const getAlbum = (params) => {
+    return axios.ajax('/image/getAlbum', 'post', params);
 };
 export const deleteImage = (params) => {
     return axios.ajax('/image/delete', 'post', params);

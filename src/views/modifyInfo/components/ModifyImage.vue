@@ -37,7 +37,7 @@
         },
         mounted () {
             let scope = this;
-            getAlbum().then(data => {
+            getAlbum({condition: {}}).then(data => {
                 scope.$response(data, '获取个人相册').then(data => {
                     scope.swiperList = data.data;
                 });
