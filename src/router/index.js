@@ -150,7 +150,7 @@ export default new Router({
             name: 'modifyInfo',
             component: () => import('../views/modifyInfo/ModifyInfo'),
             meta: {
-                title: '注册',
+                title: '信息',
                 requireAuth: false
             }
         }

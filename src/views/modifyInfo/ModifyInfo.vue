@@ -16,11 +16,16 @@
                 <img src="../../assets/modifyPersonal.svg" alt=""/>
                 <span>生活经历</span>
             </div>
+            <div class="info-col" @click.stop="changeSubMenu(3)" :class='currentMenu===3 ? "active":""'>
+                <img src="../../assets/modifyImage.svg" alt=""/>
+                <span>个性图片</span>
+            </div>
         </div>
         <div class="content-panel">
             <modify-user v-show="currentMenu===0"></modify-user>
             <modify-blogger v-show="currentMenu===1"></modify-blogger>
             <modify-personal v-show="currentMenu===2"></modify-personal>
+            <modify-image v-show="currentMenu===3"></modify-image>
         </div>
         <float-menu :menus="menu" @itemClick='chooseItem'></float-menu>
     </div>
@@ -31,10 +36,11 @@
     import ModifyUser from './components/ModifyUser';
     import ModifyBlogger from './components/ModifyBlogger';
     import ModifyPersonal from './components/ModifyPersonal';
+    import ModifyImage from '@/views/modifyInfo/components/ModifyImage';
 
     export default {
         name: 'ModifyInfo',
-        components: {ModifyPersonal, ModifyBlogger, ModifyUser, FloatMenu},
+        components: {ModifyImage, ModifyPersonal, ModifyBlogger, ModifyUser, FloatMenu},
         data () {
             return {
                 currentMenu: 0,
