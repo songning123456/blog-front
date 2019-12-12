@@ -121,8 +121,9 @@
             delImage (params) {
                 let scope = this;
                 let url = params[0];
-                let imageName = url.split('\\')[5];
-                deleteImage({condition: {imageName: imageName}}).then(data => {
+                let temps = url.split('\\');
+                let imageName = temps[temps.length - 1];
+                deleteImage({condition: {imageName: imageName, dir: 'article'}}).then(data => {
                     if (data.status === 200) {
                         scope.$msg('删除图片成功', 'success');
                     } else {
