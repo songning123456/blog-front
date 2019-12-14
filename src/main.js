@@ -7,6 +7,10 @@ import 'element-ui/lib/theme-chalk/index.css';
 import mavonEditor from 'mavon-editor';
 import 'mavon-editor/dist/css/index.css';
 import infiniteScroll from 'vue-infinite-scroll';
+import VueQuillEditor from 'vue-quill-editor';
+import 'quill/dist/quill.core.css';
+import 'quill/dist/quill.snow.css';
+import 'quill/dist/quill.bubble.css';
 import Vuex from 'vuex';
 import store from './store/store';
 import VueI18n from 'vue-i18n';
@@ -88,6 +92,7 @@ Vue.prototype.$homePage = function (src) {
 Vue.use(ElementUI);
 Vue.use(mavonEditor);
 Vue.use(infiniteScroll);
+Vue.use(VueQuillEditor);
 Vue.use(Dictionary);
 Vue.use(Vuex);
 Vue.use(VueI18n, {

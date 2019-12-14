@@ -16,10 +16,12 @@
 
 <script>
     import {sendSimpleMail} from '../../../service/request';
+    import ToolLoading from '../../../components/util/ToolLoading';
 
     export default {
         name: 'EmailInfo',
-        data () {
+        components: {ToolLoading},
+        data() {
             return {
                 emailInfo: [
                     {key: '发件人', value: 'sender'},
@@ -38,9 +40,10 @@
             };
         },
         methods: {
-            checkForm () {
+            checkForm() {
                 let scope = this;
-                let reg = /^([0-9A-Za-z_\\.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/g;
+                // let reg = /^([0-9A-Za-z_\\.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/g;
+                let reg = /^([a-zA-Z]|[0-9])(\w|\\-|_)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/g;
                 if (!scope.emailForm.sender) {
                     scope.$msg('邮件发件人不能为空', 'warning');
                     return false;
@@ -56,7 +59,7 @@
                 }
                 return true;
             },
-            sendMail () {
+            sendMail() {
                 let scope = this;
                 if (!scope.checkForm()) {
                     return;

@@ -67,8 +67,8 @@
                     },
                     {
                         id: id3,
-                        image: require('../../../assets/unknown.svg'),
-                        title: '未知1'
+                        image: require('../../../assets/email.svg'),
+                        title: '写邮件'
                     }, {
                         id: id4,
                         image: require('../../../assets/unknown.svg'),
@@ -146,8 +146,8 @@
                     case '定位地图':
                         scope.$router.push({path: '/simple-map'});
                         break;
-                    case '未知1':
-                        scope.$msg('暂未开通此功能');
+                    case '写邮件':
+                        scope.$router.push({path: '/email'});
                         break;
                     case '未知2':
                         scope.$msg('暂未开通此功能');

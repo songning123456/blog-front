@@ -138,6 +138,14 @@ export default new Router({
                 requireAuth: true
             }
         }, {
+            path: '/email',
+            name: 'email',
+            component: () => import('../views/email/Email'),
+            meta: {
+                title: '邮件',
+                requireAuth: true
+            }
+        }, {
             path: '/register',
             name: 'register',
             component: () => import('../views/register/Register'),
