@@ -97,6 +97,10 @@ export const sendSimpleMail = (params) => {
     return axios.ajax('/mail/send', 'post', params);
 };
 
+export const saveEmailDraft = (params) => {
+    return axios.ajax('/mail/draft', 'post', params);
+};
+
 /**
  * 登陆
  * @param params

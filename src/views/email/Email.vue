@@ -14,9 +14,9 @@
                     </el-form-item>
                 </el-form>
                 <el-upload
-                    class="email-upload"
-                    action="https://jsonplaceholder.typicode.com/posts/">
-                    <el-link icon="el-icon-paperclip">邮件附件(不超过100M) | 支持excel,image,txt...</el-link>
+                    class="email-upload" multiple :limit="5"
+                    action="" :before-upload="beforeUpload">
+                    <el-link icon="el-icon-paperclip">邮件附件(不超过10M) | 支持excel,image,txt...</el-link>
                 </el-upload>
                 <quill-editor v-model="form.content" ref="myQuillEditor"></quill-editor>
                 <el-form ref="form" :model="form" :label-width=labelWidth class="email-form">
@@ -43,7 +43,7 @@
                 </el-form>
                 <div class="email-button">
                     <el-button type="success" plain @click.native="sendMail">发送</el-button>
-                    <el-button type="info" plain>保存为草稿</el-button>
+                    <el-button type="info" plain @click.native='save'>保存为草稿</el-button>
                 </div>
             </div>
         </div>
@@ -56,21 +56,22 @@
     import FloatMenu from '../../components/util/FloatMenu';
     import uuidv1 from 'uuid/v1';
     import ToolLoading from '../../components/util/ToolLoading';
-    import {sendSimpleMail} from '../../service/request';
+    import {sendSimpleMail, saveEmailDraft} from '../../service/request';
 
     export default {
         name: 'Email',
         components: {ToolLoading, FloatMenu},
-        data() {
+        data () {
             let id = uuidv1();
             return {
                 form: {
-                    sender: '',
-                    recipient: '',
-                    subject: '',
-                    content: '',
-                    password: ''
+                    sender: 'sn_15850682191@163.com',
+                    recipient: '1457065857@qq.com',
+                    subject: 'company 测试 email 是否 有用',
+                    content: 'company 测试 email 是否 有用',
+                    password: '772805406sn23'
                 },
+                files: [],
                 loading: false,
                 labelWidth: '5rem',
                 menus: [
@@ -83,15 +84,23 @@
             };
         },
         methods: {
-            chooseItem(menu) {
+            chooseItem (menu) {
                 let scope = this;
                 scope.$homePage('read');
             },
-            checkForm() {
+            // 上传操作
+            beforeUpload (file) {
                 let scope = this;
-                // let reg = /^([0-9A-Za-z_\\.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/g;
-                let reg = /^([a-zA-Z]|[0-9])(\w|\\-|_)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/g;
-                if (!reg.test(scope.form.recipient)) {
+                scope.files.push(file);
+                return false;
+            },
+            checkForm () {
+                let scope = this;
+                // 如果用 同一个 匹配规则，第二次会报错???
+                let reg1 = /^([a-zA-Z]|[0-9])(\w|\\-|_)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/g;
+                let reg2 = /^([a-zA-Z]|[0-9])(\w|\\-|_)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/g;
+                // let reg2 = /^([0-9A-Za-z_\\.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/g;
+                if (!reg1.test(scope.form.recipient)) {
                     scope.$msg('邮件收件人格式错误', 'warning');
                     return false;
                 }
@@ -103,7 +112,7 @@
                     scope.$msg('邮件文本不能为空', 'warning');
                     return false;
                 }
-                if (!reg.test(scope.form.sender)) {
+                if (!reg2.test((scope.form.sender))) {
                     scope.$msg('邮件发件人格式错误', 'warning');
                     return false;
                 }
@@ -113,7 +122,7 @@
                 }
                 return true;
             },
-            sendMail() {
+            save () {
                 let scope = this;
                 if (!scope.checkForm()) {
                     return;
@@ -129,7 +138,38 @@
                     condition: form
                 };
                 scope.loading = true;
-                sendSimpleMail(param).then((data) => {
+                saveEmailDraft(param).then(data => {
+                    if (data.status === 200) {
+                        scope.$msg('邮件保存成功', 'success');
+                    } else {
+                        scope.$msg('邮件保存失败');
+                    }
+                }).finally(() => {
+                    scope.loading = false;
+                });
+            },
+            sendMail () {
+                let scope = this;
+                if (!scope.checkForm()) {
+                    return;
+                }
+                let form = {
+                    recipient: scope.form.recipient,
+                    subject: scope.form.subject,
+                    content: scope.form.content,
+                    sender: scope.form.sender,
+                    password: scope.form.password
+                };
+                let param = {
+                    condition: form
+                };
+                scope.loading = true;
+                let formData = new FormData();
+                formData.append('jsonData', JSON.stringify(param));
+                scope.files.forEach(item => {
+                    formData.append('file', item);
+                });
+                sendSimpleMail(formData).then((data) => {
                     if (data.status === 200) {
                         scope.$msg('邮件发送成功', 'success');
                     } else {
