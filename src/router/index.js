@@ -158,7 +158,23 @@ export default new Router({
             name: 'modifyInfo',
             component: () => import('../views/modifyInfo/ModifyInfo'),
             meta: {
-                title: '信息',
+                title: '修改信息',
+                requireAuth: true
+            }
+        }, {
+            path: '/git-hub',
+            name: 'gitHub',
+            component: () => import('../views/thirdPart/gitHub/GitHub'),
+            meta: {
+                title: 'gitHub登录',
+                requireAuth: false
+            }
+        }, {
+            path: '/third-part',
+            name: 'thirdPart',
+            component: () => import('../views/thirdPart/ThirdPart'),
+            meta: {
+                title: '第三方登录信息',
                 requireAuth: false
             }
         }

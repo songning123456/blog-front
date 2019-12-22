@@ -36,7 +36,7 @@
     import ModifyUser from './components/ModifyUser';
     import ModifyBlogger from './components/ModifyBlogger';
     import ModifyPersonal from './components/ModifyPersonal';
-    import ModifyImage from '@/views/modifyInfo/components/ModifyImage';
+    import ModifyImage from './components/ModifyImage';
 
     export default {
         name: 'ModifyInfo',

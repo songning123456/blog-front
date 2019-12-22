@@ -86,4 +86,16 @@ FunctionUtil.jsonToObject = (json) => {
     return null;
 };
 
+/**
+ * @return {string}
+ */
+FunctionUtil.GetString = function (url, obj) {
+    let result = url + '?';
+    for (let key in obj) {
+        result += (key + '=' + obj[key] + '&');
+    }
+    result = result.slice(0, -1);
+    return result;
+};
+
 export default FunctionUtil;

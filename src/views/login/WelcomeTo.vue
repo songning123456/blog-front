@@ -34,6 +34,11 @@
             <el-row class='register'>
                 <el-link type="primary" @click='register'>立即注册</el-link>
             </el-row>
+            <el-row class="third-party">
+                <el-col :span="8">
+                    <img src="../../assets/github.svg" @click='jumpGitHub' />
+                </el-col>
+            </el-row>
         </div>
     </div>
 </template>
@@ -101,6 +106,10 @@
                     return false;
                 }
                 return true;
+            },
+            jumpGitHub() {
+                let scope = this;
+                scope.$router.push({path: '/git-hub'});
             },
             // 登陆
             switchRouter () {
@@ -264,6 +273,13 @@
 
             .register {
                 padding-top: 16px;
+            }
+
+            .third-party {
+                padding: .5rem 0;
+                img:hover {
+                    cursor: pointer;
+                }
             }
         }
     }

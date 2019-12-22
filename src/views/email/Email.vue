@@ -192,10 +192,9 @@
         position: relative;
         background-color: #f8f8f9;
         display: flex;
-        justify-content: center;
-        align-items: center;
 
         .paper {
+            margin: auto;
             width: 45%;
             height: 90%;
             background: white;
