@@ -197,3 +197,7 @@ export const getUserPermission = (params) => {
 export const refreshCache = (params) => {
     return axios.ajax('/cache/refresh', 'post', params);
 };
+
+export const gitHubUser = (params) => {
+    return axios.ajax('/thirdPart/gitHub', 'post', params);
+};

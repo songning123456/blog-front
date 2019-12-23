@@ -14,6 +14,11 @@
                     <el-form-item label="Client Secret">
                         <el-input v-model="form.clientSecret" show-password></el-input>
                     </el-form-item>
+                    <el-form-item label="请求方式">
+                        <el-select v-model="form.frontOrServer">
+                            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                        </el-select>
+                    </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="loginBtn" :loading="loading">确认登录</el-button>
                     </el-form-item>
@@ -29,7 +34,7 @@
 
     export default {
         name: 'GitHub',
-        data() {
+        data () {
             let uuid = uuidv1();
             return {
                 form: {
@@ -38,16 +43,31 @@
                     state: uuid,
                     scope: 'read:user',
                     getCodeURL: 'https://github.com/login/oauth/authorize',
-                    getAccessTokenURL: '/github/login/oauth/access_token',
+                    getProxyAccessTokenURL: '/github/login/oauth/access_token', // 前端代理
+                    getAccessTokenURL: 'https://github.com/login/oauth/access_token',
                     getUserURL: 'https://api.github.com/user',
-                    redirectURL: 'http://simple-blog.xyz/#/third-part'
+                    redirectURL: 'http://simple-blog.xyz/#/third-part',
+                    frontOrServer: 'front' // 用前端还是后端去请求
                 },
-                loading: false
+                loading: false,
+                options: [
+                    {
+                        label: '前端请求',
+                        value: 'front'
+                    },
+                    {
+                        label: '后端请求',
+                        value: 'server'
+                    }
+                ]
             };
         },
         methods: {
-            loginBtn() {
+            loginBtn () {
                 let scope = this;
+                if (!scope.formCheck()) {
+                    return;
+                }
                 scope.loading = true;
                 let obj = {
                     client_id: scope.form.clientId,
@@ -57,12 +77,26 @@
                 let gitHub = {
                     clientId: scope.form.clientId,
                     clientSecret: scope.form.clientSecret,
+                    getProxyAccessTokenURL: scope.form.getProxyAccessTokenURL,
                     getAccessTokenURL: scope.form.getAccessTokenURL,
                     getUserURL: scope.form.getUserURL,
+                    frontOrServer: scope.form.frontOrServer,
                     type: 'gitHub'
                 };
                 sessionStorage.setItem('gitHub', JSON.stringify(gitHub));
                 location.href = Util.GetString(scope.form.getCodeURL, obj);
+            },
+            formCheck () {
+                let scope = this;
+                if (!scope.form.clientId) {
+                    scope.$msg('clientId不能为空', 'warning');
+                    return false;
+                }
+                if (!scope.form.clientSecret) {
+                    scope.$msg('clientSecret不能为空', 'warning');
+                    return false;
+                }
+                return true;
             }
         }
     };
@@ -103,6 +137,11 @@
                 .el-form {
                     .el-button {
                         margin-right: 3.25rem;
+                    }
+                    .el-form-item {
+                        .el-select {
+                            width: 17.5rem;
+                        }
                     }
                 }
             }

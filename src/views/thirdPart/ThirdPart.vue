@@ -24,6 +24,7 @@
     import ToolLoading from '../../components/util/ToolLoading';
     import FloatMenu from '../../components/util/FloatMenu';
     import uuidv1 from 'uuid/v1';
+    import {gitHubUser} from '../../service/request';
 
     export default {
         name: 'ThirdPart',
@@ -43,25 +44,45 @@
             } else {
                 // 回调之后再次进入 获取信息
                 let param = JSON.parse(sessionStorage.getItem('gitHub'));
-                if (Object.keys(param).length > 0 && param.clientId && param.clientSecret && param.code && param.getAccessTokenURL) {
+                if (Object.keys(param).length > 0 && param.clientId && param.clientSecret && param.code && param.getProxyAccessTokenURL && param.getAccessTokenURL) {
                     this.loading = true;
                     this.type = param.type;
-                    let obj = {
-                        client_id: param.clientId,
-                        client_secret: param.clientSecret,
-                        code: param.code
-                    };
-                    axios.post(param.getAccessTokenURL, obj).then((response) => {
-                        let accessToken = response.data.split('&')[0].slice(13);
-                        axios.get(param.getUserURL, {params: {access_token: accessToken}}).then(response => {
-                            this.form = response.data;
+                    // 通过前端代理直接请求， 解决跨域问题
+                    if (param.frontOrServer === 'front') {
+                        let obj = {
+                            client_id: param.clientId,
+                            client_secret: param.clientSecret,
+                            code: param.code
+                        };
+                        axios.post(param.getProxyAccessTokenURL, obj).then((response) => {
+                            let accessToken = response.data.split('&')[0].slice(13);
+                            axios.get(param.getUserURL, {params: {access_token: accessToken}}).then(response => {
+                                this.form = response.data;
+                            }).finally(() => {
+                                sessionStorage.removeItem('gitHub');
+                                this.loading = false;
+                            });
+                        }).catch(error => {
+                            console.error(error);
+                        });
+                    } else if (param.frontOrServer === 'server') {
+                        // 通过后台请求，无跨域问题
+                        let params = {
+                            clientId: param.clientId,
+                            clientSecret: param.clientSecret,
+                            code: param.code,
+                            accessTokenURL: param.getAccessTokenURL,
+                            userURL: param.getUserURL
+                        };
+                        gitHubUser({condition: params}).then(data => {
+                            if (data.status === 200) {
+                                this.form = data.dataExt;
+                            }
                         }).finally(() => {
                             sessionStorage.removeItem('gitHub');
                             this.loading = false;
                         });
-                    }).catch(error => {
-                        console.error(error);
-                    });
+                    }
                 }
             }
         },
