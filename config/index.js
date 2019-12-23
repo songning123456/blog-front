@@ -11,11 +11,12 @@ module.exports = {
         assetsSubDirectory: 'static',
         assetsPublicPath: '/',
         proxyTable: {
-            '/github': {
-                target: 'https://github.com',
-                changeOrigin: true,
-                pathRewrite: {
-                    '^/github': '/'
+            '/github': { // 以/github为开头的适合这个规则
+                target: 'https://github.com', // 目标地址
+                changeOrigin: true, // 跨域访问设置，true代表跨域
+                "secure": true, // false为http访问，true为https访问
+                pathRewrite: { // 路径改写规则
+                    '^/github': '' // 以/github为开头的改写为''
                 }
             }
         },

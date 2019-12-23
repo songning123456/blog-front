@@ -210,7 +210,7 @@
 
         .login-info {
             width: 384px;
-            height: 384px;
+            height: 20rem;
             background-color: white;
 
             .outer-image {

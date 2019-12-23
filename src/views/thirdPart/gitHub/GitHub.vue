@@ -15,7 +15,7 @@
                         <el-input v-model="form.clientSecret" show-password></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" @click="loginBtn">确认登录</el-button>
+                        <el-button type="primary" @click="loginBtn" :loading="loading">确认登录</el-button>
                     </el-form-item>
                 </el-form>
             </div>
@@ -33,22 +33,22 @@
             let uuid = uuidv1();
             return {
                 form: {
-                    clientId: '5611bcae54facd3f33c4',
-                    clientSecret: '129f49f9f28ae489a57fa7b9c9c470f277fe189f',
+                    clientId: 'b53228209ce0f034e769',
+                    clientSecret: '8b84be6298ffe9801b76bdb59d1c1f43afe11095',
                     state: uuid,
                     scope: 'read:user',
                     getCodeURL: 'https://github.com/login/oauth/authorize',
-                    getAccessTokenURL: 'https://github.com/login/oauth/access_token',
-                    getUserURl: 'https://api.github.com/user',
-                    redirectURL: 'http://localhost:8070/#/third-part',
-                    code: null,
-                    accessToken: null
-                }
+                    getAccessTokenURL: '/github/login/oauth/access_token',
+                    getUserURL: 'https://api.github.com/user',
+                    redirectURL: 'http://simple-blog.xyz/#/third-part'
+                },
+                loading: false
             };
         },
         methods: {
             loginBtn() {
                 let scope = this;
+                scope.loading = true;
                 let obj = {
                     client_id: scope.form.clientId,
                     state: scope.form.state,
@@ -57,7 +57,9 @@
                 let gitHub = {
                     clientId: scope.form.clientId,
                     clientSecret: scope.form.clientSecret,
-                    getAccessTokenURL: scope.form.getAccessTokenURL
+                    getAccessTokenURL: scope.form.getAccessTokenURL,
+                    getUserURL: scope.form.getUserURL,
+                    type: 'gitHub'
                 };
                 sessionStorage.setItem('gitHub', JSON.stringify(gitHub));
                 location.href = Util.GetString(scope.form.getCodeURL, obj);
