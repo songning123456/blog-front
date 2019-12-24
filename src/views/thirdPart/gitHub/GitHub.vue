@@ -9,10 +9,10 @@
             <div class='info'>
                 <el-form ref="form" :model="form" label-width="6.5rem">
                     <el-form-item label="Client ID">
-                        <el-input v-model="form.clientId" show-password></el-input>
+                        <el-input v-model="form.clientId" show-password readonly></el-input>
                     </el-form-item>
                     <el-form-item label="Client Secret">
-                        <el-input v-model="form.clientSecret" show-password></el-input>
+                        <el-input v-model="form.clientSecret" show-password readonly></el-input>
                     </el-form-item>
                     <el-form-item label="请求方式">
                         <el-select v-model="form.frontOrServer">
@@ -25,15 +25,18 @@
                 </el-form>
             </div>
         </div>
+        <float-menu :menus='menus' @itemClick='chooseItem'></float-menu>
     </div>
 </template>
 
 <script>
     import uuidv1 from 'uuid/v1';
     import Util from '../../../utils/FunctionUtil';
+    import FloatMenu from '../../../components/util/FloatMenu';
 
     export default {
         name: 'GitHub',
+        components: {FloatMenu},
         data () {
             let uuid = uuidv1();
             return {
@@ -58,6 +61,13 @@
                     {
                         label: '后端请求',
                         value: 'server'
+                    }
+                ],
+                menus: [
+                    {
+                        id: uuid,
+                        image: require('../../../assets/exit.svg'),
+                        title: '返回首页'
                     }
                 ]
             };
@@ -97,6 +107,10 @@
                     return false;
                 }
                 return true;
+            },
+            chooseItem (menu) {
+                let scope = this;
+                scope.$router.push({path: '/'});
             }
         }
     };
