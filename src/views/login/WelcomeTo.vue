@@ -46,6 +46,8 @@
 <script>
 
     import {loginBlog} from '../../service/request';
+    import uuidv1 from 'uuid/v1';
+    import Util from '../../utils/FunctionUtil';
 
     let keyFlag = true;
     const REG = /^[0-9a-zA-Z]{8,20}$/;
@@ -53,13 +55,26 @@
     export default {
         name: 'WelcomeTo',
         data () {
+            let uuid = uuidv1();
             return {
                 user: {
                     name: '',
                     password: ''
                 },
                 remember: false,
-                loading: false
+                loading: false,
+                gitHubForm: {
+                    clientId: 'b53228209ce0f034e769',
+                    clientSecret: '8b84be6298ffe9801b76bdb59d1c1f43afe11095',
+                    state: uuid,
+                    scope: 'read:user',
+                    getCodeURL: 'https://github.com/login/oauth/authorize',
+                    getProxyAccessTokenURL: '/github/login/oauth/access_token', // 前端代理
+                    getAccessTokenURL: 'https://github.com/login/oauth/access_token',
+                    getUserURL: 'https://api.github.com/user',
+                    redirectURL: 'http://simple-blog.xyz/#/third-part',
+                    frontOrServer: 'server' // 用前端还是后端去请求
+                }
             };
         },
         created () {
@@ -109,7 +124,23 @@
             },
             jumpGitHub() {
                 let scope = this;
-                scope.$router.push({path: '/git-hub'});
+                // scope.$router.push({path: '/git-hub'});
+                let obj = {
+                    client_id: scope.gitHubForm.clientId,
+                    state: scope.gitHubForm.state,
+                    redirect_uri: scope.gitHubForm.redirectURL
+                };
+                let gitHub = {
+                    clientId: scope.gitHubForm.clientId,
+                    clientSecret: scope.gitHubForm.clientSecret,
+                    getAccessTokenURL: scope.gitHubForm.getAccessTokenURL,
+                    getUserURL: scope.gitHubForm.getUserURL,
+                    frontOrServer: scope.gitHubForm.frontOrServer,
+                    getProxyAccessTokenURL: scope.gitHubForm.getProxyAccessTokenURL,
+                    type: 'gitHub'
+                };
+                sessionStorage.setItem('gitHub', JSON.stringify(gitHub));
+                location.href = Util.GetString(scope.gitHubForm.getCodeURL, obj);
             },
             // 登陆
             switchRouter () {

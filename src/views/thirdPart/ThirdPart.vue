@@ -42,6 +42,30 @@
                 let url = location.href.slice(0, codeStart) + '#/' + location.href.slice(deleteEnd + 2);
                 location.href = url;
             } else {
+                this.callback();
+            }
+        },
+        data () {
+            let id = uuidv1();
+            return {
+                form: {},
+                type: '',
+                loading: false,
+                menus: [
+                    {
+                        id: id,
+                        image: require('../../assets/exit.svg'),
+                        title: '返回首页'
+                    }
+                ]
+            };
+        },
+        methods: {
+            chooseItem (menu) {
+                let scope = this;
+                scope.$router.push({path: '/'});
+            },
+            callback() {
                 // 回调之后再次进入 获取信息
                 let param = JSON.parse(sessionStorage.getItem('gitHub'));
                 if (Object.keys(param).length > 0 && param.clientId && param.clientSecret && param.code && param.getProxyAccessTokenURL && param.getAccessTokenURL) {
@@ -84,27 +108,6 @@
                         });
                     }
                 }
-            }
-        },
-        data () {
-            let id = uuidv1();
-            return {
-                form: {},
-                type: '',
-                loading: false,
-                menus: [
-                    {
-                        id: id,
-                        image: require('../../assets/exit.svg'),
-                        title: '返回首页'
-                    }
-                ]
-            };
-        },
-        methods: {
-            chooseItem (menu) {
-                let scope = this;
-                scope.$router.push({path: '/'});
             }
         }
     };
