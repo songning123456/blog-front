@@ -36,7 +36,7 @@
             </el-row>
             <el-row class="third-party">
                 <el-col :span="8">
-                    <img src="../../assets/github.svg" @click='jumpGitHub' />
+                    <img src="../../assets/github.svg" @click='jumpGitHub'/>
                 </el-col>
             </el-row>
         </div>
@@ -48,9 +48,9 @@
     import {loginBlog} from '../../service/request';
     import uuidv1 from 'uuid/v1';
     import Util from '../../utils/FunctionUtil';
+    import Reg from '../../utils/RegularUtil';
 
     let keyFlag = true;
-    const REG = /^[0-9a-zA-Z]{8,20}$/;
 
     export default {
         name: 'WelcomeTo',
@@ -79,13 +79,16 @@
         },
         created () {
             let scope = this;
+            scope.windowResize();
             document.addEventListener('keydown', scope.handleKeyDown);
             document.addEventListener('keyup', scope.handleKeyUp);
+            window.addEventListener('resize', scope.windowResize);
         },
         destroyed () {
             let scope = this;
             document.removeEventListener('keydown', scope.handleKeyDown);
             document.removeEventListener('keyup', scope.handleKeyUp);
+            window.removeEventListener('resize', scope.windowResize);
         },
         mounted () {
             let scope = this;
@@ -101,6 +104,19 @@
             }
         },
         methods: {
+            windowResize () {
+                let width = document.body.offsetWidth || document.body.clientWidth;
+                this.$nextTick(() => {
+                    // 1920 * 1080
+                    let doc = document.getElementsByClassName('login-info')[0];
+                    if (width > 1800) {
+                        doc.style.height = '20rem';
+                    } else if (width > 1000) {
+                        // 1366 * 768
+                        doc.style.height = '24rem';
+                    }
+                });
+            },
             // 表单验证
             formCheck () {
                 let scope = this;
@@ -108,7 +124,7 @@
                     scope.$msg('用户名不能为空');
                     return false;
                 }
-                if (!REG.test(scope.user.name)) {
+                if (!Reg.USERNAME.test(scope.user.name)) {
                     scope.$msg('用户名不符合规范');
                     return false;
                 }
@@ -116,13 +132,13 @@
                     scope.$msg('密码不能为空');
                     return false;
                 }
-                if (!REG.test(scope.user.password)) {
+                if (!Reg.PASSWORD.test(scope.user.password)) {
                     scope.$msg('密码不符合规范');
                     return false;
                 }
                 return true;
             },
-            jumpGitHub() {
+            jumpGitHub () {
                 let scope = this;
                 // scope.$router.push({path: '/git-hub'});
                 let obj = {
@@ -308,6 +324,7 @@
 
             .third-party {
                 padding: .5rem 0;
+
                 img:hover {
                     cursor: pointer;
                 }

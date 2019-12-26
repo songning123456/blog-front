@@ -37,23 +37,13 @@
                             </div>
                         </div>
                     </el-form-item>
-                    <el-form-item label='年龄'>
-                        <div class="modify-form-content">
-                            <el-slider v-model='form.age' show-input :min='18' :disabled="disabled.age"></el-slider>
-                            <div class="modify-icon-true" v-if="disabled.age">
-                                <i class="el-icon-edit" @click="disabled.age = false"></i></div>
-                            <div class="modify-icon-false" v-if="!disabled.age">
-                                <span @click.stop="save('age')">保存</span>
-                                <span @click.stop="cancel('age')">取消</span>
-                            </div>
-                        </div>
-                    </el-form-item>
                     <el-form-item label='性别'>
                         <div class="modify-form-content">
-                            <el-radio-group v-model="form.gender" :disabled="disabled.gender">
-                                <el-radio label="男">男</el-radio>
-                                <el-radio label="女">女</el-radio>
-                            </el-radio-group>
+                            <el-select v-model="form.gender" placeholder="请选择" clearable>
+                                <el-option v-for="item in options" :key="item.value" :label="item.label"
+                                           :value="item.value"
+                                           clearable :disabled="disabled.gender"></el-option>
+                            </el-select>
                             <div class="modify-icon-true" v-if="disabled.gender">
                                 <i class="el-icon-edit" @click="disabled.gender = false"></i></div>
                             <div class="modify-icon-false" v-if="!disabled.gender">
@@ -73,12 +63,7 @@
     import {getBloggerInfo, saveImage, updateBlogger} from '../../../service/request';
     import config from '../../../utils/ConfigUtil';
     import ToolLoading from '../../../components/util/ToolLoading';
-
-    // 正则表达式
-    // const REG1 = /^[0-9a-zA-Z]{8,20}$/;
-    const REG2 = /^([\u4e00-\u9fa5]|[a-zA-Z0-9]){1,20}$/;
-    const REG3 = /^([\w-_]+(?:\.[\w-_]+)*)@((?:[a-z0-9]+(?:-[a-zA-Z0-9]+)*)+\.[a-z]{2,6})$/;
-    const REG4 = /^1[3456789]\d{9}$/;
+    import Reg from '../../../utils/RegularUtil';
 
     export default {
         name: 'ModifyBlogger',
@@ -109,8 +94,19 @@
                     {
                         key: '电子邮箱',
                         value: 'email'
+                    },
+                    {
+                        key: '年龄',
+                        value: 'age'
                     }
                 ],
+                options: [{
+                    value: '男',
+                    label: '男'
+                }, {
+                    value: '女',
+                    label: '女'
+                }],
                 labelWidth: '5rem',
                 form: {
                     author: '',
@@ -149,6 +145,11 @@
             getBloggerInfo({condition: {}}).then(data => {
                 scope.$response(data, '获取个人简介').then(data => {
                     scope.form = data.data[0];
+                    for (let key in scope.form) {
+                        if (scope.form[key] === null || scope.form[key] === 'null') {
+                            scope.form[key] = '';
+                        }
+                    }
                     scope.copy = Object.assign({}, scope.form);
                 });
             }).finally();
@@ -157,8 +158,12 @@
             avatar () {
                 let scope = this;
                 if (scope.form.headPortrait !== '') {
-                    let src = config.getImageOriginal() + encodeURIComponent(scope.form.headPortrait);
-                    return src;
+                    if (scope.form.headPortrait.indexOf('https://') === -1 && scope.form.headPortrait.indexOf('http://') === -1) {
+                        let src = config.getImageOriginal() + encodeURIComponent(scope.form.headPortrait);
+                        return src;
+                    } else {
+                        return scope.form.headPortrait;
+                    }
                 } else {
                     return '';
                 }
@@ -170,7 +175,7 @@
                 scope.disabled[type] = true;
                 switch (type) {
                     case 'author':
-                        if (!scope.form.author.length || !REG2.test(scope.form.author)) {
+                        if (!scope.form.author.length || !Reg.AUTHOR.test(scope.form.author)) {
                             scope.$msg('笔名必须符合汉字,英文');
                             return;
                         }
@@ -180,17 +185,13 @@
                         }
                         break;
                     case 'profession':
-                        if (!scope.form.profession.length || !REG2.test(scope.form.profession)) {
-                            scope.$msg('请填写相关职位');
-                            return;
-                        }
                         if (scope.form.profession === scope.copy.profession) {
                             scope.$msg('职业信息不能与原始信息相同');
                             return;
                         }
                         break;
                     case 'telephone':
-                        if (!scope.form.telephone.length || !REG4.test(scope.form.telephone)) {
+                        if (!scope.form.telephone.length || !Reg.PHONE.test(scope.form.telephone)) {
                             scope.$msg('以1开头的11位数字');
                             return;
                         }
@@ -200,7 +201,7 @@
                         }
                         break;
                     case 'email':
-                        if (!scope.form.email.length || !REG3.test(scope.form.email)) {
+                        if (!scope.form.email.length || !Reg.EMAIL.test(scope.form.email)) {
                             scope.$msg('电子邮件必须符合邮件规范');
                             return;
                         }
@@ -220,16 +221,26 @@
                         }
                         break;
                     case 'realName':
-                        if (!scope.form.realName.length || !REG2.test(scope.form.realName)) {
-                            scope.$msg('真实姓名必须符合汉字,英文');
-                            return;
-                        }
                         if (scope.form.realName === scope.copy.realName) {
                             scope.$msg('真实姓名信息不能与原始信息相同');
                             return;
                         }
                         break;
                     case 'age':
+                        if (scope.form.age.length) {
+                            let temp = +(scope.form.age);
+                            if (temp) {
+                                if (temp > 120) {
+                                    scope.$msg('年龄不符合实际');
+                                    return;
+                                } else {
+                                    scope.form.age = temp;
+                                }
+                            } else {
+                                scope.$msg('年龄信息格式错误');
+                                return;
+                            }
+                        }
                         if (scope.form.age === scope.copy.age) {
                             scope.$msg('年龄信息不能与原始信息相同');
                             return;
@@ -336,7 +347,7 @@
                             display: flex;
                             align-items: center;
 
-                            .el-input, .el-slider, .el-radio-group, .modify-headPortrait {
+                            .el-input, .el-slider, .el-select, .modify-headPortrait {
                                 width: 78%;
                                 float: left;
                             }

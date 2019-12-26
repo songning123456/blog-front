@@ -3,16 +3,16 @@
         <div class='empty-info' v-if='JSON.stringify(form) === "{}" && !loading'>
             <empty-view></empty-view>
         </div>
-        <div class="display-info" v-if='JSON.stringify(form) !== "{}" && !loading'>
+       <!-- <div class="display-info" v-if='JSON.stringify(form) !== "{}" && !loading'>
             <h2>{{type}}用户数据</h2>
             <el-form :modal='form' label-width="7rem">
                 <el-form-item v-for="(value, key) in form" :key="key" :label='key'>
                     <el-input :value="value + ''" readonly></el-input>
                 </el-form-item>
             </el-form>
-        </div>
+        </div>-->
         <div class='load-info' v-if='loading'>
-            <tool-loading :loading='loading'></tool-loading>
+            <tool-loading :loading='loading' normal="spinner"></tool-loading>
         </div>
         <float-menu :menus='menus' @itemClick='chooseItem'></float-menu>
     </div>
@@ -24,14 +24,15 @@
     import ToolLoading from '../../components/util/ToolLoading';
     import FloatMenu from '../../components/util/FloatMenu';
     import uuidv1 from 'uuid/v1';
-    import {gitHubUser} from '../../service/request';
+    import {gitHubUser, loginBlog} from '../../service/request';
 
     export default {
         name: 'ThirdPart',
         components: {FloatMenu, ToolLoading, EmptyView},
-        created () {
+        mounted () {
             // github 登陆时的回调
             if (location.href.indexOf('?code=') > -1 && location.href.indexOf('&state=') > -1) {
+                this.loading = true;
                 let codeStart = location.href.indexOf('?code=');
                 let codeEnd = location.href.indexOf('&state=');
                 let code = location.href.slice(codeStart + 6, codeEnd);
@@ -66,6 +67,7 @@
                 scope.$router.push({path: '/'});
             },
             callback() {
+                let scope = this;
                 // 回调之后再次进入 获取信息
                 let param = JSON.parse(sessionStorage.getItem('gitHub'));
                 if (Object.keys(param).length > 0 && param.clientId && param.clientSecret && param.code && param.getProxyAccessTokenURL && param.getAccessTokenURL) {
@@ -101,6 +103,7 @@
                         gitHubUser({condition: params}).then(data => {
                             if (data.status === 200) {
                                 this.form = data.dataExt;
+                                scope.login();
                             }
                         }).finally(() => {
                             sessionStorage.removeItem('gitHub');
@@ -108,6 +111,40 @@
                         });
                     }
                 }
+            },
+            login () {
+                let scope = this;
+                let param = new FormData();
+                let username = 'gitHubUn' + scope.form.id;
+                let password = 'gitHubPd' + scope.form.id;
+                param.append('username', username);
+                param.append('password', password);
+                // 如果存在token时，先删除
+                if (localStorage.token) {
+                    localStorage.removeItem('token');
+                }
+                // 登陆时默认进入阅读
+                sessionStorage.setItem('homePage', 'read');
+                loginBlog(param).then((data) => {
+                    if (data.status === 200) {
+                        if (scope.$route.query.redirect) {
+                            scope.$router.push(scope.$route.query.redirect);
+                        } else {
+                            // 跳转路由
+                            scope.$router.push(
+                                {
+                                    path: '/home-page',
+                                    name: 'homePage'
+                                }
+                            );
+                        }
+                    }
+                }).catch(e => {
+                    console.error('错误用户: ', e);
+                    scope.$msg('~~~请输入正确用户~~~');
+                }).finally(() => {
+                    scope.loading = false;
+                });
             }
         }
     };

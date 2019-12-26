@@ -61,7 +61,11 @@
             avatar () {
                 let scope = this;
                 if (JSON.stringify(scope.result) !== '{}') {
-                    return config.getImageOriginal() + encodeURIComponent(scope.result.headPortrait);
+                    if (scope.result.headPortrait.indexOf('https://') === -1 && scope.result.headPortrait.indexOf('http://') === -1) {
+                        return config.getImageOriginal() + encodeURIComponent(scope.result.headPortrait);
+                    } else {
+                        return scope.result.headPortrait;
+                    }
                 } else {
                     return '';
                 }

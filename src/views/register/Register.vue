@@ -4,7 +4,7 @@
             <div class='header'>登陆信息</div>
             <el-form :model='form' :label-width='labelWidth'>
                 <popover-item v-for='(item, index) in menu[0]' :key='index' :label-name='item.label'
-                              :show='warning[item.value].show'
+                              :show='warning[item.value].show' :required="item.required"
                               :title='warning[item.value].title'>
                     <el-input slot='popoverItem' v-model='form[item.value]' :placeholder='item.label'
                               clearable="" :show-password="item.value.indexOf('password') > -1"
@@ -17,9 +17,7 @@
             </div>
         </div>
         <div class='register-second' v-else-if='step === 2'>
-            <div class='header'>
-                个人信息
-            </div>
+            <div class='header'>个人信息</div>
             <el-upload class='avatar-uploader' accept="image/*" action='' :limit='1'
                        :before-upload="beforeUpload">
                 <img v-if="image.imgBlob" :src="image.imgBlob" class="avatar" alt=""/>
@@ -27,19 +25,17 @@
             </el-upload>
             <el-form :model='form' :label-width="labelWidth">
                 <popover-item v-for='(item, index) in menu[1]' :key='index' :label-name='item.label'
-                              :show='warning[item.value].show'
+                              :show='warning[item.value].show' :required="item.required"
                               :title='warning[item.value].title'>
                     <el-input slot='popoverItem' v-model='form[item.value]' :placeholder='item.label'
-                              clearable="" :show-password="item.value.indexOf('password') > -1" @change="promptInfo(item.value)"></el-input>
+                              clearable="" :show-password="item.value.indexOf('password') > -1"
+                              @change="promptInfo(item.value)"></el-input>
                 </popover-item>
-                <el-form-item label='年龄'>
-                    <el-slider v-model='form.age' show-input :min='18'></el-slider>
-                </el-form-item>
                 <el-form-item label='性别'>
-                    <span class='register-gender'>
-                        <el-radio v-model="form.gender" label="男">男</el-radio>
-                        <el-radio v-model="form.gender" label="女">女</el-radio>
-                    </span>
+                    <el-select v-model="form.gender" placeholder="请选择" clearable>
+                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"
+                                   clearable></el-option>
+                    </el-select>
                 </el-form-item>
             </el-form>
             <div class='register-button'>
@@ -93,12 +89,7 @@
         insertHistoryInfo
     } from '../../service/request';
     import ToolLoading from '../../components/util/ToolLoading';
-
-    // 正则表达式
-    const REG1 = /^[0-9a-zA-Z]{8,20}$/;
-    const REG2 = /^([\u4e00-\u9fa5]|[a-zA-Z0-9]){1,20}$/;
-    const REG3 = /^([\w-_]+(?:\.[\w-_]+)*)@((?:[a-z0-9]+(?:-[a-zA-Z0-9]+)*)+\.[a-z]{2,6})$/;
-    const REG4 = /^1[3456789]\d{9}$/;
+    import Reg from '../../utils/RegularUtil';
 
     export default {
         name: 'Register',
@@ -115,8 +106,8 @@
                     motto: '',
                     profession: '',
                     telephone: '',
-                    age: 25,
-                    gender: '男',
+                    age: '',
+                    gender: '',
                     headPortrait: ''
                 },
                 // (第三步的)标签信息
@@ -140,28 +131,43 @@
                 labelWidth: '5rem',
                 // 步骤
                 step: 1,
+                options: [{
+                    value: '男',
+                    label: '男'
+                }, {
+                    value: '女',
+                    label: '女'
+                }],
                 //总的加载状况
                 loading: false,
                 // label信息
-                menu: [[{label: '用户名', value: 'username'}, {label: '密码', value: 'password'}, {
+                menu: [[{label: '用户名', value: 'username', required: true}, {
+                    label: '密码',
+                    value: 'password',
+                    required: true
+                }, {
                     label: '确认密码',
-                    value: 'password2'
-                }], [{label: '真实姓名', value: 'realName'}, {label: '笔名', value: 'author'}, {
+                    value: 'password2',
+                    required: true
+                }], [{label: '笔名', value: 'author', required: true}, {label: '真实姓名', value: 'realName'}, {
                     label: '电子邮件',
                     value: 'email'
                 },
                     {label: '座右铭', value: 'motto'}, {label: '职业', value: 'profession'}, {
                         label: '电话',
                         value: 'telephone'
+                    }, {
+                        label: '年龄',
+                        value: 'age'
                     }]],
                 // 右侧的警告信息
                 warning: {
                     username: {
-                        title: '用户名必须符合0-9,a-z,A-Z且长度>8,<20',
+                        title: '用户名由4-20位字母,数字,下划线,减号,点组合',
                         show: false
                     },
                     password: {
-                        title: '密码必须符合0-9,a-z,A-Z且长度>8,<20',
+                        title: '密码由6-12位字母加数字组合',
                         show: false
                     },
                     password2: {
@@ -173,7 +179,7 @@
                         show: false
                     },
                     author: {
-                        title: '笔名必须符合汉字,英文',
+                        title: '笔名必须符合汉字,英文,数字,下划线,减号,点组合',
                         show: false
                     },
                     email: {
@@ -190,6 +196,10 @@
                     },
                     telephone: {
                         title: '以1开头的11位数字',
+                        show: false
+                    },
+                    age: {
+                        title: '年龄必须符合规范',
                         show: false
                     }
                 }
@@ -224,7 +234,7 @@
                 scope.formCheck(type).then(res => {
                     if (res.value) {
                         if (type === 0) {
-                            scope.save();
+                            scope.saveBtn();
                         } else if (type === 3) {
                             scope.labelInfo = {
                                 result: res.data,
@@ -258,87 +268,59 @@
                     }, 1000);
                 }
             },
-            promptInfo (type) {
+            saveBtn () {
                 let scope = this;
-                switch (type) {
-                    case 'username':
-                        scope.warning.username.show = !REG1.test(scope.form.username);
-                        break;
-                    case 'password':
-                        scope.warning.password.show = !REG1.test(scope.form.password);
-                        break;
-                    case 'password2':
-                        if (!(scope.form.password && !scope.form.password2)) {
-                            scope.warning.password2.show = scope.form.password !== scope.form.password2;
-                        } else {
-                            scope.warning.password2.show = !!scope.form.password2;
-                        }
-                        break;
-                    case 'realName':
-                        scope.warning.realName.show = !scope.form.realName.length || !REG2.test(scope.form.realName);
-                        break;
-                    case 'author':
-                        scope.warning.author.show = !scope.form.author.length || !REG2.test(scope.form.author);
-                        break;
-                    case 'email':
-                        scope.warning.email.show = !scope.form.email.length || !REG3.test(scope.form.email);
-                        break;
-                    case 'motto':
-                        scope.warning.motto.show = !scope.form.motto.length;
-                        break;
-                    case 'profession':
-                        scope.warning.profession.show = !scope.form.profession.length || !REG2.test(scope.form.profession);
-                        break;
-                    case 'telephone':
-                        scope.warning.telephone.show = !scope.form.telephone.length || !REG4.test(scope.form.telephone);
-                        break;
-                }
-            },
-            save () {
-                let scope = this;
-                let formData = new FormData();
-                formData.append('file', scope.image.files, scope.image.filename);
-                formData.append('dir', 'avatar');
                 scope.loading = true;
-                // 在服务器中生成 图片文件
-                saveImage(formData).then(data => {
-                    if (data.status === 200 && data.total > 0) {
-                        // 获取服务器中图片路径
-                        scope.form.headPortrait = data.data[0].imageSrc;
-                        scope.form.labelVOS = scope.tableData.map(item => {
-                            let obj = {};
-                            obj.labelName = item.labelName;
-                            if (item.attention) {
-                                obj.attention = 1;
-                            } else {
-                                obj.attention = 0;
-                            }
-                            return obj;
-                        });
-                        registerAll({condition: scope.form}).then(data => {
-                            scope.loading = false;
-                            if (data.status === 200) {
-                                let param = {
-                                    condition: {
-                                        title: scope.COMMON_MAP.HISTORY.REGISTER,
-                                        username: scope.form.username
-                                    }
-                                };
-                                insertHistoryInfo(param).then(data => {
-                                    if (data.status !== 200) {
-                                        scope.$msg('插入历史信息失败!');
-                                    }
-                                });
-                                scope.autoJump('success');
-                            } else {
-                                scope.autoJump('fail');
-                            }
-                        }).catch(e => {
+                if (scope.image.filename !== '') {
+                    // 在服务器中生成 图片文件
+                    let formData = new FormData();
+                    formData.append('file', scope.image.files, scope.image.filename);
+                    formData.append('dir', 'avatar');
+                    saveImage(formData).then(data => {
+                        if (data.status === 200 && data.total > 0) {
+                            // 获取服务器中图片路径
+                            scope.form.headPortrait = data.data[0].imageSrc;
+                            scope.registerInfo();
+                        } else {
                             scope.loading = false;
                             scope.autoJump('fail');
-                        });
-                    } else {
+                        }
+                    }).catch(e => {
                         scope.loading = false;
+                        scope.autoJump('fail');
+                    });
+                } else {
+                    scope.registerInfo();
+                }
+            },
+            registerInfo () {
+                let scope = this;
+                scope.form.labelVOS = scope.tableData.map(item => {
+                    let obj = {};
+                    obj.labelName = item.labelName;
+                    if (item.attention) {
+                        obj.attention = 1;
+                    } else {
+                        obj.attention = 0;
+                    }
+                    return obj;
+                });
+                registerAll({condition: scope.form}).then(data => {
+                    scope.loading = false;
+                    if (data.status === 200) {
+                        let param = {
+                            condition: {
+                                title: scope.COMMON_MAP.HISTORY.REGISTER,
+                                username: scope.form.username
+                            }
+                        };
+                        insertHistoryInfo(param).then(data => {
+                            if (data.status !== 200) {
+                                scope.$msg('插入历史信息失败!');
+                            }
+                        });
+                        scope.autoJump('success');
+                    } else {
                         scope.autoJump('fail');
                     }
                 }).catch(e => {
@@ -355,19 +337,50 @@
                 // 组织默认上传地址
                 return false;
             },
+            // 警告信息
+            promptInfo (type) {
+                let scope = this;
+                switch (type) {
+                    case 'username':
+                        scope.warning.username.show = !Reg.USERNAME.test(scope.form.username);
+                        break;
+                    case 'password':
+                        scope.warning.password.show = !Reg.PASSWORD.test(scope.form.password);
+                        break;
+                    case 'password2':
+                        if (!(scope.form.password && !scope.form.password2)) {
+                            scope.warning.password2.show = scope.form.password !== scope.form.password2;
+                        } else {
+                            scope.warning.password2.show = !!scope.form.password2;
+                        }
+                        break;
+                    case 'author':
+                        scope.warning.author.show = !scope.form.author.length || !Reg.AUTHOR.test(scope.form.author);
+                        break;
+                    case 'email':
+                        scope.warning.email.show = !!(scope.form.email.length && !Reg.EMAIL.test(scope.form.email));
+                        break;
+                    case 'telephone':
+                        scope.warning.telephone.show = !!(scope.form.telephone.length && !Reg.PHONE.test(scope.form.telephone));
+                        break;
+                    case 'age':
+                        scope.warning.age.show = !!(scope.form.age.length && !(+(scope.form.age) > 0 && +(scope.form.age) < 120));
+                        break;
+                }
+            },
             //表单验证
             formCheck (type) {
                 let scope = this;
                 if (type === 2) {
                     return new Promise((resolve) => {
-                        if (!scope.form.username || !REG1.test(scope.form.username)) {
+                        if (!scope.form.username || !Reg.USERNAME.test(scope.form.username)) {
                             resolve({
                                 message: '用户名格式不符合规范',
                                 value: false
                             });
                             return;
                         }
-                        if (!scope.form.password || !REG1.test(scope.form.password)) {
+                        if (!scope.form.password || !Reg.PASSWORD.test(scope.form.password)) {
                             resolve({
                                 message: '密码格式不符合规范',
                                 value: false
@@ -399,54 +412,40 @@
                     });
                 } else if (type === 3) {
                     return new Promise((resolve) => {
-                        if (!scope.image.imgBlob) {
+                        if (!scope.form.author.length || !Reg.AUTHOR.test(scope.form.author)) {
                             resolve({
-                                message: '头像不能为空',
+                                message: '笔名必须符合汉字,英文,数字组合',
                                 value: false
                             });
                             return;
                         }
-                        if (!scope.form.realName.length || !REG2.test(scope.form.realName)) {
-                            resolve({
-                                message: '真实姓名必须符合汉字,英文',
-                                value: false
-                            });
-                            return;
-                        }
-                        if (!scope.form.author.length || !REG2.test(scope.form.author)) {
-                            resolve({
-                                message: '笔名必须符合汉字,英文',
-                                value: false
-                            });
-                            return;
-                        }
-                        if (!scope.form.email.length || !REG3.test(scope.form.email)) {
+                        if (scope.form.email.length && !Reg.EMAIL.test(scope.form.email)) {
                             resolve({
                                 message: '电子邮件格式不符合规范',
                                 value: false
                             });
                             return;
                         }
-                        if (!scope.form.motto.length) {
-                            resolve({
-                                message: '座右铭不能为空',
-                                value: false
-                            });
-                            return;
-                        }
-                        if (!scope.form.profession.length || !REG2.test(scope.form.profession)) {
-                            resolve({
-                                message: '请填写相关职位',
-                                value: false
-                            });
-                            return;
-                        }
-                        if (!scope.form.telephone.length || !REG4.test(scope.form.telephone)) {
+                        if (scope.form.telephone.length && !Reg.PHONE.test(scope.form.telephone)) {
                             resolve({
                                 message: '以1开头的11位电话号码',
                                 value: false
                             });
                             return;
+                        }
+                        if (scope.form.age.length) {
+                            let temp = +(scope.form.age);
+                            if (temp) {
+                                if (temp > 120) {
+                                    scope.$msg('年龄不符合实际');
+                                    return;
+                                } else {
+                                    scope.form.age = temp;
+                                }
+                            } else {
+                                scope.$msg('年龄信息格式错误');
+                                return;
+                            }
                         }
                         // 获取标签配置
                         getLabelConfig().then(data => {
@@ -467,11 +466,6 @@
                         if (attentions.length === 0) {
                             resolve({
                                 message: '请先选择关注标签',
-                                value: false
-                            });
-                        } else if (attentions.length > 0 && attentions.length < 5) {
-                            resolve({
-                                message: '至少选择5个关注标签',
                                 value: false
                             });
                         } else {
@@ -575,6 +569,10 @@
 
                 .el-form-item {
                     margin-bottom: 1.1rem;
+
+                    .el-select {
+                        width: 100%;
+                    }
                 }
 
                 .register-gender {

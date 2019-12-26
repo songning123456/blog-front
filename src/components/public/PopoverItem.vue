@@ -2,7 +2,7 @@
     <el-popover placement='right' width='300' trigger='manual' v-model='show'
                 popper-class='popover-item' :visible-arrow='false'>
         <span>{{title}}</span>
-        <el-form-item :label='labelName' slot='reference'>
+        <el-form-item :label='labelName' slot='reference' :required='required'>
             <slot name='popoverItem'></slot>
         </el-form-item>
     </el-popover>
@@ -23,6 +23,10 @@
             title: {
                 type: String,
                 default: ''
+            },
+            required: {
+                type: Boolean,
+                default: false
             }
         }
     };

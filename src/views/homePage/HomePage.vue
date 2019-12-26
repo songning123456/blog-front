@@ -102,8 +102,12 @@
             avatar () {
                 let scope = this;
                 if (JSON.stringify(scope.owner) !== '{}') {
-                    let src = config.getImageOriginal() + encodeURIComponent(scope.owner.headPortrait);
-                    return src;
+                  if (scope.owner.headPortrait.indexOf('https://') === -1 && scope.owner.headPortrait.indexOf('http://') === -1) {
+                      let src = config.getImageOriginal() + encodeURIComponent(scope.owner.headPortrait);
+                      return src;
+                  } else {
+                      return scope.owner.headPortrait;
+                  }
                 } else {
                     return '';
                 }
