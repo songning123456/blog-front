@@ -1,44 +1,24 @@
 <template>
     <div class='welcome-to'>
-        <div class='login-image'>
-            <img src="../../assets/login.jpg">
-        </div>
-        <div class='login-info'>
-            <el-row class='outer-image'>
-                <el-row><img src='../../assets/头像.png'></el-row>
-                <el-row>登陆</el-row>
-            </el-row>
-            <el-row class='name-image'>
-                <el-input placeholder="请输入用户名" v-model="user.name" clearable @keyup.enter.native='switchRouter'>
-                    <i slot="prefix" class="el-input__icon">
-                        <img src='../../assets/头像inner.png'/></i>
-                </el-input>
-            </el-row>
-            <el-row class='password-image'>
-                <el-input placeholder="请输入密码" v-model="user.password" show-password @keyup.enter.native='switchRouter'>
-                    <i slot="prefix" class="el-input__icon">
-                        <img src='../../assets/密码.png'/></i>
-                </el-input>
-            </el-row>
-            <el-row class='password-info'>
-                <el-col :span='12'>
-                    <el-checkbox v-model="remember">记住密码</el-checkbox>
-                </el-col>
-                <el-col :span='12'>
-                    <el-link type="primary" @click="forgotPassword">忘记密码?</el-link>
-                </el-col>
-            </el-row>
-            <el-row class='login-button'>
-                <el-button type="primary" @click.native='switchRouter' :loading="loading">登陆</el-button>
-            </el-row>
-            <el-row class='register'>
-                <el-link type="primary" @click='register'>立即注册</el-link>
-            </el-row>
-            <el-row class="third-party">
-                <el-col :span="8">
-                    <img src="../../assets/github.svg" @click='jumpGitHub'/>
-                </el-col>
-            </el-row>
+        <div class='frame-set'>
+            <div class='left-frame'>
+                <img src="../../assets/login.jpg" />
+            </div>
+            <div class='right-frame'>
+                <div class="frame-center">
+                    <img src='../../assets/loginAvatar.svg' />
+                    <div class='login-txt'>登陆</div>
+                    <el-input prefix-icon="el-icon-user" placeholder="请输入用户名" v-model="user.name" clearable @keyup.enter.native='switchRouter'></el-input>
+                    <el-input prefix-icon="el-icon-lock" placeholder="请输入密码" v-model="user.password" show-password @keyup.enter.native='switchRouter'></el-input>
+                    <div class="operate-password">
+                        <el-checkbox v-model="remember">记住密码</el-checkbox>
+                        <div class="forget-password" @click="forgotPassword">忘记密码?</div>
+                    </div>
+                    <el-button type="primary" @click.native='switchRouter' :loading="loading">登陆</el-button>
+                    <div class="register" @click='register'>立即注册</div>
+                    <img class='github' src="../../assets/github.svg" @click='jumpGitHub'/>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -105,7 +85,7 @@
         },
         methods: {
             windowResize () {
-                let width = document.body.offsetWidth || document.body.clientWidth;
+                /*let width = document.body.offsetWidth || document.body.clientWidth;
                 this.$nextTick(() => {
                     // 1920 * 1080
                     let doc = document.getElementsByClassName('login-info')[0];
@@ -115,7 +95,7 @@
                         // 1366 * 768
                         doc.style.height = '24rem';
                     }
-                });
+                });*/
             },
             // 表单验证
             formCheck () {
@@ -242,91 +222,94 @@
 
 <style lang="scss">
     .welcome-to {
-        height: 100%;
         width: 100%;
-        background-color: #e9eaef;
+        height: 100%;
         display: flex;
+        justify-content: center;
         align-items: center;
+        background-color: #e9eaef;
 
-        .login-image {
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            width: 50%;
-        }
+        .frame-set {
+            width: 70%;
+            height: 66%;
 
-        .login-info {
-            width: 384px;
-            height: 20rem;
-            background-color: white;
-
-            .outer-image {
-                margin: 12.8px;
-
-                img {
-                    max-height: 48px;
-                    max-width: 48px;
-                }
+            .left-frame {
+                width: 50%;
+                height: 100%;
+                float: left;
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
             }
 
-            .name-image {
-                .el-input {
-                    width: 80%;
-                    margin: 6.4px;
+            .right-frame {
+                width: 50%;
+                height: 100%;
+                float: left;
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
 
-                    .el-input__icon {
-                        img {
-                            max-height: 16px;
-                            max-width: 16px;
-                            padding-top: 0.6rem;
+                .frame-center {
+                    width: 60%;
+                    height: 85%;
+                    float: left;
+                    padding: 1.5rem;
+                    box-sizing: border-box;
+                    background: white;
+
+                    .login-txt {
+                        font-size: 1.5em;
+                        font-weight: bold;
+                    }
+                    .el-input {
+                        margin-top: 1rem;
+                    }
+                    .operate-password {
+                        margin: 1rem 0;
+
+                        .el-checkbox {
+                            width: 50%;
+                            font-size: .7rem;
+                            display: inline-flex;
+                            align-items: center;
+                            justify-content: flex-start;
+                        }
+
+                        .forget-password {
+                            font-size: .7rem;
+                            width: 50%;
+                            float: right;
+                            text-align: right;
+
+                            &:hover {
+                                color: #409EFF;
+                                cursor: pointer;
+                                text-decoration: underline;
+                            }
                         }
                     }
-                }
-            }
 
-            .password-image {
-                .el-input {
-                    width: 80%;
-                    margin: 6.4px;
+                    .el-button {
+                        display: block;
+                        width: 80%;
+                        margin-left: 10%;
+                    }
 
-                    .el-input__icon {
-                        img {
-                            max-height: 16px;
-                            max-width: 16px;
-                            padding-top: 0.6rem;
+                    .register {
+                        font-size: .7rem;
+                        margin: 1rem 0;
+
+                        &:hover {
+                            color: #409EFF;
+                            cursor: pointer;
+                            text-decoration: underline;
                         }
                     }
-                }
-            }
 
-            .password-info {
-                .el-checkbox:last-child {
-                    margin-right: 32px;
-                }
-
-                .el-link.el-link--primary {
-                    margin-left: 48px;
-                }
-
-            }
-
-            .login-button {
-                padding-top: 40px;
-
-                .el-button {
-                    width: 80%;
-                }
-            }
-
-            .register {
-                padding-top: 16px;
-            }
-
-            .third-party {
-                padding: .5rem 0;
-
-                img:hover {
-                    cursor: pointer;
+                    .github:hover {
+                        cursor: pointer;
+                    }
                 }
             }
         }

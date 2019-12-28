@@ -9,7 +9,9 @@
                     <el-form-item label='头像'>
                         <div class="modify-form-content">
                             <div class="modify-headPortrait">
-                                <el-avatar :src="avatar"></el-avatar>
+                                <el-avatar :src="avatar">
+                                    <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png" />
+                                </el-avatar>
                                 <div class="headPortrait-upload">
                                     <el-upload accept="image/*" action='' :limit='1' v-if="!disabled.headPortrait"
                                                :before-upload="beforeUpload">

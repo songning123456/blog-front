@@ -2,7 +2,9 @@
     <div class='blogger-info'>
         <div class="avatar">
             <div class='inner-border'>
-                <el-avatar shape="square" :src="avatar"></el-avatar>
+                <el-avatar shape="square" :src="avatar">
+                    <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png" />
+                </el-avatar>
             </div>
         </div>
         <div class='simple-info'>

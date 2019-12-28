@@ -28,7 +28,9 @@
                     <div @click.stop="about"><span>关于</span></div>
                     <div @click.stop='exit'><span>退出</span></div>
                     <el-avatar :src="avatar" slot='reference'
-                               @click.native.stop='isShow'></el-avatar>
+                               @click.native.stop='isShow'>
+                        <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png" />
+                    </el-avatar>
                 </el-popover>
             </div>
         </div>
@@ -60,7 +62,7 @@
                 routeAlive: true,
                 search: '',
                 currentPage: '',
-                bgUrl: require('../../assets/title-bg.png')
+                bgUrl: require('../../assets/titleBg.png')
             };
         },
         created () {
