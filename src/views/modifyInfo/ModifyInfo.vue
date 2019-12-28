@@ -59,9 +59,8 @@
                 scope.currentMenu = current;
             },
             chooseItem (menu) {
-                let scope = this;
                 if (menu.id === '退出') {
-                    scope.$homePage('read');
+                    this.$router.push({path: '/home-page/read'});
                 }
             }
         }

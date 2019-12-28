@@ -35,7 +35,9 @@
             </div>
         </div>
         <div :class='currentPage === "read" ? "router-view-100" : "router-view-90"'>
-            <router-view v-if='routeAlive'></router-view>
+            <keep-alive>
+                <router-view></router-view>
+            </keep-alive>
         </div>
     </div>
 </template>
@@ -59,35 +61,37 @@
                     {label: '成长', name: 'growth'}
                 ],
                 owner: {},
-                routeAlive: true,
                 search: '',
-                currentPage: '',
+                currentPage: 'read',
                 bgUrl: require('../../assets/titleBg.png')
             };
-        },
-        created () {
-            let scope = this;
-            if (sessionStorage.getItem('homePage')) {
-                scope.currentPage = sessionStorage.getItem('homePage');
-            } else {
-                scope.currentPage = 'read';
-            }
         },
         mounted () {
             let scope = this;
             // 设置样式
             document.getElementsByClassName('above-info')[0].style.marginTop = '0rem';
-            // 绑定搜索点击事件
-            scope.$nextTick(() => {
-                let doc = scope.$refs['elInput'].$vnode.elm.children[1];
-                doc.addEventListener('click', scope.searchArticle, true);
-            });
             scope.getOwnerInfo();
             // 默认点击第一个标签
             this.handleClick(scope.currentPage);
+        },
+        activated() {
+            if (this.$refs['elInput'] && this.$refs['elInput'].$el) {
+                let doc = this.$refs['elInput'].$el.children[1];
+                doc.addEventListener('click', this.searchArticle, true);
+            }
             // 判断设置栏状态，默认进入页面时 是关闭状态
-            if (scope.$store.state.showInfo) {
-                scope.$store.commit('setShowInfo', false);
+            if (this.$store.state.showInfo) {
+                this.$store.commit('setShowInfo', false);
+            }
+        },
+        deactivated() {
+            if (this.$refs['elInput'] && this.$refs['elInput'].$el) {
+                let doc = this.$refs['elInput'].$el.children[1];
+                doc.removeEventListener('click', this.searchArticle, true);
+            }
+            // 判断设置栏状态，默认离开页面时 是关闭状态
+            if (this.$store.state.showInfo) {
+                this.$store.commit('setShowInfo', false);
             }
         },
         computed: {
@@ -151,7 +155,7 @@
                 let scope = this;
                 scope.$store.commit('setShowInfo', false);
                 scope.currentPage = '';
-                scope.$homePage('blogConfig');
+                this.$router.push({path: '/home-page/blog-config'});
             },
             about () {
                 window.open('https://github.com/songning123456/', '_blank');
@@ -179,7 +183,7 @@
             handleClick (type) {
                 let scope = this;
                 scope.currentPage = type;
-                scope.$homePage(scope.currentPage);
+                this.$router.push({path: '/home-page/' + scope.currentPage});
             },
             searchArticle () {
                 let scope = this;
@@ -192,10 +196,6 @@
             jumpTo () {
                 let scope = this;
                 if (scope.search) {
-                    scope.routeAlive = false;
-                    scope.$nextTick(() => {
-                        scope.routeAlive = true;
-                    });
                     scope.$router.push({
                         path: '/home-page/search',
                         name: 'search',

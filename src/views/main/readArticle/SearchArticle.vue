@@ -35,7 +35,7 @@
                 loading: false
             };
         },
-        created () {
+        activated () {
             let scope = this;
             if (scope.$route.query) {
                 scope.content = scope.$route.query.data;

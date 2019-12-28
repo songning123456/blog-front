@@ -29,7 +29,7 @@
     export default {
         name: 'ThirdPart',
         components: {FloatMenu, ToolLoading, EmptyView},
-        mounted () {
+        activated () {
             // github 登陆时的回调
             if (location.href.indexOf('?code=') > -1 && location.href.indexOf('&state=') > -1) {
                 this.loading = true;
@@ -124,7 +124,6 @@
                     localStorage.removeItem('token');
                 }
                 // 登陆时默认进入阅读
-                sessionStorage.setItem('homePage', 'read');
                 loginBlog(param).then((data) => {
                     if (data.status === 200) {
                         if (scope.$route.query.redirect) {

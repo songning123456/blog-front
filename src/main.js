@@ -69,25 +69,6 @@ Vue.prototype.$response = function (data, message = '') {
         }
     });
 };
-// 注册home-page路由跳转事件
-Vue.prototype.$homePage = function (src) {
-    let target = '';
-    // 属于驼峰格式
-    if (new RegExp('[A-Za-z]+', 'g')) {
-        // 转换成下划线
-        target = src.replace(/([A-Z])/g, '-$1').toLowerCase();
-        sessionStorage.setItem('homePage', src);
-        this.$router.push({path: '/home-page/' + target});
-    } else if (new RegExp('_(\\w)', 'g')) {
-        target = src.replace(/_(\w)/g, function (all, letter) {
-            return letter.toUpperCase();
-        });
-        sessionStorage.setItem('homePage', target);
-        this.$router.push({path: '/home-page/' + src});
-    } else {
-        this.$msg('跳转页面失败!');
-    }
-};
 
 Vue.use(ElementUI);
 Vue.use(mavonEditor);

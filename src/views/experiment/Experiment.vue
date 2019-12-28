@@ -49,8 +49,7 @@
                 }
             },
             goback () {
-                let scope = this;
-                scope.$homePage('read');
+                this.$router.push({path: '/home-page/read'});
             }
         }
     };

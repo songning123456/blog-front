@@ -85,8 +85,7 @@
         },
         methods: {
             chooseItem (menu) {
-                let scope = this;
-                scope.$homePage('read');
+                this.$router.push({path: '/home-page/read'});
             },
             // 上传操作
             beforeUpload (file) {

@@ -11,7 +11,7 @@
             </div>
             <div class="second">
                 <el-button type="primary" plain @click="publishArticle" icon="el-icon-thumb">发布</el-button>
-                <el-button type="info" plain @click="$homePage('read')" icon="el-icon-position">返回</el-button>
+                <el-button type="info" plain @click="returnBtn" icon="el-icon-position">返回</el-button>
             </div>
         </div>
         <mavon-editor v-model='form.content' @imgAdd='addImage' @imgDel='delImage' ref="md"></mavon-editor>
@@ -71,6 +71,9 @@
             doc.removeEventListener('click', scope.queryLabel);
         },
         methods: {
+            returnBtn() {
+                this.$router.push({path: '/home-page/read'});
+            },
             formCheck (type) {
                 let scope = this;
                 if (type === 1 && !scope.form.title) {

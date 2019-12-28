@@ -57,21 +57,12 @@
                 }
             };
         },
-        created () {
+        activated () {
             let scope = this;
             scope.windowResize();
             document.addEventListener('keydown', scope.handleKeyDown);
             document.addEventListener('keyup', scope.handleKeyUp);
             window.addEventListener('resize', scope.windowResize);
-        },
-        destroyed () {
-            let scope = this;
-            document.removeEventListener('keydown', scope.handleKeyDown);
-            document.removeEventListener('keyup', scope.handleKeyUp);
-            window.removeEventListener('resize', scope.windowResize);
-        },
-        mounted () {
-            let scope = this;
             // 回到登录页面时, 判断是否记住密码
             if (localStorage.getItem('username')) {
                 scope.user.name = localStorage.getItem('username');
@@ -82,6 +73,12 @@
             if (localStorage.getItem('username') && localStorage.getItem('password')) {
                 scope.remember = true;
             }
+        },
+        deactivated () {
+            let scope = this;
+            document.removeEventListener('keydown', scope.handleKeyDown);
+            document.removeEventListener('keyup', scope.handleKeyUp);
+            window.removeEventListener('resize', scope.windowResize);
         },
         methods: {
             windowResize () {
@@ -153,7 +150,6 @@
                     localStorage.removeItem('token');
                 }
                 // 登陆时默认进入阅读
-                sessionStorage.setItem('homePage', 'read');
                 loginBlog(param).then((data) => {
                     if (data.status === 200) {
                         // 保存用户名和密码
