@@ -2,8 +2,8 @@
     <div class='label-panel'>
         <div class='left-icon' @click='before' v-show="showIcon"><i class='el-icon-arrow-left'></i></div>
         <div class='label-center'>
-            <div class='label-content' v-for='(item, index) in tabs' :key='index' @click="chooseLabel(index)"
-                 :class='currentIndex === index ? "content-color" : "" '>
+            <div class='label-content' v-for='(item, index) in tabs' :key='index' @click="chooseLabel(item)"
+                 :class='currentTab === item ? "content-color" : "" '>
                 {{item}}
             </div>
         </div>
@@ -25,7 +25,7 @@
         data () {
             return {
                 oldTab: '',
-                currentIndex: -1,
+                currentTab: '',
                 showIcon: false
             };
         },
@@ -51,15 +51,11 @@
             }
         },
         methods: {
-            chooseLabel (index) {
+            chooseLabel (item) {
                 let scope = this;
-                scope.currentIndex = index;
-                // 确定只能点击一次
-                if (scope.oldTab === scope.tabs[index]) {
-                    return;
-                }
-                scope.oldTab = scope.tabs[index];
-                scope.$emit('current', scope.tabs[index]);
+                scope.currentTab = item;
+                scope.oldTab = item;
+                scope.$emit('current', item);
             },
             before () {
                 this.$emit('iconClick', 'before');

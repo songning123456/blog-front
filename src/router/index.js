@@ -30,7 +30,18 @@ export default new Router({
                     meta: {
                         title: '阅读',
                         requireAuth: true
-                    }
+                    },
+                    children: [
+                        {
+                            path: ':label',
+                            name: 'publicRead',
+                            component: () => import('../views/main/readArticle/childRoute/PublicRead'),
+                            meta: {
+                                title: '阅读',
+                                requireAuth: true
+                            }
+                        }
+                    ]
                 },
                 {
                     path: 'search',

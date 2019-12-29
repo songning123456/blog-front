@@ -5,7 +5,7 @@
                     @detail="getDetail"></column>
         </div>
         <tool-loading :loading='loading' v-if='result.data.length === 0'></tool-loading>
-        <el-backtop target='.content-info' :visibility-height='50'></el-backtop>
+        <el-backtop :target='target' :visibility-height='50'></el-backtop>
     </div>
 </template>
 
@@ -22,6 +22,10 @@
             kinds: {
                 type: String,
                 default: '热门'
+            },
+            target: {
+                type: String,
+                default: ''
             }
         },
         data () {
@@ -40,6 +44,16 @@
                 },
                 loading: false
             };
+        },
+        watch: {
+            kinds: {
+                handler(newVal, oldVal) {
+                    if (newVal) {
+                        this.busy = false;
+                    }
+                },
+                immediate: true
+            }
         },
         methods: {
             // 跳转到文章内容
@@ -80,7 +94,7 @@
 
                 }).finally(() => {
                     scope.loading = false;
-                    this.$emit('hotShow');
+                    this.$emit('showHotArticle');
                 });
             },
             loadMore () {

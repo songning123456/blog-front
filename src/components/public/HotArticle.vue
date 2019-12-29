@@ -22,23 +22,42 @@
 
 <script>
     import DateUtil from '../../utils/DateUtil';
-    import EmptyView from '@/components/util/EmptyView';
+    import EmptyView from '../../components/util/EmptyView';
+    import {getHotArticle} from '../../service/request';
 
     export default {
         name: 'HotArticle',
         components: {EmptyView},
         props: {
-            result: {
-                type: Array,
-                default: () => []
+            kinds: {
+                type: String,
+                default: ''
             }
         },
-        data () {
+        data() {
             return {
-                hotImage: require('../../assets/fire/hot.svg')
+                hotImage: require('../../assets/fire/hot.svg'),
+                result: []
             };
         },
-        mounted () {
+        watch: {
+            kinds: {
+                handler(newVal, oldVal) {
+                    if (newVal) {
+                        let params = {
+                            condition: {kinds: this.kinds},
+                            recordStartNo: 0,
+                            pageRecordNum: 5
+                        };
+                        getHotArticle(params).then((data) => {
+                            this.result = data.data;
+                        });
+                    }
+                },
+                immediate: true
+            }
+        },
+        mounted() {
             if (document.getElementsByClassName('above-info')[0].style.marginTop !== '0rem') {
                 document.getElementsByClassName('hot-article')[0].style.top = 9 - document.body.clientHeight / 200 + 'rem';
             } else {
@@ -46,11 +65,11 @@
             }
         },
         methods: {
-            getUpdateTime (index) {
+            getUpdateTime(index) {
                 let scope = this;
                 return DateUtil.formatDate(new Date(scope.result[index].updateTime));
             },
-            getIntroduction (userId) {
+            getIntroduction(userId) {
                 let scope = this;
                 let routerData = scope.$router.resolve({
                     path: '/introduction',
@@ -60,10 +79,10 @@
                 });
                 window.open(routerData.href, '_blank');
             },
-            getSrc (index) {
+            getSrc(index) {
                 return require('../../assets/fire/fire' + index + '.svg');
             },
-            getDetail (id) {
+            getDetail(id) {
                 let scope = this;
                 let routerData = scope.$router.resolve({
                     path: '/detail',
