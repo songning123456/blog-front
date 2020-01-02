@@ -86,7 +86,6 @@
             width: 90%;
             white-space: nowrap;
             overflow: auto;
-            padding-bottom: .2rem;
 
             .label-content {
                 font-size: 0.75rem;

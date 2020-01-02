@@ -109,7 +109,7 @@
             },
             exitMap () {
                 let scope = this;
-                scope.$router.push({path: '/home-page/read'});
+                scope.$router.go(-1);
             }
         }
     };

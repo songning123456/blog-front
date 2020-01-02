@@ -1,33 +1,37 @@
 <template>
-    <div class='blog-config'>
-        <div class='config-left'>
-            <div class="refresh-cache">
-                <div class="button" @click="refresh"><span>刷新缓存</span></div>
+    <div class="blog-config">
+        <main-head @futureTab='futureTab' ref='mainHead'></main-head>
+        <div class='frame-center'>
+            <div class='config-left'>
+                <div class="refresh-cache">
+                    <div class="button" @click="refresh"><span>刷新缓存</span></div>
+                </div>
+                <label-button v-for='(item, index) in tabsForm' :key='index' :label='item.label'
+                              @click.native='chooseType(index)'
+                              :normal='!(chooseTab === tabsForm[index].name)'></label-button>
             </div>
-            <label-button v-for='(item, index) in tabsForm' :key='index' :label='item.label'
-                          @click.native='chooseType(index)'
-                          :normal='!(chooseTab === tabsForm[index].name)'></label-button>
-        </div>
-        <div class='config-right'>
-            <system-config v-if='chooseTab === tabsForm[0].name'></system-config>
-            <label-config v-else-if='chooseTab === tabsForm[1].name'></label-config>
-        </div>
-        <el-dialog :close-on-click-modal='false' title="请选择缓存刷新" :visible.sync="refreshModal" width="20%" top="25vh">
-            <el-form ref="form" :model="form" :label-width="labelWidth">
-                <el-form-item label="标签配置缓存" v-if="permission === 'ADMIN'">
-                    <el-switch v-model="form.labelConfig" @change="changeStatus($event, 'labelConfig')"></el-switch>
-                </el-form-item>
-                <el-form-item v-for='(item, index) in cacheForm' :key="index" :label="item.label"
-                :style="item.name === 'all' ? 'font-weight:600' : ''">
-                    <el-switch v-model="form[item.name]" @change="changeStatus($event, item.name)"></el-switch>
-                </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
+            <div class='config-right'>
+                <system-config v-if='chooseTab === tabsForm[0].name'></system-config>
+                <label-config v-else-if='chooseTab === tabsForm[1].name'></label-config>
+            </div>
+            <el-dialog :close-on-click-modal='false' title="请选择缓存刷新" :visible.sync="refreshModal" width="20%"
+                       top="25vh">
+                <el-form ref="form" :model="form" :label-width="labelWidth">
+                    <el-form-item label="标签配置缓存" v-if="permission === 'ADMIN'">
+                        <el-switch v-model="form.labelConfig" @change="changeStatus($event, 'labelConfig')"></el-switch>
+                    </el-form-item>
+                    <el-form-item v-for='(item, index) in cacheForm' :key="index" :label="item.label"
+                                  :style="item.name === 'all' ? 'font-weight:600' : ''">
+                        <el-switch v-model="form[item.name]" @change="changeStatus($event, item.name)"></el-switch>
+                    </el-form-item>
+                </el-form>
+                <span slot="footer" class="dialog-footer">
     <el-button @click="refreshModal = false" size="mini">取 消</el-button>
     <el-button type="primary" @click="sureCache" size="mini">确 定</el-button>
   </span>
-        </el-dialog>
-        <tool-loading :loading="loading"></tool-loading>
+            </el-dialog>
+            <tool-loading :loading="loading"></tool-loading>
+        </div>
     </div>
 </template>
 
@@ -38,11 +42,12 @@
     import LabelConfig from '../../views/config/labelConfig/LabelConfig';
     import {getUserPermission, refreshCache} from '../../service/request';
     import ToolLoading from '../../components/util/ToolLoading';
+    import MainHead from '../../components/public/MainHead';
 
     export default {
         name: 'BlogConfig',
-        components: {ToolLoading, LabelConfig, LabelButton, SystemConfig},
-        data() {
+        components: {MainHead, ToolLoading, LabelConfig, LabelButton, SystemConfig},
+        data () {
             return {
                 chooseTab: 'systemConfig',
                 tabsForm: [
@@ -67,7 +72,7 @@
                 permission: ''
             };
         },
-        created() {
+        created () {
             let scope = this;
             getUserPermission({condition: {}}).then(data => {
                 scope.$response(data, '获取权限').then(data => {
@@ -76,11 +81,14 @@
             });
         },
         methods: {
-            chooseType(index) {
+            futureTab (tab) {
+                this.$router.push({path: '/' + tab});
+            },
+            chooseType (index) {
                 let scope = this;
                 scope.chooseTab = scope.tabsForm[index].name;
             },
-            refresh() {
+            refresh () {
                 let scope = this;
                 scope.form = {
                     systemConfig: false,
@@ -90,7 +98,7 @@
                 };
                 scope.refreshModal = true;
             },
-            formCheck() {
+            formCheck () {
                 let scope = this;
                 if (!scope.form.systemConfig && !scope.form.labelConfig && !scope.form.personalAttentionLabel) {
                     scope.$msg('请先选择缓存内容', 'warning');
@@ -98,7 +106,7 @@
                 }
                 return true;
             },
-            sureCache() {
+            sureCache () {
                 let scope = this;
                 if (!scope.formCheck()) {
                     return;
@@ -115,7 +123,7 @@
                     scope.loading = false;
                 });
             },
-            changeStatus($event, type) {
+            changeStatus ($event, type) {
                 let scope = this;
                 if (type === 'all') {
                     if ($event) {
@@ -177,57 +185,64 @@
     .blog-config {
         width: 100%;
         height: 100%;
-        background-color: #f0f2f5;
-        padding: .5rem;
-        box-sizing: border-box;
+        position: relative;
 
-        .config-left {
-            width: 10%;
-            height: 100%;
-            background-color: white;
-            float: left;
+        .frame-center {
+            width: 100%;
+            height: 90%;
+            background-color: #f0f2f5;
+            padding: .5rem;
+            box-sizing: border-box;
 
-            .refresh-cache {
-                height: 2.5rem;
-                width: 85%;
-                padding: 7.5%;
-                border-bottom: 1px solid #ddd;
+            .config-left {
+                width: 10%;
+                height: 100%;
+                background-color: white;
+                float: left;
 
-                .button {
-                    width: 100%;
-                    height: 100%;
-                    background: #bfbfbf;
-                    border-radius: 4px;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    font-size: .75rem;
-                    font-family: PingFangSC-Regular;
-                    font-weight: 400;
-                    color: white;
+                .refresh-cache {
+                    height: 2.5rem;
+                    width: 85%;
+                    padding: 7.5%;
+                    border-bottom: 1px solid #ddd;
 
-                    &:hover {
-                        cursor: pointer;
+                    .button {
+                        width: 100%;
+                        height: 100%;
+                        background: #bfbfbf;
+                        border-radius: 4px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        font-size: .75rem;
+                        font-family: PingFangSC-Regular;
+                        font-weight: 400;
+                        color: white;
+
+                        &:hover {
+                            cursor: pointer;
+                        }
                     }
                 }
             }
-        }
 
-        .config-right {
-            width: calc(90% - .5rem);
-            height: 100%;
-            background-color: white;
-            float: left;
-            margin-left: .5rem;
-        }
+            .config-right {
+                width: calc(90% - .5rem);
+                height: 100%;
+                background-color: white;
+                float: left;
+                margin-left: .5rem;
+            }
 
-        .el-dialog {
+            .el-dialog {
 
-            .el-dialog__body {
-                padding: 0.5rem 1rem 0.5rem 1rem;
-                .el-form {
-                    .el-form-item {
-                        margin-bottom: unset;
+                .el-dialog__body {
+                    padding: 0.5rem 1rem 0.5rem 1rem;
+
+                    .el-form {
+                        .el-form-item {
+                            margin-bottom: unset;
+                        }
                     }
                 }
             }

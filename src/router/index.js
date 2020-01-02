@@ -15,80 +15,71 @@ export default new Router({
             }
         },
         {
-            path: '/home-page',
-            name: 'homePage',
-            component: () => import('../views/homePage/HomePage'),
+            path: '/read',
+            name: 'read',
+            component: () => import('../views/read/Read'),
             meta: {
-                title: '主页',
+                title: '阅读',
                 requireAuth: true
             },
             children: [
                 {
-                    path: 'read',
-                    name: 'read',
-                    component: () => import('../views/main/readArticle/ReadArticle'),
+                    path: ':label',
+                    name: 'publicRead',
+                    component: () => import('../components/public/PublicRead'),
                     meta: {
                         title: '阅读',
-                        requireAuth: true
-                    },
-                    children: [
-                        {
-                            path: ':label',
-                            name: 'publicRead',
-                            component: () => import('../views/main/readArticle/childRoute/PublicRead'),
-                            meta: {
-                                title: '阅读',
-                                requireAuth: true
-                            }
-                        }
-                    ]
-                },
-                {
-                    path: 'search',
-                    name: 'search',
-                    component: () => import('../views/main/readArticle/SearchArticle'),
-                    meta: {
-                        title: '搜索',
-                        requireAuth: true
-                    }
-                },
-                {
-                    path: 'statistics',
-                    name: 'statistics',
-                    component: () => import('../views/main/statistics/Statistics'),
-                    meta: {
-                        title: '话题',
-                        requireAuth: true
-                    }
-                },
-                {
-                    path: 'history',
-                    name: 'history',
-                    component: () => import('../views/main/history/History'),
-                    meta: {
-                        title: '历史',
-                        requireAuth: true
-                    }
-                },
-                {
-                    path: 'growth',
-                    name: 'growth',
-                    component: () => import('../views/main/growth/Growth'),
-                    meta: {
-                        title: '成长',
-                        requireAuth: true
-                    }
-                }, {
-                    path: 'blog-config',
-                    name: 'blogConfig',
-                    component: () => import('../views/config/BlogConfig'),
-                    meta: {
-                        title: '管理配置',
                         requireAuth: true
                     }
                 }
             ]
-        }, {
+        },
+        {
+            path: '/statistics',
+            name: 'statistics',
+            component: () => import('../views/statistics/Statistics'),
+            meta: {
+                title: '统计',
+                requireAuth: true
+            }
+        },
+        {
+            path: '/history',
+            name: 'history',
+            component: () => import('../views/history/History'),
+            meta: {
+                title: '历史',
+                requireAuth: true
+            }
+        },
+        {
+            path: '/growth',
+            name: 'growth',
+            component: () => import('../views/growth/Growth'),
+            meta: {
+                title: '成长',
+                requireAuth: true
+            }
+        },
+        {
+            path: '/blog-config',
+            name: 'blogConfig',
+            component: () => import('../views/config/BlogConfig'),
+            meta: {
+                title: '管理配置',
+                requireAuth: true
+            }
+        },
+        {
+            path: '/search',
+            name: 'search',
+            component: () => import('../views/search/Search'),
+            meta: {
+                title: '搜索',
+                requireAuth: true
+            }
+        },
+        {
             path: '/experiment',
             name: 'experiment',
             component: () => import('../views/experiment/Experiment'),

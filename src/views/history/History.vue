@@ -1,27 +1,32 @@
 <template>
-    <div class='history'>
-        <el-timeline v-infinite-scroll='loadMore' infinite-scroll-disabled='busy' infinite-scroll-distance='10'>
-            <el-timeline-item :timestamp="item.time" placement='top' v-for='(item, index) in result.data' :key="index">
-                <el-card>
-                    <h3 v-html='item.title' class='history-title'></h3>
-                    <p v-html='item.description'></p>
-                </el-card>
-            </el-timeline-item>
-        </el-timeline>
-        <tool-loading :loading='loading' v-if='result.data.length === 0'></tool-loading>
-        <empty-view v-if='result.data.length === 0'></empty-view>
-        <el-backtop target='.history' :visibility-height='50'></el-backtop>
+    <div class="history">
+        <main-head @futureTab='futureTab' current-tab="history" ref='mainHead'></main-head>
+        <div class='frame-center'>
+            <el-timeline v-infinite-scroll='loadMore' infinite-scroll-disabled='busy' infinite-scroll-distance='10'>
+                <el-timeline-item :timestamp="item.time" placement='top' v-for='(item, index) in result.data'
+                                  :key="index">
+                    <el-card>
+                        <h3 v-html='item.title' class='history-title'></h3>
+                        <p v-html='item.description'></p>
+                    </el-card>
+                </el-timeline-item>
+            </el-timeline>
+            <tool-loading :loading='loading' v-if='result.data.length === 0'></tool-loading>
+            <empty-view v-if='result.data.length === 0'></empty-view>
+            <el-backtop target='.history' :visibility-height='50'></el-backtop>
+        </div>
     </div>
 </template>
 
 <script>
-    import {getHistoryInfo} from '../../../service/request';
-    import ToolLoading from '../../../components/util/ToolLoading';
-    import EmptyView from '../../../components/util/EmptyView';
+    import MainHead from '../../components/public/MainHead';
+    import {getHistoryInfo} from '../../service/request';
+    import ToolLoading from '../../components/util/ToolLoading';
+    import EmptyView from '../../components/util/EmptyView';
 
     export default {
         name: 'History',
-        components: {EmptyView, ToolLoading},
+        components: {MainHead, EmptyView, ToolLoading},
         data () {
             return {
                 // 是否继续查询
@@ -64,6 +69,9 @@
             }
         },
         methods: {
+            futureTab (tab) {
+                this.$router.push({path: '/' + tab});
+            },
             loadMore () {
                 let scope = this;
                 scope.busy = true;
@@ -163,34 +171,40 @@
     };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
     .history {
+        position: relative;
         width: 100%;
         height: 100%;
-        overflow: auto;
 
-        .el-timeline {
-            padding: .2rem 25rem;
-            box-sizing: border-box;
+        .frame-center {
+            width: 100%;
+            height: 90%;
+            overflow: auto;
 
-            .el-timeline-item {
-                .el-timeline-item__timestamp {
-                    text-align: left;
-                }
+            /deep/ .el-timeline {
+                padding: .2rem 25rem;
+                box-sizing: border-box;
 
-                .el-timeline-item__content {
-                    .history-title {
-                        span:nth-child(1) {
-                            color: #417BF1;
-                        }
+                /deep/ .el-timeline-item {
+                    /deep/ .el-timeline-item__timestamp {
+                        text-align: left;
+                    }
 
-                        span:nth-child(3) {
-                            font-weight: 500;
-                            cursor: pointer;
-
-                            &:hover {
+                    /deep/ .el-timeline-item__content {
+                        .history-title {
+                            span:nth-child(1) {
                                 color: #417BF1;
-                                text-decoration: underline;
+                            }
+
+                            span:nth-child(3) {
+                                font-weight: 500;
+                                cursor: pointer;
+
+                                &:hover {
+                                    color: #417BF1;
+                                    text-decoration: underline;
+                                }
                             }
                         }
                     }
@@ -198,25 +212,6 @@
             }
         }
 
-        // 修改滚动条样式
-        &::-webkit-scrollbar {
-            width: 10px;
-            height: 15px;
-        }
-
-        &::-webkit-scrollbar-track {
-            background-color: white;
-            border-radius: 2px;
-        }
-
-        &::-webkit-scrollbar-thumb {
-            background: #bfbfbf;
-            border-radius: 10px;
-
-            &:hover {
-                background: #a5a5a5;
-            }
-        }
     }
 
 </style>

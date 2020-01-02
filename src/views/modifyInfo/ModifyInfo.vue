@@ -60,7 +60,7 @@
             },
             chooseItem (menu) {
                 if (menu.id === '退出') {
-                    this.$router.push({path: '/home-page/read'});
+                    this.$router.go(-1);
                 }
             }
         }

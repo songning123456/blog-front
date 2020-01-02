@@ -7,16 +7,16 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
     state: {
-        showInfo: false,
-        language: getLanguage()
+        language: getLanguage(),
+        blogger: {}
     },
     mutations: {
-        setShowInfo (state, showInfo) {
-            state.showInfo = showInfo;
-        },
         SET_LANGUAGE: (state, language) => {
             state.language = language;
             Cookies.set('language', language);
+        },
+        SET_BLOGGER: (state, blogger) => {
+            state.blogger = blogger;
         }
     },
     actions: {

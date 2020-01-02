@@ -49,7 +49,7 @@
                 }
             },
             goback () {
-                this.$router.push({path: '/home-page/read'});
+                this.$router.go(-1);
             }
         }
     };

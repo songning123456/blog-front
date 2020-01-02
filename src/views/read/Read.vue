@@ -1,109 +1,101 @@
 <template>
-    <div class='read-article'>
-        <div class='top-frame'>
-            <div class='choose-tabs'>
+    <div class="read">
+        <main-head @futureTab='futureTab' current-tab="read" ref='mainHead'></main-head>
+        <div class="frame-center">
+            <div class="top-frame">
                 <label-panel :tabs="labelNames" ref='labelPanel' @current='chooseCurrent'
                              @iconClick='iconClick'></label-panel>
             </div>
-        </div>
-        <div class='bottom-frame'>
-            <keep-alive>
-                <router-view :key="$route.path"></router-view>
-            </keep-alive>
+            <div class="bottom-frame">
+                <keep-alive>
+                    <router-view :key="$route.path"></router-view>
+                </keep-alive>
+            </div>
         </div>
         <float-menu :menus='menus' @itemClick='chooseItem'></float-menu>
     </div>
 </template>
 
 <script>
-    import ElFrameset from '../../../components/layout/el-frameset';
-    import ElFrame from '../../../components/layout/el-frame';
-    import KindArticle from '../../../components/public/KindArticle';
-    import ToolLoading from '../../../components/util/ToolLoading';
-    import HotArticle from '../../../components/public/HotArticle';
-    import {getSelectedLabel} from '../../../service/request';
-    import EventUtil from '../../../utils/EventUtil';
-    import LabelPanel from '../../../components/public/LabelPanel';
+    import MainHead from '../../components/public/MainHead';
+    import LabelPanel from '../../components/public/LabelPanel';
+    import {getSelectedLabel} from '../../service/request';
+    import EventUtil from '../../utils/EventUtil';
     import uuidv1 from 'uuid/v1';
-    import FloatMenu from '../../../components/util/FloatMenu';
+    import FloatMenu from '../../components/util/FloatMenu';
 
     export default {
-        name: 'ReadArticle',
-        components: {FloatMenu, LabelPanel, HotArticle, KindArticle, ToolLoading, ElFrame, ElFrameset},
-        data() {
+        name: 'Read',
+        components: {FloatMenu, LabelPanel, MainHead},
+        data () {
             let id1 = uuidv1();
             let id2 = uuidv1();
             let id3 = uuidv1();
             let id4 = uuidv1();
             return {
-                // 当前分类
-                currentContent: '',
                 labelNames: [],
                 scrollLeft: '',
                 menus: [
                     {
                         id: id1,
-                        image: require('../../../assets/time.svg'),
+                        image: require('../../assets/time.svg'),
                         title: '休眠时钟'
                     },
                     {
                         id: id2,
-                        image: require('../../../assets/map.svg'),
+                        image: require('../../assets/map.svg'),
                         title: '定位地图'
                     },
                     {
                         id: id3,
-                        image: require('../../../assets/email.svg'),
+                        image: require('../../assets/email.svg'),
                         title: '写邮件'
                     }, {
                         id: id4,
-                        image: require('../../../assets/unknown.svg'),
+                        image: require('../../assets/unknown.svg'),
                         title: '未知2'
                     }
                 ]
             };
         },
-        activated() {
-            let scope = this;
-            getSelectedLabel().then((data) => {
-                scope.$response(data, '获取关注标签').then(data => {
-                    data.data.forEach(item => {
-                        scope.labelNames.push(item.labelName);
-                    });
-                });
-            }).finally(() => {
-                let label = sessionStorage.getItem('homePageRead');
-                if (label) {
-                    this.$refs['labelPanel'].chooseLabel(label);
-                } else {
-                    this.$refs['labelPanel'].chooseLabel(this.labelNames[0]);
-                }
-            });
+        mounted () {
+            this.getSelectedLabelNames();
+        },
+        activated () {
             // 绑定横向滚动
-            scope.$nextTick(() => {
-                scope.scrollLeft = scope.$refs['labelPanel'].$el.children[1];
-                scope.scrollLeft.addEventListener('mousewheel', scope.mouseScroll, true);
+            this.$nextTick(() => {
+                this.scrollLeft = this.$refs['labelPanel'].$el.children[1];
+                this.scrollLeft.addEventListener('mousewheel', this.mouseScroll, true);
             });
         },
-        deactivated() {
+        deactivated () {
             this.scrollLeft.removeEventListener('mousewheel', this.mouseScroll, true);
         },
         methods: {
-            iconClick(arg0) {
-                let scope = this;
-                if (arg0 === 'before') {
-                    scope.scrollLeft.scrollLeft -= 50;
-                } else {
-                    scope.scrollLeft.scrollLeft += 50;
-                }
+            futureTab (tab) {
+                this.$router.push({path: '/' + tab});
             },
-            chooseCurrent(arg0) {
-                let scope = this;
-                scope.currentContent = arg0;
-                sessionStorage.setItem('homePageRead', arg0);
-                this.$router.push({path: '/home-page/read/' + scope.currentContent});
+            getSelectedLabelNames () {
+                getSelectedLabel().then((data) => {
+                    this.$response(data, '获取关注标签').then(data => {
+                        data.data.forEach(item => {
+                            this.labelNames.push(item.labelName);
+                        });
+                    });
+                }).finally(() => {
+                    let currentLabelName = sessionStorage.getItem('currentLabelName');
+                    if (currentLabelName && this.labelNames.indexOf(currentLabelName) > -1) {
+                        this.$refs['labelPanel'].chooseLabel(currentLabelName);
+                    } else {
+                        this.$refs['labelPanel'].chooseLabel(this.labelNames[0]);
+                    }
+                });
             },
-            chooseItem(menu) {
+            chooseCurrent (labelName) {
+                sessionStorage.setItem('currentLabelName', labelName);
+                this.$router.push({path: '/read/' + labelName});
+            },
+            chooseItem (menu) {
                 let scope = this;
                 switch (menu.title) {
                     case '休眠时钟':
@@ -122,8 +114,16 @@
                         break;
                 }
             },
+            iconClick (arg0) {
+                let scope = this;
+                if (arg0 === 'before') {
+                    scope.scrollLeft.scrollLeft -= 50;
+                } else {
+                    scope.scrollLeft.scrollLeft += 50;
+                }
+            },
             // 横向滚动
-            mouseScroll(event) {
+            mouseScroll (event) {
                 let scope = this;
                 let e = EventUtil.getEvent(event);
                 e.preventDefault();
@@ -138,19 +138,20 @@
     };
 </script>
 
-<style lang="scss">
-    .read-article {
-        height: 100%;
+<style lang="scss" scoped>
+    .read {
+        position: relative;
         width: 100%;
+        height: 100%;
 
-        .top-frame {
-            height: 4%;
+        .frame-center {
             width: 100%;
-            display: flex;
-            justify-content: center;
+            height: 100%;
 
-            .choose-tabs {
+            .top-frame {
                 width: 60%;
+                height: 4%;
+                margin-left: 20%;
 
                 .el-tabs {
 
@@ -181,11 +182,12 @@
                     }
                 }
             }
-        }
 
-        .bottom-frame {
-            height: 96%;
-            width: 100%;
+            .bottom-frame {
+                height: 96%;
+                width: 100%;
+            }
         }
     }
+
 </style>

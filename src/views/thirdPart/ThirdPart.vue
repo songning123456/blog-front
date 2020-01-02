@@ -132,8 +132,8 @@
                             // 跳转路由
                             scope.$router.push(
                                 {
-                                    path: '/home-page',
-                                    name: 'homePage'
+                                    path: '/read',
+                                    name: 'read'
                                 }
                             );
                         }

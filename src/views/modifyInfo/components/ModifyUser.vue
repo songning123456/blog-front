@@ -29,8 +29,7 @@
 <script>
     import {modifyUser} from '../../../service/request';
     import ToolLoading from '../../../components/util/ToolLoading';
-
-    const REG = /^[0-9a-zA-Z]{8,20}$/;
+    import Reg from '../../../utils/RegularUtil';
 
     export default {
         name: 'ModifyUser',
@@ -40,8 +39,8 @@
             let validateOldPass = (rule, value, callback) => {
                 if (value === '') {
                     callback(new Error('请输入原始密码'));
-                } else if (!REG.test(value)) {
-                    callback(new Error('密码必须符合0-9,a-z,A-Z且长度>8,<20'));
+                } else if (!Reg.PASSWORD.test(value)) {
+                    callback(new Error('密码由6~12字母和数字组合'));
                 } else {
                     callback();
                 }
@@ -49,7 +48,7 @@
             let validatePass = (rule, value, callback) => {
                 if (value === '') {
                     callback(new Error('请输入新密码'));
-                } else if (!REG.test(value)) {
+                } else if (!Reg.PASSWORD.test(value)) {
                     callback(new Error('密码必须符合0-9,a-z,A-Z且长度>8,<20'));
                 } else {
                     if (scope.form.checkPassword !== '') {

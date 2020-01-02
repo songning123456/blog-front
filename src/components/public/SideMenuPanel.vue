@@ -43,7 +43,7 @@
     };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
     .side-menu-panel {
         width: 2rem;
         height: 100%;

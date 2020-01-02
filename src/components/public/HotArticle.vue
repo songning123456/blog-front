@@ -34,7 +34,7 @@
                 default: ''
             }
         },
-        data() {
+        data () {
             return {
                 hotImage: require('../../assets/fire/hot.svg'),
                 result: []
@@ -42,7 +42,7 @@
         },
         watch: {
             kinds: {
-                handler(newVal, oldVal) {
+                handler (newVal, oldVal) {
                     if (newVal) {
                         let params = {
                             condition: {kinds: this.kinds},
@@ -57,19 +57,19 @@
                 immediate: true
             }
         },
-        mounted() {
+        /*mounted () {
             if (document.getElementsByClassName('above-info')[0].style.marginTop !== '0rem') {
                 document.getElementsByClassName('hot-article')[0].style.top = 9 - document.body.clientHeight / 200 + 'rem';
             } else {
                 document.getElementsByClassName('hot-article')[0].style.top = '9rem';
             }
-        },
+        },*/
         methods: {
-            getUpdateTime(index) {
+            getUpdateTime (index) {
                 let scope = this;
                 return DateUtil.formatDate(new Date(scope.result[index].updateTime));
             },
-            getIntroduction(userId) {
+            getIntroduction (userId) {
                 let scope = this;
                 let routerData = scope.$router.resolve({
                     path: '/introduction',
@@ -79,10 +79,10 @@
                 });
                 window.open(routerData.href, '_blank');
             },
-            getSrc(index) {
+            getSrc (index) {
                 return require('../../assets/fire/fire' + index + '.svg');
             },
-            getDetail(id) {
+            getDetail (id) {
                 let scope = this;
                 let routerData = scope.$router.resolve({
                     path: '/detail',
@@ -103,7 +103,7 @@
         height: 50%;
         position: fixed;
         right: 10rem;
-        /*top: 9rem;*/
+        top: 9rem;
         background: white;
         transition: all .4s ease-in-out;
 

@@ -1,84 +1,88 @@
 <template>
-    <div class='statistic global-css'>
-        <side-menu-panel class='page-left' :side-bar='sideBar' title='大数据统计' :img-src='imgSrc'>
-            <div slot='panel' class='slot-left'>
-                <div class='left-content'>
-                    <el-scrollbar>
-                        <el-card class='box-card statistic-card' shadow='false'>
-                            <div slot='header'>
-                                {{COMMON_MAP.DICTIONARY.CHOOSE_TIME}}
-                            </div>
-                            <tab-panel :tabs='time.choose' @rangeTime='rangeTime' ref='tabPanel'
-                                       format='yyyy-MM-dd hh:mm:ss' :index='3'></tab-panel>
-                            <el-form :model='form' label-width='5rem'>
-                                <el-form-item label='开始时间'>
-                                    <el-date-picker type='datetime' placeholder='请选择开始时间' v-model='form.startTime'
-                                                    value-format='yyyy-MM-dd hh:mm:ss'></el-date-picker>
-                                </el-form-item>
-                                <el-form-item label='结束时间'>
-                                    <el-date-picker type='datetime' placeholder='请选择开始时间' v-model='form.endTime'
-                                                    value-format='yyyy-MM-dd hh:mm:ss'></el-date-picker>
-                                </el-form-item>
-                            </el-form>
-                        </el-card>
-                        <el-card class='box-card statistic-card' shadow='false'>
-                            <div slot='header'>
-                                {{COMMON_MAP.DICTIONARY.STATISTIC_TYPE}}
-                            </div>
-                            <el-form :model='form' label-width='5rem'>
-                                <el-form-item label='按类型统计'>
-                                    <el-select v-model='form.type' placeholder='请选择类型'>
-                                        <el-option label='种类' value='kinds'></el-option>
-                                        <el-option label='作者' value='author'></el-option>
-                                    </el-select>
-                                </el-form-item>
-                            </el-form>
-                        </el-card>
-                    </el-scrollbar>
+    <div class="statistics">
+        <main-head @futureTab='futureTab' current-tab="statistics" ref='mainHead'></main-head>
+        <div class='frame-center global-css'>
+            <side-menu-panel class='page-left' :side-bar='sideBar' title='大数据统计' :img-src='imgSrc'>
+                <div slot='panel' class='slot-left'>
+                    <div class='left-content'>
+                        <el-scrollbar>
+                            <el-card class='box-card statistic-card' shadow='false'>
+                                <div slot='header'>
+                                    {{COMMON_MAP.DICTIONARY.CHOOSE_TIME}}
+                                </div>
+                                <tab-panel :tabs='time.choose' @rangeTime='rangeTime' ref='tabPanel'
+                                           format='yyyy-MM-dd hh:mm:ss' :index='3'></tab-panel>
+                                <el-form :model='form' label-width='5rem'>
+                                    <el-form-item label='开始时间'>
+                                        <el-date-picker type='datetime' placeholder='请选择开始时间' v-model='form.startTime'
+                                                        value-format='yyyy-MM-dd hh:mm:ss'></el-date-picker>
+                                    </el-form-item>
+                                    <el-form-item label='结束时间'>
+                                        <el-date-picker type='datetime' placeholder='请选择开始时间' v-model='form.endTime'
+                                                        value-format='yyyy-MM-dd hh:mm:ss'></el-date-picker>
+                                    </el-form-item>
+                                </el-form>
+                            </el-card>
+                            <el-card class='box-card statistic-card' shadow='false'>
+                                <div slot='header'>
+                                    {{COMMON_MAP.DICTIONARY.STATISTIC_TYPE}}
+                                </div>
+                                <el-form :model='form' label-width='5rem'>
+                                    <el-form-item label='按类型统计'>
+                                        <el-select v-model='form.type' placeholder='请选择类型'>
+                                            <el-option label='种类' value='kinds'></el-option>
+                                            <el-option label='作者' value='author'></el-option>
+                                        </el-select>
+                                    </el-form-item>
+                                </el-form>
+                            </el-card>
+                        </el-scrollbar>
+                    </div>
+                    <div class='left-query'>
+                        <el-button type='primary' @click='query' :loading='loading'>{{COMMON_MAP.DICTIONARY.QUERY}}
+                        </el-button>
+                        <el-button type='warning' plain @click='reset'>{{COMMON_MAP.DICTIONARY.RESET}}</el-button>
+                    </div>
                 </div>
-                <div class='left-query'>
-                    <el-button type='primary' @click='query' :loading='loading'>{{COMMON_MAP.DICTIONARY.QUERY}}
-                    </el-button>
-                    <el-button type='warning' plain @click='reset'>{{COMMON_MAP.DICTIONARY.RESET}}</el-button>
+            </side-menu-panel>
+            <div @mousedown="sideBar.showing = false" class='page-right statistic-layout'>
+                <div style='width: 100%;height: 100%' v-if='JSON.stringify(result) !== "{}"'>
+                    <div class='content-top'>
+                        <div class='content-left'>
+                            <e-charts :option='option.first'></e-charts>
+                        </div>
+                        <div class='content-right'>
+                            <e-charts :option='option.second'></e-charts>
+                        </div>
+                    </div>
+                    <div class='content-bottom'>
+                        <div class='content-left'>
+                            <e-charts :option='option.third'></e-charts>
+                        </div>
+                        <div class='content-right'>
+                            <e-charts :option='option.fourth'></e-charts>
+                        </div>
+                    </div>
                 </div>
+                <empty-view v-if='JSON.stringify(result) === "{}"'></empty-view>
             </div>
-        </side-menu-panel>
-        <div @mousedown="sideBar.showing = false" class='page-right statistic-layout'>
-            <div style='width: 100%;height: 100%' v-if='JSON.stringify(result) !== "{}"'>
-                <div class='content-top'>
-                    <div class='content-left'>
-                        <e-charts :option='option.first'></e-charts>
-                    </div>
-                    <div class='content-right'>
-                        <e-charts :option='option.second'></e-charts>
-                    </div>
-                </div>
-                <div class='content-bottom'>
-                    <div class='content-left'>
-                        <e-charts :option='option.third'></e-charts>
-                    </div>
-                    <div class='content-right'>
-                        <e-charts :option='option.fourth'></e-charts>
-                    </div>
-                </div>
-            </div>
-            <empty-view v-if='JSON.stringify(result) === "{}"'></empty-view>
+            <tool-loading :loading='loading'></tool-loading>
         </div>
-        <tool-loading :loading='loading'></tool-loading>
     </div>
 </template>
 
 <script>
-    import SideMenuPanel from '../../../components/public/SideMenuPanel';
-    import TabPanel from '../../../components/public/TabPanel';
-    import {getHadoop, insertHistoryInfo} from '../../../service/request';
-    import ToolLoading from '../../../components/util/ToolLoading';
-    import ECharts from '../../../components/public/ECharts';
-    import EmptyView from '../../../components/util/EmptyView';
+    import MainHead from '../../components/public/MainHead';
+    import SideMenuPanel from '../../components/public/SideMenuPanel';
+    import TabPanel from '../../components/public/TabPanel';
+    import {getHadoop, insertHistoryInfo} from '../../service/request';
+    import ToolLoading from '../../components/util/ToolLoading';
+    import ECharts from '../../components/public/ECharts';
+    import EmptyView from '../../components/util/EmptyView';
 
     export default {
         name: 'Statistics',
-        components: {EmptyView, ECharts, ToolLoading, TabPanel, SideMenuPanel},
+        components: {MainHead, EmptyView, ECharts, ToolLoading, TabPanel, SideMenuPanel},
         data () {
             return {
                 sideBar: {
@@ -121,7 +125,7 @@
                     }
                 },
                 result: {},
-                imgSrc: require('../../../assets/statistic.svg')
+                imgSrc: require('../../assets/statistic.svg')
             };
         },
         watch: {
@@ -166,11 +170,13 @@
                 deep: true
             }
         },
-        mounted () {
-            let scope = this;
-            scope.sideBar.showing = true;
+        activated () {
+            this.sideBar.showing = true;
         },
         methods: {
+            futureTab (tab) {
+                this.$router.push({path: '/' + tab});
+            },
             formCheck () {
                 let scope = this;
                 if (!scope.form.startTime) {
@@ -383,146 +389,150 @@
     };
 </script>
 
-<style lang="scss">
-
-    .statistic {
+<style lang="scss" scoped>
+    .statistics {
+        position: relative;
         width: 100%;
         height: 100%;
-        padding-top: .5rem;
-        position: relative;
-        box-sizing: border-box;
 
-        .page-left {
-
-            .slot-left {
-                height: 100%;
-                width: 100%;
-
-                .left-content {
-                    width: 100%;
-                    height: 92%;
-
-                    .statistic-card {
-                        width: 90%;
-                        margin: .4rem 0 .4rem 1rem;
-                    }
-                }
-
-                .left-query {
-                    width: 100%;
-                    height: 8%;
-                    line-height: 2.7rem;
-                }
-            }
-        }
-
-        .page-right {
-            float: left;
-            width: calc(100% - 2rem);
-            height: 100%;
+        .frame-center {
+            width: 100%;
+            height: 90%;
+            padding-top: .5rem;
             position: relative;
             box-sizing: border-box;
 
-            &.statistic-layout {
-                padding: 0 1rem 1rem 1rem;
-                box-sizing: border-box;
+            .page-left {
+
+                .slot-left {
+                    height: 100%;
+                    width: 100%;
+
+                    .left-content {
+                        width: 100%;
+                        height: 92%;
+
+                        .statistic-card {
+                            width: 90%;
+                            margin: .4rem 0 .4rem 1rem;
+                        }
+                    }
+
+                    .left-query {
+                        width: 100%;
+                        height: 8%;
+                        line-height: 2.7rem;
+                    }
+                }
             }
 
-            .content-top {
-                width: 100%;
-                height: 50%;
-            }
-
-            .content-bottom {
-                width: 100%;
-                height: 50%;
-            }
-
-            .content-left {
-                width: 50%;
-                height: 100%;
+            .page-right {
                 float: left;
-                padding: 1rem;
+                width: calc(100% - 2rem);
+                height: 100%;
+                position: relative;
                 box-sizing: border-box;
+
+                &.statistic-layout {
+                    padding: 0 1rem 1rem 1rem;
+                    box-sizing: border-box;
+                }
+
+                .content-top {
+                    width: 100%;
+                    height: 50%;
+                }
+
+                .content-bottom {
+                    width: 100%;
+                    height: 50%;
+                }
+
+                .content-left {
+                    width: 50%;
+                    height: 100%;
+                    float: left;
+                    padding: 1rem;
+                    box-sizing: border-box;
+                }
+
+                .content-right {
+                    width: 50%;
+                    height: 100%;
+                    float: left;
+                    padding: 1rem;
+                    box-sizing: border-box;
+                }
+            }
+        }
+
+        .global-css {
+            // 表单
+            /deep/ .el-form {
+                /deep/ .el-form-item {
+                    margin-bottom: .3rem;
+
+                    /deep/ .el-form-item__label {
+                        font-size: .7rem;
+                        line-height: 2rem;
+                        padding: 0 .6rem 0 0;
+                    }
+
+                    /deep/ .el-form-item__content {
+                        line-height: 2rem;
+                        font-size: .7rem;
+                    }
+                }
             }
 
-            .content-right {
-                width: 50%;
-                height: 100%;
-                float: left;
-                padding: 1rem;
-                box-sizing: border-box;
+            // 按钮
+            .el-button {
+                padding: .6rem 1.8rem;
+            }
+
+            /deep/ .el-card {
+                border: unset;
+
+                /deep/ .el-card__header {
+                    background-color: #d8edff;
+                    padding: .3rem 1rem;
+                    border-radius: 0.2rem 0.2rem 0 0;
+                    font-size: 0.75rem;
+                    font-weight: bold;
+                    color: #427BF1;
+                }
+
+                /deep/ .el-card__body {
+                    background-color: #ecf6ff;
+                    padding: .5rem;
+                }
+            }
+
+            .el-date-editor {
+                font-size: .7rem;
+            }
+
+            .el-input {
+                width: 11rem;
+
+                input {
+                    height: 2rem;
+
+                    &.el-input__inner {
+                        padding-left: 1.5rem;
+                        padding-right: 1.5rem;
+                    }
+                }
+
+                .el-input__prefix {
+                    left: 0.25rem;
+
+                    .el-input__icon {
+                        line-height: 2rem;
+                        width: 1.25rem;
+                    }
+                }
             }
         }
     }
-
-    .global-css {
-        // 表单
-        .el-form {
-            .el-form-item {
-                margin-bottom: .3rem;
-
-                .el-form-item__label {
-                    font-size: .7rem;
-                    line-height: 2rem;
-                    padding: 0 .6rem 0 0;
-                }
-
-                .el-form-item__content {
-                    line-height: 2rem;
-                    font-size: .7rem;
-                }
-            }
-        }
-
-        // 按钮
-        .el-button {
-            padding: .6rem 1.8rem;
-        }
-
-        .el-card {
-            border: unset;
-
-            .el-card__header {
-                background-color: #d8edff;
-                padding: .3rem 1rem;
-                border-radius: 0.2rem 0.2rem 0 0;
-                font-size: 0.75rem;
-                font-weight: bold;
-                color: #427BF1;
-            }
-
-            .el-card__body {
-                background-color: #ecf6ff;
-                padding: .5rem;
-            }
-        }
-
-        .el-date-editor {
-            font-size: .7rem;
-        }
-
-        .el-input {
-            width: 11rem;
-
-            input {
-                height: 2rem;
-
-                &.el-input__inner {
-                    padding-left: 1.5rem;
-                    padding-right: 1.5rem;
-                }
-            }
-
-            .el-input__prefix {
-                left: 0.25rem;
-
-                .el-input__icon {
-                    line-height: 2rem;
-                    width: 1.25rem;
-                }
-            }
-        }
-    }
-
 </style>

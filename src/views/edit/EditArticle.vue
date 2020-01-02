@@ -71,8 +71,8 @@
             doc.removeEventListener('click', scope.queryLabel);
         },
         methods: {
-            returnBtn() {
-                this.$router.push({path: '/home-page/read'});
+            returnBtn () {
+                this.$router.go(-1);
             },
             formCheck (type) {
                 let scope = this;
