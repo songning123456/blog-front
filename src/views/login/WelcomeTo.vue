@@ -2,14 +2,16 @@
     <div class='welcome-to'>
         <div class='frame-set'>
             <div class='left-frame'>
-                <img src="../../assets/login.jpg" />
+                <img src="../../assets/login.jpg"/>
             </div>
             <div class='right-frame'>
                 <div class="frame-center">
-                    <img src='../../assets/loginAvatar.svg' />
+                    <img src='../../assets/loginAvatar.svg'/>
                     <div class='login-txt'>登陆</div>
-                    <el-input prefix-icon="el-icon-user" placeholder="请输入用户名" v-model="user.name" clearable @keyup.enter.native='switchRouter'></el-input>
-                    <el-input prefix-icon="el-icon-lock" placeholder="请输入密码" v-model="user.password" show-password @keyup.enter.native='switchRouter'></el-input>
+                    <el-input prefix-icon="el-icon-user" placeholder="请输入用户名" v-model="user.name" clearable
+                              @keyup.enter.native='switchRouter'></el-input>
+                    <el-input prefix-icon="el-icon-lock" placeholder="请输入密码" v-model="user.password" show-password
+                              @keyup.enter.native='switchRouter'></el-input>
                     <div class="operate-password">
                         <el-checkbox v-model="remember">记住密码</el-checkbox>
                         <div class="forget-password" @click="forgotPassword">忘记密码?</div>
@@ -82,17 +84,17 @@
         },
         methods: {
             windowResize () {
-                /*let width = document.body.offsetWidth || document.body.clientWidth;
+                let height = document.body.offsetHeight || document.body.clientHeight;
                 this.$nextTick(() => {
                     // 1920 * 1080
-                    let doc = document.getElementsByClassName('login-info')[0];
-                    if (width > 1800) {
-                        doc.style.height = '20rem';
-                    } else if (width > 1000) {
+                    let doc = document.getElementsByClassName('frame-center')[0];
+                    if (height < 1000) {
+                        doc.style.height = '74%';
+                    } else if (height < 800) {
                         // 1366 * 768
-                        doc.style.height = '24rem';
+                        doc.style.height = '70%';
                     }
-                });*/
+                });
             },
             // 表单验证
             formCheck () {
@@ -257,9 +259,11 @@
                         font-size: 1.5em;
                         font-weight: bold;
                     }
+
                     .el-input {
                         margin-top: 1rem;
                     }
+
                     .operate-password {
                         margin: 1rem 0;
 

@@ -6,11 +6,9 @@
                 <label-panel :tabs="labelNames" ref='labelPanel' @current='chooseCurrent'
                              @iconClick='iconClick'></label-panel>
             </div>
-            <div class="bottom-frame">
-                <keep-alive>
-                    <router-view :key="$route.path"></router-view>
-                </keep-alive>
-            </div>
+            <keep-alive>
+                <router-view :key="$route.path" class="bottom-frame"></router-view>
+            </keep-alive>
         </div>
         <float-menu :menus='menus' @itemClick='chooseItem'></float-menu>
     </div>
@@ -83,12 +81,7 @@
                         });
                     });
                 }).finally(() => {
-                    let currentLabelName = sessionStorage.getItem('currentLabelName');
-                    if (currentLabelName && this.labelNames.indexOf(currentLabelName) > -1) {
-                        this.$refs['labelPanel'].chooseLabel(currentLabelName);
-                    } else {
-                        this.$refs['labelPanel'].chooseLabel(this.labelNames[0]);
-                    }
+                    this.defaultClick();
                 });
             },
             chooseCurrent (labelName) {
@@ -112,6 +105,14 @@
                         break;
                     default:
                         break;
+                }
+            },
+            defaultClick () {
+                let currentLabelName = sessionStorage.getItem('currentLabelName');
+                if (currentLabelName && this.labelNames.indexOf(currentLabelName) > -1) {
+                    this.$refs['labelPanel'].chooseLabel(currentLabelName);
+                } else {
+                    this.$refs['labelPanel'].chooseLabel(this.labelNames[0]);
                 }
             },
             iconClick (arg0) {

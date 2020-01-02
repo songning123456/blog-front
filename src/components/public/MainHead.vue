@@ -194,7 +194,7 @@
         }
 
         .main-head-popover {
-            position: relative;
+            position: absolute;
             z-index: 100;
             width: 4rem;
             float: left;

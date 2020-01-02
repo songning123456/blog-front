@@ -1,5 +1,5 @@
 <template>
-    <div class='hot-article'>
+    <div class='hot-article' ref="hotArticle">
         <template v-if='result.length'>
             <div class='hot-title'><span><img :src='hotImage'/></span><span>热门文章</span></div>
             <div class='hot-content' v-for='(item, index) in result' :key='index' @click='getDetail(item.id)'>
@@ -57,13 +57,6 @@
                 immediate: true
             }
         },
-        /*mounted () {
-            if (document.getElementsByClassName('above-info')[0].style.marginTop !== '0rem') {
-                document.getElementsByClassName('hot-article')[0].style.top = 9 - document.body.clientHeight / 200 + 'rem';
-            } else {
-                document.getElementsByClassName('hot-article')[0].style.top = '9rem';
-            }
-        },*/
         methods: {
             getUpdateTime (index) {
                 let scope = this;
