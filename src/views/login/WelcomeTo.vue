@@ -168,17 +168,13 @@
                             }
                             sessionStorage.setItem('username', scope.user.name);
                         }
-                        if (scope.$route.query.redirect) {
-                            scope.$router.push(scope.$route.query.redirect);
-                        } else {
-                            // 跳转路由
-                            scope.$router.push(
-                                {
-                                    path: '/read',
-                                    name: 'read'
-                                }
-                            );
-                        }
+                        // 跳转路由
+                        scope.$router.push(
+                            {
+                                path: '/read',
+                                name: 'read'
+                            }
+                        );
                     }
                 }).catch(e => {
                     console.error('错误用户: ', e);

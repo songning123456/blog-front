@@ -179,6 +179,16 @@ export default new Router({
                 title: '第三方登录信息',
                 requireAuth: false
             }
+        },
+        {
+            // 路由是从上到下执行的，在路由配置中最后面 *
+            path: '*',
+            name: 'error',
+            component: () => import('../views/error/Error'),
+            meta: {
+                title: '404',
+                requireAuth: true
+            }
         }
     ]
 })

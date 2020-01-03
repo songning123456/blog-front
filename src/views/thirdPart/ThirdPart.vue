@@ -3,14 +3,14 @@
         <div class='empty-info' v-if='JSON.stringify(form) === "{}" && !loading'>
             <empty-view></empty-view>
         </div>
-       <!-- <div class="display-info" v-if='JSON.stringify(form) !== "{}" && !loading'>
-            <h2>{{type}}用户数据</h2>
-            <el-form :modal='form' label-width="7rem">
-                <el-form-item v-for="(value, key) in form" :key="key" :label='key'>
-                    <el-input :value="value + ''" readonly></el-input>
-                </el-form-item>
-            </el-form>
-        </div>-->
+        <!-- <div class="display-info" v-if='JSON.stringify(form) !== "{}" && !loading'>
+             <h2>{{type}}用户数据</h2>
+             <el-form :modal='form' label-width="7rem">
+                 <el-form-item v-for="(value, key) in form" :key="key" :label='key'>
+                     <el-input :value="value + ''" readonly></el-input>
+                 </el-form-item>
+             </el-form>
+         </div>-->
         <div class='load-info' v-if='loading'>
             <tool-loading :loading='loading' normal="spinner"></tool-loading>
         </div>
@@ -66,7 +66,7 @@
                 let scope = this;
                 scope.$router.push({path: '/'});
             },
-            callback() {
+            callback () {
                 let scope = this;
                 // 回调之后再次进入 获取信息
                 let param = JSON.parse(sessionStorage.getItem('gitHub'));
@@ -126,17 +126,13 @@
                 // 登陆时默认进入阅读
                 loginBlog(param).then((data) => {
                     if (data.status === 200) {
-                        if (scope.$route.query.redirect) {
-                            scope.$router.push(scope.$route.query.redirect);
-                        } else {
-                            // 跳转路由
-                            scope.$router.push(
-                                {
-                                    path: '/read',
-                                    name: 'read'
-                                }
-                            );
-                        }
+                        // 跳转路由
+                        scope.$router.push(
+                            {
+                                path: '/read',
+                                name: 'read'
+                            }
+                        );
                     }
                 }).catch(e => {
                     console.error('错误用户: ', e);
