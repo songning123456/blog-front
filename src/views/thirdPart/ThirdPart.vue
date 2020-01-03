@@ -136,7 +136,7 @@
                     }
                 }).catch(e => {
                     console.error('错误用户: ', e);
-                    scope.$msg('~~~请输入正确用户~~~');
+                    this.$message.error('~~~请输入正确用户~~~');
                 }).finally(() => {
                     scope.loading = false;
                 });

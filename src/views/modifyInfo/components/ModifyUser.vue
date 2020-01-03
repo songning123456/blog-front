@@ -101,14 +101,14 @@
                         scope.loading = true;
                         modifyUser(params).then(data => {
                             if (data.status === 200) {
-                                scope.$msg('修改成功', 'success');
+                                this.$message.success('修改成功');
                                 localStorage.setItem('username', '');
                                 localStorage.setItem('password', '');
                             } else {
-                                scope.$msg('修改失败 ' + data.message);
+                                this.$message.error('修改失败 ' + data.message);
                             }
                         }).catch(e => {
-                            scope.$msg('修改失败 ' + e);
+                            this.$message.error('修改失败 ' + e);
                         }).finally(() => {
                             scope.loading = false;
                         });

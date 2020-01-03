@@ -64,7 +64,7 @@
             };
             insertHistoryInfo(params).then(data => {
                 if (data.status !== 200) {
-                    scope.$msg('插入历史信息失败!');
+                    this.$message.error('插入历史信息失败!');
                 }
             });
         },

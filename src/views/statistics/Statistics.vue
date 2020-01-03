@@ -180,15 +180,15 @@
             formCheck () {
                 let scope = this;
                 if (!scope.form.startTime) {
-                    scope.$msg('开始时间不能为空!');
+                    this.$message.error('开始时间不能为空!');
                     return false;
                 }
                 if (!scope.form.endTime) {
-                    scope.$msg('结束时间不能为空!');
+                    this.$message.error('结束时间不能为空!');
                     return false;
                 }
                 if (Date.parse(scope.form.endTime) <= Date.parse(scope.form.startTime)) {
-                    scope.$msg('开始时间不能大于结束时间!');
+                    this.$message.error('开始时间不能大于结束时间!');
                     return false;
                 }
                 return true;
@@ -216,7 +216,7 @@
                         // 插入历史信息
                         insertHistoryInfo({condition: {title: scope.COMMON_MAP.HISTORY.STATISTIC}}).then(data => {
                             if (data.status !== 200) {
-                                scope.$msg('插入历史信息失败!');
+                                this.$message.error('插入历史信息失败!');
                             }
                         });
                     }

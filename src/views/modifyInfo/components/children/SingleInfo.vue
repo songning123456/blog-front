@@ -204,49 +204,49 @@
                 switch (type) {
                     case 'infoType':
                         if (scope.form[type] === scope.info[type]) {
-                            scope.$msg('请输入不同信息');
+                            this.$message.warning('请输入不同信息');
                             return;
                         }
                         break;
                     case 'position':
                         if (scope.form[type] === scope.info[type]) {
-                            scope.$msg('请输入不同信息');
+                            this.$message.warning('请输入不同信息');
                             return;
                         }
                         if (!scope.form[type]) {
-                            scope.$msg('请输入有效信息');
+                            this.$message.warning('请输入有效信息');
                             return;
                         }
                         break;
                     case 'startTime':
                         if (!scope.form[type]) {
-                            scope.$msg('请输入开始日期');
+                            this.$message.warning('请输入开始日期');
                             return;
                         }
                         break;
                     case 'endTime':
                         if (!scope.form[type]) {
-                            scope.$msg('请输入结束日期');
+                            this.$message.warning('请输入结束日期');
                             return;
                         }
                         break;
                     case 'mechanism':
                         if (scope.form[type] === scope.info[type]) {
-                            scope.$msg('请输入不同信息');
+                            this.$message.warning('请输入不同信息');
                             return;
                         }
                         if (!scope.form[type]) {
-                            scope.$msg('请输入有效信息');
+                            this.$message.warning('请输入有效信息');
                             return;
                         }
                         break;
                     case 'introduction':
                         if (scope.form[type] === scope.info[type]) {
-                            scope.$msg('请输入不同信息');
+                            this.$message.warning('请输入不同信息');
                             return;
                         }
                         if (!scope.form[type]) {
-                            scope.$msg('请输入有效信息');
+                            this.$message.warning('请输入有效信息');
                             return;
                         }
                         break;

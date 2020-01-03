@@ -181,7 +181,7 @@ export default new Router({
             }
         },
         {
-            // 路由是从上到下执行的，在路由配置中最后面 *
+            // 路由是从上到下执行的，所以在路由配置中最后面 *
             path: '*',
             name: 'error',
             component: () => import('../views/error/Error'),

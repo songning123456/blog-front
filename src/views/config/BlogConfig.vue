@@ -101,7 +101,7 @@
             formCheck () {
                 let scope = this;
                 if (!scope.form.systemConfig && !scope.form.labelConfig && !scope.form.personalAttentionLabel) {
-                    scope.$msg('请先选择缓存内容', 'warning');
+                    this.$message.warning('请先选择缓存内容');
                     return false;
                 }
                 return true;
@@ -115,9 +115,9 @@
                 scope.loading = true;
                 refreshCache({condition: scope.form}).then(data => {
                     if (data.status === 200) {
-                        scope.$msg('刷新成功', 'success');
+                        this.$message.success('刷新成功');
                     } else {
-                        scope.$msg('刷新失败');
+                        this.$message.error('刷新失败');
                     }
                 }).finally(() => {
                     scope.loading = false;

@@ -45,6 +45,8 @@ messageTypes.forEach(type => {
 
 // 初始化
 ZMessage.prototype.init = function (options) {
+    // 默认时长1s
+    options.duration = 1000;
     const {max, isQueue, showNewest} = ZMessage.config;
     // 判断如果超出最大消息数时，删除消息
     if (max > 0 && ZMessage.instances.length >= max && showNewest && !isQueue) {

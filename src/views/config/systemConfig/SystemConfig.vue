@@ -168,10 +168,10 @@
                             scope.result.data = data.data;
                             scope.page.total = data.total;
                         } else {
-                            scope.$msg('查询结果为空');
+                            this.$message.error('查询结果为空');
                         }
                     } else {
-                        scope.$msg('查询异常! ' + data.message);
+                        this.$message.error('查询异常! ' + data.message);
                     }
                 }).catch().finally(() => {
                     scope.loading = false;
@@ -189,15 +189,15 @@
             formCheck () {
                 let scope = this;
                 if (!scope.dialogForm.configKey) {
-                    scope.$msg('系统配置key不能为空');
+                    this.$message.warning('系统配置key不能为空');
                     return false;
                 }
                 if (!scope.dialogForm.configValue) {
-                    scope.$msg('系统配置value不能为空');
+                    this.$message.warning('系统配置value不能为空');
                     return false;
                 }
                 if (!scope.dialogForm.valueDescription) {
-                    scope.$msg('系统配置描述不能为空');
+                    this.$message.warning('系统配置描述不能为空');
                     return false;
                 }
                 return true;
@@ -218,10 +218,10 @@
                 scope.loading = true;
                 updateSystemConfig(param).then((data) => {
                     if (data.status === 200) {
-                        scope.$msg('更新成功!', 'success');
+                        this.$message.success('更新成功!');
                         scope.refresh();
                     } else {
-                        scope.$msg('更新失败! ' + data.message);
+                        this.$message.error('更新失败! ' + data.message);
                     }
                 }).catch().finally(() => {
                     scope.loading = false;

@@ -48,7 +48,7 @@
                 let scope = this;
                 const extension = file.name.split('.')[1];
                 if (!(extension === 'png' || extension === 'jpg')) {
-                    scope.$msg('上传模板只能是jpg/png格式!', 'warning');
+                    this.$message.warning('上传模板只能是jpg/png格式!');
                     return;
                 }
                 scope.image.imgBlob = URL.createObjectURL(file);
@@ -59,10 +59,10 @@
                 formData.append('dir', 'album');
                 operateAlbum(formData).then(data => {
                     if (data.status === 200 && data.total > 0) {
-                        scope.$msg('上传图片成功', 'success');
+                        this.$message.success('上传图片成功');
                         scope.swiperList = data.data;
                     } else {
-                        scope.$msg('上传图片失败 ' + data.message);
+                        this.$message.error('上传图片失败 ' + data.message);
                     }
                 });
                 // 阻止默认上传地址

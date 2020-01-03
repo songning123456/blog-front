@@ -45,7 +45,7 @@
                     scope.chooseTab = scope.tabsForm[index].path;
                     scope.$router.push({path: '/experiment/' + scope.tabsForm[index].path});
                 } else {
-                    scope.$msg('暂时不可用', 'warning');
+                    this.$message.warning('暂时不可用');
                 }
             },
             goback () {

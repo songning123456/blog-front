@@ -84,27 +84,27 @@
             formCheck () {
                 let scope = this;
                 if (!scope.form.infoType) {
-                    scope.$msg('请选择信息类型');
+                    this.$message.warning('请选择信息类型');
                     return false;
                 }
                 if (!scope.form.mechanism) {
-                    scope.$msg('请填写学校/公司');
+                    this.$message.warning('请填写学校/公司');
                     return false;
                 }
                 if (!scope.form.position) {
-                    scope.$msg('请填写职位');
+                    this.$message.warning('请填写职位');
                     return false;
                 }
                 if (!scope.form.startTime) {
-                    scope.$msg('请填写开始时间');
+                    this.$message.warning('请填写开始时间');
                     return false;
                 }
                 if (!scope.form.endTime) {
-                    scope.$msg('请填写结束时间');
+                    this.$message.warning('请填写结束时间');
                     return false;
                 }
                 if (!scope.form.introduction) {
-                    scope.$msg('请填写简介');
+                    this.$message.warning('请填写简介');
                     return false;
                 }
                 return true;

@@ -100,23 +100,23 @@
                 let reg2 = /^([a-zA-Z]|[0-9])(\w|\\-|_)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/g;
                 // let reg2 = /^([0-9A-Za-z_\\.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/g;
                 if (!reg1.test(scope.form.recipient)) {
-                    scope.$msg('邮件收件人格式错误', 'warning');
+                    this.$message.warning('邮件收件人格式错误');
                     return false;
                 }
                 if (!scope.form.subject) {
-                    scope.$msg('邮件主题不能为空', 'warning');
+                    this.$message.warning('邮件主题不能为空');
                     return false;
                 }
                 if (!scope.form.content) {
-                    scope.$msg('邮件文本不能为空', 'warning');
+                    this.$message.warning('邮件文本不能为空');
                     return false;
                 }
                 if (!reg2.test((scope.form.sender))) {
-                    scope.$msg('邮件发件人格式错误', 'warning');
+                    this.$message.warning('邮件发件人格式错误');
                     return false;
                 }
                 if (!scope.form.password) {
-                    scope.$msg('发件人授权码不能为空', 'warning');
+                    this.$message.warning('发件人授权码不能为空');
                     return false;
                 }
                 return true;
@@ -139,9 +139,9 @@
                 scope.loading = true;
                 saveEmailDraft(param).then(data => {
                     if (data.status === 200) {
-                        scope.$msg('邮件保存成功', 'success');
+                        this.$message.success('邮件保存成功');
                     } else {
-                        scope.$msg('邮件保存失败');
+                        this.$message.error('邮件保存失败');
                     }
                 }).finally(() => {
                     scope.loading = false;
@@ -170,12 +170,12 @@
                 });
                 sendSimpleMail(formData).then((data) => {
                     if (data.status === 200) {
-                        scope.$msg('邮件发送成功', 'success');
+                        this.$message.success('邮件发送成功');
                     } else {
-                        scope.$msg('邮件发送失败');
+                        this.$message.error('邮件发送失败');
                     }
                 }).catch(() => {
-                    scope.$msg('邮件发送失败');
+                    this.$message.error('邮件发送失败');
                 }).finally(() => {
                     scope.loading = false;
                 });

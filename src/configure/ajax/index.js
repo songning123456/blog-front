@@ -45,7 +45,7 @@ const httpRequest = function (resolve, reject, config, isRetry, customize, respo
                     // 隐藏 设置栏
                     Vue.$store.commit('setShowInfo', false);
                     setTimeout(() => {
-                        Vue.$msg('token无效,请重新登陆!', 'error', 2000);
+                        Vue.$message.error('token无效,请重新登陆!');
                     }, 300);
                 }
             });

@@ -52,13 +52,13 @@
             scope.sureCity().then((data) => {
                 scope.initMap(data);
             }).catch((error) => {
-                scope.$msg(error);
+                this.$message.error(error);
             }).finally(() => {
                 scope.loading = false;
             });
             insertHistoryInfo({condition: {title: scope.COMMON_MAP.HISTORY.SIMPLE_MAP}}).then(data => {
                 if (data.status !== 200) {
-                    scope.$msg('插入历史信息失败!');
+                    this.$message.error('插入历史信息失败!');
                 }
             });
         },

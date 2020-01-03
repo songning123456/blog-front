@@ -114,7 +114,7 @@
                 scope.loading = true;
                 addMyInfo({condition: form}).then(data => {
                     if (data.status === 200) {
-                        scope.$msg('添加信息成功', 'success');
+                        this.$message.success('添加信息成功');
                     }
                 }).finally(() => {
                     scope.loading = false;

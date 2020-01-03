@@ -29,15 +29,7 @@ Vue.config.productionTip = false;
 
 // 自定义配置
 ZMessage.setConfig({max: 1, isQueue: false, showNewest: true});
-Vue.prototype.$message = ZMessage;
-// 注册全局提示消息
-Vue.prototype.$msg = function (msg = '', type = 'error', duration = 1000) {
-    ZMessage({
-        type: type,
-        message: msg,
-        duration: duration
-    });
-};
+
 // 注册全局响应返回状态
 Vue.prototype.$response = function (data, message = '') {
     let msg = '';
@@ -61,16 +53,18 @@ Vue.prototype.$response = function (data, message = '') {
             } else {
                 // 排除无限加载 默认多加载一次的情况
                 if (message !== 'infiniteScroll') {
-                    this.$msg(msg + '查询为空');
+                    ZMessage.error(msg + '查询为空');
                 }
             }
         } else {
-            this.$msg('查询失败' + data.message);
+            ZMessage.error('查询失败' + data.message);
         }
     });
 };
 
 Vue.use(ElementUI);
+// * 自定义Zmessage 放在ElementUI后面
+Vue.prototype.$message = ZMessage;
 Vue.use(mavonEditor);
 Vue.use(infiniteScroll);
 Vue.use(VueQuillEditor);
@@ -81,7 +75,6 @@ Vue.use(VueI18n, {
 });
 Vue.use(VueLazyComponent);
 router.beforeEach((to, from, next) => {
-    debugger;
     if (to.meta.title) {
         document.title = to.meta.title;
     }

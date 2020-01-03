@@ -110,7 +110,7 @@
                         }
                     });
                 } else {
-                    this.$msg('请输入搜索内容', 'warning');
+                    this.$message.warning('请输入搜索内容');
                 }
             },
             writeBtn () {

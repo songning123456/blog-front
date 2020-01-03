@@ -101,7 +101,7 @@
                         scope.$router.push({path: '/email'});
                         break;
                     case '未知2':
-                        scope.$msg('暂未开通此功能');
+                        this.$message.error('暂未开通此功能');
                         break;
                     default:
                         break;

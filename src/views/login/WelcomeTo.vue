@@ -100,26 +100,25 @@
             formCheck () {
                 let scope = this;
                 if (!scope.user.name) {
-                    scope.$msg('用户名不能为空');
+                    scope.$message.warning('用户名不能为空');
                     return false;
                 }
                 if (!Reg.USERNAME.test(scope.user.name)) {
-                    scope.$msg('用户名不符合规范');
+                    scope.$message.warning('用户名不符合规范');
                     return false;
                 }
                 if (!scope.user.password) {
-                    scope.$msg('密码不能为空');
+                    scope.$message.warning('密码不能为空');
                     return false;
                 }
                 if (!Reg.PASSWORD.test(scope.user.password)) {
-                    scope.$msg('密码不符合规范');
+                    scope.$message.warning('密码不符合规范');
                     return false;
                 }
                 return true;
             },
             jumpGitHub () {
                 let scope = this;
-                // scope.$router.push({path: '/git-hub'});
                 let obj = {
                     client_id: scope.gitHubForm.clientId,
                     state: scope.gitHubForm.state,
@@ -178,14 +177,13 @@
                     }
                 }).catch(e => {
                     console.error('错误用户: ', e);
-                    scope.$msg('~~~请输入正确用户~~~');
+                    this.$message.error('~~~请输入正确用户~~~');
                 }).finally(() => {
                     scope.loading = false;
                 });
             },
             forgotPassword () {
-                let scope = this;
-                scope.$msg('暂未开通此功能');
+                this.$message.error('暂未开通此功能');
             },
             register () {
                 let scope = this;

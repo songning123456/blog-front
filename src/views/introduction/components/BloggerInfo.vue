@@ -87,10 +87,10 @@
                         if (data.total > 0) {
                             scope.result = data.data[0];
                         } else {
-                            scope.$msg('查询结果为空');
+                            this.$message.error('查询结果为空');
                         }
                     } else {
-                        scope.$msg('查询异常! ' + data.message);
+                        this.$message.error('查询异常! ' + data.message);
                     }
                 }).catch().finally();
             }

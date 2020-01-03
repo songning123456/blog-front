@@ -75,17 +75,16 @@
                 this.$router.go(-1);
             },
             formCheck (type) {
-                let scope = this;
-                if (type === 1 && !scope.form.title) {
-                    scope.$msg('标题不能为空');
+                if (type === 1 && !this.form.title) {
+                    this.$message.warning('标题不能为空');
                     return false;
                 }
-                if (type === 2 && !scope.form.labelName) {
-                    scope.$msg('标签不能为空');
+                if (type === 2 && !this.form.labelName) {
+                    this.$message.warning('标签不能为空');
                     return false;
                 }
-                if (type === 3 && !scope.form.content) {
-                    scope.$msg('正文不能为空');
+                if (type === 3 && !this.form.content) {
+                    this.$message.warning('正文不能为空');
                     return false;
                 }
                 return true;
@@ -122,15 +121,14 @@
                 });
             },
             delImage (params) {
-                let scope = this;
                 let url = params[0];
                 let temps = url.split('\\');
                 let imageName = temps[temps.length - 1];
                 deleteImage({condition: {imageName: imageName, dir: 'article'}}).then(data => {
                     if (data.status === 200) {
-                        scope.$msg('删除图片成功', 'success');
+                        this.$message.success('删除图片成功');
                     } else {
-                        scope.$msg(data.message);
+                        this.$message.error(data.message);
                     }
                 });
             },
@@ -157,7 +155,7 @@
                     condition: form
                 };
                 publishArticle(params).then(() => {
-                    scope.$msg('文章发布成功!', 'success');
+                    this.$message.success('文章发布成功!');
                 }).finally(() => {
                     scope.loading = false;
                     scope.form = {};

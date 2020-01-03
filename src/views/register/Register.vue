@@ -245,7 +245,7 @@
                             scope.step = type;
                         }
                     } else {
-                        scope.$msg(res.message);
+                        this.$message.error(res.message);
                     }
                 });
             },
@@ -316,7 +316,7 @@
                         };
                         insertHistoryInfo(param).then(data => {
                             if (data.status !== 200) {
-                                scope.$msg('插入历史信息失败!');
+                                this.$message.error('插入历史信息失败!');
                             }
                         });
                         scope.autoJump('success');
@@ -437,13 +437,13 @@
                             let temp = +(scope.form.age);
                             if (temp) {
                                 if (temp > 120) {
-                                    scope.$msg('年龄不符合实际');
+                                    this.$message.warning('年龄不符合实际');
                                     return;
                                 } else {
                                     scope.form.age = temp;
                                 }
                             } else {
-                                scope.$msg('年龄信息格式错误');
+                                this.$message.warning('年龄信息格式错误');
                                 return;
                             }
                         }

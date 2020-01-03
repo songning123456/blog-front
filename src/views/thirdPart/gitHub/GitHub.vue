@@ -99,11 +99,11 @@
             formCheck () {
                 let scope = this;
                 if (!scope.form.clientId) {
-                    scope.$msg('clientId不能为空', 'warning');
+                    this.$message.warning('clientId不能为空');
                     return false;
                 }
                 if (!scope.form.clientSecret) {
-                    scope.$msg('clientSecret不能为空', 'warning');
+                    this.$message.warning('clientSecret不能为空');
                     return false;
                 }
                 return true;

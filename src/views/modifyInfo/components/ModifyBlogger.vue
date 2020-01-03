@@ -178,53 +178,53 @@
                 switch (type) {
                     case 'author':
                         if (!scope.form.author.length || !Reg.AUTHOR.test(scope.form.author)) {
-                            scope.$msg('笔名必须符合汉字,英文');
+                            this.$message.warning('笔名必须符合汉字,英文');
                             return;
                         }
                         if (scope.form.author === scope.copy.author) {
-                            scope.$msg('作者信息不能与原始信息相同');
+                            this.$message.warning('作者信息不能与原始信息相同');
                             return;
                         }
                         break;
                     case 'profession':
                         if (scope.form.profession === scope.copy.profession) {
-                            scope.$msg('职业信息不能与原始信息相同');
+                            this.$message.warning('职业信息不能与原始信息相同');
                             return;
                         }
                         break;
                     case 'telephone':
                         if (!scope.form.telephone.length || !Reg.PHONE.test(scope.form.telephone)) {
-                            scope.$msg('以1开头的11位数字');
+                            this.$message.warning('以1开头的11位数字');
                             return;
                         }
                         if (scope.form.telephone === scope.copy.telephone) {
-                            scope.$msg('电话号码信息不能与原始信息相同');
+                            this.$message.warning('电话号码信息不能与原始信息相同');
                             return;
                         }
                         break;
                     case 'email':
                         if (!scope.form.email.length || !Reg.EMAIL.test(scope.form.email)) {
-                            scope.$msg('电子邮件必须符合邮件规范');
+                            this.$message.warning('电子邮件必须符合邮件规范');
                             return;
                         }
                         if (scope.form.email === scope.copy.email) {
-                            scope.$msg('电子邮件信息不能与原始信息相同');
+                            this.$message.warning('电子邮件信息不能与原始信息相同');
                             return;
                         }
                         break;
                     case 'motto':
                         if (!scope.form.motto.length) {
-                            scope.$msg('座右铭不能为空');
+                            this.$message.warning('座右铭不能为空');
                             return;
                         }
                         if (scope.form.motto === scope.copy.motto) {
-                            scope.$msg('座右铭信息不能与原始信息相同');
+                            this.$message.warning('座右铭信息不能与原始信息相同');
                             return;
                         }
                         break;
                     case 'realName':
                         if (scope.form.realName === scope.copy.realName) {
-                            scope.$msg('真实姓名信息不能与原始信息相同');
+                            this.$message.warning('真实姓名信息不能与原始信息相同');
                             return;
                         }
                         break;
@@ -233,34 +233,34 @@
                             let temp = +(scope.form.age);
                             if (temp) {
                                 if (temp > 120) {
-                                    scope.$msg('年龄不符合实际');
+                                    this.$message.warning('年龄不符合实际');
                                     return;
                                 } else {
                                     scope.form.age = temp;
                                 }
                             } else {
-                                scope.$msg('年龄信息格式错误');
+                                this.$message.warning('年龄信息格式错误');
                                 return;
                             }
                         }
                         if (scope.form.age === scope.copy.age) {
-                            scope.$msg('年龄信息不能与原始信息相同');
+                            this.$message.warning('年龄信息不能与原始信息相同');
                             return;
                         }
                         break;
                     case 'gender':
                         if (scope.form.gender === scope.copy.gender) {
-                            scope.$msg('性别信息不能与原始信息相同');
+                            this.$message.warning('性别信息不能与原始信息相同');
                             return;
                         }
                         break;
                     case 'headPortrait':
                         if (!scope.form.headPortrait) {
-                            scope.$msg('头像url不能为空');
+                            this.$message.warning('头像url不能为空');
                             return;
                         }
                         if (scope.form.headPortrait === scope.copy.headPortrait) {
-                            scope.$msg('头像信息不能与原始信息相同');
+                            this.$message.warning('头像信息不能与原始信息相同');
                             return;
                         }
                         break;
@@ -274,7 +274,7 @@
                         scope.form = data.data[0];
                     });
                 }).catch(e => {
-                    scope.$msg('更新失败 ' + e);
+                    this.$message.error('更新失败 ' + e);
                 }).finally(() => {
                     scope.loading = false;
                 });
@@ -297,7 +297,7 @@
                         // 获取服务器中图片路径
                         scope.form.headPortrait = data.data[0].imageSrc;
                     } else {
-                        scope.$msg('上传图片失败 ' + data.message);
+                        this.$message.error('上传图片失败 ' + data.message);
                     }
                 });
                 // 阻止默认上传地址

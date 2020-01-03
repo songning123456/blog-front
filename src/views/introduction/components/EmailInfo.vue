@@ -45,16 +45,16 @@
                 // let reg = /^([0-9A-Za-z_\\.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/g;
                 let reg = /^([a-zA-Z]|[0-9])(\w|\\-|_)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/g;
                 if (!scope.emailForm.sender) {
-                    scope.$msg('邮件发件人不能为空', 'warning');
+                    this.$message.warning('邮件发件人不能为空');
                     return false;
                 } else if (!reg.test(scope.emailForm.sender)) {
-                    scope.$msg('邮件格式错误', 'warning');
+                    this.$message.warning('邮件格式错误');
                     return false;
                 } else if (!scope.emailForm.subject) {
-                    scope.$msg('邮件主题不能为空', 'warning');
+                    this.$message.warning('邮件主题不能为空');
                     return false;
                 } else if (!scope.emailForm.content) {
-                    scope.$msg('邮件文本不能为空', 'warning');
+                    this.$message.warning('邮件文本不能为空');
                     return false;
                 }
                 return true;
@@ -76,12 +76,12 @@
                 scope.loading = true;
                 sendSimpleMail(param).then((data) => {
                     if (data.status === 200) {
-                        scope.$msg('邮件发送成功', 'success');
+                        this.$message.success('邮件发送成功');
                     } else {
-                        scope.$msg('邮件发送失败');
+                        this.$message.error('邮件发送失败');
                     }
                 }).catch(() => {
-                    scope.$msg('邮件发送失败');
+                    this.$message.error('邮件发送失败');
                 }).finally(() => {
                     scope.loading = false;
                 });
