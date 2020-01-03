@@ -75,6 +75,10 @@
             if (localStorage.getItem('username') && localStorage.getItem('password')) {
                 scope.remember = true;
             }
+            // 如果存在token时，先删除
+            if (localStorage.token) {
+                localStorage.removeItem('token');
+            }
         },
         deactivated () {
             let scope = this;
@@ -146,10 +150,6 @@
                 let param = new FormData();
                 param.append('username', scope.user.name);
                 param.append('password', scope.user.password);
-                // 如果存在token时，先删除
-                if (localStorage.token) {
-                    localStorage.removeItem('token');
-                }
                 // 登陆时默认进入阅读
                 loginBlog(param).then((data) => {
                     if (data.status === 200) {

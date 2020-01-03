@@ -127,9 +127,9 @@
             exit () {
                 exitBlog().then((data) => {
                     if (data.status === 200) {
-                        this.$router.push({path: '/'});
                         // 删除token
                         localStorage.removeItem('token');
+                        this.$router.push({path: '/'});
                     }
                 }).catch((e) => {
                     this.$message.error('~~~退出登陆异常~~~');

@@ -38,8 +38,6 @@ const httpRequest = function (resolve, reject, config, isRetry, customize, respo
             // 退出登陆
             axios.ajax('/logout', 'get').then(data => {
                 if (data.status === 200) {
-                    // 强制跳转到登陆页面
-                    Vue.$router.push({path: '/'});
                     // 删除token
                     localStorage.removeItem('token');
                     // 隐藏 设置栏
@@ -47,6 +45,8 @@ const httpRequest = function (resolve, reject, config, isRetry, customize, respo
                     setTimeout(() => {
                         Vue.$message.error('token无效,请重新登陆!');
                     }, 300);
+                    // 强制跳转到登陆页面
+                    Vue.$router.push({path: '/'});
                 }
             });
         } else {
