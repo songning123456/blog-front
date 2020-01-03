@@ -49,17 +49,21 @@
                 <div style='width: 100%;height: 100%' v-if='JSON.stringify(result) !== "{}"'>
                     <div class='content-top'>
                         <div class='content-left'>
+                            <div class='content-title'></div>
                             <e-charts :option='option.first'></e-charts>
                         </div>
                         <div class='content-right'>
+                            <div class='content-title'></div>
                             <e-charts :option='option.second'></e-charts>
                         </div>
                     </div>
                     <div class='content-bottom'>
                         <div class='content-left'>
+                            <div class='content-title'></div>
                             <e-charts :option='option.third'></e-charts>
                         </div>
                         <div class='content-right'>
+                            <div class='content-title'></div>
                             <e-charts :option='option.fourth'></e-charts>
                         </div>
                     </div>
@@ -406,7 +410,9 @@
 
                 .slot-left {
                     height: 100%;
-                    width: 100%;
+                    width: calc(100% - .8rem);
+                    float: left;
+                    background: white;
 
                     .left-content {
                         width: 100%;
@@ -449,19 +455,30 @@
                 }
 
                 .content-left {
-                    width: 50%;
-                    height: 100%;
+                    width: calc(50% - 1.1rem);
+                    height: calc(100% - 1.1rem);
+                    margin: .5rem;
                     float: left;
-                    padding: 1rem;
-                    box-sizing: border-box;
+                    border: 0.05rem solid #f0f2f9;
                 }
 
                 .content-right {
-                    width: 50%;
-                    height: 100%;
+                    width: calc(50% - 1.1rem);
+                    height: calc(100% - 1.1rem);
+                    margin: .5rem;
                     float: left;
-                    padding: 1rem;
-                    box-sizing: border-box;
+                    border: 0.05rem solid #f0f2f9;
+                }
+
+                .content-title {
+                    height: 2rem;
+                    width: 100%;
+                    float: left;
+                    background-color: #f0f2f9;
+                }
+
+                .e-charts {
+                    height: calc(100% - 2.1rem);
                 }
             }
         }

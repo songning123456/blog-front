@@ -2,7 +2,7 @@
     <div class="public-read" ref='publicRead'>
         <div class="left-frame"></div>
         <div class="middle-frame">
-            <kind-article :kinds="currentLabel" target='.public-read'
+            <kind-article :kinds="currentLabel" :target='target'
                           @showHotArticle="showHotArticle = true"></kind-article>
         </div>
         <div class="right-frame">
@@ -21,16 +21,19 @@
         data () {
             return {
                 currentLabel: '',
-                showHotArticle: false
+                showHotArticle: false,
+                target: ''
             };
         },
         activated () {
             this.currentLabel = this.$route.params.label;
+            this.target = '.public-read';
             this.$nextTick(() => {
                 this.$refs['publicRead'].addEventListener('mousewheel', this.handleHeadScroll);
             });
         },
         deactivated () {
+            this.target = '';
             this.$refs['publicRead'].removeEventListener('mousewheel', this.handleHeadScroll);
         },
         methods: {

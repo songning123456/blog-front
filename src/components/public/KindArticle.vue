@@ -5,7 +5,7 @@
                     @detail="getDetail"></column>
         </div>
         <tool-loading :loading='loading' v-if='result.data.length === 0'></tool-loading>
-        <el-backtop :target='target' :visibility-height='50'></el-backtop>
+        <el-backtop :target='target' :visibility-height='50' v-if="target"></el-backtop>
     </div>
 </template>
 
