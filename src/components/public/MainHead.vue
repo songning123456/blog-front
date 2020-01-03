@@ -176,6 +176,10 @@
             top: 50%;
             left: 78%;
             transform: translate(-50%, -50%);
+
+            .el-input__suffix {
+                cursor: pointer;
+            }
         }
 
         .el-button {

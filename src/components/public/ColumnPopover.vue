@@ -39,8 +39,7 @@
         },
         methods: {
             getDetail (id) {
-                let scope = this;
-                scope.$emit('detail', id);
+                this.$emit('detail', id);
             }
         }
     };

@@ -2,12 +2,12 @@
     <div class="search">
         <main-head @futureTab='futureTab' ref='mainHead'></main-head>
         <div class='search-article'>
-            <div v-infinite-scroll='loadMore' infinite-scorll-disabled='busy' infinite-scroll-distance='10'>
-                <column-popover v-for='(item, index) in result.data' :key='index' :data='item'
+            <div v-infinite-scroll='loadMore' infinite-scorll-disabled='busy' infinite-scroll-distance='10' class="frame-center">
+                <column-popover v-for='(item, index) in result' :key='index' :data='item'
                                 @detail='getDetail'></column-popover>
             </div>
-            <empty-view v-if='!result.data.length'></empty-view>
-            <tool-loading :loading='loading' v-if='result.data.length === 0'></tool-loading>
+            <empty-view v-if='!result.length'></empty-view>
+            <tool-loading :loading='loading' v-if='result.length === 0'></tool-loading>
             <el-backtop target='.search-article' :visibility-height='50'></el-backtop>
         </div>
     </div>
@@ -29,13 +29,11 @@
                 busy: false,
                 page: {
                     recordStartNo: -1,
-                    pageRecordNum: 20
-                },
-                content: '',
-                result: {
-                    data: [],
+                    pageRecordNum: 20,
                     total: 0
                 },
+                content: '',
+                result: [],
                 loading: false
             };
         },
@@ -73,9 +71,10 @@
                     if (data.status === 200) {
                         if (data.total > 0) {
                             data.data.forEach(item => {
-                                scope.result.data.push(item);
+                                item.isRead = false;
+                                scope.result.push(item);
                             });
-                            scope.result.total = data.total;
+                            scope.page.total = data.total;
                             scope.busy = false;
                         } else {
                             scope.busy = true;
@@ -111,6 +110,11 @@
             height: 100%;
             overflow: auto;
             background-color: #f8f8f9;
+
+            .frame-center {
+                /*width: 40%;*/
+                /*margin-left: 30%;*/
+            }
         }
     }
 

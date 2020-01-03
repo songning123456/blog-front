@@ -7,7 +7,8 @@
                 src="../../assets/dislike.svg"><span>{{sum}}</span>
             </div>
         </div>
-        <div class='title'><span class='modify-txt'><span>{{data.title}}</span></span></div>
+        <div class='title'><span class='modify-txt'
+                                 :class="data.isRead ? 'is-read': ''"><span>{{data.title}}</span></span></div>
         <div class='info'>
             <span @click.stop='getIntroduction'>{{data.author}}</span>
             <span>{{' | '}}</span>
@@ -77,8 +78,8 @@
             },
             // 点击标题进入文章详情
             detail () {
-                let scope = this;
-                scope.$emit('detail', scope.data.id);
+                this.data.isRead = true;
+                this.$emit('detail', this.data.id);
             },
             getIntroduction () {
                 let scope = this;
@@ -175,6 +176,10 @@
                 overflow: hidden; /*内容会被修剪，并且其余内容是不可见的*/
                 text-overflow: ellipsis; /*显示省略符号来代表被修剪的文本。*/
                 white-space: nowrap; /*文本不换行*/
+
+                &.is-read {
+                    color: grey;
+                }
 
                 span {
                     &:hover {

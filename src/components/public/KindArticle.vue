@@ -1,10 +1,10 @@
 <template>
     <div class='kind-article'>
         <div v-infinite-scroll='loadMore' infinite-scroll-disabled='busy' infinite-scroll-distance='10'>
-            <column v-for='(item, index) in result.data' :key='index' :data='item'
+            <column v-for='(item, index) in result' :key='index' :data='item'
                     @detail="getDetail"></column>
         </div>
-        <tool-loading :loading='loading' v-if='result.data.length === 0'></tool-loading>
+        <tool-loading :loading='loading' v-if='result.length === 0'></tool-loading>
         <el-backtop :target='target' :visibility-height='50' v-if="target"></el-backtop>
     </div>
 </template>
@@ -35,13 +35,11 @@
                 // 分页信息
                 page: {
                     recordStartNo: -1,
-                    pageRecordNum: 20
-                },
-                // 返回的数据
-                result: {
-                    data: [],
+                    pageRecordNum: 20,
                     total: 0
                 },
+                // 返回的数据
+                result: [],
                 loading: false
             };
         },
@@ -80,10 +78,11 @@
                 };
                 getAbstract(param).then((data) => {
                     scope.$response(data, 'infiniteScroll').then(data => {
-                        scope.result.total = data.total;
+                        scope.page.total = data.total;
                         if (data.data.length > 0) {
                             data.data.forEach(item => {
-                                scope.result.data.push(item);
+                                item.isRead = false;
+                                scope.result.push(item);
                             });
                             scope.busy = false;
                         } else {
