@@ -47,7 +47,7 @@
                 </div>
             </div>
         </div>
-        <tool-loading :loading="loading" normal="spinner"></tool-loading>
+        <tool-loading :loading="loading" category="spinner"></tool-loading>
         <float-menu :menus="menus" @itemClick='chooseItem'></float-menu>
     </div>
 </template>

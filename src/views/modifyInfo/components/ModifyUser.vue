@@ -22,7 +22,7 @@
                 </el-form>
             </div>
         </div>
-        <tool-loading :loading="loading" normal="spinner"></tool-loading>
+        <tool-loading :loading="loading" category="spinner"></tool-loading>
     </div>
 </template>
 

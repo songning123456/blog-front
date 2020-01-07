@@ -59,7 +59,7 @@
                 <el-button type="primary" @click='nextStep(0)'>保存信息</el-button>
             </div>
         </div>
-        <tool-loading :loading="loading" normal="spinner"></tool-loading>
+        <tool-loading :loading="loading" category="spinner"></tool-loading>
         <div class='register-success' v-if='register.success'>
             <div class='count-down'>
                 <span class='digital'>{{second}}</span>

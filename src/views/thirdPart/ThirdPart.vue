@@ -12,7 +12,7 @@
              </el-form>
          </div>-->
         <div class='load-info' v-if='loading'>
-            <tool-loading :loading='loading' normal="spinner"></tool-loading>
+            <tool-loading :loading='loading' category="spinner"></tool-loading>
         </div>
         <float-menu :menus='menus' @itemClick='chooseItem'></float-menu>
     </div>

@@ -30,7 +30,7 @@
     <el-button type="primary" @click="sureCache" size="mini">确 定</el-button>
   </span>
             </el-dialog>
-            <tool-loading :loading="loading"></tool-loading>
+            <tool-loading :loading="loading" category="spinner"></tool-loading>
         </div>
     </div>
 </template>

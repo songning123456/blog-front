@@ -20,7 +20,7 @@
                               @click.native='isChosen = index' @updateParam='updateIsAttention'></single-label>
             </div>
         </div>
-        <tool-loading :loading='loading'></tool-loading>
+        <tool-loading :loading='loading' category="spinner"></tool-loading>
     </div>
 </template>
 

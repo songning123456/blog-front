@@ -1,7 +1,7 @@
 <template>
     <div class='tool-loading' v-show='loading'>
-        <img class='image' v-if='normal === "face"' :src=url alt=''>
-        <img class='image' v-if='normal === "spinner"' :src=url2 alt=''>
+        <img class='image' v-if='category === "face"' :src=faceUrl alt=''>
+        <img class='image' v-if='category === "spinner"' :src=spinnerUrl alt=''>
     </div>
 </template>
 
@@ -13,15 +13,15 @@
                 type: Boolean,
                 default: false
             },
-            normal: {
+            category: {
                 type: String,
                 default: 'face'
             }
         },
         data () {
             return {
-                url: require('../../assets/loading.gif'),
-                url2: require('../../assets/spinner.gif')
+                faceUrl: require('../../assets/face.gif'),
+                spinnerUrl: require('../../assets/spinner.gif')
             };
         }
     };

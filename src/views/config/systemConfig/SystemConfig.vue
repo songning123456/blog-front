@@ -42,7 +42,7 @@
             <el-pagination layout="prev, pager, next, jumper" :current-page='page.recordStartNo'
                            :total='page.total'></el-pagination>
         </div>
-        <tool-loading :loading="loading"></tool-loading>
+        <tool-loading :loading="loading" category="spinner"></tool-loading>
         <el-dialog title='编辑系统配置' :visible.sync='dialogVisible' center width='30%' top='30vh'>
             <el-form :model='dialogForm'>
                 <el-form-item label='系统配置key' :label-width='dialogLabelWidth'>
