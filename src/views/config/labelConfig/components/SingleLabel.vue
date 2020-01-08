@@ -49,7 +49,7 @@
         methods: {
             modifyAttention () {
                 let scope = this;
-                scope.face.status = true;
+                scope.loading.status = true;
                 let attention;
                 if (scope.data.isAttention === 1) {
                     attention = 0;
@@ -63,7 +63,7 @@
                 let param = {
                     condition: form
                 };
-                scope.$emit('updateParam', param, scope.face);
+                scope.$emit('updateParam', param, scope.loading);
             }
         }
     };
