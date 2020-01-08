@@ -218,6 +218,9 @@
                 return result;
             }
         },
+        activated() {
+            this.step = 1;
+        },
         methods: {
             // 0,1; 0 跳转到登录页 1返回上一步
             previousStep (type) {
