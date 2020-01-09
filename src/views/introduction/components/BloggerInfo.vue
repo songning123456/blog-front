@@ -3,7 +3,7 @@
         <div class="avatar">
             <div class='inner-border'>
                 <el-avatar shape="square" :src="avatar">
-                    <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png" />
+                    <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>
                 </el-avatar>
             </div>
         </div>
@@ -83,16 +83,10 @@
                     condition: form
                 };
                 getBloggerInfo(param).then((data) => {
-                    if (data.status === 200) {
-                        if (data.total > 0) {
-                            scope.result = data.data[0];
-                        } else {
-                            this.$message.error('查询结果为空');
-                        }
-                    } else {
-                        this.$message.error('查询异常! ' + data.message);
+                    if (data.status === 200 && data.total > 0) {
+                        scope.result = data.data[0];
                     }
-                }).catch().finally();
+                });
             }
         }
     };

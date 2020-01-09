@@ -80,6 +80,26 @@ export default new Router({
             }
         },
         {
+            path: '/written',
+            name: 'written',
+            component: () => import('../views/written/Written'),
+            meta: {
+                title: '我写过的',
+                requireAuth: true,
+                notKeepAlive: true
+            }
+        },
+        {
+            path: '/loved',
+            name: 'loved',
+            component: () => import('../views/loved/Loved'),
+            meta: {
+                title: '我点赞的',
+                requireAuth: true,
+                notKeepAlive: true
+            }
+        },
+        {
             path: '/experiment',
             name: 'experiment',
             component: () => import('../views/experiment/Experiment'),

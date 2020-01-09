@@ -201,3 +201,10 @@ export const refreshCache = (params) => {
 export const gitHubUser = (params) => {
     return axios.ajax('/thirdPart/gitHub', 'post', params);
 };
+
+export const getWrittenArticle = (params) => {
+    return axios.ajax('/blog/queryByUser', 'post', params);
+};
+export const getLovedArticle = (params) => {
+    return axios.ajax('/blog/queryByLove', 'post', params);
+};

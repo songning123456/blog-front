@@ -9,14 +9,19 @@
                     <img src='../../assets/loginAvatar.svg'/>
                     <div class='login-txt'>登陆</div>
                     <el-input prefix-icon="el-icon-user" placeholder="请输入用户名" v-model="user.name" clearable
-                              @keyup.enter.native='switchRouter'></el-input>
+                              @keyup.enter.native='Login'></el-input>
                     <el-input prefix-icon="el-icon-lock" placeholder="请输入密码" v-model="user.password" show-password
-                              @keyup.enter.native='switchRouter'></el-input>
+                              @keyup.enter.native='Login'></el-input>
                     <div class="operate-password">
                         <el-checkbox v-model="remember">记住密码</el-checkbox>
                         <div class="forget-password" @click="forgotPassword">忘记密码?</div>
                     </div>
-                    <el-button type="primary" @click.native='switchRouter' :loading="loading">登陆</el-button>
+                    <el-button type="primary" @click.native='Login' :loading="loading.normal"
+                               :disabled="loading.special">登陆
+                    </el-button>
+                    <el-button type="primary" plain @click.native='touristsLogin' :loading="loading.special"
+                               :disabled="loading.normal">游客
+                    </el-button>
                     <div class="register" @click='register'>立即注册</div>
                     <img class='github' src="../../assets/github.svg" @click='jumpGitHub'/>
                 </div>
@@ -44,7 +49,10 @@
                     password: ''
                 },
                 remember: false,
-                loading: false,
+                loading: {
+                    normal: false,
+                    special: false
+                },
                 gitHubForm: {
                     clientId: 'b53228209ce0f034e769',
                     clientSecret: '8b84be6298ffe9801b76bdb59d1c1f43afe11095',
@@ -141,12 +149,12 @@
                 location.href = Util.GetString(scope.gitHubForm.getCodeURL, obj);
             },
             // 登陆
-            switchRouter () {
+            Login () {
                 let scope = this;
                 if (!scope.formCheck()) {
                     return;
                 }
-                scope.loading = true;
+                scope.loading.normal = true;
                 let param = new FormData();
                 param.append('username', scope.user.name);
                 param.append('password', scope.user.password);
@@ -179,7 +187,29 @@
                     console.error('错误用户: ', e);
                     this.$message.error('~~~请输入正确用户~~~');
                 }).finally(() => {
-                    scope.loading = false;
+                    scope.loading.normal = false;
+                });
+            },
+            touristsLogin () {
+                this.loading.special = true;
+                let param = new FormData();
+                param.append('username', 'tourists');
+                param.append('password', 'tourists1234');
+                // 登陆时默认进入阅读
+                loginBlog(param).then((data) => {
+                    if (data.status === 200) {
+                        // 跳转路由
+                        this.$router.push(
+                            {
+                                path: '/read',
+                                name: 'read'
+                            }
+                        );
+                    }
+                }).catch(e => {
+                    this.$message.error('~~~请输入正确用户~~~');
+                }).finally(() => {
+                    this.loading.special = false;
                 });
             },
             forgotPassword () {
@@ -194,7 +224,7 @@
                 let key = window.event.keyCode ? window.event.keyCode : window.event.which;
                 if (key === 13) {
                     if (keyFlag) {
-                        scope.switchRouter();
+                        scope.Login();
                         keyFlag = -false;
                     }
                     e.preventDefault();
@@ -284,9 +314,7 @@
                     }
 
                     .el-button {
-                        display: block;
-                        width: 80%;
-                        margin-left: 10%;
+                        width: 40%;
                     }
 
                     .register {

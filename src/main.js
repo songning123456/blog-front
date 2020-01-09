@@ -57,7 +57,7 @@ Vue.prototype.$response = function (data, message = '') {
                 }
             }
         } else {
-            ZMessage.error('查询失败' + data.message);
+            ZMessage.error('查询失败:' + data.message);
         }
     });
 };

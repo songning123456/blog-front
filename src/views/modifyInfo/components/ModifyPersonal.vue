@@ -60,9 +60,9 @@
                 if (type === 1 && scope.current !== 1) {
                     scope.loading = true;
                     getMyInfo({condition: {}}).then(data => {
-                        scope.$response(data, '获取个人信息').then(data => {
+                        if (data.status === 200 && data.total > 0) {
                             scope.result = data.data;
-                        });
+                        }
                     }).finally(() => {
                         scope.loading = false;
                     });

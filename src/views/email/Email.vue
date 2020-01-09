@@ -65,11 +65,11 @@
             let id = uuidv1();
             return {
                 form: {
-                    sender: 'sn_15850682191@163.com',
-                    recipient: '1457065857@qq.com',
-                    subject: 'company 测试 email 是否 有用',
-                    content: 'company 测试 email 是否 有用',
-                    password: '772805406sn23'
+                    sender: '',
+                    recipient: '',
+                    subject: '',
+                    content: '',
+                    password: ''
                 },
                 files: [],
                 loading: false,

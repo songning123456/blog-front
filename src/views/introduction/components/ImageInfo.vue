@@ -33,9 +33,9 @@
                     condition: form
                 };
                 getAlbum(param).then(data => {
-                    scope.$response(data, '获取个人相册').then(data => {
+                    if (data.status === 200 && data.total > 0) {
                         scope.swiperList = data.data;
-                    });
+                    }
                 });
             }
         }

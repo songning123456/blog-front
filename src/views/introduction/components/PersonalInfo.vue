@@ -25,7 +25,7 @@
     export default {
         name: 'PersonalInfo',
         components: {EmptyView},
-        data() {
+        data () {
             return {
                 resume: {
                     data: [],
@@ -33,7 +33,7 @@
                 }
             };
         },
-        mounted() {
+        mounted () {
             this.getMyInfo();
         },
         methods: {
@@ -46,17 +46,11 @@
                     condition: form
                 };
                 getPersonalInfo(param).then((data) => {
-                    if (data.status === 200) {
-                        if (data.total > 0) {
-                            scope.resume.data = data.data;
-                            scope.resume.total = data.total;
-                        } else {
-                           this.$message.error('查询结果为空');
-                        }
-                    } else {
-                        this.$message.error('查询异常! ' + data.message);
+                    if (data.status === 200 && data.total > 0) {
+                        scope.resume.data = data.data;
+                        scope.resume.total = data.total;
                     }
-                }).catch().finally();
+                });
             }
         }
     };
