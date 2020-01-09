@@ -36,7 +36,7 @@
     import MultiLabel from '../../components/public/MultiLabel';
     import ToolLoading from '../../components/util/ToolLoading';
     import Config from '../../utils/ConfigUtil';
-    import {publishArticle, getBloggerInfo, saveImage, deleteImage} from '../../service/request';
+    import {publishArticle, getBloggerInfo, saveImage, deleteImage, insertHistoryInfo} from '../../service/request';
 
     export default {
         name: 'EditArticle',
@@ -154,8 +154,15 @@
                 let params = {
                     condition: form
                 };
-                publishArticle(params).then(() => {
-                    this.$message.success('文章发布成功!');
+                publishArticle(params).then(data => {
+                    if (data.status === 200) {
+                        this.$message.success('文章发布成功!');
+                        insertHistoryInfo({condition: {title: scope.COMMON_MAP.HISTORY.ARTICLE + '-' + scope.form.title}}).then(data => {
+                            if (data.status !== 200) {
+                                this.$message.error('插入历史信息失败!');
+                            }
+                        });
+                    }
                 }).finally(() => {
                     scope.loading = false;
                     scope.form = {};

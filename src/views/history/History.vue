@@ -11,7 +11,7 @@
                     </el-card>
                 </el-timeline-item>
             </el-timeline>
-            <tool-loading :loading='loading' v-if='result.data.length === 0'></tool-loading>
+            <tool-loading :loading='loading' v-if='result.data.length === 0' category="spinner"></tool-loading>
             <empty-view v-if='result.data.length === 0'></empty-view>
             <el-backtop target='.history' :visibility-height='50'></el-backtop>
         </div>

@@ -49,7 +49,8 @@ export default new Router({
             component: () => import('../views/history/History'),
             meta: {
                 title: '历史',
-                requireAuth: true
+                requireAuth: true,
+                notKeepAlive: true
             }
         },
         {

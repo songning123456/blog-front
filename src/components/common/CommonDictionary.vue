@@ -17,7 +17,8 @@
                     SIMPLE_CLOCK: '休眠时钟',
                     SIMPLE_MAP: '定位地图',
                     STATISTIC: '大数据统计',
-                    REGISTER: '注冊用戶信息'
+                    REGISTER: '注冊用戶信息',
+                    ARTICLE: '写文章'
                 }
             };
         }
