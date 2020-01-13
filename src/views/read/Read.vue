@@ -33,6 +33,7 @@
             return {
                 labelNames: [],
                 scrollLeft: '',
+                isFirstEnter: true,
                 menus: [
                     {
                         id: id1,
@@ -60,7 +61,9 @@
             this.getSelectedLabelNames();
         },
         activated () {
-            this.defaultClick();
+            if (!this.isFirstEnter) {
+                this.defaultClick();
+            }
             // 绑定横向滚动
             this.$nextTick(() => {
                 this.scrollLeft = this.$refs['labelPanel'].$el.children[1];
@@ -68,6 +71,7 @@
             });
         },
         deactivated () {
+            this.isFirstEnter = false;
             this.scrollLeft.removeEventListener('mousewheel', this.mouseScroll, true);
         },
         methods: {
@@ -80,6 +84,8 @@
                         data.data.forEach(item => {
                             this.labelNames.push(item.labelName);
                         });
+                    }).finally(() => {
+                        this.defaultClick();
                     });
                 });
             },

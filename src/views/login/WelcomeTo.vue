@@ -198,6 +198,20 @@
                 // 登陆时默认进入阅读
                 loginBlog(param).then((data) => {
                     if (data.status === 200) {
+                        // 保存用户名和密码
+                        if (this.remember) {
+                            localStorage.setItem('username', 'tourists');
+                            localStorage.setItem('password', 'tourists1234');
+                        } else {
+                            // 如果不记住密码， 则删除 记住密码时保存的 用户名 和 密码
+                            if (localStorage.getItem('username')) {
+                                localStorage.removeItem('username');
+                            }
+                            if (localStorage.getItem('password')) {
+                                localStorage.removeItem('password');
+                            }
+                            sessionStorage.setItem('username', 'tourists');
+                        }
                         // 跳转路由
                         this.$router.push(
                             {
