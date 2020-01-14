@@ -208,3 +208,6 @@ export const getWrittenArticle = (params) => {
 export const getLovedArticle = (params) => {
     return axios.ajax('/blog/queryByLove', 'post', params);
 };
+export const deleteArticle = (params) => {
+    return axios.ajax('/blog/delete', 'post', params);
+};

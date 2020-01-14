@@ -5,17 +5,18 @@
                 <div class='top'><span>{{result.title}}</span></div>
                 <div class='bottom'>
                         <span>
-                        {{result.author + '&nbsp;&nbsp;|&nbsp;&nbsp;' + updateTime}}
+                        {{result.author + '&nbsp;&nbsp;|&nbsp;&nbsp;' + getUpdateTime}}
                     </span>
                 </div>
             </div>
             <div class='content'>
                 <mavon-editor v-model='content' :defaultOpen='"preview"' :editable='false' :subfield='false'
-                              :toolbarsFlag='false' :boxShadow='false' :shortCut='false' :transition="false"></mavon-editor>
+                              :toolbarsFlag='false' :boxShadow='false' :shortCut='false'
+                              :transition="false"></mavon-editor>
             </div>
         </div>
         <el-backtop target=".detail-article" :visibility-height='50'></el-backtop>
-        <tool-loading :loading="loading"></tool-loading>
+        <tool-loading :loading="loading" category="spinner"></tool-loading>
     </div>
 </template>
 
@@ -49,23 +50,28 @@
                 if (data.status === 200) {
                     if (data.total > 0) {
                         scope.result = data.data[0];
+                        // 插入记录，表明当时做了什么,插入到历史记录表中
+                        let params = {
+                            condition: {
+                                articleId: scope.$route.query.id,
+                                title: scope.COMMON_MAP.HISTORY.READ_ARTICLE
+                            }
+                        };
+                        insertHistoryInfo(params).then(data => {
+                            if (data.status !== 200) {
+                                this.$message.error('插入历史信息失败!');
+                            }
+                        });
                     }
                 }
-            }).catch(() => {
+            }).catch((e) => {
+                console.error(e);
+                this.result = {
+                    title: '未知',
+                    author: '未知'
+                };
             }).finally(() => {
                 scope.loading = false;
-            });
-            // 插入记录，表明当时做了什么,插入到历史记录表中
-            let params = {
-                condition: {
-                    articleId: scope.$route.query.id,
-                    title: scope.COMMON_MAP.HISTORY.READ_ARTICLE
-                }
-            };
-            insertHistoryInfo(params).then(data => {
-                if (data.status !== 200) {
-                    this.$message.error('插入历史信息失败!');
-                }
             });
         },
         computed: {
@@ -77,9 +83,12 @@
                 set () {
                 }
             },
-            updateTime () {
-                let scope = this;
-                return DateUtil.formatDate(new Date(scope.result.updateTime));
+            getUpdateTime () {
+                if (this.result.updateTime) {
+                    return DateUtil.formatDate(new Date(this.result.updateTime));
+                } else {
+                    return DateUtil.formatDate(new Date());
+                }
             }
         }
     };

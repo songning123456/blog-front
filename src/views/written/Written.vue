@@ -5,8 +5,8 @@
             <div class="left-frame"></div>
             <div class="middle-frame">
                 <div v-infinite-scroll='loadMore' infinite-scroll-disabled='busy' infinite-scroll-distance='10'>
-                    <column v-for='(item, index) in result' :key='index' :data='item'
-                            @detail="getDetail"></column>
+                    <column v-for='(item) in result' :key='item.id' :data='item' :show-delete="true"
+                            @detail="getDetail" @delete="deleteArticle"></column>
                 </div>
             </div>
             <div class="right-frame"></div>
@@ -20,7 +20,7 @@
 <script>
     import MainHead from '../../components/public/MainHead';
     import Column from '../../components/public/Column';
-    import {getWrittenArticle} from '../../service/request';
+    import {deleteArticle, getWrittenArticle} from '../../service/request';
     import EmptyView from '../../components/util/EmptyView';
     import ToolLoading from '../../components/util/ToolLoading';
 
@@ -56,6 +56,32 @@
                     }
                 });
                 window.open(routerData.href, '_blank');
+            },
+            deleteArticle (id) {
+                this.loading = true;
+                deleteArticle({condition: {id: id}}).then(data => {
+                    if (data.status === 200) {
+                        this.$message.success('删除成功');
+                        let index = -1;
+                        for (let i = 0; i < this.result.length; i++) {
+                            if (this.result[i].id === id) {
+                                index = i;
+                                break;
+                            }
+                        }
+                        if (index > -1) {
+                            this.result.splice(index, 1);
+                            // 重新加载页面 删除keep-alive缓存
+                            location.reload();
+                        }
+                    } else {
+                        this.$message.error('删除失败');
+                    }
+                }).catch(e => {
+                    this.$message.error('删除失败');
+                }).finally(() => {
+                    this.loading = false;
+                });
             },
             getWritten () {
                 let params = {

@@ -6,6 +6,7 @@
             <div class="dislike-tag" v-else @click.stop="sureTag"><img
                 src="../../assets/dislike.svg"><span>{{sum}}</span>
             </div>
+            <i class="el-icon-delete" v-if="showDelete" @click.stop="deleteArticle"></i>
         </div>
         <div class='title'><span class='modify-txt'
                                  :class="data.isRead ? 'is-read': ''"><span>{{data.title}}</span></span></div>
@@ -29,6 +30,10 @@
                 default () {
                     return {};
                 }
+            },
+            showDelete: {
+                type: Boolean,
+                default: false
             }
         },
         data () {
@@ -51,7 +56,7 @@
                     scope.likeTag = data.data[0].love;
                     scope.sum = data.dataExt.tags;
                 }
-            }).catch().finally();
+            });
         },
         methods: {
             sureTag () {
@@ -69,7 +74,7 @@
                         scope.likeTag = data.data[0].love;
                         scope.sum = data.dataExt.tags;
                     }
-                }).catch().finally();
+                });
             },
             getRecentTime () {
                 let scope = this;
@@ -80,6 +85,9 @@
             detail () {
                 this.data.isRead = true;
                 this.$emit('detail', this.data.id);
+            },
+            deleteArticle () {
+                this.$emit('delete', this.data.id);
             },
             getIntroduction () {
                 let scope = this;
@@ -118,6 +126,8 @@
             align-items: flex-end;
             justify-content: flex-start;
             padding-left: 1.2rem;
+            box-sizing: border-box;
+            position: relative;
 
             .like-tag {
                 border: 1px solid #ddd;
@@ -155,6 +165,16 @@
                     position: relative;
                     bottom: .2rem;
                     padding: 0 .1rem 0 0;
+                }
+            }
+
+            .el-icon-delete {
+                position: absolute;
+                right: 1rem;
+                bottom: .1rem;
+
+                &:hover {
+                    color: #409eff;
                 }
             }
 
