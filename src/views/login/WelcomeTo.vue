@@ -173,7 +173,6 @@
                             if (localStorage.getItem('password')) {
                                 localStorage.removeItem('password');
                             }
-                            sessionStorage.setItem('username', scope.user.name);
                         }
                         // 跳转路由
                         scope.$router.push(
@@ -210,7 +209,6 @@
                             if (localStorage.getItem('password')) {
                                 localStorage.removeItem('password');
                             }
-                            sessionStorage.setItem('username', 'tourists');
                         }
                         // 跳转路由
                         this.$router.push(

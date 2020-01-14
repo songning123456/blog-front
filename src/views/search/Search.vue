@@ -71,7 +71,6 @@
                     if (data.status === 200) {
                         if (data.total > 0) {
                             data.data.forEach(item => {
-                                item.isRead = false;
                                 scope.result.push(item);
                             });
                             scope.page.total = data.total;

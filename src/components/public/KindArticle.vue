@@ -81,7 +81,6 @@
                         scope.page.total = data.total;
                         if (data.data.length > 0) {
                             data.data.forEach(item => {
-                                item.isRead = false;
                                 scope.result.push(item);
                             });
                             scope.busy = false;

@@ -1,15 +1,15 @@
 <template>
     <div class='column' @click="detail">
         <div class='tag'>
-            <div class='like-tag' v-if="likeTag === 1" @click.stop="sureTag"><img
+            <div class='like-tag' v-if="love === 1" @click.stop="sureTag"><img
                 src="../../assets/like.svg"/><span>{{sum}}</span></div>
-            <div class="dislike-tag" v-else @click.stop="sureTag"><img
+            <div class="dislike-tag" v-if="!love" @click.stop="sureTag"><img
                 src="../../assets/dislike.svg"><span>{{sum}}</span>
             </div>
             <i class="el-icon-delete" v-if="showDelete" @click.stop="deleteArticle"></i>
         </div>
         <div class='title'><span class='modify-txt'
-                                 :class="data.isRead ? 'is-read': ''"><span>{{data.title}}</span></span></div>
+                                 :class="{'is-read': hasRead}"><span>{{data.title}}</span></span></div>
         <div class='info'>
             <span @click.stop='getIntroduction'>{{data.author}}</span>
             <span>{{' | '}}</span>
@@ -38,52 +38,57 @@
         },
         data () {
             return {
-                likeTag: 0,
+                love: 0,
+                hasRead: 0,
                 sum: 0
             };
         },
         mounted () {
-            let scope = this;
-            let form = {
-                username: localStorage.getItem('username') || sessionStorage.getItem('username'),
-                articleId: scope.data.id
-            };
             let param = {
-                condition: form
+                condition: {
+                    articleId: this.data.id
+                }
             };
             getTag(param).then((data) => {
                 if (data.status === 200) {
-                    scope.likeTag = data.data[0].love;
-                    scope.sum = data.dataExt.tags;
+                    this.love = data.data[0].love;
+                    this.hasRead = data.data[0].hasRead;
+                    this.sum = data.dataExt.tags;
                 }
             });
         },
         methods: {
             sureTag () {
-                let scope = this;
                 let form = {
-                    username: localStorage.getItem('username') || sessionStorage.getItem('username'),
-                    articleId: scope.data.id,
-                    love: scope.likeTag
+                    articleId: this.data.id,
+                    love: this.love
                 };
                 let param = {
                     condition: form
                 };
                 updateTag(param).then((data) => {
                     if (data.status === 200) {
-                        scope.likeTag = data.data[0].love;
-                        scope.sum = data.dataExt.tags;
+                        this.love = data.data[0].love;
+                        this.sum = data.dataExt.tags;
                     }
                 });
             },
             getRecentTime () {
-                let scope = this;
-                let result = DateUtil.formatDate(new Date(scope.data.updateTime));
+                let result = DateUtil.formatDate(new Date(this.data.updateTime));
                 return result;
             },
             // 点击标题进入文章详情
             detail () {
-                this.data.isRead = true;
+                let params = {
+                    condition: {
+                        articleId: this.data.id
+                    }
+                };
+                updateTag(params).then(data => {
+                    if (data.status === 200) {
+                        this.hasRead = 1;
+                    }
+                });
                 this.$emit('detail', this.data.id);
             },
             deleteArticle () {

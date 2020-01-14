@@ -69,7 +69,6 @@
                         this.page.total = data.total;
                         if (data.data.length > 0) {
                             data.data.forEach(item => {
-                                item.isRead = false;
                                 this.result.push(item);
                             });
                             this.busy = false;

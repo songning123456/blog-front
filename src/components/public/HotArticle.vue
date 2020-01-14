@@ -139,6 +139,8 @@
                 }
 
                 span:nth-child(2) {
+                    font-size: .9rem;
+                    font-weight: 500;
                     width: 90%;
                     text-align: left;
                     overflow: hidden;
