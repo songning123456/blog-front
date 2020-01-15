@@ -31,11 +31,10 @@
     import Column from '../../components/public/Column';
     import ToolLoading from '../../components/util/ToolLoading';
     import EmptyView from '../../components/util/EmptyView';
-    import ColumnPopover from '../../components/public/ColumnPopover';
 
     export default {
         name: 'Search',
-        components: {MainHead, ColumnPopover, EmptyView, ToolLoading, Column},
+        components: {MainHead, EmptyView, ToolLoading, Column},
         data () {
             return {
                 busy: false,

@@ -3,8 +3,9 @@
         <template v-if='result.length'>
             <div class='hot-title'><span><img :src='hotImage'/></span><span>热门文章</span></div>
             <div class='hot-content' v-for='(item, index) in result' :key='index' @click='getDetail(item.id)'>
-                <div class='first'><span><img :src=getSrc(index) alt=''/></span><span
-                    :title='item.title'>{{item.title}}</span></div>
+                <div class='first'>
+                    <span><img :src=getSrc(index) alt=''/></span>
+                    <span :title='item.title'>{{item.title}}</span></div>
                 <div class='second'>
                     <span @click.stop='getIntroduction(item.userId)'>{{item.author}}</span>
                     <span>{{' | '}}</span>
@@ -136,6 +137,11 @@
 
                 span:nth-child(1) {
                     width: 10%;
+
+                    img {
+                        padding-top: .25rem;
+                        box-sizing: border-box;
+                    }
                 }
 
                 span:nth-child(2) {
