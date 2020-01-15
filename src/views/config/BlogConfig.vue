@@ -12,7 +12,6 @@
             </div>
             <div class='config-right'>
                 <system-config v-if='chooseTab === tabsForm[0].name'></system-config>
-                <label-config v-else-if='chooseTab === tabsForm[1].name'></label-config>
             </div>
             <el-dialog :close-on-click-modal='false' title="请选择缓存刷新" :visible.sync="refreshModal" width="20%"
                        top="25vh">
@@ -39,20 +38,18 @@
 
     import SystemConfig from '../../views/config/systemConfig/SystemConfig';
     import LabelButton from '../../components/util/LabelButton';
-    import LabelConfig from '../../views/config/labelConfig/LabelConfig';
     import {getUserPermission, refreshCache} from '../../service/request';
     import ToolLoading from '../../components/util/ToolLoading';
     import MainHead from '../../components/public/MainHead';
 
     export default {
         name: 'BlogConfig',
-        components: {MainHead, ToolLoading, LabelConfig, LabelButton, SystemConfig},
+        components: {MainHead, ToolLoading, LabelButton, SystemConfig},
         data () {
             return {
                 chooseTab: 'systemConfig',
                 tabsForm: [
-                    {label: '系统配置', name: 'systemConfig'},
-                    {label: '标签配置', name: 'labelConfig'}
+                    {label: '系统配置', name: 'systemConfig'}
                 ],
                 cacheForm: [
                     {label: '系统配置缓存', name: 'systemConfig'},

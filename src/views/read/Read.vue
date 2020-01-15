@@ -5,6 +5,7 @@
             <div class="top-frame">
                 <label-panel :tabs="labelNames" ref='labelPanel' @current='chooseCurrent'
                              @iconClick='iconClick'></label-panel>
+                <div class="label-icon" @click.stop='$router.push({path: "/label-config"})'>标签管理</div>
             </div>
             <keep-alive>
                 <router-view :key="$route.path" class="bottom-frame"></router-view>
@@ -155,36 +156,27 @@
             height: 100%;
 
             .top-frame {
-                width: 60%;
+                width: 100%;
                 height: 4%;
-                margin-left: 20%;
 
-                .el-tabs {
+                .label-panel {
+                    width: 60%;
+                    height: 100%;
+                    float: left;
+                    position: relative;
+                    left: 20%;
+                }
 
-                    display: flex;
-                    align-items: center;
-                    padding-top: .3rem;
+                .label-icon {
+                    font-size: 0.75rem;
+                    float: right;
+                    position: absolute;
+                    right: 10%;
+                    top: 10.9%;
 
-                    .el-tabs__header {
-                        margin: unset;
-                        width: 100%;
-                    }
-
-                    .el-tabs__item {
-                        padding: 0 1.5rem;
-                        font-size: .8rem;
-                    }
-
-                    .el-tabs__nav-scroll {
-                        /*overflow-x: auto;*/
-                    }
-
-                    .el-tabs__active-bar {
-                        background-color: white;
-                    }
-
-                    .el-tabs__nav-wrap::after {
-                        background-color: white;
+                    &:hover {
+                        cursor: pointer;
+                        color: #409eff;
                     }
                 }
             }

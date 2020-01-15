@@ -10,7 +10,7 @@
         </div>
         <div v-else class='yes-loading'>
             <div class='loading'>
-                <img src='../../../../assets/attentionLoading.gif' />
+                <img src='../../../assets/attentionLoading.gif' />
             </div>
         </div>
     </div>

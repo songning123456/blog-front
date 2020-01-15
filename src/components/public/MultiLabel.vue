@@ -7,7 +7,7 @@
 </template>
 
 <script>
-    import SingleLabel from '../../views/config/labelConfig/components/SingleLabel';
+    import SingleLabel from '../../views/labelConfig/components/SingleLabel';
     import {getAllLabel, updateAttention} from '../../service/request';
     import ToolLoading from '../../components/util/ToolLoading';
 

@@ -63,6 +63,15 @@ export default new Router({
             }
         },
         {
+            path: '/label-config',
+            name: 'labelConfig',
+            component: () => import('../views/labelConfig/labelConfig'),
+            meta: {
+                title: '标签管理',
+                requireAuth: true
+            }
+        },
+        {
             path: '/blog-config',
             name: 'blogConfig',
             component: () => import('../views/config/BlogConfig'),
