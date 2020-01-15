@@ -6,7 +6,8 @@
             <div class="dislike-tag" v-if="!love" @click.stop="sureTag"><img
                 src="../../assets/dislike.svg"><span>{{sum}}</span>
             </div>
-            <i class="el-icon-delete" v-if="showDelete" @click.stop="deleteArticle"></i>
+            <i class="el-icon-delete" v-if="showDelete" @click.stop="$emit('delete', this.data.id)"></i>
+            <i class="el-icon-chat-line-square" v-if="showIntroduction" @click.stop="displayIntroduction"></i>
         </div>
         <div class='title'><span class='modify-txt'
                                  :class="{'is-read': hasRead}"><span>{{data.title}}</span></span></div>
@@ -32,6 +33,10 @@
                 }
             },
             showDelete: {
+                type: Boolean,
+                default: false
+            },
+            showIntroduction: {
                 type: Boolean,
                 default: false
             }
@@ -77,6 +82,9 @@
                 let result = DateUtil.formatDate(new Date(this.data.updateTime));
                 return result;
             },
+            displayIntroduction (e) {
+                this.$emit('introduction', this.data.id, e.clientY);
+            },
             // 点击标题进入文章详情
             detail () {
                 let params = {
@@ -90,9 +98,6 @@
                     }
                 });
                 this.$emit('detail', this.data.id);
-            },
-            deleteArticle () {
-                this.$emit('delete', this.data.id);
             },
             getIntroduction () {
                 let scope = this;
@@ -173,7 +178,7 @@
                 }
             }
 
-            .el-icon-delete {
+            .el-icon-delete, .el-icon-chat-line-square {
                 position: absolute;
                 right: 1rem;
                 bottom: .1rem;

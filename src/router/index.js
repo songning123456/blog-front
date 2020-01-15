@@ -77,7 +77,8 @@ export default new Router({
             component: () => import('../views/search/Search'),
             meta: {
                 title: '搜索',
-                requireAuth: true
+                requireAuth: true,
+                notKeepAlive: true
             }
         },
         {
