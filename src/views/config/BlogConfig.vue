@@ -178,7 +178,7 @@
     };
 </script>
 
-<style lang='scss'>
+<style lang='scss' scoped>
     .blog-config {
         width: 100%;
         height: 100%;

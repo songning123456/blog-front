@@ -17,7 +17,7 @@
             <div @click.stop='$router.push({path: "/label-config"})'><span>标签管理</span></div>
             <div @click.stop='$router.push({path: "/written"})'><span>我写过的</span></div>
             <div @click.stop='$router.push({path: "/loved"})'><span>我点赞的</span></div>
-            <div @click.stop="window.open('https://github.com/songning123456/', '_blank')"><span>关于</span></div>
+            <div @click.stop="aboutme"><span>关于</span></div>
             <div @click.stop='exit'><span>退出</span></div>
         </div>
     </div>
@@ -125,6 +125,9 @@
                         });
                     });
                 }
+            },
+            aboutme () {
+                window.open('https://github.com/songning123456/', '_blank');
             },
             exit () {
                 exitBlog().then((data) => {
