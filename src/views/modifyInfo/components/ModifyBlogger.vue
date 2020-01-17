@@ -10,7 +10,7 @@
                         <div class="modify-form-content">
                             <div class="modify-headPortrait">
                                 <el-avatar :src="avatar">
-                                    <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png" />
+                                    <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>
                                 </el-avatar>
                                 <div class="headPortrait-upload">
                                     <el-upload accept="image/*" action='' :limit='1' v-if="!disabled.headPortrait"
@@ -143,18 +143,7 @@
             };
         },
         mounted () {
-            let scope = this;
-            getBloggerInfo({condition: {}}).then(data => {
-                scope.$response(data, '获取个人简介').then(data => {
-                    scope.form = data.data[0];
-                    for (let key in scope.form) {
-                        if (scope.form[key] === null || scope.form[key] === 'null') {
-                            scope.form[key] = '';
-                        }
-                    }
-                    scope.copy = Object.assign({}, scope.form);
-                });
-            }).finally();
+            this.getBlogger();
         },
         computed: {
             avatar () {
@@ -172,6 +161,29 @@
             }
         },
         methods: {
+            getBlogger () {
+                if (JSON.stringify(this.$store.state.blogger) !== '{}') {
+                    this.form = Object.assign({}, this.$store.state.blogger);
+                    for (let key in this.form) {
+                        if (this.form[key] === null || this.form[key] === 'null') {
+                            this.form[key] = '';
+                        }
+                    }
+                    this.copy = Object.assign({}, this.form);
+                } else {
+                    getBloggerInfo({condition: {}}).then(data => {
+                        this.$response(data, '获取个人简介').then(data => {
+                            this.form = data.data[0];
+                            for (let key in this.form) {
+                                if (this.form[key] === null || this.form[key] === 'null') {
+                                    this.form[key] = '';
+                                }
+                            }
+                            this.copy = Object.assign({}, this.form);
+                        });
+                    });
+                }
+            },
             save (type) {
                 let scope = this;
                 scope.disabled[type] = true;

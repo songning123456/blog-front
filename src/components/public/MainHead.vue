@@ -64,11 +64,7 @@
             }
         },
         mounted () {
-            if (JSON.stringify(this.$store.state.blogger) !== '{}') {
-                this.blogger = this.$store.state.blogger;
-            } else {
-                this.getBlogger();
-            }
+            this.getBlogger();
         },
         activated () {
             // 绑定搜索文章 查询事件
@@ -118,12 +114,16 @@
                 this.$router.push({path: '/edit'});
             },
             getBlogger () {
-                getBloggerInfo({condition: {}}).then((data) => {
-                    this.$response(data, '获取个人信息').then(data => {
-                        this.blogger = data.data[0];
-                        this.$store.commit('SET_BLOGGER', this.blogger);
+                if (JSON.stringify(this.$store.state.blogger) !== '{}') {
+                    this.blogger = Object.assign({}, this.$store.state.blogger);
+                } else {
+                    getBloggerInfo({condition: {}}).then((data) => {
+                        this.$response(data, '获取个人信息').then(data => {
+                            this.blogger = data.data[0];
+                            this.$store.commit('SET_BLOGGER', Object.assign({}, this.blogger));
+                        });
                     });
-                });
+                }
             },
             exit () {
                 exitBlog().then((data) => {

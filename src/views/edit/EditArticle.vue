@@ -2,12 +2,18 @@
     <div class='edit-article'>
         <div class="title" :style="{backgroundImage: 'url(' +bgUrl + ')'}">
             <div class="first">
-                <el-form :model='form' :label-width="labelWidth">
+                <el-form :model='form' label-width="5rem" :inline="true">
                     <el-form-item label='文章标题'>
                         <el-input v-model="form.title" placeholder='请输入文章标题' clearable></el-input>
                     </el-form-item>
+                    <el-form-item label='文章分类'>
+                        <el-select v-model="form.labelName" filterable placeholder="请选择">
+                            <el-option v-for="item in labelNameOption" :key="item" :label="item"
+                                       :value="item">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
                 </el-form>
-                <el-button type="success" plain @click="dialog.label = true" icon="el-icon-price-tag">选择标签</el-button>
             </div>
             <div class="second">
                 <el-button type="primary" plain @click="publishArticle" icon="el-icon-thumb">发布</el-button>
@@ -15,38 +21,28 @@
             </div>
         </div>
         <mavon-editor v-model='form.content' @imgAdd='addImage' @imgDel='delImage' ref="md"></mavon-editor>
-        <el-dialog title='标签' :visible.sync='dialog.label' width='50%' :close-on-click-modal='false'
-                   :before-close='cancelLabel' class='summary-dialog' top="8vh">
-            <multi-label @chosen='(arg0) => form.labelName = arg0' ref='multiLabel'></multi-label>
-            <span slot='footer'>
-                <el-input placeholder='搜索标签' v-model='form.labelFuzzyName' @keyup.enter.native='queryLabel'>
-                    <i slot="suffix" class='el-icon-search'></i>
-                </el-input>
-                <el-input placeholder='请选择标签' v-model='form.labelName' :disabled='true'></el-input>
-                <el-button @click='cancelLabel'>取消</el-button>
-                <el-button type="primary" @click='sureLabel'>确定</el-button>
-            </span>
-        </el-dialog>
         <tool-loading :loading='loading'></tool-loading>
     </div>
 </template>
 
 <script>
     import FloatMenu from '../../components/util/FloatMenu';
-    import MultiLabel from '../../components/public/MultiLabel';
     import ToolLoading from '../../components/util/ToolLoading';
     import Config from '../../utils/ConfigUtil';
-    import {publishArticle, getBloggerInfo, saveImage, deleteImage, insertHistoryInfo} from '../../service/request';
+    import {
+        publishArticle,
+        getBloggerInfo,
+        saveImage,
+        deleteImage,
+        insertHistoryInfo,
+        getSelectedLabel
+    } from '../../service/request';
 
     export default {
         name: 'EditArticle',
-        components: {ToolLoading, MultiLabel, FloatMenu},
+        components: {ToolLoading, FloatMenu},
         data () {
             return {
-                labelWidth: '5rem',
-                dialog: {
-                    label: false
-                },
                 img: [],
                 form: {
                     title: '',
@@ -55,15 +51,16 @@
                     labelFuzzyName: '',
                     author: ''
                 },
+                labelNameOption: [],
                 loading: false,
                 bgUrl: require('../../assets/articleBg.png')
             };
         },
         mounted () {
-            let scope = this;
             let doc = document.getElementsByClassName('el-input__suffix')[0];
-            doc.addEventListener('click', scope.queryLabel);
-            scope.getBlogger();
+            doc.addEventListener('click', this.queryLabel);
+            this.getBlogger();
+            this.getSelected();
         },
         destroyed () {
             let scope = this;
@@ -88,21 +85,6 @@
                     return false;
                 }
                 return true;
-            },
-            sureLabel () {
-                let scope = this;
-                if (!scope.formCheck(2)) {
-                    return;
-                }
-                scope.dialog.label = false;
-            },
-            cancelLabel () {
-                let scope = this;
-                scope.dialog.label = false;
-                setTimeout(() => {
-                    scope.form.labelFuzzyName = '';
-                    scope.form.labelName = '';
-                }, 300);
             },
             queryLabel () {
                 let scope = this;
@@ -170,11 +152,24 @@
             },
             // 根据username 获取 author, 发布文章时直接使用
             getBlogger () {
-                let scope = this;
-                getBloggerInfo({condition: {}}).then((data) => {
-                    scope.$response(data, '获取作者信息').then(data => {
-                        scope.form.author = data.data[0].author;
+                if (JSON.stringify(this.$store.state.blogger) !== '{}') {
+                    this.form.author = this.$store.state.blogger.author;
+                } else {
+                    getBloggerInfo({condition: {}}).then((data) => {
+                        this.$response(data, '获取作者信息').then(data => {
+                            this.form.author = data.data[0].author;
+                        });
                     });
+                }
+            },
+            getSelected () {
+                getSelectedLabel().then(data => {
+                    if (data.status === 200 && data.total > 0) {
+                        this.labelNameOption = data.data.map(item => {
+                            return item.labelName;
+                        });
+                        this.form.labelName = this.labelNameOption[0];
+                    }
                 });
             }
         }
