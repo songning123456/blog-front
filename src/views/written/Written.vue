@@ -5,7 +5,7 @@
             <div class="left-frame"></div>
             <div class="middle-frame">
                 <div v-infinite-scroll='loadMore' infinite-scroll-disabled='busy' infinite-scroll-distance='10'>
-                    <column v-for='(item) in result' :key='item.id' :data='item' :show-delete="true"
+                    <column v-for='(item) in result' :key='item.id' :article='item' :show-delete="true"
                             @detail="getDetail" @delete="deleteArticle"></column>
                 </div>
             </div>
@@ -57,23 +57,12 @@
                 });
                 window.open(routerData.href, '_blank');
             },
+            // 删除文章
             deleteArticle (id) {
                 this.loading = true;
                 deleteArticle({condition: {id: id}}).then(data => {
                     if (data.status === 200) {
-                        this.$message.success('删除成功');
-                        let index = -1;
-                        for (let i = 0; i < this.result.length; i++) {
-                            if (this.result[i].id === id) {
-                                index = i;
-                                break;
-                            }
-                        }
-                        if (index > -1) {
-                            this.result.splice(index, 1);
-                            // 重新加载页面 删除keep-alive缓存
-                            location.reload();
-                        }
+                        this.reload();
                     } else {
                         this.$message.error('删除失败');
                     }
@@ -83,13 +72,27 @@
                     this.loading = false;
                 });
             },
+            // 删除文章后重新加载
+            reload () {
+                this.page.recordStartNo = -1;
+                this.busy = true;
+                this.loading = true;
+                setTimeout(() => {
+                    this.page.recordStartNo++;
+                    this.getWritten();
+                }, 500);
+            },
+            // 查询文章
             getWritten () {
                 let params = {
                     recordStartNo: this.page.recordStartNo,
                     pageRecordNum: this.page.pageRecordNum,
                     condition: {}
                 };
-                this.loading = true;
+                if (!this.loading) {
+                    this.loading = true;
+                }
+                this.result = [];
                 getWrittenArticle(params).then(data => {
                     this.$response(data, 'infiniteScroll').then(data => {
                         this.page.total = data.total;
@@ -107,12 +110,11 @@
                 });
             },
             loadMore () {
-                let scope = this;
-                scope.busy = true;
-                scope.loading = true;
+                this.busy = true;
+                this.loading = true;
                 setTimeout(() => {
-                    scope.page.recordStartNo++;
-                    scope.getWritten();
+                    this.page.recordStartNo++;
+                    this.getWritten();
                 }, 500);
             }
         }

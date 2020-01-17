@@ -1,7 +1,7 @@
 <template>
     <div class='kind-article'>
         <div v-infinite-scroll='loadMore' infinite-scroll-disabled='busy' infinite-scroll-distance='10'>
-            <column v-for='(item, index) in result' :key='index' :data='item'
+            <column v-for='(item, index) in result' :key='index' :article='item'
                     @detail="getDetail"></column>
         </div>
         <tool-loading :loading='loading' v-if='result.length === 0'></tool-loading>

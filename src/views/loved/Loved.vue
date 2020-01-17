@@ -5,7 +5,7 @@
             <div class="left-frame"></div>
             <div class="middle-frame">
                 <div v-infinite-scroll='loadMore' infinite-scroll-disabled='busy' infinite-scroll-distance='10'>
-                    <column v-for='(item, index) in result' :key='index' :data='item'
+                    <column v-for='(item, index) in result' :key='index' :article='item'
                             @detail="getDetail"></column>
                 </div>
             </div>

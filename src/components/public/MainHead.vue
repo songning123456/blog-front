@@ -14,6 +14,7 @@
         <div class="main-head-popover" v-show='configBar'>
             <div @click.stop='$router.push({path: "/modify-info"})'><span>个人信息</span></div>
             <div @click.stop='$router.push({path: "/blog-config"})'><span>管理配置</span></div>
+            <div @click.stop='$router.push({path: "/label-config"})'><span>标签管理</span></div>
             <div @click.stop='$router.push({path: "/written"})'><span>我写过的</span></div>
             <div @click.stop='$router.push({path: "/loved"})'><span>我点赞的</span></div>
             <div @click.stop="window.open('https://github.com/songning123456/', '_blank')"><span>关于</span></div>

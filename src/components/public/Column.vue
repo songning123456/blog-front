@@ -6,13 +6,13 @@
             <div class="dislike-tag" v-if="!love" @click.stop="sureTag"><img
                 src="../../assets/dislike.svg"><span>{{sum}}</span>
             </div>
-            <i class="el-icon-delete" v-if="showDelete" @click.stop="$emit('delete', this.data.id)"></i>
+            <i class="el-icon-delete" v-if="showDelete" @click.stop="$emit('delete', article.id)"></i>
             <i class="el-icon-chat-line-square" v-if="showIntroduction" @click.stop="displayIntroduction"></i>
         </div>
         <div class='title'><span class='modify-txt'
-                                 :class="{'is-read': hasRead}"><span>{{data.title}}</span></span></div>
+                                 :class="{'is-read': hasRead}"><span>{{article.title}}</span></span></div>
         <div class='info'>
-            <span @click.stop='getIntroduction'>{{data.author}}</span>
+            <span @click.stop='getIntroduction'>{{article.author}}</span>
             <span>{{' | '}}</span>
             <span @click.stop='jumpClock'>{{getRecentTime()}}</span>
         </div>
@@ -26,7 +26,7 @@
     export default {
         name: 'Column',
         props: {
-            data: {
+            article: {
                 type: Object,
                 default () {
                     return {};
@@ -51,7 +51,7 @@
         mounted () {
             let param = {
                 condition: {
-                    articleId: this.data.id
+                    articleId: this.article.id
                 }
             };
             getTag(param).then((data) => {
@@ -65,7 +65,7 @@
         methods: {
             sureTag () {
                 let form = {
-                    articleId: this.data.id,
+                    articleId: this.article.id,
                     love: this.love
                 };
                 let param = {
@@ -79,17 +79,17 @@
                 });
             },
             getRecentTime () {
-                let result = DateUtil.formatDate(new Date(this.data.updateTime));
+                let result = DateUtil.formatDate(new Date(this.article.updateTime));
                 return result;
             },
             displayIntroduction (e) {
-                this.$emit('introduction', this.data.id, e.clientY);
+                this.$emit('introduction', this.article.id, e.clientY);
             },
             // 点击标题进入文章详情
             detail () {
                 let params = {
                     condition: {
-                        articleId: this.data.id
+                        articleId: this.article.id
                     }
                 };
                 updateTag(params).then(data => {
@@ -97,14 +97,13 @@
                         this.hasRead = 1;
                     }
                 });
-                this.$emit('detail', this.data.id);
+                this.$emit('detail', this.article.id);
             },
             getIntroduction () {
-                let scope = this;
-                let routerData = scope.$router.resolve({
+                let routerData = this.$router.resolve({
                     path: '/introduction',
                     query: {
-                        userId: scope.data.userId
+                        userId: this.article.userId
                     }
                 });
                 window.open(routerData.href, '_blank');

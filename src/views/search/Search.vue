@@ -4,7 +4,7 @@
         <div class='search-article' ref='searchArticle'>
             <div v-infinite-scroll='loadMore' infinite-scorll-disabled='busy' infinite-scroll-distance='10'
                  class="frame-center">
-                <column v-for='(item, index) in result' :key="index" :data="item" :show-introduction="true"
+                <column v-for='(item, index) in result' :key="index" :article="item" :show-introduction="true"
                         @detail='getDetail' @introduction='showIntroduction'></column>
             </div>
             <div v-if="modal" class="introduction-popover" ref="introductionPopover">
