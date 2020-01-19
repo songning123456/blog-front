@@ -16,10 +16,14 @@
                     <div class="online-members">
                         <div class="member-info" v-for="item in onlineMembers" :key="item.userId">
                             <el-avatar :src="item.avatar"></el-avatar>
-                            <div class='member-name' ref="memberName" :data-id='item.userId'>{{item.author}}</div>
+                            <div class='member-name' ref="memberName" :data-id='item.userId' @mouseenter="modifyHover" :class="{'hover-w-resize': scrollHover, 'hover-pointer': !scrollHover}">
+                                {{item.author}}
+                            </div>
                         </div>
                     </div>
-                    <div class="group-message"></div>
+                    <div class="group-message">
+                        <div class="online-total">当前在线<span>{{onlineMembers.length}}</span>人</div>
+                    </div>
                     <div class="send-message">
                         <el-input type="textarea" :rows="4" placeholder="请输入内容" v-model="message"></el-input>
                         <el-button type="primary">发送</el-button>
@@ -41,21 +45,92 @@
             return {
                 currentTab: 'onlineChat',
                 nameScroll: {},
+                scrollHover: false,
                 onlineMembers: [
-                    {userId: '121212', message: '121212122', avatar: '', author: 'AAAAAAAAAAAAAAAA'},
-                    {userId: '1212121212', message: '12121212', avatar: '', author: 'BBBAAAAAA'},
-                    {userId: 'sdsdsd1', message: '12121212', avatar: '', author: 'CCCAAAAAAA'},
-                    {userId: 'ewewew2', message: '12121212', avatar: '', author: 'DDDAAAAAAAAA'},
-                    {userId: 'ewewew3', message: '12121212', avatar: '', author: 'DDD'},
-                    {userId: 'ewewew4', message: '12121212', avatar: '', author: 'DDD'},
-                    {userId: 'ewewew5', message: '12121212', avatar: '', author: 'DDD'},
-                    {userId: 'ewewew6', message: '12121212', avatar: '', author: 'DDD'},
-                    {userId: 'ewewew7', message: '12121212', avatar: '', author: 'DDD'},
-                    {userId: 'ewewew8', message: '12121212', avatar: '', author: 'DDD'},
-                    {userId: 'ewewew9', message: '12121212', avatar: '', author: 'DDD'},
-                    {userId: 'ewewew0', message: '12121212', avatar: '', author: 'DDD'},
-                    {userId: 'ewewew11', message: '12121212', avatar: '', author: 'DDD'},
-                    {userId: 'wewe22w12', message: '1212121212', avatar: '', author: 'EEE'}
+                    {
+                        userId: '121212',
+                        message: '121212122',
+                        avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+                        author: 'AAAAAA'
+                    },
+                    {
+                        userId: '1212121212',
+                        message: '12121212',
+                        avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+                        author: 'BBBAAAAAA'
+                    },
+                    {
+                        userId: 'sdsdsd1',
+                        message: '12121212',
+                        avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+                        author: 'CCCAAAAAAA'
+                    },
+                    {
+                        userId: 'ewewew2',
+                        message: '12121212',
+                        avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+                        author: 'DDDAAAAAAAAA'
+                    },
+                    {
+                        userId: 'ewewew3',
+                        message: '12121212',
+                        avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+                        author: 'DDD'
+                    },
+                    {
+                        userId: 'ewewew4',
+                        message: '12121212',
+                        avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+                        author: 'DDD'
+                    },
+                    {
+                        userId: 'ewewew5',
+                        message: '12121212',
+                        avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+                        author: 'DDD'
+                    },
+                    {
+                        userId: 'ewewew6',
+                        message: '12121212',
+                        avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+                        author: 'DDD'
+                    },
+                    {
+                        userId: 'ewewew7',
+                        message: '12121212',
+                        avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+                        author: 'DDD'
+                    },
+                    {
+                        userId: 'ewewew8',
+                        message: '12121212',
+                        avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+                        author: 'DDD'
+                    },
+                    {
+                        userId: 'ewewew9',
+                        message: '12121212',
+                        avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+                        author: 'DDD'
+                    },
+                    {
+                        userId: 'ewewew0',
+                        message: '12121212',
+                        avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+                        author: 'DDD'
+                    },
+                    {
+                        userId: 'ewewew11',
+                        message: '12121212',
+                        avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+                        author: 'DDD'
+                    },
+                    {
+                        userId: 'wewe22w12',
+                        message: '1212121212',
+                        avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+                        author: 'EEE'
+                    }
                 ],
                 message: ''
             };
@@ -65,14 +140,23 @@
                 let memberDoc = this.$refs['memberName'];
                 for (let i = 0; i < memberDoc.length; i++) {
                     let dataId = memberDoc[i].getAttribute('data-id');
-                    this.nameScroll[dataId] = memberDoc[i];
-                    this.nameScroll[dataId].addEventListener('mousewheel', this.scrollName, true);
+                    if (memberDoc[i].innerText.length > 6) {
+                        this.nameScroll[dataId] = memberDoc[i];
+                        this.nameScroll[dataId].addEventListener('mousewheel', this.scrollName, true);
+                    }
                 }
             });
         },
         methods: {
             futureTab (tab) {
                 this.$router.push({path: '/' + tab});
+            },
+            modifyHover (e) {
+                if (e.target.innerText.length > 6) {
+                    this.scrollHover = true;
+                } else {
+                    this.scrollHover = false;
+                }
             },
             scrollName (event) {
                 event.preventDefault();
@@ -189,7 +273,11 @@
                                     height: 1px;
                                 }
 
-                                &:hover {
+                                &.hover-pointer:hover {
+                                    cursor: pointer;
+                                }
+
+                                &.hover-w-resize:hover {
                                     cursor: w-resize;
                                 }
                             }
@@ -202,6 +290,21 @@
                         float: left;
                         margin: .8rem .8rem .8rem 0;
                         border: 1px solid #409EFF;
+
+                        .online-total {
+                            font-size: .65rem;
+                            height: 1.5rem;
+                            line-height: 1.5rem;
+                            text-align: center;
+
+                            span {
+                                background: #ecf5ff;
+                                border-color: #b3d8ff;
+                                color: #409eff;
+                                padding: .12rem .5rem;
+                                margin: 0 .2rem;
+                            }
+                        }
                     }
 
                     .send-message {
