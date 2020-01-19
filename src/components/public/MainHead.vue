@@ -42,7 +42,7 @@
                     {label: '阅读', name: 'read'},
                     {label: '统计', name: 'statistics'},
                     {label: '历史', name: 'history'},
-                    {label: '成长', name: 'growth'}
+                    {label: '微聊', name: 'wechat'}
                 ],
                 search: '',
                 blogger: {},

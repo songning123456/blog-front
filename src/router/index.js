@@ -53,11 +53,11 @@ export default new Router({
             }
         },
         {
-            path: '/growth',
-            name: 'growth',
-            component: () => import('../views/growth/Growth'),
+            path: '/wechat',
+            name: 'wechat',
+            component: () => import('../views/wechat/Wechat'),
             meta: {
-                title: '成长',
+                title: '微聊',
                 requireAuth: true
             }
         },
