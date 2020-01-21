@@ -61,7 +61,7 @@
                     <div class="start-time">
                         <el-date-picker
                             v-model="form.startTime" :picker-options="pickerOptionsStart"
-                            type="date" :disabled="disabled.startTime"
+                            type="date" :disabled="disabled.startTime" value-format='yyyy-MM-dd hh:mm:ss'
                             placeholder="开始日期">
                         </el-date-picker>
                         <div class='modify-icon' v-if="disabled.startTime">
@@ -74,7 +74,7 @@
                     </div>
                     <div class="end-time">
                         <el-date-picker
-                            v-model="form.endTime"
+                            v-model="form.endTime" value-format='yyyy-MM-dd hh:mm:ss'
                             type="date" :disabled="disabled.endTime" :picker-options="pickerOptionsEnd"
                             placeholder="结束日期">
                         </el-date-picker>
@@ -254,8 +254,10 @@
                         break;
                 }
                 scope.disabled[type] = true;
-                scope.form.infoId = scope.info.infoId;
-                scope.$emit('update', scope.form);
+                let param = Object.create(null);
+                param[type] = scope.form[type];
+                param.infoId = scope.info.infoId;
+                scope.$emit('update', param);
             },
             cancel (type) {
                 let scope = this;

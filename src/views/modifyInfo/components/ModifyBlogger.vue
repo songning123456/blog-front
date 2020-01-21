@@ -41,10 +41,11 @@
                     </el-form-item>
                     <el-form-item label='性别'>
                         <div class="modify-form-content">
-                            <el-select v-model="form.gender" placeholder="请选择" clearable>
+                            <el-input v-model="form.gender" :disabled="true" v-if="disabled.gender"></el-input>
+                            <el-select v-model="form.gender" placeholder="请选择" v-if="!disabled.gender">
                                 <el-option v-for="item in options" :key="item.value" :label="item.label"
                                            :value="item.value"
-                                           clearable :disabled="disabled.gender"></el-option>
+                                ></el-option>
                             </el-select>
                             <div class="modify-icon-true" v-if="disabled.gender">
                                 <i class="el-icon-edit" @click="disabled.gender = false"></i></div>
@@ -277,8 +278,10 @@
                         }
                         break;
                 }
+                let param = Object.create(null);
+                param[type] = scope.form[type];
                 let params = {
-                    condition: scope.form
+                    condition: param
                 };
                 scope.loading = true;
                 updateBlogger(params).then(data => {
