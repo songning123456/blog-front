@@ -1,8 +1,8 @@
 <template>
     <div class="receive-message">
-        <el-avatar :src="receive.avatar"></el-avatar>
+        <el-avatar :src="isSystem ? require('../../../assets/robot.svg') : receive.avatar"></el-avatar>
         <div class="author-message">
-            <div class="author">{{receive.author}}</div>
+            <div class="author">{{isSystem ? '系统通知' : receive.author}}</div>
             <div class="message" v-html="getMessage(receive.message)"></div>
         </div>
     </div>
@@ -15,6 +15,10 @@
             receive: {
                 type: Object,
                 default() {}
+            },
+            isSystem: {
+                type: Boolean,
+                default: false
             }
         },
         methods: {

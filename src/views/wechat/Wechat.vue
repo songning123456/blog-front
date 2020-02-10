@@ -11,7 +11,18 @@
                          :class="{'current-tab': currentTab === 'onlineChat'}">在线聊天
                     </div>
                 </div>
-                <div class="system-info" v-show="currentTab === 'systemInfo'"></div>
+                <div class="system-info" v-show="currentTab === 'systemInfo'">
+                    <div class="system-to-my">
+                        <template v-for='(item, index) in systemMessages'>
+                            <post-message v-if="item.type === 'post'" :post="item" :key="index"></post-message>
+                            <receive-message v-if='item.type === "receive"' :receive="item" :is-system='true' :key="index"></receive-message>
+                        </template>
+                    </div>
+                    <div class="my-to-system">
+                        <el-input type="textarea" :rows="4" placeholder="请输入内容" v-model="toSystemMessage"></el-input>
+                        <el-button type="primary" @click='sendMessage(toSystemMessage, "toSystem")'>发送</el-button>
+                    </div>
+                </div>
                 <div class="online-chat" v-show="currentTab === 'onlineChat'">
                     <div class="online-members">
                         <div class="member-info" v-for="item in onlineMembers" :key="item.userId">
@@ -31,8 +42,8 @@
                         </div>
                     </div>
                     <div class="send-message">
-                        <el-input type="textarea" :rows="4" placeholder="请输入内容" v-model="message"></el-input>
-                        <el-button type="primary" @click='sendMessage'>发送</el-button>
+                        <el-input type="textarea" :rows="4" placeholder="请输入内容" v-model="toOnlineMessage"></el-input>
+                        <el-button type="primary" @click='sendMessage(toOnlineMessage)'>发送</el-button>
                     </div>
                 </div>
             </div>
@@ -131,8 +142,10 @@
                         author: 'EEE'
                     }
                 ],
-                message: '',
-                onlineMessages: []
+                toOnlineMessage: '',
+                toSystemMessage: '',
+                onlineMessages: [],
+                systemMessages: []
             };
         },
         activated () {
@@ -173,15 +186,20 @@
                     this.nameScroll[userId].scrollLeft -= 10;
                 }
             },
-            sendMessage() {
+            sendMessage(message, which) {
                 let obj = {
                     author: this.$store.state.blogger.author,
                     avatar: this.$store.state.blogger.headPortrait,
-                    message: this.message,
+                    message: message,
                     type: 'post'
                 };
-                this.onlineMessages.push(obj);
-                this.message = '';
+                if (which === 'toSystem') {
+                    this.systemMessages.push(obj);
+                    this.toSystemMessage = '';
+                } else {
+                    this.onlineMessages.push(obj);
+                    this.toOnlineMessage = '';
+                }
             }
         }
     };
@@ -233,6 +251,30 @@
                 .system-info {
                     width: 100%;
                     height: calc(100% - 1.8rem - 1px);
+
+                    .system-to-my {
+                        height: calc(75% - 1.6rem - 2px);
+                        width: calc(100% - 1.6rem - 2px);
+                        margin: .8rem;
+                        border: 1px solid #409EFF;
+                        background-color: #f8f8f9;
+                    }
+
+                    .my-to-system {
+                        height: 25%;
+                        width: 100%;
+                        float: left;
+                        padding: 0 .8rem .8rem .8rem;
+                        box-sizing: border-box;
+                        position: relative;
+
+                        .el-button {
+                            width: 6rem;
+                            position: absolute;
+                            top: 5rem;
+                            right: .8rem;
+                        }
+                    }
                 }
 
                 .online-chat {
