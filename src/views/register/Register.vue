@@ -40,22 +40,6 @@
             </el-form>
             <div class='register-button'>
                 <el-button @click='previousStep(1)'>上一步</el-button>
-                <el-button type="primary" @click='nextStep(3)'>下一步</el-button>
-            </div>
-        </div>
-        <div class='register-third' v-else-if='step === 3'>
-            <div class='header'>标签选择</div>
-            <el-table :data='tableData'>
-                <el-table-column prop="index" label="ID"></el-table-column>
-                <el-table-column prop="labelName" label="标签名称"></el-table-column>
-                <el-table-column label="是否关注">
-                    <template slot-scope='scope'>
-                        <el-switch v-model="scope.row.attention"></el-switch>
-                    </template>
-                </el-table-column>
-            </el-table>
-            <div class='register-button'>
-                <el-button @click='previousStep(2)'>上一步</el-button>
                 <el-button type="primary" @click='nextStep(0)'>保存信息</el-button>
             </div>
         </div>
@@ -84,7 +68,6 @@
     import {
         existUser,
         saveImage,
-        getLabelConfig,
         registerAll,
         insertHistoryInfo
     } from '../../service/request';
@@ -94,7 +77,7 @@
     export default {
         name: 'Register',
         components: {ToolLoading, PopoverItem},
-        data () {
+        data() {
             return {
                 form: {
                     username: '',
@@ -205,25 +188,12 @@
                 }
             };
         },
-        computed: {
-            tableData () {
-                let scope = this;
-                let result = scope.labelInfo.result.map((item, index) => {
-                    return {
-                        index: index + 1,
-                        labelName: item.labelName,
-                        attention: false
-                    };
-                });
-                return result;
-            }
-        },
         activated() {
             this.step = 1;
         },
         methods: {
             // 0,1; 0 跳转到登录页 1返回上一步
-            previousStep (type) {
+            previousStep(type) {
                 let scope = this;
                 if (type === 0) {
                     scope.$router.push({path: '/'});
@@ -232,18 +202,12 @@
                 }
             },
             // 2，0; 2 继续下一步
-            nextStep (type) {
+            nextStep(type) {
                 let scope = this;
                 scope.formCheck(type).then(res => {
                     if (res.value) {
                         if (type === 0) {
                             scope.saveBtn();
-                        } else if (type === 3) {
-                            scope.labelInfo = {
-                                result: res.data,
-                                total: res.total
-                            };
-                            scope.step = type;
                         } else {
                             scope.step = type;
                         }
@@ -253,7 +217,7 @@
                 });
             },
             // 自动跳转页面 type => success, fail
-            autoJump (type) {
+            autoJump(type) {
                 let scope = this;
                 const TIME_COUNT = 3;
                 if (!scope.timer) {
@@ -271,7 +235,7 @@
                     }, 1000);
                 }
             },
-            saveBtn () {
+            saveBtn() {
                 let scope = this;
                 scope.loading = true;
                 if (scope.image.filename !== '') {
@@ -296,18 +260,8 @@
                     scope.registerInfo();
                 }
             },
-            registerInfo () {
+            registerInfo() {
                 let scope = this;
-                scope.form.labelVOS = scope.tableData.map(item => {
-                    let obj = {};
-                    obj.labelName = item.labelName;
-                    if (item.attention) {
-                        obj.attention = 1;
-                    } else {
-                        obj.attention = 0;
-                    }
-                    return obj;
-                });
                 registerAll({condition: scope.form}).then(data => {
                     scope.loading = false;
                     if (data.status === 200) {
@@ -332,7 +286,7 @@
                 });
             },
             // 上传操作
-            beforeUpload (file) {
+            beforeUpload(file) {
                 let scope = this;
                 scope.image.imgBlob = URL.createObjectURL(file);
                 scope.image.filename = file.name;
@@ -341,7 +295,7 @@
                 return false;
             },
             // 警告信息
-            promptInfo (type) {
+            promptInfo(type) {
                 let scope = this;
                 switch (type) {
                     case 'username':
@@ -372,7 +326,7 @@
                 }
             },
             //表单验证
-            formCheck (type) {
+            formCheck(type) {
                 let scope = this;
                 if (type === 2) {
                     return new Promise((resolve) => {
@@ -413,7 +367,7 @@
                             });
                         });
                     });
-                } else if (type === 3) {
+                } else if (type === 0) {
                     return new Promise((resolve) => {
                         if (!scope.form.author.length || !Reg.AUTHOR.test(scope.form.author)) {
                             resolve({
@@ -450,32 +404,9 @@
                                 return;
                             }
                         }
-                        // 获取标签配置
-                        getLabelConfig().then(data => {
-                            scope.$response(data, '获取标签配置').then(data => {
-                                resolve({
-                                    data: data.data,
-                                    total: data.total,
-                                    value: true
-                                });
-                            });
+                        resolve({
+                            value: true
                         });
-                    });
-                } else if (type === 0) {
-                    return new Promise(resolve => {
-                        let attentions = scope.tableData.filter(item => {
-                            return item.attention === true;
-                        });
-                        if (attentions.length === 0) {
-                            resolve({
-                                message: '请先选择关注标签',
-                                value: false
-                            });
-                        } else {
-                            resolve({
-                                value: true
-                            });
-                        }
                     });
                 }
             }
@@ -585,52 +516,6 @@
 
             .register-button {
                 text-align: center;
-            }
-        }
-
-        .register-third {
-            width: 100%;
-            height: 100%;
-            padding: 0 24rem;
-            box-sizing: border-box;
-
-            .header {
-                height: 5%;
-                text-align: center;
-                line-height: 2.5rem;
-                font-weight: bold;
-                font-size: 1.2rem;
-            }
-
-            /deep/ .el-table {
-                height: 88%;
-                overflow: auto;
-
-                // 修改滚动条样式
-                &::-webkit-scrollbar {
-                    width: 10px;
-                    height: 15px;
-                }
-
-                &::-webkit-scrollbar-track {
-                    background-color: white;
-                    border-radius: 2px;
-                }
-
-                &::-webkit-scrollbar-thumb {
-                    background: #bfbfbf;
-                    border-radius: 10px;
-
-                    &:hover {
-                        background: #a5a5a5;
-                    }
-                }
-            }
-
-            .register-button {
-                height: 7%;
-                text-align: center;
-                padding-top: .5rem;
             }
         }
 
