@@ -16,17 +16,23 @@
                     <div class="online-members">
                         <div class="member-info" v-for="item in onlineMembers" :key="item.userId">
                             <el-avatar :src="item.avatar"></el-avatar>
-                            <div class='member-name' ref="memberName" :data-id='item.userId' @mouseenter="modifyHover" :class="{'hover-w-resize': scrollHover, 'hover-pointer': !scrollHover}">
+                            <div class='member-name' ref="memberName" :user-id='item.userId' @mouseenter="modifyHover" :class="{'hover-w-resize': scrollHover, 'hover-pointer': !scrollHover}">
                                 {{item.author}}
                             </div>
                         </div>
                     </div>
                     <div class="group-message">
                         <div class="online-total">当前在线<span>{{onlineMembers.length}}</span>人</div>
+                        <div class="online-info" ref="onlineInfo">
+                            <template v-for="(item, index) in onlineMessages">
+                                <post-message v-if='item.type === "post"' :post="item" :key="index"></post-message>
+                                <receive-message v-if='item.type === "receive"' :receive="item" :key="index"></receive-message>
+                            </template>
+                        </div>
                     </div>
                     <div class="send-message">
                         <el-input type="textarea" :rows="4" placeholder="请输入内容" v-model="message"></el-input>
-                        <el-button type="primary">发送</el-button>
+                        <el-button type="primary" @click='sendMessage'>发送</el-button>
                     </div>
                 </div>
             </div>
@@ -37,10 +43,12 @@
 <script>
     import MainHead from '../../components/public/MainHead';
     import EmptyView from '../../components/util/EmptyView';
+    import PostMessage from './components/PostMessage';
+    import ReceiveMessage from './components/ReceiveMessage';
 
     export default {
         name: 'Wechat',
-        components: {MainHead, EmptyView},
+        components: {ReceiveMessage, PostMessage, MainHead, EmptyView},
         data () {
             return {
                 currentTab: 'onlineChat',
@@ -49,19 +57,16 @@
                 onlineMembers: [
                     {
                         userId: '121212',
-                        message: '121212122',
                         avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
                         author: 'AAAAAA'
                     },
                     {
                         userId: '1212121212',
-                        message: '12121212',
                         avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
                         author: 'BBBAAAAAA'
                     },
                     {
                         userId: 'sdsdsd1',
-                        message: '12121212',
                         avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
                         author: 'CCCAAAAAAA'
                     },
@@ -73,13 +78,11 @@
                     },
                     {
                         userId: 'ewewew3',
-                        message: '12121212',
                         avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
                         author: 'DDD'
                     },
                     {
                         userId: 'ewewew4',
-                        message: '12121212',
                         avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
                         author: 'DDD'
                     },
@@ -91,7 +94,6 @@
                     },
                     {
                         userId: 'ewewew6',
-                        message: '12121212',
                         avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
                         author: 'DDD'
                     },
@@ -109,7 +111,6 @@
                     },
                     {
                         userId: 'ewewew9',
-                        message: '12121212',
                         avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
                         author: 'DDD'
                     },
@@ -121,31 +122,35 @@
                     },
                     {
                         userId: 'ewewew11',
-                        message: '12121212',
                         avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
                         author: 'DDD'
                     },
                     {
                         userId: 'wewe22w12',
-                        message: '1212121212',
                         avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
                         author: 'EEE'
                     }
                 ],
-                message: ''
+                message: '',
+                onlineMessages: []
             };
         },
         activated () {
             this.$nextTick(() => {
                 let memberDoc = this.$refs['memberName'];
                 for (let i = 0; i < memberDoc.length; i++) {
-                    let dataId = memberDoc[i].getAttribute('data-id');
+                    let userId = memberDoc[i].getAttribute('user-id');
                     if (memberDoc[i].innerText.length > 6) {
-                        this.nameScroll[dataId] = memberDoc[i];
-                        this.nameScroll[dataId].addEventListener('mousewheel', this.scrollName, true);
+                        this.nameScroll[userId] = memberDoc[i];
+                        this.nameScroll[userId].addEventListener('mousewheel', this.scrollName, true);
                     }
                 }
             });
+        },
+        updated() {
+            // 滚动条到最底部
+            let doc = this.$refs['onlineInfo'];
+            doc.scrollTop = doc.scrollHeight;
         },
         methods: {
             futureTab (tab) {
@@ -161,12 +166,22 @@
             scrollName (event) {
                 event.preventDefault();
                 // eslint-disable-next-line no-unused-vars
-                let dataId = event.target.getAttribute('data-id');
+                let userId = event.target.getAttribute('user-id');
                 if (event.deltaY > 0) {
-                    this.nameScroll[dataId].scrollLeft += 10;
+                    this.nameScroll[userId].scrollLeft += 10;
                 } else {
-                    this.nameScroll[dataId].scrollLeft -= 10;
+                    this.nameScroll[userId].scrollLeft -= 10;
                 }
+            },
+            sendMessage() {
+                let obj = {
+                    author: this.$store.state.blogger.author,
+                    avatar: this.$store.state.blogger.headPortrait,
+                    message: this.message,
+                    type: 'post'
+                };
+                this.onlineMessages.push(obj);
+                this.message = '';
             }
         }
     };
@@ -223,6 +238,8 @@
                 .online-chat {
                     width: 100%;
                     height: calc(100% - 1.8rem - 1px);
+                    // 清除子元素浮动
+                    clear: both;
 
                     .online-members {
                         height: calc(100% - 1.6rem);
@@ -303,6 +320,17 @@
                                 color: #409eff;
                                 padding: .12rem .5rem;
                                 margin: 0 .2rem;
+                            }
+                        }
+
+                        .online-info {
+                            overflow: auto;
+                            height: calc(100% - 1.5rem);
+                            width: 100%;
+                            background: #f8f8f9;
+
+                            &::-webkit-scrollbar {
+                                width: 0;
                             }
                         }
                     }
