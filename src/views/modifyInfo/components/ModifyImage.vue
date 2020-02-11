@@ -1,7 +1,8 @@
 <template>
     <div class='modify-image'>
         <div class="image-left">
-            <el-upload class="upload-demo" action="" drag multiple :show-file-list="false" accept="image/*" :before-upload="beforeUpload"
+            <el-upload class="upload-demo" action="" drag multiple :show-file-list="false" accept="image/*"
+                       :before-upload="beforeUpload"
                        :http-request='httpRequest'>
                 <i class="el-icon-upload"></i>
                 <div class="el-upload__text">将图片拖到此处，或<em>点击上传</em></div>
@@ -21,6 +22,7 @@
     import {operateAlbum, getAlbum} from '../../../service/request';
     import EmptyView from '../../../components/util/EmptyView';
     import ImageSwiper from '../../../components/public/ImageSwiper';
+    import config from '../../../utils/ConfigUtil';
 
     export default {
         name: 'ModifyImage',
@@ -34,7 +36,9 @@
             let scope = this;
             getAlbum({condition: {}}).then(data => {
                 if (data.status === 200 && data.total > 0) {
-                    scope.swiperList = data.data;
+                    scope.swiperList = data.data.map(item => {
+                        return config.getImageOriginal() + encodeURIComponent(item.imageSrc);
+                    });
                 }
             });
         },
@@ -46,7 +50,9 @@
                 operateAlbum(formData).then(data => {
                     if (data.status === 200 && data.total > 0) {
                         this.$message.success('上传图片成功');
-                        this.swiperList = data.data;
+                        this.swiperList = data.data.map(item => {
+                            return config.getImageOriginal() + encodeURIComponent(item.imageSrc);
+                        });
                     } else {
                         this.$message.error('上传图片失败 ' + data.message);
                     }

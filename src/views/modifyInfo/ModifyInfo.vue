@@ -21,7 +21,7 @@
                 <span>个性图片</span>
             </div>
             <div class="info-col" @click.stop="changeSubMenu(4)" :class='currentMenu===4 ? "active":""'>
-                <img src="../../assets/modifyImage.svg" alt=""/>
+                <img src="../../assets/modifyVideo.svg" alt=""/>
                 <span>个性视频</span>
             </div>
         </div>

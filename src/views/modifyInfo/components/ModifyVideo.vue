@@ -9,7 +9,9 @@
                     <div class="el-upload__tip" slot="tip">只能上传视频文件</div>
                 </el-upload>
             </div>
-            <div class="frame-bottom"></div>
+            <div class="frame-bottom">
+                <multi-cover :videos="displayVideos"></multi-cover>
+            </div>
         </div>
         <div class="video-right">
             <video-player class="video-player"
@@ -26,11 +28,13 @@
 </template>
 
 <script>
-    import {operateVideo} from '../../../service/request';
+    import {operateVideo, getVideo} from '../../../service/request';
     import config from '../../../utils/ConfigUtil';
+    import MultiCover from './children/MultiCover';
 
     export default {
         name: 'ModifyVideo',
+        components: {MultiCover},
         data() {
             return {
                 playerOptions: {
@@ -54,13 +58,26 @@
                         // 全屏按钮
                         fullscreenToggle: true
                     }
-                }
+                },
+                displayVideos: []
             };
         },
         computed: {
             player() {
                 return this.$refs.videoPlayer.player;
             }
+        },
+        mounted() {
+            getVideo({condition: {}}).then(data => {
+                if (data.status === 200 && data.total > 0) {
+                    this.displayVideos = data.data.map(item => {
+                        let obj = {};
+                        obj.name = item.name;
+                        obj.cover = config.getImageOriginal() + encodeURIComponent(item.cover);
+                        return obj;
+                    });
+                }
+            });
         },
         methods: {
             httpRequest(file) {
@@ -75,7 +92,13 @@
                             obj.type = item.type;
                             return obj;
                         });
-                        this.playerOptions.sources = videos;
+                        this.displayVideos = data.data.map(item => {
+                            let obj = {};
+                            obj.name = item.name;
+                            obj.cover = config.getImageOriginal() + encodeURIComponent(item.cover);
+                            return obj;
+                        });
+                        this.playerOptions.sources = [videos[0]];
                     }
                 });
             },

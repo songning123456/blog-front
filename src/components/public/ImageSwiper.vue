@@ -1,7 +1,7 @@
 <template>
     <div class="swiper-container">
         <div class="swiper-wrapper">
-            <div class="swiper-slide" v-for="(item, index) in images" :key="index">
+            <div class="swiper-slide" v-for="(item, index) in swiperList" :key="index">
                 <div class="swiper-zoom-container">
                     <img :src="item" alt="暂无图片"/>
                 </div>
@@ -16,42 +16,20 @@
     import Swiper from 'swiper';
     import 'swiper/dist/css/swiper.min.css';
     import 'swiper/dist/js/swiper.min.js';
-    import config from '../../utils/ConfigUtil';
 
     export default {
         name: 'ImageSwiper',
         props: {
             swiperList: {
                 type: Array,
-                default () {
+                default() {
                     return [];
                 }
-            }
-        },
-        data () {
-            return {
-                swiper: null
-            };
-        },
-        mounted () {
-            this.init();
-        },
-        computed: {
-            images () {
-                let scope = this;
-                let arr = [];
-                scope.swiperList.forEach(item => {
-                    let src = config.getImageOriginal() + encodeURIComponent(item.imageSrc);
-                    arr.push(src);
-                });
-                return arr;
-            }
-        },
-        methods: {
-            init () {
-                let scope = this;
-                setTimeout(() => {
-                    scope.swiper = new Swiper('.swiper-container', {
+            },
+            options: {
+                type: Object,
+                default() {
+                    return {
                         // 滑动速度
                         speed: 1000,
                         // 修改swiper自己或子元素时，自动初始化swiper
@@ -77,7 +55,22 @@
                             el: '.swiper-pagination',
                             clickable: true
                         }
-                    });
+                    };
+                }
+            }
+        },
+        data() {
+            return {
+                swiper: null
+            };
+        },
+        mounted() {
+            this.init();
+        },
+        methods: {
+            init() {
+                setTimeout(() => {
+                    this.swiper = new Swiper('.swiper-container', this.options);
                 }, 100);
             }
         }

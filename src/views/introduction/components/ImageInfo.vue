@@ -11,30 +11,32 @@
     import {getAlbum} from '../../../service/request';
     import EmptyView from '../../../components/util/EmptyView';
     import ImageSwiper from '../../../components/public/ImageSwiper';
+    import config from '../../../utils/ConfigUtil';
 
     export default {
         name: 'ImageInfo',
         components: {ImageSwiper, EmptyView},
-        data () {
+        data() {
             return {
                 swiperList: []
             };
         },
-        mounted () {
+        mounted() {
             this.getBloggerAlbum();
         },
         methods: {
-            getBloggerAlbum () {
-                let scope = this;
+            getBloggerAlbum() {
                 let form = {
-                    userId: scope.$route.query.userId
+                    userId: this.$route.query.userId
                 };
                 let param = {
                     condition: form
                 };
                 getAlbum(param).then(data => {
                     if (data.status === 200 && data.total > 0) {
-                        scope.swiperList = data.data;
+                        this.swiperList = data.data.map(item => {
+                            return config.getImageOriginal() + encodeURIComponent(item.imageSrc);
+                        });
                     }
                 });
             }
