@@ -171,6 +171,9 @@ export const operateAlbum = (params) => {
 export const getAlbum = (params) => {
     return axios.ajax('/image/getAlbum', 'post', params);
 };
+export const operateVideo = (params) => {
+    return axios.ajax('/video/operateVideo', 'post', params);
+};
 export const deleteImage = (params) => {
     return axios.ajax('/image/delete', 'post', params);
 };

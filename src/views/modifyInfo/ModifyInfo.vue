@@ -20,12 +20,17 @@
                 <img src="../../assets/modifyImage.svg" alt=""/>
                 <span>个性图片</span>
             </div>
+            <div class="info-col" @click.stop="changeSubMenu(4)" :class='currentMenu===4 ? "active":""'>
+                <img src="../../assets/modifyImage.svg" alt=""/>
+                <span>个性视频</span>
+            </div>
         </div>
         <div class="content-panel">
             <modify-user v-if="currentMenu===0"></modify-user>
             <modify-blogger v-if="currentMenu===1"></modify-blogger>
             <modify-personal v-if="currentMenu===2"></modify-personal>
             <modify-image v-if="currentMenu===3"></modify-image>
+            <modify-video v-if="currentMenu===4"></modify-video>
         </div>
         <float-menu :menus="menu" @itemClick='chooseItem'></float-menu>
     </div>
@@ -37,11 +42,12 @@
     import ModifyBlogger from './components/ModifyBlogger';
     import ModifyPersonal from './components/ModifyPersonal';
     import ModifyImage from './components/ModifyImage';
+    import ModifyVideo from './components/ModifyVideo';
 
     export default {
         name: 'ModifyInfo',
-        components: {ModifyImage, ModifyPersonal, ModifyBlogger, ModifyUser, FloatMenu},
-        data () {
+        components: {ModifyVideo, ModifyImage, ModifyPersonal, ModifyBlogger, ModifyUser, FloatMenu},
+        data() {
             return {
                 currentMenu: 0,
                 menu: [
@@ -54,11 +60,11 @@
             };
         },
         methods: {
-            changeSubMenu (current) {
+            changeSubMenu(current) {
                 let scope = this;
                 scope.currentMenu = current;
             },
-            chooseItem (menu) {
+            chooseItem(menu) {
                 if (menu.id === '退出') {
                     this.$router.go(-1);
                 }

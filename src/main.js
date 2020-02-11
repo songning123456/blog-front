@@ -4,6 +4,8 @@ import Vue from 'vue';
 import axios from 'axios';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+import VideoPlayer from 'vue-video-player';
+import 'video.js/dist/video-js.css';
 import mavonEditor from 'mavon-editor';
 import 'mavon-editor/dist/css/index.css';
 import infiniteScroll from 'vue-infinite-scroll';
@@ -65,6 +67,7 @@ Vue.prototype.$response = function (data, message = '') {
 Vue.use(ElementUI);
 // * 自定义Zmessage 放在ElementUI后面
 Vue.prototype.$message = ZMessage;
+Vue.use(VideoPlayer);
 Vue.use(mavonEditor);
 Vue.use(infiniteScroll);
 Vue.use(VueQuillEditor);

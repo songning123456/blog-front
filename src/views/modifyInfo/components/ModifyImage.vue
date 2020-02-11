@@ -1,7 +1,8 @@
 <template>
     <div class='modify-image'>
         <div class="image-left">
-            <el-upload class="upload-demo" drag action='' multiple accept="image/*" :before-upload="beforeUpload">
+            <el-upload class="upload-demo" action="" drag multiple :show-file-list="false" accept="image/*" :before-upload="beforeUpload"
+                       :http-request='httpRequest'>
                 <i class="el-icon-upload"></i>
                 <div class="el-upload__text">将图片拖到此处，或<em>点击上传</em></div>
                 <div class="el-upload__tip" slot="tip">只能上传jpg/png文件</div>
@@ -24,18 +25,12 @@
     export default {
         name: 'ModifyImage',
         components: {ImageSwiper, EmptyView},
-        data () {
+        data() {
             return {
-                // 上传的头像
-                image: {
-                    imgBlob: '',
-                    filename: '',
-                    files: ''
-                },
                 swiperList: []
             };
         },
-        mounted () {
+        mounted() {
             let scope = this;
             getAlbum({condition: {}}).then(data => {
                 if (data.status === 200 && data.total > 0) {
@@ -44,29 +39,25 @@
             });
         },
         methods: {
-            beforeUpload (file) {
-                let scope = this;
-                const extension = file.name.split('.')[1];
-                if (!(extension === 'png' || extension === 'jpg')) {
-                    this.$message.warning('上传模板只能是jpg/png格式!');
-                    return;
-                }
-                scope.image.imgBlob = URL.createObjectURL(file);
-                scope.image.filename = file.name;
-                scope.image.files = file;
+            httpRequest(file) {
                 let formData = new FormData();
-                formData.append('file', scope.image.files, scope.image.filename);
+                formData.append('file', file.file, file.file.name);
                 formData.append('dir', 'album');
                 operateAlbum(formData).then(data => {
                     if (data.status === 200 && data.total > 0) {
                         this.$message.success('上传图片成功');
-                        scope.swiperList = data.data;
+                        this.swiperList = data.data;
                     } else {
                         this.$message.error('上传图片失败 ' + data.message);
                     }
                 });
-                // 阻止默认上传地址
-                return false;
+            },
+            beforeUpload(file) {
+                const extension = file.name.split('.')[1];
+                if (!(extension === 'png' || extension === 'jpg')) {
+                    this.$message.warning('上传模板只能是jpg/png格式!');
+                    return false;
+                }
             }
         }
     };
