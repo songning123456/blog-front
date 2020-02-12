@@ -10,7 +10,7 @@
                 </el-upload>
             </div>
             <div class="frame-bottom">
-                <multi-cover :videos="displayVideos"></multi-cover>
+                <multi-cover :videos="displayVideos" @play="playVideo"></multi-cover>
             </div>
         </div>
         <div class="video-right">
@@ -19,9 +19,7 @@
                           :playsinline="true"
                           :options="playerOptions"
                           :x5-video-player-fullscreen="true"
-                          @pause="onPlayerPause($event)"
-                          @play="onPlayerPlay($event)"
-                          @click="fullScreen"
+                          @ready="playerIsReady"
             ></video-player>
         </div>
     </div>
@@ -31,6 +29,8 @@
     import {operateVideo, getVideo} from '../../../service/request';
     import config from '../../../utils/ConfigUtil';
     import MultiCover from './children/MultiCover';
+    import 'videojs-flash';
+    import 'videojs-hotkeys';
 
     export default {
         name: 'ModifyVideo',
@@ -39,7 +39,7 @@
             return {
                 playerOptions: {
                     playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
-                    autoplay: false, //如果true,浏览器准备好时开始回放。
+                    autoplay: true, //如果true,浏览器准备好时开始回放。
                     muted: false, // 默认情况下将会消除任何音频。
                     loop: false, // 导致视频一结束就重新开始。
                     preload: 'auto', // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
@@ -47,29 +47,32 @@
                     aspectRatio: '16:9', // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
                     fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
                     sources: [],
+                    techOrder: ['flash'],
                     //你的封面地址
-                    poster: require('../../../assets/videoCover.jpg'),
+                    poster: require('../../../assets/aiqiyi.svg'),
                     // width: document.documentElement.clientWidth,
                     notSupportedMessage: '此视频暂无法播放，请稍后再试', //允许覆盖Video.js无法播放媒体源时显示的默认信息。
                     controlBar: {
                         timeDivider: true,
                         durationDisplay: true,
-                        remainingTimeDisplay: false,
+                        remainingTimeDisplay: true,
                         // 全屏按钮
                         fullscreenToggle: true
                     }
                 },
-                displayVideos: []
+                displayVideos: [],
+                playVideos: []
             };
-        },
-        computed: {
-            player() {
-                return this.$refs.videoPlayer.player;
-            }
         },
         mounted() {
             getVideo({condition: {}}).then(data => {
                 if (data.status === 200 && data.total > 0) {
+                    this.playVideos = data.data.map(item => {
+                        let obj = {};
+                        obj.src = config.getImageOriginal() + encodeURIComponent(item.src);
+                        obj.type = item.type;
+                        return obj;
+                    });
                     this.displayVideos = data.data.map(item => {
                         let obj = {};
                         obj.name = item.name;
@@ -79,6 +82,11 @@
                 }
             });
         },
+        computed: {
+            player() {
+                return this.$refs.videoPlayer.player;
+            }
+        },
         methods: {
             httpRequest(file) {
                 let formData = new FormData();
@@ -86,7 +94,7 @@
                 formData.append('dir', 'video');
                 operateVideo(formData).then(data => {
                     if (data.status === 200 && data.total > 0) {
-                        let videos = data.data.map(item => {
+                        this.playVideos = data.data.map(item => {
                             let obj = {};
                             obj.src = config.getImageOriginal() + encodeURIComponent(item.src);
                             obj.type = item.type;
@@ -98,7 +106,6 @@
                             obj.cover = config.getImageOriginal() + encodeURIComponent(item.cover);
                             return obj;
                         });
-                        this.playerOptions.sources = [videos[0]];
                     }
                 });
             },
@@ -110,17 +117,20 @@
                     return false;
                 }
             },
-            fullScreen() {
-                let player = this.$refs.videoPlayer.player;
-                player.requestFullscreen(); //调用全屏api方法
-                player.isFullscreen(true);
-                player.play();
+            playVideo(index) {
+                this.playerOptions.sources = [this.playVideos[index]];
             },
-            onPlayerPlay(player) {
-                player.play();
-            },
-            onPlayerPause(player) {
-                // alert("pause");
+            playerIsReady(player) {
+                player.hotkeys({
+                    volumeStep: 0.1,
+                    seekStep: 5,
+                    enableModifiersForNumbers: false,
+                    // override fullscreen to trigger when pressing the F key or Ctrl+Enter
+                    fullscreenKey: function (event, player) {
+                        // override fullscreen to trigger when pressing the F key or Ctrl+Enter
+                        return ((event.which === 70) || (event.ctrlKey && event.which === 13));
+                    }
+                });
             }
         }
     };
