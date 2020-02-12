@@ -2,7 +2,8 @@
     <div class="modify-video">
         <div class="video-left">
             <div class="frame-top">
-                <el-upload class="upload-demo" drag action='' :show-file-list="false" :before-upload="beforeUpload"
+                <el-upload class="upload-demo" drag action='' :accept="'video/*'" :show-file-list="false"
+                           :before-upload="beforeUpload"
                            :http-request='httpRequest'>
                     <i class="el-icon-upload"></i>
                     <div class="el-upload__text">将视频拖到此处，或<em>点击上传</em></div>
@@ -10,7 +11,8 @@
                 </el-upload>
             </div>
             <div class="frame-bottom">
-                <multi-cover :videos="displayVideos" @play="playVideo"></multi-cover>
+                <multi-cover :videos="displayVideos" @play="playVideo" v-if="displayVideos.length > 0"></multi-cover>
+                <empty-view v-else></empty-view>
             </div>
         </div>
         <div class="video-right">
@@ -26,15 +28,17 @@
 </template>
 
 <script>
-    import {operateVideo, getVideo} from '../../../service/request';
+    import {getVideo} from '../../../service/request';
+    import {uploadByPieces} from '../../../utils/UploadUtil';
     import config from '../../../utils/ConfigUtil';
     import MultiCover from './children/MultiCover';
     import 'videojs-flash';
     import 'videojs-hotkeys';
+    import EmptyView from '../../../components/util/EmptyView';
 
     export default {
         name: 'ModifyVideo',
-        components: {MultiCover},
+        components: {EmptyView, MultiCover},
         data() {
             return {
                 playerOptions: {
@@ -88,27 +92,35 @@
             }
         },
         methods: {
+            // 覆盖action的动作
             httpRequest(file) {
-                let formData = new FormData();
-                formData.append('file', file.file, file.file.name);
-                formData.append('dir', 'video');
-                operateVideo(formData).then(data => {
-                    if (data.status === 200 && data.total > 0) {
-                        this.playVideos = data.data.map(item => {
-                            let obj = {};
-                            obj.src = config.getImageOriginal() + encodeURIComponent(item.src);
-                            obj.type = item.type;
-                            return obj;
-                        });
-                        this.displayVideos = data.data.map(item => {
-                            let obj = {};
-                            obj.name = item.name;
-                            obj.cover = config.getImageOriginal() + encodeURIComponent(item.cover);
-                            return obj;
-                        });
+                uploadByPieces({
+                    file: file.file,
+                    success: data => {
+                        if (data.message) {
+                            this.$message.warning(data.message);
+                        }
+                        if (data.total > 0) {
+                            this.playVideos = data.data.map(item => {
+                                let obj = {};
+                                obj.src = config.getImageOriginal() + encodeURIComponent(item.src);
+                                obj.type = item.type;
+                                return obj;
+                            });
+                            this.displayVideos = data.data.map(item => {
+                                let obj = {};
+                                obj.name = item.name;
+                                obj.cover = config.getImageOriginal() + encodeURIComponent(item.cover);
+                                return obj;
+                            });
+                        }
+                    },
+                    error: e => {
+                        console.log('分片上传视频失败');
                     }
                 });
             },
+            //判断是否是视频格式
             beforeUpload(file) {
                 // 可支持的视频格式
                 let videoFormat = ['video/mp4', 'video/ogg', 'video/flv', 'video/avi', 'video/wmv', 'video/rmvb'];
@@ -117,9 +129,11 @@
                     return false;
                 }
             },
+            // 点击播放哪个视频
             playVideo(index) {
                 this.playerOptions.sources = [this.playVideos[index]];
             },
+            // 添加视频快捷键
             playerIsReady(player) {
                 player.hotkeys({
                     volumeStep: 0.1,
@@ -159,6 +173,12 @@
             .frame-bottom {
                 width: 100%;
                 height: 75%;
+
+                .empty-view {
+                    margin: .5rem;
+                    width: calc(100% - 1rem);
+                    height: calc(100% - 1rem);
+                }
             }
         }
 

@@ -171,8 +171,14 @@ export const operateAlbum = (params) => {
 export const getAlbum = (params) => {
     return axios.ajax('/image/getAlbum', 'post', params);
 };
-export const operateVideo = (params) => {
-    return axios.ajax('/video/operateVideo', 'post', params);
+export const shardUpload = (params) => {
+    return axios.ajax('/video/shardUpload', 'post', params);
+};
+export const shardMerge = (params) => {
+    return axios.ajax('/video/shardMerge', 'get', params);
+};
+export const videoIsExist = (params) => {
+    return axios.ajax('/video/isExist', 'get', params);
 };
 export const getVideo = (params) => {
     return axios.ajax('/video/getVideo', 'post', params);
