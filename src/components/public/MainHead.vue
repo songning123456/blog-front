@@ -12,7 +12,8 @@
             <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>
         </el-avatar>
         <div class="main-head-popover" v-show='configBar'>
-            <div @click.stop='$router.push({path: "/modify-info"})'><span>个人信息</span></div>
+            <div @click.stop='$router.push({path: "/modify-password"})'><span>修改资料</span></div>
+            <div @click.stop='$router.push({path: "/hobby-image"})'><span>业余爱好</span></div>
             <div @click.stop='$router.push({path: "/blog-config"})'><span>管理配置</span></div>
             <div @click.stop='$router.push({path: "/label-config"})'><span>标签管理</span></div>
             <div @click.stop='$router.push({path: "/written"})'><span>我写过的</span></div>
@@ -35,7 +36,7 @@
                 default: ''
             }
         },
-        data () {
+        data() {
             return {
                 bgUrl: require('../../assets/titleBg.png'),
                 tabs: [
@@ -50,7 +51,7 @@
             };
         },
         computed: {
-            avatar () {
+            avatar() {
                 let scope = this;
                 if (JSON.stringify(scope.blogger) !== '{}') {
                     if (scope.blogger.headPortrait.indexOf('https://') === -1 && scope.blogger.headPortrait.indexOf('http://') === -1) {
@@ -64,10 +65,10 @@
                 }
             }
         },
-        mounted () {
+        mounted() {
             this.getBlogger();
         },
-        activated () {
+        activated() {
             // 绑定搜索文章 查询事件
             if (this.$refs['elInput'] && this.$refs['elInput'].$el) {
                 let doc = this.$refs['elInput'].$el.children[1];
@@ -75,7 +76,7 @@
             }
             document.addEventListener('click', this.closeShowInfo);
         },
-        deactivated () {
+        deactivated() {
             // 解绑搜索文章 查询事件
             if (this.$refs['elInput'] && this.$refs['elInput'].$el) {
                 let doc = this.$refs['elInput'].$el.children[1];
@@ -86,7 +87,7 @@
             document.removeEventListener('click', this.closeShowInfo);
         },
         methods: {
-            tabClick (tab) {
+            tabClick(tab) {
                 if (tab !== this.currentTab) {
                     if (tab === 'read' && sessionStorage.getItem('currentLabelName')) {
                         tab = tab + '/' + sessionStorage.getItem('currentLabelName');
@@ -95,10 +96,10 @@
                 }
             },
             // 其他body 点击事件 关闭 设置栏
-            closeShowInfo () {
+            closeShowInfo() {
                 this.configBar = false;
             },
-            queryBtn () {
+            queryBtn() {
                 if (this.search) {
                     this.$router.push({
                         path: '/search',
@@ -111,10 +112,10 @@
                     this.$message.warning('请输入搜索内容');
                 }
             },
-            writeBtn () {
+            writeBtn() {
                 this.$router.push({path: '/edit'});
             },
-            getBlogger () {
+            getBlogger() {
                 if (JSON.stringify(this.$store.state.blogger) !== '{}') {
                     this.blogger = Object.assign({}, this.$store.state.blogger);
                 } else {
@@ -126,10 +127,10 @@
                     });
                 }
             },
-            aboutme () {
+            aboutme() {
                 window.open('https://github.com/songning123456/', '_blank');
             },
-            exit () {
+            exit() {
                 exitBlog().then((data) => {
                     if (data.status === 200) {
                         // 删除token

@@ -186,11 +186,43 @@ export default new Router({
                 requireAuth: false
             }
         }, {
-            path: '/modify-info',
-            name: 'modifyInfo',
-            component: () => import('../views/modifyInfo/ModifyInfo'),
+            path: '/modify-password',
+            name: 'modifyPassword',
+            component: () => import('../views/modify/ModifyPassword'),
             meta: {
-                title: '修改信息',
+                title: '修改密码',
+                requireAuth: true
+            }
+        }, {
+            path: '/modify-blogger',
+            name: 'modifyBlogger',
+            component: () => import('../views/modify/ModifyBlogger'),
+            meta: {
+                title: '修改简介',
+                requireAuth: true
+            }
+        }, {
+            path: '/modify-personal',
+            name: 'modifyPersonal',
+            component: () => import('../views/modify/ModifyPersonal'),
+            meta: {
+                title: '修改经历',
+                requireAuth: true
+            }
+        }, {
+            path: '/hobby-image',
+            name: 'hobbyImage',
+            component: () => import('../views/hobby/HobbyImage'),
+            meta: {
+                title: '图片搜集',
+                requireAuth: true
+            }
+        }, {
+            path: '/hobby-video',
+            name: 'hobbyVideo',
+            component: () => import('../views/hobby/HobbyVideo'),
+            meta: {
+                title: '视频搜集',
                 requireAuth: true
             }
         }, {

@@ -1,78 +1,91 @@
 <template>
-    <div class='modify-blogger'>
-        <div class="content">
-            <div class="inner-title">
-                <span>修改个人简介</span>
-            </div>
-            <div class="inner-content">
-                <el-form ref="form" :modal="form" :label-width='labelWidth'>
-                    <el-form-item label='头像'>
-                        <div class="modify-form-content">
-                            <div class="modify-headPortrait">
-                                <el-avatar :src="avatar">
-                                    <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>
-                                </el-avatar>
-                                <div class="headPortrait-upload">
-                                    <el-upload accept="image/*" action='' :limit='1' v-if="!disabled.headPortrait"
-                                               :before-upload="beforeUpload">
-                                        <el-button size="small" type="primary">点击上传</el-button>
-                                    </el-upload>
+    <div class="modify-blogger">
+        <left-side-bar current-tab='modifyBlogger'></left-side-bar>
+        <div class="blogger-frame">
+            <div class="content">
+                <div class="inner-title">
+                    <span>修改个人简介</span>
+                </div>
+                <div class="inner-content">
+                    <el-form ref="form" :modal="form" :label-width='labelWidth'>
+                        <el-form-item label='头像'>
+                            <div class="modify-form-content">
+                                <div class="modify-headPortrait">
+                                    <el-avatar :src="avatar">
+                                        <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>
+                                    </el-avatar>
+                                    <div class="headPortrait-upload">
+                                        <el-upload accept="image/*" action='' :limit='1' v-if="!disabled.headPortrait"
+                                                   :before-upload="beforeUpload">
+                                            <el-button size="small" type="primary">点击上传</el-button>
+                                        </el-upload>
+                                    </div>
+                                </div>
+                                <div class="modify-icon-true" v-if="disabled.headPortrait">
+                                    <i class="el-icon-edit" @click="disabled.headPortrait = false"></i></div>
+                                <div class="modify-icon-false" v-if="!disabled.headPortrait">
+                                    <span @click.stop="save('headPortrait')">保存</span>
+                                    <span @click.stop="cancel('headPortrait')">取消</span>
                                 </div>
                             </div>
-                            <div class="modify-icon-true" v-if="disabled.headPortrait">
-                                <i class="el-icon-edit" @click="disabled.headPortrait = false"></i></div>
-                            <div class="modify-icon-false" v-if="!disabled.headPortrait">
-                                <span @click.stop="save('headPortrait')">保存</span>
-                                <span @click.stop="cancel('headPortrait')">取消</span>
+                        </el-form-item>
+                        <el-form-item v-for='(item, index) in display' :label="item.key" :key="index">
+                            <div class="modify-form-content">
+                                <el-input v-model="form[item.value]"
+                                          :disabled="disabled[item.value]"></el-input>
+                                <div class="modify-icon-true" v-if="disabled[item.value]">
+                                    <i class="el-icon-edit" @click="disabled[item.value] = false"></i></div>
+                                <div class="modify-icon-false" v-if="!disabled[item.value]">
+                                    <span @click.stop="save(item.value)">保存</span>
+                                    <span @click.stop="cancel(item.value)">取消</span>
+                                </div>
                             </div>
-                        </div>
-                    </el-form-item>
-                    <el-form-item v-for='(item, index) in display' :label="item.key" :key="index">
-                        <div class="modify-form-content">
-                            <el-input v-model="form[item.value]"
-                                      :disabled="disabled[item.value]"></el-input>
-                            <div class="modify-icon-true" v-if="disabled[item.value]">
-                                <i class="el-icon-edit" @click="disabled[item.value] = false"></i></div>
-                            <div class="modify-icon-false" v-if="!disabled[item.value]">
-                                <span @click.stop="save(item.value)">保存</span>
-                                <span @click.stop="cancel(item.value)">取消</span>
+                        </el-form-item>
+                        <el-form-item label='性别'>
+                            <div class="modify-form-content">
+                                <el-input v-model="form.gender" :disabled="true" v-if="disabled.gender"></el-input>
+                                <el-select v-model="form.gender" placeholder="请选择" v-if="!disabled.gender">
+                                    <el-option v-for="item in options" :key="item.value" :label="item.label"
+                                               :value="item.value"
+                                    ></el-option>
+                                </el-select>
+                                <div class="modify-icon-true" v-if="disabled.gender">
+                                    <i class="el-icon-edit" @click="disabled.gender = false"></i></div>
+                                <div class="modify-icon-false" v-if="!disabled.gender">
+                                    <span @click.stop="save('gender')">保存</span>
+                                    <span @click.stop="cancel('gender')">取消</span>
+                                </div>
                             </div>
-                        </div>
-                    </el-form-item>
-                    <el-form-item label='性别'>
-                        <div class="modify-form-content">
-                            <el-input v-model="form.gender" :disabled="true" v-if="disabled.gender"></el-input>
-                            <el-select v-model="form.gender" placeholder="请选择" v-if="!disabled.gender">
-                                <el-option v-for="item in options" :key="item.value" :label="item.label"
-                                           :value="item.value"
-                                ></el-option>
-                            </el-select>
-                            <div class="modify-icon-true" v-if="disabled.gender">
-                                <i class="el-icon-edit" @click="disabled.gender = false"></i></div>
-                            <div class="modify-icon-false" v-if="!disabled.gender">
-                                <span @click.stop="save('gender')">保存</span>
-                                <span @click.stop="cancel('gender')">取消</span>
-                            </div>
-                        </div>
-                    </el-form-item>
-                </el-form>
+                        </el-form-item>
+                    </el-form>
+                </div>
             </div>
+            <tool-loading :loading="loading" category="spinner"></tool-loading>
         </div>
-        <tool-loading :loading="loading" category="spinner"></tool-loading>
+        <float-menu :menus="menu" @itemClick='chooseItem'></float-menu>
     </div>
 </template>
 
 <script>
-    import {getBloggerInfo, saveImage, updateBlogger} from '../../../service/request';
-    import config from '../../../utils/ConfigUtil';
-    import ToolLoading from '../../../components/util/ToolLoading';
-    import Reg from '../../../utils/RegularUtil';
+    import LeftSideBar from '../../components/public/LeftSideBar';
+    import {getBloggerInfo, saveImage, updateBlogger} from '../../service/request';
+    import config from '../../utils/ConfigUtil';
+    import ToolLoading from '../../components/util/ToolLoading';
+    import Reg from '../../utils/RegularUtil';
+    import FloatMenu from '../../components/util/FloatMenu';
 
     export default {
         name: 'ModifyBlogger',
-        components: {ToolLoading},
-        data () {
+        components: {LeftSideBar, ToolLoading, FloatMenu},
+        data() {
             return {
+                menu: [
+                    {
+                        id: '退出',
+                        image: require('../../assets/exit.svg'),
+                        title: '返回首页'
+                    }
+                ],
                 display: [
                     {
                         key: '真实姓名',
@@ -143,11 +156,11 @@
                 loading: false
             };
         },
-        mounted () {
+        mounted() {
             this.getBlogger();
         },
         computed: {
-            avatar () {
+            avatar() {
                 let scope = this;
                 if (scope.form.headPortrait !== '') {
                     if (scope.form.headPortrait.indexOf('https://') === -1 && scope.form.headPortrait.indexOf('http://') === -1) {
@@ -162,7 +175,13 @@
             }
         },
         methods: {
-            getBlogger () {
+            chooseItem(menu) {
+                if (menu.id === '退出') {
+                    let labelName = sessionStorage.getItem('currentLabelName');
+                    this.$router.push({path: '/read/' + labelName});
+                }
+            },
+            getBlogger() {
                 if (JSON.stringify(this.$store.state.blogger) !== '{}') {
                     this.form = Object.assign({}, this.$store.state.blogger);
                     for (let key in this.form) {
@@ -185,7 +204,7 @@
                     });
                 }
             },
-            save (type) {
+            save(type) {
                 let scope = this;
                 scope.disabled[type] = true;
                 switch (type) {
@@ -294,12 +313,12 @@
                     scope.loading = false;
                 });
             },
-            cancel (type) {
+            cancel(type) {
                 let scope = this;
                 scope.disabled[type] = true;
                 scope.form[type] = scope.copy[type];
             },
-            beforeUpload (file) {
+            beforeUpload(file) {
                 let scope = this;
                 scope.image.imgBlob = URL.createObjectURL(file);
                 scope.image.filename = file.name;
@@ -327,81 +346,89 @@
         width: 100%;
         height: 100%;
         position: relative;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        background-color: #f8f8f9;
 
-        .content {
-            width: 40%;
-            height: 85%;
-            background-color: white;
+        .blogger-frame {
+            float: left;
+            height: 100%;
+            width: calc(100% - 2rem - 1px);
+            top: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
 
-            .inner-title {
-                height: 3rem;
-                font-weight: 500;
-                font-size: 1.3rem;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
+            .content {
+                width: 40%;
+                height: 85%;
+                background-color: white;
 
-            .inner-content {
-                display: flex;
-                justify-content: center;
-                align-items: flex-start;
-                height: calc(100% - 3rem);
+                .inner-title {
+                    height: 3rem;
+                    font-weight: 500;
+                    font-size: 1.3rem;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
 
-                .el-form {
-                    width: 60%;
-                    margin-top: 1.5rem;
+                .inner-content {
+                    display: flex;
+                    justify-content: center;
+                    align-items: flex-start;
+                    height: calc(100% - 3rem);
 
-                    .el-form-item {
-                        margin-bottom: 1rem;
+                    .el-form {
+                        width: 60%;
+                        margin-top: 1.5rem;
 
-                        .modify-form-content {
-                            width: 100%;
-                            height: 100%;
-                            display: flex;
-                            align-items: center;
+                        .el-form-item {
+                            margin-bottom: 1rem;
 
-                            .el-input, .el-slider, .el-select, .modify-headPortrait {
-                                width: 78%;
-                                float: left;
-                            }
+                            .modify-form-content {
+                                width: 100%;
+                                height: 100%;
+                                display: flex;
+                                align-items: center;
 
-                            .modify-headPortrait {
-                                .el-avatar {
-                                    float: left;
-                                    margin-left: 1rem;
-                                }
-
-                                .headPortrait-upload {
-                                    width: calc(100% - 3rem);
+                                .el-input, .el-slider, .el-select, .modify-headPortrait {
+                                    width: 78%;
                                     float: left;
                                 }
-                            }
 
-                            .modify-icon-true {
-                                width: 22%;
-                                height: 100%;
-                                font-size: 1.2rem;
-                                float: left;
+                                .modify-headPortrait {
+                                    .el-avatar {
+                                        float: left;
+                                        margin-left: 1rem;
+                                    }
 
-                                :hover {
-                                    color: #417BF1;
-                                    cursor: pointer;
+                                    .headPortrait-upload {
+                                        width: calc(100% - 3rem);
+                                        float: left;
+                                    }
                                 }
-                            }
 
-                            .modify-icon-false {
-                                width: 22%;
-                                height: 100%;
-                                float: left;
+                                .modify-icon-true {
+                                    width: 22%;
+                                    height: 100%;
+                                    font-size: 1.2rem;
+                                    float: left;
 
-                                span:hover {
-                                    color: #417BF1;
-                                    cursor: pointer;
+                                    :hover {
+                                        color: #417BF1;
+                                        cursor: pointer;
+                                    }
+                                }
 
+                                .modify-icon-false {
+                                    width: 22%;
+                                    height: 100%;
+                                    float: left;
+
+                                    span:hover {
+                                        color: #417BF1;
+                                        cursor: pointer;
+
+                                    }
                                 }
                             }
                         }
@@ -410,4 +437,5 @@
             }
         }
     }
+
 </style>
