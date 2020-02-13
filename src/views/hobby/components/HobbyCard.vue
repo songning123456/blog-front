@@ -1,16 +1,20 @@
 <template>
-    <div class="single-cover">
+    <div class="hobby-card">
         <div class="cover-src">
-            <el-image :src="video.cover" lazy></el-image>
+            <el-image :src="card.cover" lazy></el-image>
         </div>
         <div class="cover-info" ref='coverInfo'>
             <div class="info">
                 <span>标题</span>
-                <span>{{video.name}}</span>
+                <el-tooltip :content="card.name" placement="right-start" effect="light">
+                    <span>{{card.name}}</span>
+                </el-tooltip>
             </div>
             <div class="info">
                 <span>时间</span>
-                <span>{{video.updateTime}}</span>
+                <el-tooltip :content="card.updateTime" placement="right-start" effect="light">
+                    <span>{{card.updateTime}}</span>
+                </el-tooltip>
             </div>
         </div>
     </div>
@@ -19,9 +23,9 @@
 <script>
 
     export default {
-        name: 'SingleCover',
+        name: 'HobbyCard',
         props: {
-            video: {
+            card: {
                 type: Object,
                 default() {
                 }
@@ -42,9 +46,9 @@
 </script>
 
 <style lang="scss" scoped>
-    .single-cover {
+    .hobby-card {
         width: 23%;
-        margin: 1%;
+        margin: 0 1% 1% 1%;
         padding: 1%;
         box-sizing: border-box;
         height: auto;

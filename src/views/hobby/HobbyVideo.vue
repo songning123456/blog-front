@@ -13,9 +13,8 @@
                     </el-upload>
                 </div>
                 <div class="frame-bottom">
-                    <multi-cover :videos="displayVideos" @play="playVideo"
-                                 v-if="displayVideos.length > 0"></multi-cover>
-                    <empty-view v-else></empty-view>
+                    <table-or-list v-model='kind' :display="displayVideos" @current="playVideo"></table-or-list>
+                    <tool-loading :loading="loading" category="spinner"></tool-loading>
                 </div>
             </div>
             <div class="video-right">
@@ -38,16 +37,17 @@
     import {getVideo} from '../../service/request';
     import {uploadByPieces} from '../../utils/UploadUtil';
     import config from '../../utils/ConfigUtil';
-    import MultiCover from './components/MultiCover';
     import 'videojs-flash';
     import 'videojs-hotkeys';
-    import EmptyView from '../../components/util/EmptyView';
+    import TableOrList from './components/TableOrList';
+    import ToolLoading from '../../components/util/ToolLoading';
 
     export default {
         name: 'HobbyVideo',
-        components: {LeftSideBar, FloatMenu, EmptyView, MultiCover},
+        components: {ToolLoading, TableOrList, LeftSideBar, FloatMenu},
         data() {
             return {
+                kind: 'list',
                 menu: [
                     {
                         id: '退出',
@@ -57,7 +57,7 @@
                 ],
                 playerOptions: {
                     playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
-                    autoplay: true, //如果true,浏览器准备好时开始回放。
+                    autoplay: false, //如果true,浏览器准备好时开始回放。
                     muted: false, // 默认情况下将会消除任何音频。
                     loop: false, // 导致视频一结束就重新开始。
                     preload: 'auto', // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
@@ -78,10 +78,12 @@
                     }
                 },
                 displayVideos: [],
-                playVideos: []
+                playVideos: [],
+                loading: false
             };
         },
         mounted() {
+            this.loading = true;
             getVideo({condition: {}}).then(data => {
                 if (data.status === 200 && data.total > 0) {
                     this.playVideos = data.data.map(item => {
@@ -90,14 +92,17 @@
                         obj.type = item.type;
                         return obj;
                     });
-                    this.displayVideos = data.data.map(item => {
+                    this.displayVideos = data.data.map((item, index) => {
                         let obj = {};
+                        obj.$index = index;
                         obj.name = item.name;
                         obj.updateTime = item.updateTime;
                         obj.cover = config.getImageOriginal() + encodeURIComponent(item.cover);
                         return obj;
                     });
                 }
+            }).finally(() => {
+                this.loading = false;
             });
         },
         computed: {
@@ -127,8 +132,9 @@
                                 obj.type = item.type;
                                 return obj;
                             });
-                            this.displayVideos = data.data.map(item => {
+                            this.displayVideos = data.data.map((item, index) => {
                                 let obj = {};
+                                obj.$index = index;
                                 obj.name = item.name;
                                 obj.updateTime = item.updateTime;
                                 obj.cover = config.getImageOriginal() + encodeURIComponent(item.cover);
@@ -200,12 +206,7 @@
                 .frame-bottom {
                     width: 100%;
                     height: 75%;
-
-                    .empty-view {
-                        margin: .5rem;
-                        width: calc(100% - 1rem);
-                        height: calc(100% - 1rem);
-                    }
+                    position: relative;
                 }
             }
 
