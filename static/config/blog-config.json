@@ -6,5 +6,13 @@
         "dev": {
             "originalUrl": "http://localhost:8072/image/original?url="
         }
+    },
+    "Video": {
+        "pro": {
+            "originalUrl": "http://simple-blog.xyz/server/video/original?url="
+        },
+        "dev": {
+            "originalUrl": "http://localhost:8072/video/original?url="
+        }
     }
 }

@@ -73,7 +73,7 @@
                 if (data.status === 200 && data.total > 0) {
                     this.playVideos = data.data.map(item => {
                         let obj = {};
-                        obj.src = config.getImageOriginal() + encodeURIComponent(item.src);
+                        obj.src = config.getVideoOriginal() + encodeURIComponent(item.src);
                         obj.type = item.type;
                         return obj;
                     });
@@ -103,7 +103,7 @@
                         if (data.total > 0) {
                             this.playVideos = data.data.map(item => {
                                 let obj = {};
-                                obj.src = config.getImageOriginal() + encodeURIComponent(item.src);
+                                obj.src = config.getVideoOriginal() + encodeURIComponent(item.src);
                                 obj.type = item.type;
                                 return obj;
                             });

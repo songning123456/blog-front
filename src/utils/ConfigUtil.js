@@ -4,6 +4,8 @@ const _config_ = {};
 
 let image;
 
+let video;
+
 _config_.setConfig = function (config) {
     if (typeof config === 'string') {
         config = util.jsonToObject(config) || {};
@@ -15,12 +17,16 @@ _config_.setConfig = function (config) {
         Image = util.jsonToObject(Image);
     }
     image = Image;
+
+    let {Video} = config;
+    if (typeof Video === 'string') {
+        Video = util.jsonToObject(Video);
+    }
+    video = Video;
 };
 
 _config_.getSource = function (obj) {
-    if (location.hostname === 'songning123456.github.io') {
-        return obj.pro;
-    } else if (location.hostname === 'localhost') {
+    if (location.hostname === 'localhost') {
         return obj.dev;
     } else {
         return obj.pro;
@@ -33,6 +39,11 @@ _config_.getSource = function (obj) {
  */
 _config_.getImageOriginal = function () {
     let param = _config_.getSource(image);
+    return param.originalUrl;
+};
+
+_config_.getVideoOriginal = function () {
+    let param = _config_.getSource(video);
     return param.originalUrl;
 };
 
