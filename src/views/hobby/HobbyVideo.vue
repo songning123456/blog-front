@@ -93,6 +93,7 @@
                     this.displayVideos = data.data.map(item => {
                         let obj = {};
                         obj.name = item.name;
+                        obj.updateTime = item.updateTime;
                         obj.cover = config.getImageOriginal() + encodeURIComponent(item.cover);
                         return obj;
                     });
@@ -129,6 +130,7 @@
                             this.displayVideos = data.data.map(item => {
                                 let obj = {};
                                 obj.name = item.name;
+                                obj.updateTime = item.updateTime;
                                 obj.cover = config.getImageOriginal() + encodeURIComponent(item.cover);
                                 return obj;
                             });

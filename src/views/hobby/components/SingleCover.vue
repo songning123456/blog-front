@@ -3,7 +3,16 @@
         <div class="cover-src">
             <el-image :src="video.cover" lazy></el-image>
         </div>
-        <div class="cover-name" :class="video.name.length >= 14 ? 'more-than' : 'less-than'">{{video.name}}</div>
+        <div class="cover-info" ref='coverInfo'>
+            <div class="info">
+                <span>标题</span>
+                <span>{{video.name}}</span>
+            </div>
+            <div class="info">
+                <span>时间</span>
+                <span>{{video.updateTime}}</span>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -20,6 +29,13 @@
         },
         data() {
             return {};
+        },
+        mounted() {
+            let doc = this.$refs.coverInfo.getElementsByClassName('info');
+            for (let i = 0; i < doc.length; i++) {
+                doc[i].children[0].style.width = '30px';
+                doc[i].children[1].style.width = 'calc(100% - 30px)';
+            }
         },
         methods: {}
     };
@@ -45,28 +61,40 @@
             display: flex;
             justify-content: center;
             align-items: center;
-
-            .el-image {
-
-            }
         }
 
-        .cover-name {
-            height: 1.6rem;
+        .cover-info {
             width: 100%;
             font-size: .6rem;
+            overflow: auto;
 
-            // 文本长度>=14
-            &.more-than {
-                word-break: break-all;
-                text-align: left;
-                line-height: .8rem;
+            .info {
+                width: 100%;
+                height: 1.5rem;
+                margin-bottom: .2rem;
+
+                span:nth-child(1) {
+                    display: inline-block;
+                    float: left;
+                    line-height: 1.5rem;
+                }
+
+                span:nth-child(2) {
+                    display: inline-block;
+                    line-height: 1.5rem;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    background: #f8f8f9;
+                    border-radius: .1rem;
+                }
             }
 
-            // 文本长度<14
-            &.less-than {
-                line-height: 1.6rem;
-                text-align: center;
+            .info:nth-child(1) {
+                span:nth-child(2) {
+                    padding-left: .24rem;
+                    box-sizing: border-box;
+                }
             }
         }
     }

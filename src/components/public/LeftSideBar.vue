@@ -1,7 +1,7 @@
 <template>
     <div class="left-side-bar">
         <div class="main-col">
-            <img :src=mainImage alt=""/>
+            <img :src=mainImage[kind] alt=""/>
         </div>
         <div class="info-col" :class="{'active': currentTab === item.name}" v-for="(item, index) in sideBar[kind]"
              :key='index' @click.stop="$router.push({path: item.path})">
@@ -15,10 +15,6 @@
     export default {
         name: 'LeftSideBar',
         props: {
-            mainImage: {
-                type: String,
-                default: require('../../assets/modifyInfo.svg')
-            },
             kind: {
                 type: String,
                 default: 'modify'
@@ -65,6 +61,10 @@
                             path: '/hobby-video'
                         }
                     ]
+                },
+                mainImage: {
+                    'modify': require('../../assets/modify.svg'),
+                    'hobby': require('../../assets/hobby.svg')
                 }
             };
         }
