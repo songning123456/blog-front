@@ -13,7 +13,7 @@
                     </el-upload>
                 </div>
                 <div class="frame-bottom">
-                    <table-or-list v-model='kind' :display="displayVideos" @current="playVideo"></table-or-list>
+                    <table-or-list ref='tableOrList' :display="displayVideos" @current="playVideo"></table-or-list>
                     <tool-loading :loading="loading" category="spinner"></tool-loading>
                 </div>
             </div>
@@ -47,7 +47,6 @@
         components: {ToolLoading, TableOrList, LeftSideBar, FloatMenu},
         data() {
             return {
-                kind: 'list',
                 menu: [
                     {
                         id: '退出',
@@ -79,30 +78,38 @@
                 },
                 displayVideos: [],
                 playVideos: [],
-                loading: false
+                loading: false,
+                promise: null
             };
         },
-        mounted() {
+        created() {
             this.loading = true;
-            getVideo({condition: {}}).then(data => {
-                if (data.status === 200 && data.total > 0) {
-                    this.playVideos = data.data.map(item => {
-                        let obj = {};
-                        obj.src = config.getVideoOriginal() + encodeURIComponent(item.src);
-                        obj.type = item.type;
-                        return obj;
-                    });
-                    this.displayVideos = data.data.map((item, index) => {
-                        let obj = {};
-                        obj.$index = index;
-                        obj.name = item.name;
-                        obj.updateTime = item.updateTime;
-                        obj.cover = config.getImageOriginal() + encodeURIComponent(item.cover);
-                        return obj;
-                    });
-                }
-            }).finally(() => {
-                this.loading = false;
+            this.promise = new Promise((resolve, reject) => {
+                getVideo({condition: {}}).then(data => {
+                    if (data.status === 200 && data.total > 0) {
+                        this.playVideos = data.data.map(item => {
+                            let obj = {};
+                            obj.src = config.getVideoOriginal() + encodeURIComponent(item.src);
+                            obj.type = item.type;
+                            return obj;
+                        });
+                        this.displayVideos = data.data.map((item, index) => {
+                            let obj = {};
+                            obj.$index = index;
+                            obj.name = item.name;
+                            obj.updateTime = item.updateTime;
+                            obj.cover = config.getImageOriginal() + encodeURIComponent(item.cover);
+                            return obj;
+                        });
+                        resolve(this.playVideos);
+                    } else {
+                        reject(false);
+                    }
+                }).catch(e => {
+                    reject(false);
+                }).finally(() => {
+                    this.loading = false;
+                });
             });
         },
         computed: {
@@ -140,6 +147,7 @@
                                 obj.cover = config.getImageOriginal() + encodeURIComponent(item.cover);
                                 return obj;
                             });
+                            ++this.$refs.tableOrList.current.selection;
                         }
                     },
                     error: e => {
@@ -158,7 +166,9 @@
             },
             // 点击播放哪个视频
             playVideo(index) {
-                this.playerOptions.sources = [this.playVideos[index]];
+                this.promise.then(players => {
+                    this.playerOptions.sources = [players[index]];
+                });
             },
             // 添加视频快捷键
             playerIsReady(player) {

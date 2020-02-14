@@ -1,7 +1,8 @@
 <template>
     <div class="hobby-list">
         <hobby-card v-for="item in list" :key="item.$index" :card="item"
-                    @click.native="currentChange(item.$index)" :class="{'high-light': chosen === item.$index}"></hobby-card>
+                    @click.native="currentChange(item.$index)"
+                    :class="{'high-light': current.selection === item.$index}"></hobby-card>
     </div>
 </template>
 
@@ -17,18 +18,20 @@
                 default() {
                     return [];
                 }
+            },
+            current: {
+                type: Object,
+                default() {
+                    return {
+                        selection: 0
+                    };
+                }
             }
-        },
-        data() {
-            return {
-                chosen: -1
-            };
         },
         methods: {
             currentChange(index) {
-                if (this.chosen !== index) {
-                    this.chosen = index;
-                    this.$emit('currentSelection', index);
+                if (this.current.selection !== index) {
+                    this.current.selection = index;
                 }
             }
         }

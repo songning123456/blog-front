@@ -1,6 +1,6 @@
 <template>
     <div class="hobby-table">
-        <el-table :data="table" style="width: 100%" @current-change='currentChange' highlight-current-row>
+        <el-table :data="table" ref='elTable' style="width: 100%" @current-change='currentChange' highlight-current-row>
             <el-table-column label="序号" width="100" align="center"><span slot-scope="scope">{{ scope.$index + 1}}</span>
             </el-table-column>
             <el-table-column prop="name" label="标题" align="center"></el-table-column>
@@ -13,6 +13,14 @@
     export default {
         name: 'HobbyTable',
         props: {
+            current: {
+                type: Object,
+                default() {
+                    return {
+                        selection: 0
+                    };
+                }
+            },
             table: {
                 type: Array,
                 default() {
@@ -22,7 +30,7 @@
         },
         methods: {
             currentChange(currentRow, oldCurrentRow) {
-                this.$emit('currentSelection', currentRow.$index);
+                this.current.selection = currentRow.$index;
             }
         }
     };

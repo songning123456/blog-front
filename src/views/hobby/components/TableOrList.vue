@@ -1,30 +1,26 @@
 <template>
     <div class="table-or-list">
-        <div class="choose-type" v-if="display.length > 0">
-            <i class="el-icon-s-fold" :class="{'to-blue': value === 'list'}" @click="switchStatus('list')"></i>
-            <i class="el-icon-s-unfold" :class="{'to-blue': value === 'table'}" @click="switchStatus('table')"></i>
+        <div class="choose-type" v-show="display.length > 0">
+            <i class="el-icon-s-fold" :class="{'to-blue': kind === 'list'}" @click="kind = 'list'"></i>
+            <i class="el-icon-s-unfold" :class="{'to-blue': kind === 'table'}" @click="kind = 'table'"></i>
         </div>
-        <div class="display-info" v-if="display.length > 0">
-            <hobby-list :list="display" @currentSelection="currentSelection" v-if='value === "list"'></hobby-list>
-            <hobby-table :table='display' @currentSelection='currentSelection' v-if="value === 'table'"></hobby-table>
+        <div class="display-info" v-show="display.length > 0">
+            <hobby-list :list="display" :current='current' v-show='kind === "list"'></hobby-list>
+            <hobby-table ref='hobbyTable' :table='display' :current='current' v-show="kind === 'table'"></hobby-table>
         </div>
-        <empty-view v-if="display.length === 0"></empty-view>
+        <empty-view v-show="display.length === 0"></empty-view>
     </div>
 </template>
 
 <script>
     import HobbyList from './HobbyList';
-    import EmptyView from '../../../components/util/EmptyView';
     import HobbyTable from './HobbyTable';
+    import EmptyView from '../../../components/util/EmptyView';
 
     export default {
         name: 'TableOrList',
-        components: {HobbyTable, EmptyView, HobbyList},
+        components: {HobbyList, HobbyTable, EmptyView},
         props: {
-            value: {
-                type: String,
-                default: 'list'
-            },
             display: {
                 type: Array,
                 default() {
@@ -32,12 +28,31 @@
                 }
             }
         },
-        methods: {
-            switchStatus(kind) {
-                this.$emit('input', kind);
-            },
-            currentSelection(index) {
-                this.$emit('current', index);
+        data() {
+            return {
+                kind: 'list',
+                current: {selection: 0}
+            };
+        },
+        watch: {
+            'current.selection': {
+                handler(newVal, oldVal) {
+                    // 为列表时的情况
+                    if (this.kind === 'list') {
+                        if (this.$refs.hobbyTable) {
+                            this.$refs.hobbyTable.$refs.elTable.setCurrentRow(this.display[newVal]);
+                        } else {
+                            // 第一次挂载时还未加载完成
+                            this.$nextTick(() => {
+                                setTimeout(() => {
+                                    this.$refs.hobbyTable.$refs.elTable.setCurrentRow(this.display[newVal]);
+                                }, 1000);
+                            });
+                        }
+                    }
+                    this.$emit('current', newVal);
+                },
+                immediate: true
             }
         }
     };
