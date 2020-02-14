@@ -4,17 +4,17 @@
         <div class="video-frame">
             <div class="video-left">
                 <div class="frame-top">
-                    <el-upload class="upload-demo" drag action='' :accept="'video/*'" :show-file-list="false"
-                               :before-upload="beforeUpload"
+                    <el-upload class="upload-demo" drag action='' :accept="'video/mp4'" :show-file-list="false"
+                               :before-upload="beforeUpload" :disabled='loading.upload'
                                :http-request='httpRequest'>
                         <i class="el-icon-upload"></i>
                         <div class="el-upload__text">将视频拖到此处，或<em>点击上传</em></div>
-                        <div class="el-upload__tip" slot="tip">只能上传视频文件</div>
+                        <div class="el-upload__tip" slot="tip">仅支持<b>mp4</b>且编码<b>h.264</b>文件</div>
                     </el-upload>
                 </div>
                 <div class="frame-bottom">
                     <table-or-list ref='tableOrList' :display="displayVideos" @current="playVideo"></table-or-list>
-                    <tool-loading :loading="loading" category="spinner"></tool-loading>
+                    <tool-loading :loading="loading.display" category="spinner"></tool-loading>
                 </div>
             </div>
             <div class="video-right">
@@ -78,37 +78,27 @@
                 },
                 displayVideos: [],
                 playVideos: [],
-                loading: false,
+                loading: {
+                    upload: false,
+                    display: false
+                },
                 promise: null
             };
         },
         created() {
-            this.loading = true;
+            this.loading.display = true;
             this.promise = new Promise((resolve, reject) => {
                 getVideo({condition: {}}).then(data => {
                     if (data.status === 200 && data.total > 0) {
-                        this.playVideos = data.data.map(item => {
-                            let obj = {};
-                            obj.src = config.getVideoOriginal() + encodeURIComponent(item.src);
-                            obj.type = item.type;
-                            return obj;
-                        });
-                        this.displayVideos = data.data.map((item, index) => {
-                            let obj = {};
-                            obj.$index = index;
-                            obj.name = item.name;
-                            obj.updateTime = item.updateTime;
-                            obj.cover = config.getImageOriginal() + encodeURIComponent(item.cover);
-                            return obj;
-                        });
-                        resolve(this.playVideos);
+                        this.analysis(data.data);
+                        resolve(true);
                     } else {
                         reject(false);
                     }
                 }).catch(e => {
                     reject(false);
                 }).finally(() => {
-                    this.loading = false;
+                    this.loading.display = false;
                 });
             });
         },
@@ -126,6 +116,8 @@
             },
             // 覆盖action的动作
             httpRequest(file) {
+                this.loading.upload = true;
+                this.loading.display = true;
                 uploadByPieces({
                     file: file.file,
                     success: data => {
@@ -133,25 +125,16 @@
                             this.$message.warning(data.message);
                         }
                         if (data.total > 0) {
-                            this.playVideos = data.data.map(item => {
-                                let obj = {};
-                                obj.src = config.getVideoOriginal() + encodeURIComponent(item.src);
-                                obj.type = item.type;
-                                return obj;
-                            });
-                            this.displayVideos = data.data.map((item, index) => {
-                                let obj = {};
-                                obj.$index = index;
-                                obj.name = item.name;
-                                obj.updateTime = item.updateTime;
-                                obj.cover = config.getImageOriginal() + encodeURIComponent(item.cover);
-                                return obj;
-                            });
+                            this.analysis(data.data);
                             ++this.$refs.tableOrList.current.selection;
+                            this.loading.upload = false;
+                            this.loading.display = false;
                         }
                     },
                     error: e => {
-                        console.log('分片上传视频失败');
+                        this.$message.error('分片上传视频失败 ' + e);
+                        this.loading.upload = false;
+                        this.loading.display = false;
                     }
                 });
             },
@@ -164,10 +147,28 @@
                     return false;
                 }
             },
+            analysis(list) {
+                this.playVideos = list.map(item => {
+                    let obj = {};
+                    obj.src = config.getVideoOriginal() + encodeURIComponent(item.src);
+                    obj.type = item.type;
+                    return obj;
+                });
+                this.displayVideos = list.map((item, index) => {
+                    let obj = {};
+                    obj.$index = index;
+                    obj.name = item.name;
+                    obj.updateTime = item.updateTime;
+                    obj.cover = config.getImageOriginal() + encodeURIComponent(item.cover);
+                    return obj;
+                });
+            },
             // 点击播放哪个视频
             playVideo(index) {
-                this.promise.then(players => {
-                    this.playerOptions.sources = [players[index]];
+                this.promise.then(res => {
+                    if (res) {
+                        this.playerOptions.sources = [this.playVideos[index]];
+                    }
                 });
             },
             // 添加视频快捷键

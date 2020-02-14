@@ -1,7 +1,7 @@
 <template>
     <div class="hobby-card">
         <div class="cover-src">
-            <el-image :src="card.cover" lazy></el-image>
+            <el-image :src="card.cover" lazy scroll-container='.display-info'></el-image>
         </div>
         <div class="cover-info" ref='coverInfo'>
             <div class="info">

@@ -68,6 +68,8 @@ export const uploadByPieces = ({file, pieceSize = 10, progress, success, error})
         shardMerge({md5: upload.md5, filename: file.name}).then(data => {
             if (data.status === 200) {
                 success && success(data);
+            } else {
+                error && error(data.message);
             }
         }).catch(e => {
             error && error(e);
