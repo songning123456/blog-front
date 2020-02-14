@@ -35,14 +35,12 @@
             };
         },
         watch: {
-            'current.selection': {
+            current: {
                 handler(newVal, oldVal) {
-                    // 为列表时的情况
-                    if (this.kind === 'list') {
-                        this.$refs.hobbyTable.$refs.elTable.setCurrentRow(this.display[newVal]);
-                    }
-                    this.$emit('current', newVal);
-                }
+                    this.$refs.hobbyTable.$refs.elTable.setCurrentRow(this.display[newVal.selection]);
+                    this.$emit('current', newVal.selection);
+                },
+                deep: true
             }
         }
     };

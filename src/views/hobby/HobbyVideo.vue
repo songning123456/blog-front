@@ -11,6 +11,7 @@
                         <div class="el-upload__text">将视频拖到此处，或<em>点击上传</em></div>
                         <div class="el-upload__tip" slot="tip">仅支持<b>mp4</b>且编码<b>h.264</b>文件</div>
                     </el-upload>
+                    <el-progress :text-inside="true" :stroke-width="26" :percentage="progress"></el-progress>
                 </div>
                 <div class="frame-center">
                     <table-or-list ref='tableOrList' :display="displayVideos" @current="playVideo"></table-or-list>
@@ -92,7 +93,8 @@
                     recordStartNo: 0,
                     pageRecordNum: 20,
                     total: 0
-                }
+                },
+                progress: 0
             };
         },
         mounted() {
@@ -115,6 +117,7 @@
                 this.loading = true;
                 uploadByPieces({
                     file: file.file,
+                    pieceSize: 5,
                     success: data => {
                         if (data.isExist) {
                             this.$message.warning('文件已经上传');
@@ -127,6 +130,9 @@
                     error: e => {
                         this.$message.error('分片上传视频失败 ' + e);
                         this.loading = false;
+                    },
+                    progress: data => {
+                        this.progress = data;
                     }
                 });
             },
@@ -195,7 +201,7 @@
                     if (this.loading) {
                         this.loading = false;
                     }
-                    this.$refs.tableOrList.current.selection = 0;
+                    this.$refs.tableOrList.current = {selection: 0};
                 });
             },
             handleCurrentChange(index) {
@@ -227,9 +233,22 @@
                 .frame-top {
                     width: 100%;
                     height: 25%;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
+                    position: relative;
+
+                    .upload-demo {
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                    }
+
+                    /deep/ .el-progress {
+                        width: 8rem;
+                        position: absolute;
+                        top: 35%;
+                        left: 88%;
+                        transform: translate(-50%, -50%);
+                    }
                 }
 
                 .frame-center {

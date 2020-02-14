@@ -6,6 +6,7 @@ export const uploadByPieces = ({file, pieceSize = 10, progress, success, error})
     upload.chunkSize = pieceSize * 1024 * 1024; // 10MB/片
     upload.chunkCount = Math.ceil(file.size / upload.chunkSize); // 总片数
     upload.hasExist = []; // 某个文件已经上传的部分
+    upload.progressIndex = 0;
     const readFile = () => {
         let fileReader = new FileReader();
         fileReader.readAsBinaryString(file);
@@ -67,6 +68,7 @@ export const uploadByPieces = ({file, pieceSize = 10, progress, success, error})
     const mergeChunk = () => {
         shardMerge({md5: upload.md5, filename: file.name}).then(data => {
             if (data.status === 200) {
+                progress(100);
                 success && success({shardMerge: true});
             } else {
                 error && error(data.message);
@@ -85,6 +87,7 @@ export const uploadByPieces = ({file, pieceSize = 10, progress, success, error})
         return new Promise((resolve, reject) => {
             shardUpload(formData).then(data => {
                 if (data.status === 200) {
+                    progress(++upload.progressIndex * Math.floor(90 / upload.chunkCount));
                     resolve('success');
                 } else {
                     reject('fail');
