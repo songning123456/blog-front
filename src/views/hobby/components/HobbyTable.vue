@@ -43,6 +43,12 @@
 
         /deep/ .el-table {
             height: 100%;
+            overflow: auto;
+
+            &::-webkit-scrollbar {
+                width: 3px;
+                height: 3px;
+            }
         }
     }
 </style>
