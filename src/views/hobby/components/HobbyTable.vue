@@ -30,7 +30,9 @@
         },
         methods: {
             currentChange(currentRow, oldCurrentRow) {
-                this.current.selection = currentRow.$index;
+                if (currentRow) {
+                    this.current.selection = currentRow.$index;
+                }
             }
         }
     };
@@ -48,6 +50,10 @@
             &::-webkit-scrollbar {
                 width: 3px;
                 height: 3px;
+            }
+
+            &::before {
+                height: unset;
             }
         }
     }

@@ -16,7 +16,7 @@ export const uploadByPieces = ({file, pieceSize = 10, progress, success, error})
                 if (data.status === 200) {
                     if (!data.data) {
                         // 文件已经上传
-                        success && success(data);
+                        success && success({isExist: true});
                     } else if (data.data && data.data.length > 0) {
                         // 已经上传的部分
                         upload.hasExist = data.data;
@@ -67,7 +67,7 @@ export const uploadByPieces = ({file, pieceSize = 10, progress, success, error})
     const mergeChunk = () => {
         shardMerge({md5: upload.md5, filename: file.name}).then(data => {
             if (data.status === 200) {
-                success && success(data);
+                success && success({shardMerge: true});
             } else {
                 error && error(data.message);
             }

@@ -5,16 +5,25 @@
             <div class="video-left">
                 <div class="frame-top">
                     <el-upload class="upload-demo" drag action='' :accept="'video/mp4'" :show-file-list="false"
-                               :before-upload="beforeUpload" :disabled='loading.upload'
+                               :before-upload="beforeUpload" :disabled='loading'
                                :http-request='httpRequest'>
                         <i class="el-icon-upload"></i>
                         <div class="el-upload__text">将视频拖到此处，或<em>点击上传</em></div>
                         <div class="el-upload__tip" slot="tip">仅支持<b>mp4</b>且编码<b>h.264</b>文件</div>
                     </el-upload>
                 </div>
-                <div class="frame-bottom">
+                <div class="frame-center">
                     <table-or-list ref='tableOrList' :display="displayVideos" @current="playVideo"></table-or-list>
-                    <tool-loading :loading="loading.display" category="spinner"></tool-loading>
+                    <tool-loading :loading="loading" category="spinner"></tool-loading>
+                </div>
+                <div class="frame-bottom">
+                    <el-pagination
+                        @current-change="handleCurrentChange"
+                        :current-page.sync="page.recordStartNo"
+                        :page-size="page.pageRecordNum"
+                        layout="total, prev, pager, next"
+                        :total="page.total" :disabled="loading">
+                    </el-pagination>
                 </div>
             </div>
             <div class="video-right">
@@ -78,29 +87,16 @@
                 },
                 displayVideos: [],
                 playVideos: [],
-                loading: {
-                    upload: false,
-                    display: false
-                },
-                promise: null
+                loading: false, // 数据加载的时候同时禁止上传
+                page: {
+                    recordStartNo: 0,
+                    pageRecordNum: 20,
+                    total: 0
+                }
             };
         },
-        created() {
-            this.loading.display = true;
-            this.promise = new Promise((resolve, reject) => {
-                getVideo({condition: {}}).then(data => {
-                    if (data.status === 200 && data.total > 0) {
-                        this.analysis(data.data);
-                        resolve(true);
-                    } else {
-                        reject(false);
-                    }
-                }).catch(e => {
-                    reject(false);
-                }).finally(() => {
-                    this.loading.display = false;
-                });
-            });
+        mounted() {
+            this.queryData();
         },
         computed: {
             player() {
@@ -116,25 +112,21 @@
             },
             // 覆盖action的动作
             httpRequest(file) {
-                this.loading.upload = true;
-                this.loading.display = true;
+                this.loading = true;
                 uploadByPieces({
                     file: file.file,
                     success: data => {
-                        if (data.message) {
-                            this.$message.warning(data.message);
+                        if (data.isExist) {
+                            this.$message.warning('文件已经上传');
+                            this.loading = false;
                         }
-                        if (data.total > 0) {
-                            this.analysis(data.data);
-                            ++this.$refs.tableOrList.current.selection;
-                            this.loading.upload = false;
-                            this.loading.display = false;
+                        if (data.shardMerge) {
+                            this.queryData();
                         }
                     },
                     error: e => {
                         this.$message.error('分片上传视频失败 ' + e);
-                        this.loading.upload = false;
-                        this.loading.display = false;
+                        this.loading = false;
                     }
                 });
             },
@@ -147,6 +139,24 @@
                     return false;
                 }
             },
+            // 点击播放哪个视频
+            playVideo(index) {
+                this.playerOptions.sources = [this.playVideos[index]];
+            },
+            // 添加视频快捷键
+            playerIsReady(player) {
+                player.hotkeys({
+                    volumeStep: 0.1,
+                    seekStep: 5,
+                    enableModifiersForNumbers: false,
+                    // override fullscreen to trigger when pressing the F key or Ctrl+Enter
+                    fullscreenKey: function (event, player) {
+                        // override fullscreen to trigger when pressing the F key or Ctrl+Enter
+                        return ((event.which === 70) || (event.ctrlKey && event.which === 13));
+                    }
+                });
+            },
+            // 转换查询的结果集
             analysis(list) {
                 this.playVideos = list.map(item => {
                     let obj = {};
@@ -163,26 +173,34 @@
                     return obj;
                 });
             },
-            // 点击播放哪个视频
-            playVideo(index) {
-                this.promise.then(res => {
-                    if (res) {
-                        this.playerOptions.sources = [this.playVideos[index]];
+            queryData() {
+                if (!this.loading) {
+                    this.loading = true;
+                }
+                let params = {
+                    recordStartNo: this.page.recordStartNo - 1,
+                    pageRecordNum: this.page.pageRecordNum,
+                    condition: {}
+                };
+                getVideo(params).then(data => {
+                    if (data.status === 200 && data.total > 0) {
+                        this.page.total = data.total;
+                        this.analysis(data.data);
+                    } else {
+                        this.$message.error(data.message);
                     }
+                }).catch(e => {
+                    this.$message.error(e);
+                }).finally(() => {
+                    if (this.loading) {
+                        this.loading = false;
+                    }
+                    this.$refs.tableOrList.current.selection = 0;
                 });
             },
-            // 添加视频快捷键
-            playerIsReady(player) {
-                player.hotkeys({
-                    volumeStep: 0.1,
-                    seekStep: 5,
-                    enableModifiersForNumbers: false,
-                    // override fullscreen to trigger when pressing the F key or Ctrl+Enter
-                    fullscreenKey: function (event, player) {
-                        // override fullscreen to trigger when pressing the F key or Ctrl+Enter
-                        return ((event.which === 70) || (event.ctrlKey && event.which === 13));
-                    }
-                });
+            handleCurrentChange(index) {
+                this.page.recordStartNo = index;
+                this.queryData();
             }
         }
     };
@@ -214,10 +232,30 @@
                     align-items: center;
                 }
 
-                .frame-bottom {
+                .frame-center {
                     width: 100%;
-                    height: 75%;
+                    height: calc(75% - 3.2rem);
                     position: relative;
+                }
+
+                .frame-bottom {
+                    height: 3.2rem;
+                    width: 100%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                    /deep/ .el-pagination {
+                        .btn-next, .btn-prev {
+                            background: unset;
+                        }
+
+                        .el-pager {
+                            li {
+                                background: unset;
+                            }
+                        }
+                    }
                 }
             }
 

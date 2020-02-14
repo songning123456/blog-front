@@ -31,7 +31,7 @@
         data() {
             return {
                 kind: 'list',
-                current: {selection: 0}
+                current: {selection: -1}
             };
         },
         watch: {
@@ -39,20 +39,10 @@
                 handler(newVal, oldVal) {
                     // 为列表时的情况
                     if (this.kind === 'list') {
-                        if (this.$refs.hobbyTable) {
-                            this.$refs.hobbyTable.$refs.elTable.setCurrentRow(this.display[newVal]);
-                        } else {
-                            // 第一次挂载时还未加载完成
-                            this.$nextTick(() => {
-                                setTimeout(() => {
-                                    this.$refs.hobbyTable.$refs.elTable.setCurrentRow(this.display[newVal]);
-                                }, 1000);
-                            });
-                        }
+                        this.$refs.hobbyTable.$refs.elTable.setCurrentRow(this.display[newVal]);
                     }
                     this.$emit('current', newVal);
-                },
-                immediate: true
+                }
             }
         }
     };
@@ -60,10 +50,11 @@
 
 <style lang="scss" scoped>
     .table-or-list {
-        margin: .5rem;
+        /*margin: .5rem;*/
+        margin-left: .5rem;
         border: 1px solid #efefef;
-        width: calc(100% - 1rem - 2px);
-        height: calc(100% - 1rem - 2px);
+        width: calc(100% - 0.5rem - 2px);
+        height: calc(100% - 2px);
 
         .choose-type {
             width: 100%;
