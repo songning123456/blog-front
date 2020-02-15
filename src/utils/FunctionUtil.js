@@ -5,7 +5,7 @@ let FunctionUtil = {};
  * @param obj
  * @returns {*}
  */
-FunctionUtil.deepClone = function clone (obj) {
+FunctionUtil.deepClone = function clone(obj) {
     let result = obj;
     if (typeof obj === 'object' && obj !== null) {
         result = Object.prototype.toString.call(obj) === '[object Array]' ? [] : {};
@@ -96,6 +96,19 @@ FunctionUtil.GetString = function (url, obj) {
     }
     result = result.slice(0, -1);
     return result;
+};
+
+/**
+ * 保留小数后n位，整数不变
+ * @param value
+ * @param n
+ */
+FunctionUtil.keepDecimal = function (value, n) {
+    let result = value + '';
+    if (result.includes('.')) {
+        result = (+result).toFixed(n);
+    }
+    return +result;
 };
 
 export default FunctionUtil;

@@ -11,7 +11,9 @@
                         <div class="el-upload__text">将视频拖到此处，或<em>点击上传</em></div>
                         <div class="el-upload__tip" slot="tip">仅支持<b>mp4</b>且编码<b>h.264</b>文件</div>
                     </el-upload>
-                    <el-progress :text-inside="true" :stroke-width="26" :percentage="progress"></el-progress>
+                    <div class="begin-cancel-progress" v-show="progress.show">
+                        <el-progress type="circle" :percentage="progress.percentage"></el-progress>
+                    </div>
                 </div>
                 <div class="frame-center">
                     <table-or-list ref='tableOrList' :display="displayVideos" @current="playVideo"></table-or-list>
@@ -90,11 +92,14 @@
                 playVideos: [],
                 loading: false, // 数据加载的时候同时禁止上传
                 page: {
-                    recordStartNo: 0,
+                    recordStartNo: 1,
                     pageRecordNum: 20,
                     total: 0
                 },
-                progress: 0
+                progress: {
+                    percentage: 0,
+                    show: false
+                }
             };
         },
         mounted() {
@@ -123,8 +128,20 @@
                             this.$message.warning('文件已经上传');
                             this.loading = false;
                         }
+                        // 合并分片成功后重新查询一次数据
                         if (data.shardMerge) {
                             this.queryData();
+                        }
+                        // 显示 上传进度条
+                        if (data.showProgress) {
+                            this.progress.show = true;
+                        }
+                        // 隐藏 上传进度条
+                        if (data.hideProgress) {
+                            setTimeout(() => {
+                                this.progress.show = false;
+                                this.progress.percentage = 0;
+                            }, 1000);
                         }
                     },
                     error: e => {
@@ -132,7 +149,7 @@
                         this.loading = false;
                     },
                     progress: data => {
-                        this.progress = data;
+                        this.progress.percentage = data;
                     }
                 });
             },
@@ -242,10 +259,10 @@
                         transform: translate(-50%, -50%);
                     }
 
-                    /deep/ .el-progress {
+                    .begin-cancel-progress {
                         width: 8rem;
                         position: absolute;
-                        top: 35%;
+                        top: 50%;
                         left: 88%;
                         transform: translate(-50%, -50%);
                     }
