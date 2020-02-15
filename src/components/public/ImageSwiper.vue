@@ -8,7 +8,9 @@
             </div>
         </div>
         <!-- Add Pagination -->
-        <div class="swiper-pagination swiper-pagination-white" id="swiper-spit"></div>
+        <div class="swiper-pagination swiper-pagination-white" id="swiper-spit" v-if="options.pagination"></div>
+        <div class="swiper-button-prev" v-if="options.navigation.prevEl"></div>
+        <div class="swiper-button-next" v-if="options.navigation.nextEl"></div>
     </div>
 </template>
 
@@ -29,6 +31,7 @@
             options: {
                 type: Object,
                 default() {
+                    let scope = this;
                     return {
                         // 滑动速度
                         speed: 1000,
@@ -44,16 +47,25 @@
                         keyboard: true,
                         //循环
                         loop: true,
-                        autoplay: {
+                        /*autoplay: {
                             delay: 2000,
                             stopOnLastSlide: false,
                             disableOnInteraction: true
-                        },
+                        },*/
                         // 鼠标覆盖Swiper时指针会变成手掌形状，拖动时指针会变成抓手形状
                         grabCursor: true,
+                        navigation: {
+                            nextEl: '.swiper-button-next',
+                            prevEl: '.swiper-button-prev'
+                        },
                         pagination: {
                             el: '.swiper-pagination',
                             clickable: true
+                        },
+                        on: {
+                            slideChange: function (event) {
+                                scope.$emit('slideChange', this.realIndex);
+                            }
                         }
                     };
                 }

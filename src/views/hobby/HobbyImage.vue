@@ -3,18 +3,35 @@
         <left-side-bar current-tab='hobbyImage' kind='hobby'></left-side-bar>
         <div class="image-frame">
             <div class="image-left">
-                <el-upload class="upload-demo" action="" drag multiple :show-file-list="false" accept="image/*"
-                           :before-upload="beforeUpload"
-                           :http-request='httpRequest'>
-                    <i class="el-icon-upload"></i>
-                    <div class="el-upload__text">将图片拖到此处，或<em>点击上传</em></div>
-                    <div class="el-upload__tip" slot="tip">只能上传jpg/png文件</div>
-                </el-upload>
+                <div class="frame-top">
+                    <el-upload class="upload-demo" action="" drag :show-file-list="false" accept="image/jpeg,image/png"
+                               :before-upload="beforeUpload" :disabled='loading'
+                               :http-request='httpRequest'>
+                        <i class="el-icon-upload"></i>
+                        <div class="el-upload__text">将图片拖到此处，或<em>点击上传</em></div>
+                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件</div>
+                    </el-upload>
+                </div>
+                <div class="frame-center">
+                    <table-or-list ref='tableOrList' :display="displayImages" @current="playImage"></table-or-list>
+                    <tool-loading :loading="loading" category="spinner"></tool-loading>
+                </div>
+                <div class="frame-bottom">
+                    <el-pagination
+                        @current-change="handleCurrentChange"
+                        :current-page.sync="page.recordStartNo"
+                        :page-size="page.pageRecordNum"
+                        layout="total, prev, pager, next"
+                        :total="page.total" :disabled="loading">
+                    </el-pagination>
+                </div>
             </div>
             <div class="image-right">
                 <div class="container">
-                    <image-swiper :swiper-list="swiperList" v-if="swiperList.length > 0"></image-swiper>
-                    <empty-view v-else></empty-view>
+                    <tool-loading :loading="loading" category="spinner"></tool-loading>
+                    <image-swiper ref='imageSwiper' :swiper-list="swiperList" @slideChange='slideChange'
+                                  v-show="swiperList.length > 0"></image-swiper>
+                    <empty-view v-show="swiperList.length === 0"></empty-view>
                 </div>
             </div>
         </div>
@@ -25,14 +42,16 @@
 <script>
     import LeftSideBar from '../../components/public/LeftSideBar';
     import FloatMenu from '../../components/util/FloatMenu';
-    import {operateAlbum, getAlbum} from '../../service/request';
+    import {saveAlbum, getAlbum} from '../../service/request';
     import EmptyView from '../../components/util/EmptyView';
     import ImageSwiper from '../../components/public/ImageSwiper';
     import config from '../../utils/ConfigUtil';
+    import TableOrList from './components/TableOrList';
+    import ToolLoading from '../../components/util/ToolLoading';
 
     export default {
         name: 'HobbyImage',
-        components: {LeftSideBar, FloatMenu, ImageSwiper, EmptyView},
+        components: {ToolLoading, TableOrList, LeftSideBar, FloatMenu, ImageSwiper, EmptyView},
         data() {
             return {
                 menu: [
@@ -56,18 +75,18 @@
                         path: '/hobby-video'
                     }
                 ],
-                swiperList: []
+                swiperList: [],
+                displayImages: [],
+                loading: false,
+                page: {
+                    recordStartNo: 1,
+                    pageRecordNum: 20,
+                    total: 0
+                }
             };
         },
         mounted() {
-            let scope = this;
-            getAlbum({condition: {}}).then(data => {
-                if (data.status === 200 && data.total > 0) {
-                    scope.swiperList = data.data.map(item => {
-                        return config.getImageOriginal() + encodeURIComponent(item.imageSrc);
-                    });
-                }
-            });
+            this.queryData();
         },
         methods: {
             chooseItem(menu) {
@@ -77,15 +96,13 @@
                 }
             },
             httpRequest(file) {
+                this.loading = true;
                 let formData = new FormData();
                 formData.append('file', file.file, file.file.name);
                 formData.append('dir', 'album');
-                operateAlbum(formData).then(data => {
-                    if (data.status === 200 && data.total > 0) {
-                        this.$message.success('上传图片成功');
-                        this.swiperList = data.data.map(item => {
-                            return config.getImageOriginal() + encodeURIComponent(item.imageSrc);
-                        });
+                saveAlbum(formData).then(data => {
+                    if (data.status === 200) {
+                        this.queryData();
                     } else {
                         this.$message.error('上传图片失败 ' + data.message);
                     }
@@ -97,6 +114,56 @@
                     this.$message.warning('上传模板只能是jpg/png格式!');
                     return false;
                 }
+            },
+            analysis(list) {
+                this.displayImages = list.map((item, index) => {
+                    let obj = {};
+                    obj.$index = index;
+                    obj.name = item.name;
+                    obj.updateTime = item.updateTime;
+                    obj.cover = config.getImageOriginal() + encodeURIComponent(item.imageSrc);
+                    return obj;
+                });
+                this.swiperList = list.map(item => {
+                    return config.getImageOriginal() + encodeURIComponent(item.imageSrc);
+                });
+            },
+            queryData() {
+                if (!this.loading) {
+                    this.loading = true;
+                }
+                let params = {
+                    recordStartNo: this.page.recordStartNo - 1,
+                    pageRecordNum: this.page.pageRecordNum,
+                    condition: {}
+                };
+                getAlbum(params).then(data => {
+                    if (data.status === 200 && data.total > 0) {
+                        this.page.total = data.total;
+                        this.analysis(data.data);
+                    } else {
+                        this.$message.error(data.message);
+                    }
+                }).catch(e => {
+                    this.$message.error(e);
+                }).finally(() => {
+                    if (this.loading) {
+                        this.loading = false;
+                    }
+                    this.$refs.tableOrList.current = {selection: 0};
+                });
+            },
+            handleCurrentChange(index) {
+                this.page.recordStartNo = index;
+                this.queryData();
+            },
+            playImage(index) {
+                setTimeout(() => {
+                    this.$refs.imageSwiper.swiper.slideToLoop(index, 1000, 0);
+                }, 1);
+            },
+            slideChange(index) {
+                this.$refs.tableOrList.current.selection = index;
             }
         }
     };
@@ -119,9 +186,45 @@
                 width: 40%;
                 height: 100%;
                 float: left;
-                display: flex;
-                justify-content: center;
-                align-items: center;
+
+                .frame-top {
+                    width: 100%;
+                    height: 25%;
+                    position: relative;
+
+                    .upload-demo {
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                    }
+                }
+
+                .frame-center {
+                    width: 100%;
+                    height: calc(75% - 3.2rem);
+                    position: relative;
+                }
+
+                .frame-bottom {
+                    height: 3.2rem;
+                    width: 100%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                    /deep/ .el-pagination {
+                        .btn-next, .btn-prev {
+                            background: unset;
+                        }
+
+                        .el-pager {
+                            li {
+                                background: unset;
+                            }
+                        }
+                    }
+                }
             }
 
             .image-right {
@@ -138,6 +241,8 @@
                     display: flex;
                     justify-content: center;
                     align-items: center;
+                    position: relative;
+                    background: white;
                 }
             }
         }

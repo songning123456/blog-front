@@ -165,8 +165,8 @@ export const existUser = (params) => {
 export const saveImage = (params) => {
     return axios.ajax('/image/save', 'post', params);
 };
-export const operateAlbum = (params) => {
-    return axios.ajax('/image/operateAlbum', 'post', params);
+export const saveAlbum = (params) => {
+    return axios.ajax('/image/saveAlbum', 'post', params);
 };
 export const getAlbum = (params) => {
     return axios.ajax('/image/getAlbum', 'post', params);
