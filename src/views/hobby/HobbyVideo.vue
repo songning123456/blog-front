@@ -209,8 +209,6 @@
                     if (data.status === 200 && data.total > 0) {
                         this.page.total = data.total;
                         this.analysis(data.data);
-                    } else {
-                        this.$message.error(data.message);
                     }
                 }).catch(e => {
                     this.$message.error(e);
@@ -218,7 +216,9 @@
                     if (this.loading) {
                         this.loading = false;
                     }
-                    this.$refs.tableOrList.current = {selection: 0};
+                    if (this.page.total > 0) {
+                        this.$refs.tableOrList.current = {selection: 0};
+                    }
                 });
             },
             handleCurrentChange(index) {
