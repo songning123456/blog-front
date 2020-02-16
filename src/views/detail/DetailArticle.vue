@@ -5,7 +5,7 @@
                 <div class='top'><span>{{result.title}}</span></div>
                 <div class='bottom'>
                         <span>
-                        {{result.author + '&nbsp;&nbsp;|&nbsp;&nbsp;' + getUpdateTime}}
+                        {{result.author + '&nbsp;&nbsp;|&nbsp;&nbsp;' + result.updateTime}}
                     </span>
                 </div>
             </div>
@@ -24,7 +24,6 @@
     import {getContent, insertHistoryInfo} from '../../service/request.js';
     import ElFrameset from '../../components/layout/el-frameset';
     import ElFrame from '../../components/layout/el-frame';
-    import DateUtil from '../../utils/DateUtil';
     import EmptyView from '../../components/util/EmptyView';
     import ToolLoading from '../../components/util/ToolLoading';
 
@@ -77,17 +76,9 @@
         computed: {
             content: {
                 get () {
-                    let scope = this;
-                    return scope.result.content;
+                    return this.result.content;
                 },
                 set () {
-                }
-            },
-            getUpdateTime () {
-                if (this.result.updateTime) {
-                    return DateUtil.formatDate(new Date(this.result.updateTime));
-                } else {
-                    return DateUtil.formatDate(new Date());
                 }
             }
         }

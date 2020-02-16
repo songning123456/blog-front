@@ -5,7 +5,7 @@
                   :class='{"current-tab": currentTab === tab.name}'>{{tab.label}}
             </span>
         </div>
-        <el-input ref='elInput' suffix-icon='el-icon-search' v-model='search' placeholder='请输入搜索内容'
+        <el-input ref='elInput' suffix-icon='el-icon-search' v-model='$store.state.fuzzyQuery' placeholder='请输入搜索内容'
                   @keyup.enter.native="queryBtn"></el-input>
         <el-button type="primary" @click.native='writeBtn'>写文章</el-button>
         <el-avatar :src="avatar" @click.native.stop="configBar = !configBar">
@@ -45,7 +45,6 @@
                     {label: '历史', name: 'history'},
                     {label: '微聊', name: 'wechat'}
                 ],
-                search: '',
                 blogger: {},
                 configBar: false // 展示 设置
             };
@@ -100,12 +99,12 @@
                 this.configBar = false;
             },
             queryBtn() {
-                if (this.search) {
+                if (this.$store.state.fuzzyQuery) {
                     this.$router.push({
                         path: '/search',
                         name: 'search',
                         query: {
-                            data: this.search
+                            data: this.$store.state.fuzzyQuery
                         }
                     });
                 } else {

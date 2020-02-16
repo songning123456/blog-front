@@ -8,7 +8,8 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
     state: {
         language: getLanguage(),
-        blogger: {}
+        blogger: {},
+        fuzzyQuery: ''
     },
     mutations: {
         SET_LANGUAGE: (state, language) => {
@@ -20,7 +21,7 @@ const store = new Vuex.Store({
         }
     },
     actions: {
-        setLanguage ({commit}, language) {
+        setLanguage({commit}, language) {
             commit('SET_LANGUAGE', language);
         }
     }

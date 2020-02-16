@@ -35,7 +35,7 @@
     export default {
         name: 'Search',
         components: {MainHead, EmptyView, ToolLoading, Column},
-        data () {
+        data() {
             return {
                 busy: false,
                 page: {
@@ -51,21 +51,19 @@
             };
         },
         mounted () {
-            let scope = this;
-            if (scope.$route.query) {
-                scope.content = scope.$route.query.data;
+            if (this.$route.query) {
+                this.content = this.$route.query.data;
             }
             let doc = this.$refs['searchArticle'];
             doc.addEventListener('click', this.hiddenIntroduction);
             doc.addEventListener('mousewheel', this.hiddenIntroduction);
         },
         methods: {
-            futureTab (tab) {
+            futureTab(tab) {
                 this.$router.push({path: '/' + tab});
             },
-            getDetail (id) {
-                let scope = this;
-                let routerData = scope.$router.resolve({
+            getDetail(id) {
+                let routerData = this.$router.resolve({
                     path: '/detail',
                     query: {
                         id: id
@@ -73,10 +71,10 @@
                 });
                 window.open(routerData.href, '_blank');
             },
-            hiddenIntroduction (e) {
+            hiddenIntroduction(e) {
                 this.modal = false;
             },
-            showIntroduction (id, positionY) {
+            showIntroduction(id, positionY) {
                 this.modal = false;
                 setTimeout(() => {
                     this.modal = true;
@@ -99,7 +97,7 @@
                     }
                 }, 100);
             },
-            getHighlightArticle () {
+            getHighlightArticle() {
                 let scope = this;
                 let form = {
                     content: scope.content
@@ -127,7 +125,7 @@
                     scope.loading = false;
                 });
             },
-            loadMore () {
+            loadMore() {
                 let scope = this;
                 scope.busy = true;
                 scope.loading = true;
