@@ -1,5 +1,5 @@
 <template>
-    <div class="hobby-card">
+    <div class="show-card">
         <div class="cover-src">
             <el-image :src="card.cover" lazy scroll-container='.display-info'></el-image>
         </div>
@@ -23,7 +23,7 @@
 <script>
 
     export default {
-        name: 'HobbyCard',
+        name: 'ShowCard',
         props: {
             card: {
                 type: Object,
@@ -46,7 +46,7 @@
 </script>
 
 <style lang="scss" scoped>
-    .hobby-card {
+    .show-card {
         width: 23%;
         margin: 0 1% 1% 1%;
         padding: 1%;
@@ -94,9 +94,9 @@
                 }
             }
 
-            .info:nth-child(1) {
+            .info {
                 span:nth-child(2) {
-                    padding-left: .24rem;
+                    padding: 0 .24rem;
                     box-sizing: border-box;
                 }
             }

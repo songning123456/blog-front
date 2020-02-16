@@ -46,7 +46,7 @@
     import EmptyView from '../../components/util/EmptyView';
     import ImageSwiper from '../../components/public/ImageSwiper';
     import config from '../../utils/ConfigUtil';
-    import TableOrList from './components/TableOrList';
+    import TableOrList from '../../components/tableOrList/TableOrList';
     import ToolLoading from '../../components/util/ToolLoading';
 
     export default {

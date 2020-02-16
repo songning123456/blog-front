@@ -1,17 +1,17 @@
 <template>
-    <div class="hobby-list">
-        <hobby-card v-for="item in list" :key="item.$index" :card="item"
+    <div class="show-list">
+        <show-card v-for="item in list" :key="item.$index" :card="item"
                     @click.native="currentChange(item.$index)"
-                    :class="{'high-light': current.selection === item.$index}"></hobby-card>
+                    :class="{'high-light': current.selection === item.$index}"></show-card>
     </div>
 </template>
 
 <script>
-    import HobbyCard from './HobbyCard';
+    import ShowCard from './ShowCard';
 
     export default {
-        name: 'HobbyList',
-        components: {HobbyCard},
+        name: 'ShowList',
+        components: {ShowCard},
         props: {
             list: {
                 type: Array,
@@ -39,7 +39,7 @@
 </script>
 
 <style lang="scss" scoped>
-    .hobby-list {
+    .show-list {
         width: 100%;
         height: 100%;
 

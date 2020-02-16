@@ -64,9 +64,9 @@
                 return DateUtil.formatDate(new Date(scope.result[index].updateTime));
             },
             getIntroduction (userId) {
-                let scope = this;
-                let routerData = scope.$router.resolve({
-                    path: '/introduction',
+                let routerData = this.$router.resolve({
+                    path: '/author-personal',
+                    name: 'authorPersonal',
                     query: {
                         userId: userId
                     }

@@ -26,7 +26,7 @@
 
 <script>
     import config from '../../utils/ConfigUtil';
-    import {exitBlog, getBloggerInfo} from '../../service/request';
+    import {exitBlog, getBlogger} from '../../service/request';
 
     export default {
         name: 'MainHead',
@@ -66,7 +66,7 @@
             }
         },
         mounted() {
-            this.getBlogger();
+            this.getBloggerInfo();
         },
         activated() {
             // 绑定搜索文章 查询事件
@@ -115,11 +115,11 @@
             writeBtn() {
                 this.$router.push({path: '/edit'});
             },
-            getBlogger() {
+            getBloggerInfo() {
                 if (JSON.stringify(this.$store.state.blogger) !== '{}') {
                     this.blogger = Object.assign({}, this.$store.state.blogger);
                 } else {
-                    getBloggerInfo({condition: {}}).then((data) => {
+                    getBlogger({condition: {}}).then((data) => {
                         this.$response(data, '获取个人信息').then(data => {
                             this.blogger = data.data[0];
                             this.$store.commit('SET_BLOGGER', Object.assign({}, this.blogger));

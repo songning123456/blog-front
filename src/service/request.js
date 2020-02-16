@@ -81,7 +81,7 @@ export const getMyInfo = (params) => {
  *
  * @param params
  */
-export const getBloggerInfo = (params) => {
+export const getBlogger = (params) => {
     return axios.ajax('/blogger/getBlogger', 'post', params);
 };
 

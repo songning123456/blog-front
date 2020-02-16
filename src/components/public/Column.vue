@@ -28,7 +28,7 @@
         props: {
             article: {
                 type: Object,
-                default () {
+                default() {
                     return {};
                 }
             },
@@ -41,14 +41,14 @@
                 default: false
             }
         },
-        data () {
+        data() {
             return {
                 love: 0,
                 hasRead: 0,
                 sum: 0
             };
         },
-        mounted () {
+        mounted() {
             let param = {
                 condition: {
                     articleId: this.article.id
@@ -63,7 +63,7 @@
             });
         },
         methods: {
-            sureTag () {
+            sureTag() {
                 let form = {
                     articleId: this.article.id,
                     love: this.love
@@ -78,15 +78,15 @@
                     }
                 });
             },
-            getRecentTime () {
+            getRecentTime() {
                 let result = DateUtil.formatDate(new Date(this.article.updateTime));
                 return result;
             },
-            displayIntroduction (e) {
+            displayIntroduction(e) {
                 this.$emit('introduction', this.article.id, e.clientY);
             },
             // 点击标题进入文章详情
-            detail () {
+            detail() {
                 let params = {
                     condition: {
                         articleId: this.article.id
@@ -99,16 +99,17 @@
                 });
                 this.$emit('detail', this.article.id);
             },
-            getIntroduction () {
+            getIntroduction() {
                 let routerData = this.$router.resolve({
-                    path: '/introduction',
+                    path: '/author-personal',
+                    name: 'authorPersonal',
                     query: {
                         userId: this.article.userId
                     }
                 });
                 window.open(routerData.href, '_blank');
             },
-            jumpClock () {
+            jumpClock() {
                 let scope = this;
                 scope.$router.push({path: '/world-clock'});
             }

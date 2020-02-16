@@ -146,11 +146,27 @@ export default new Router({
                 requireAuth: true
             }
         }, {
-            path: '/introduction',
-            name: 'introduction',
-            component: () => import('../views/introduction/BloggerIntroduction'),
+            path: '/author-personal',
+            name: 'authorPersonal',
+            component: () => import('../views/authorInfo/AuthorPersonal'),
             meta: {
-                title: '作者简介',
+                title: '作者经历',
+                requireAuth: true
+            }
+        }, {
+            path: '/author-album',
+            name: 'authorAlbum',
+            component: () => import('../views/authorInfo/AuthorAlbum'),
+            meta: {
+                title: '作者相册',
+                requireAuth: true
+            }
+        }, {
+            path: '/author-video',
+            name: 'authorVideo',
+            component: () => import('../views/authorInfo/AuthorVideo'),
+            meta: {
+                title: '作者视频',
                 requireAuth: true
             }
         }, {

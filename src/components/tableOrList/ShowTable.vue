@@ -1,5 +1,5 @@
 <template>
-    <div class="hobby-table">
+    <div class="show-table">
         <el-table :data="table" ref='elTable' style="width: 100%" @current-change='currentChange' highlight-current-row>
             <el-table-column label="序号" width="100" align="center"><span slot-scope="scope">{{ scope.$index + 1}}</span>
             </el-table-column>
@@ -11,7 +11,7 @@
 
 <script>
     export default {
-        name: 'HobbyTable',
+        name: 'ShowTable',
         props: {
             current: {
                 type: Object,
@@ -39,7 +39,7 @@
 </script>
 
 <style lang="scss" scoped>
-    .hobby-table {
+    .show-table {
         width: 100%;
         height: 100%;
 

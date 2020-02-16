@@ -31,7 +31,7 @@
     import Config from '../../utils/ConfigUtil';
     import {
         publishArticle,
-        getBloggerInfo,
+        getBlogger,
         saveImage,
         deleteImage,
         insertHistoryInfo,
@@ -155,7 +155,7 @@
                 if (JSON.stringify(this.$store.state.blogger) !== '{}') {
                     this.form.author = this.$store.state.blogger.author;
                 } else {
-                    getBloggerInfo({condition: {}}).then((data) => {
+                    getBlogger({condition: {}}).then((data) => {
                         this.$response(data, '获取作者信息').then(data => {
                             this.form.author = data.data[0].author;
                         });

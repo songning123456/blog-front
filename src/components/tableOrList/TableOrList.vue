@@ -5,21 +5,21 @@
             <i class="el-icon-s-unfold" :class="{'to-blue': kind === 'table'}" @click="kind = 'table'"></i>
         </div>
         <div class="display-info" v-show="display.length > 0">
-            <hobby-list :list="display" :current='current' v-show='kind === "list"'></hobby-list>
-            <hobby-table ref='hobbyTable' :table='display' :current='current' v-show="kind === 'table'"></hobby-table>
+            <show-list ref='showList' :list="display" :current='current' v-show='kind === "list"'></show-list>
+            <show-table ref='showTable' :table='display' :current='current' v-show="kind === 'table'"></show-table>
         </div>
         <empty-view v-show="display.length === 0"></empty-view>
     </div>
 </template>
 
 <script>
-    import HobbyList from './HobbyList';
-    import HobbyTable from './HobbyTable';
-    import EmptyView from '../../../components/util/EmptyView';
+    import ShowList from './ShowList';
+    import ShowTable from './ShowTable';
+    import EmptyView from '../util/EmptyView';
 
     export default {
         name: 'TableOrList',
-        components: {HobbyList, HobbyTable, EmptyView},
+        components: {ShowList, ShowTable, EmptyView},
         props: {
             display: {
                 type: Array,
@@ -37,7 +37,7 @@
         watch: {
             current: {
                 handler(newVal, oldVal) {
-                    this.$refs.hobbyTable.$refs.elTable.setCurrentRow(this.display[newVal.selection]);
+                    this.$refs.showTable.$refs.elTable.setCurrentRow(this.display[newVal.selection]);
                     this.$emit('current', newVal.selection);
                 },
                 deep: true

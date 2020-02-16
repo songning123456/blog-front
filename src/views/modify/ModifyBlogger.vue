@@ -68,7 +68,7 @@
 
 <script>
     import LeftSideBar from '../../components/public/LeftSideBar';
-    import {getBloggerInfo, saveImage, updateBlogger} from '../../service/request';
+    import {getBlogger, saveImage, updateBlogger} from '../../service/request';
     import config from '../../utils/ConfigUtil';
     import ToolLoading from '../../components/util/ToolLoading';
     import Reg from '../../utils/RegularUtil';
@@ -191,7 +191,7 @@
                     }
                     this.copy = Object.assign({}, this.form);
                 } else {
-                    getBloggerInfo({condition: {}}).then(data => {
+                    getBlogger({condition: {}}).then(data => {
                         this.$response(data, '获取个人简介').then(data => {
                             this.form = data.data[0];
                             for (let key in this.form) {
