@@ -9,7 +9,7 @@
                 <div class='second'>
                     <span @click.stop='getIntroduction(item.userId)'>{{item.author}}</span>
                     <span>{{' | '}}</span>
-                    <span @click.stop="$router.push({path: '/world-clock'})">{{getUpdateTime(index)}}</span>
+                    <span @click.stop="$router.push({path: '/world-clock'})">{{result[index].updateTime}}</span>
                 </div>
             </div>
         </template>
@@ -22,7 +22,6 @@
 </template>
 
 <script>
-    import DateUtil from '../../utils/DateUtil';
     import EmptyView from '../../components/util/EmptyView';
     import {getHotArticle} from '../../service/request';
 
@@ -59,10 +58,6 @@
             }
         },
         methods: {
-            getUpdateTime (index) {
-                let scope = this;
-                return DateUtil.formatDate(new Date(scope.result[index].updateTime));
-            },
             getIntroduction (userId) {
                 let routerData = this.$router.resolve({
                     path: '/author-personal',

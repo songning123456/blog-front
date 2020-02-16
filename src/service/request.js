@@ -124,7 +124,7 @@ export const exitBlog = () => {
  * @returns {*|Promise|Promise<any>}
  */
 export const getTag = (params) => {
-    return axios.ajax('/tag/get', 'post', params);
+    return axios.ajax('/tag/getTag', 'post', params);
 };
 
 /**
@@ -133,7 +133,7 @@ export const getTag = (params) => {
  * @returns {*|Promise|Promise<any>}
  */
 export const updateTag = (params) => {
-    return axios.ajax('/tag/update', 'post', params);
+    return axios.ajax('/tag/updateTag', 'post', params);
 };
 
 /**

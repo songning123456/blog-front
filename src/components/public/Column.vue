@@ -14,13 +14,12 @@
         <div class='info'>
             <span @click.stop='getIntroduction'>{{article.author}}</span>
             <span>{{' | '}}</span>
-            <span @click.stop='jumpClock'>{{getRecentTime()}}</span>
+            <span @click.stop='jumpClock'>{{article.updateTime}}</span>
         </div>
     </div>
 </template>
 
 <script>
-    import DateUtil from '../../utils/DateUtil';
     import {getTag, updateTag} from '../../service/request';
 
     export default {
@@ -77,10 +76,6 @@
                         this.sum = data.dataExt.tags;
                     }
                 });
-            },
-            getRecentTime() {
-                let result = DateUtil.formatDate(new Date(this.article.updateTime));
-                return result;
             },
             displayIntroduction(e) {
                 this.$emit('introduction', this.article.id, e.clientY);
