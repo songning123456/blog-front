@@ -50,7 +50,7 @@
                 loading: false
             };
         },
-        mounted () {
+        mounted() {
             if (this.$route.query) {
                 this.content = this.$route.query.data;
             }
@@ -59,7 +59,10 @@
             doc.addEventListener('mousewheel', this.hiddenIntroduction);
         },
         beforeRouteUpdate(to, from, next) {
-            debugger;
+            this.content = to.query.data;
+            this.page.recordStartNo = -1;
+            this.loadMore();
+            next();
         },
         methods: {
             futureTab(tab) {
@@ -101,40 +104,38 @@
                 }, 100);
             },
             getHighlightArticle() {
-                let scope = this;
-                let form = {
-                    content: scope.content
-                };
                 let param = {
-                    condition: form,
-                    recordStartNo: scope.page.recordStartNo,
-                    pageRecordNum: scope.page.pageRecordNum
+                    condition: {content: this.content},
+                    recordStartNo: this.page.recordStartNo,
+                    pageRecordNum: this.page.pageRecordNum
                 };
                 highlightSearch(param).then((data) => {
                     if (data.status === 200) {
                         if (data.total > 0) {
+                            if (this.page.recordStartNo === 0) {
+                                this.result = [];
+                            }
                             data.data.forEach(item => {
-                                scope.result.push(item);
+                                this.result.push(item);
                             });
-                            scope.page.total = data.total;
-                            scope.busy = false;
+                            this.page.total = data.total;
+                            this.busy = false;
                         } else {
-                            scope.busy = true;
+                            this.busy = true;
                         }
                     } else {
                         this.$message.error(data.message ? data.message : 'Function-highlightSearch 查询异常!');
                     }
-                }).catch().finally(() => {
-                    scope.loading = false;
+                }).finally(() => {
+                    this.loading = false;
                 });
             },
             loadMore() {
-                let scope = this;
-                scope.busy = true;
-                scope.loading = true;
+                this.busy = true;
+                this.loading = true;
                 setTimeout(() => {
-                    scope.page.recordStartNo++;
-                    scope.getHighlightArticle();
+                    this.page.recordStartNo++;
+                    this.getHighlightArticle();
                 }, 500);
             }
         }
