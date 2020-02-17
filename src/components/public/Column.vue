@@ -1,14 +1,15 @@
 <template>
     <div class='column'>
         <div class='tag'>
-            <div class='like-tag' v-if="love === 1" @click.stop="sureTag"><img
+            <div class='like-tag' v-if="love === 1" @click.stop="modifyLoveOfTag(0)"><img
                 src="../../assets/like.svg"/><span>{{sum}}</span></div>
-            <div class="dislike-tag" v-if="!love" @click.stop="sureTag"><img
+            <div class="dislike-tag" v-if="!love" @click.stop="modifyLoveOfTag(1)"><img
                 src="../../assets/dislike.svg"><span>{{sum}}</span>
             </div>
             <i class="el-icon-delete" v-if="showDelete" @click.stop="$emit('delete', article.id)"></i>
             <el-popover placement="right-start" trigger="click" popper-class='column-popover' :visible-arrow='false'>
-                <el-table :data='searchResult' :show-overflow-tooltip='true' max-height="400" :header-cell-style="{background:'#eef1f6',color:'#606266'}">
+                <el-table :data='searchResult' :show-overflow-tooltip='true' max-height="400"
+                          :header-cell-style="{background:'#eef1f6',color:'#606266'}">
                     <el-table-column width="50" label='序号' align="center"><span slot-scope="scope"
                                                                                 v-html="scope.$index + 1"></span>
                     </el-table-column>
@@ -18,7 +19,8 @@
                 <i class="el-icon-chat-line-square" slot="reference" v-if="searchResult.length > 0"></i>
             </el-popover>
         </div>
-        <div class='title'><span class='modify-txt' :class="{'is-read': hasRead}"><span @click="detail">{{article.title}}</span></span></div>
+        <div class='title'><span class='modify-txt' :class="{'is-read': hasRead}"><span @click="detail">{{article.title}}</span></span>
+        </div>
         <div class='info'>
             <span @click.stop='getIntroduction'>{{article.author}}</span>
             <span>{{' | '}}</span>
@@ -72,13 +74,12 @@
             });
         },
         methods: {
-            sureTag() {
-                let form = {
-                    articleId: this.article.id,
-                    love: this.love
-                };
+            modifyLoveOfTag(love) {
                 let param = {
-                    condition: form
+                    condition: {
+                        articleId: this.article.id,
+                        love: love
+                    }
                 };
                 updateTag(param).then((data) => {
                     if (data.status === 200) {
@@ -91,12 +92,13 @@
             detail() {
                 let params = {
                     condition: {
-                        articleId: this.article.id
+                        articleId: this.article.id,
+                        hasRead: 1
                     }
                 };
                 updateTag(params).then(data => {
                     if (data.status === 200) {
-                        this.hasRead = 1;
+                        this.hasRead = data.data[0].hasRead;
                     }
                 });
                 this.$emit('detail', this.article.id);
