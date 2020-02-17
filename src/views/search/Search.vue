@@ -58,6 +58,9 @@
             doc.addEventListener('click', this.hiddenIntroduction);
             doc.addEventListener('mousewheel', this.hiddenIntroduction);
         },
+        beforeRouteUpdate(to, from, next) {
+            debugger;
+        },
         methods: {
             futureTab(tab) {
                 this.$router.push({path: '/' + tab});

@@ -29,11 +29,11 @@ export const getContent = (params) => {
  * @returns {*|Promise|Promise<any>}
  */
 export const insertHistoryInfo = (params) => {
-    return axios.ajax('/history/insert', 'post', params);
+    return axios.ajax('/history/insertHistory', 'post', params);
 };
 
 export const getHistoryInfo = (params) => {
-    return axios.ajax('/history/get', 'post', params);
+    return axios.ajax('/history/getHistory', 'post', params);
 };
 
 /**

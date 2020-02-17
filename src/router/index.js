@@ -85,8 +85,7 @@ export default new Router({
             component: () => import('../views/search/Search'),
             meta: {
                 title: '搜索',
-                requireAuth: true,
-                notKeepAlive: true
+                requireAuth: true
             }
         },
         {
@@ -95,8 +94,7 @@ export default new Router({
             component: () => import('../views/written/Written'),
             meta: {
                 title: '我写过的',
-                requireAuth: true,
-                notKeepAlive: true
+                requireAuth: true
             }
         },
         {
@@ -105,8 +103,7 @@ export default new Router({
             component: () => import('../views/loved/Loved'),
             meta: {
                 title: '我点赞的',
-                requireAuth: true,
-                notKeepAlive: true
+                requireAuth: true
             }
         },
         {

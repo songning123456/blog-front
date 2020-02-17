@@ -1,9 +1,8 @@
 <template>
     <div id="app" class="main">
         <keep-alive>
-            <router-view v-if="!$route.meta.notKeepAlive"></router-view>
+            <router-view></router-view>
         </keep-alive>
-        <router-view v-if="$route.meta.notKeepAlive"></router-view>
     </div>
 </template>
 
@@ -11,11 +10,11 @@
     export default {
         name: 'App',
         methods: {
-            resize () {
+            resize() {
                 document.documentElement.style.fontSize = document.documentElement.offsetWidth / (1920 / 20) + 'px';
             }
         },
-        mounted () {
+        mounted() {
             this.resize();
             window.addEventListener('resize', this.resize);
         }
