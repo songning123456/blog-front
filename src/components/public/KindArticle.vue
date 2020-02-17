@@ -1,10 +1,9 @@
 <template>
     <div class='kind-article'>
         <div v-infinite-scroll='loadMore' infinite-scroll-disabled='busy' infinite-scroll-distance='10'>
-            <column v-for='(item, index) in result' :key='index' :article='item'
-                    @detail="getDetail"></column>
+            <column v-for='(item, index) in result' :key='index' :article='item'></column>
         </div>
-        <tool-loading :loading='loading' v-if='result.length === 0'></tool-loading>
+        <tool-loading :loading='loading' v-if='result.length === 0' category="spinner"></tool-loading>
         <el-backtop :target='target' :visibility-height='50' v-if="target"></el-backtop>
     </div>
 </template>

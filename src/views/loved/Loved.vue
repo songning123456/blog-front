@@ -5,8 +5,7 @@
             <div class="left-frame"></div>
             <div class="middle-frame">
                 <div v-infinite-scroll='loadMore' infinite-scroll-disabled='busy' infinite-scroll-distance='10'>
-                    <column v-for='(item, index) in result' :key='index' :article='item'
-                            @detail="getDetail"></column>
+                    <column v-for='(item, index) in result' :key='index' :article='item'></column>
                 </div>
             </div>
             <div class="right-frame"></div>
@@ -27,7 +26,7 @@
     export default {
         name: 'Loved',
         components: {ToolLoading, EmptyView, MainHead, Column},
-        data () {
+        data() {
             return {
                 // 是否继续查询
                 busy: false,
@@ -43,21 +42,10 @@
             };
         },
         methods: {
-            futureTab (tab) {
+            futureTab(tab) {
                 this.$router.push({path: '/' + tab});
             },
-            // 跳转到文章内容
-            getDetail (id) {
-                let scope = this;
-                let routerData = scope.$router.resolve({
-                    path: '/detail',
-                    query: {
-                        id: id
-                    }
-                });
-                window.open(routerData.href, '_blank');
-            },
-            getLoved () {
+            getLoved() {
                 let params = {
                     recordStartNo: this.page.recordStartNo,
                     pageRecordNum: this.page.pageRecordNum,
@@ -80,7 +68,7 @@
                     this.loading = false;
                 });
             },
-            loadMore () {
+            loadMore() {
                 let scope = this;
                 scope.busy = true;
                 scope.loading = true;

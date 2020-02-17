@@ -10,7 +10,7 @@
                 </div>
             </div>
             <div class="right-frame"></div>
-            <el-backtop target='.written' :visibility-height='50'></el-backtop>
+            <el-backtop target='.frame-center' :visibility-height='50'></el-backtop>
         </div>
         <tool-loading :loading="loading" category="spinner" v-if='result.length === 0'></tool-loading>
         <empty-view v-if="result.length === 0"></empty-view>
@@ -27,7 +27,7 @@
     export default {
         name: 'Written',
         components: {ToolLoading, EmptyView, MainHead, Column},
-        data () {
+        data() {
             return {
                 // 是否继续查询
                 busy: false,
@@ -43,11 +43,11 @@
             };
         },
         methods: {
-            futureTab (tab) {
+            futureTab(tab) {
                 this.$router.push({path: '/' + tab});
             },
             // 跳转到文章内容
-            getDetail (id) {
+            getDetail(id) {
                 let scope = this;
                 let routerData = scope.$router.resolve({
                     path: '/detail',
@@ -58,7 +58,7 @@
                 window.open(routerData.href, '_blank');
             },
             // 删除文章
-            deleteArticle (id) {
+            deleteArticle(id) {
                 this.loading = true;
                 deleteArticle({condition: {id: id}}).then(data => {
                     if (data.status === 200) {
@@ -73,7 +73,7 @@
                 });
             },
             // 删除文章后重新加载
-            reload () {
+            reload() {
                 this.page.recordStartNo = -1;
                 this.busy = true;
                 this.loading = true;
@@ -83,7 +83,7 @@
                 }, 500);
             },
             // 查询文章
-            getWritten () {
+            getWritten() {
                 let params = {
                     recordStartNo: this.page.recordStartNo,
                     pageRecordNum: this.page.pageRecordNum,
@@ -92,11 +92,13 @@
                 if (!this.loading) {
                     this.loading = true;
                 }
-                this.result = [];
                 getWrittenArticle(params).then(data => {
                     this.$response(data, 'infiniteScroll').then(data => {
                         this.page.total = data.total;
                         if (data.data.length > 0) {
+                            if (this.page.recordStartNo === 0) {
+                                this.result = [];
+                            }
                             data.data.forEach(item => {
                                 this.result.push(item);
                             });
@@ -109,7 +111,7 @@
                     this.loading = false;
                 });
             },
-            loadMore () {
+            loadMore() {
                 this.busy = true;
                 this.loading = true;
                 setTimeout(() => {
@@ -125,12 +127,12 @@
     .written {
         width: 100%;
         height: 100%;
-        overflow: auto;
         background-color: #f8f8f9;
 
         .frame-center {
             width: 100%;
             height: 90%;
+            overflow: auto;
 
             .left-frame {
                 width: 30%;

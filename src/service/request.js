@@ -119,15 +119,6 @@ export const exitBlog = () => {
 };
 
 /**
- * 获取点赞状态
- * @param params
- * @returns {*|Promise|Promise<any>}
- */
-export const getTag = (params) => {
-    return axios.ajax('/tag/getTag', 'post', params);
-};
-
-/**
  *
  * @param params
  * @returns {*|Promise|Promise<any>}

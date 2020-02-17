@@ -1,10 +1,10 @@
 <template>
     <div class='column'>
         <div class='tag'>
-            <div class='like-tag' v-if="love === 1" @click.stop="modifyLoveOfTag(0)"><img
-                src="../../assets/like.svg"/><span>{{sum}}</span></div>
-            <div class="dislike-tag" v-if="!love" @click.stop="modifyLoveOfTag(1)"><img
-                src="../../assets/dislike.svg"><span>{{sum}}</span>
+            <div class='like-tag' v-if="article.tag.love === 1" @click.stop="modifyLoveOfTag(0)"><img
+                src="../../assets/like.svg"/><span>{{article.tag.sum}}</span></div>
+            <div class="dislike-tag" v-if="!article.tag.love" @click.stop="modifyLoveOfTag(1)"><img
+                src="../../assets/dislike.svg"><span>{{article.tag.sum}}</span>
             </div>
             <i class="el-icon-delete" v-if="showDelete" @click.stop="$emit('delete', article.id)"></i>
             <el-popover placement="right-start" trigger="click" popper-class='column-popover' :visible-arrow='false'>
@@ -19,7 +19,7 @@
                 <i class="el-icon-chat-line-square" slot="reference" v-if="searchResult.length > 0"></i>
             </el-popover>
         </div>
-        <div class='title'><span class='modify-txt' :class="{'is-read': hasRead}"><span @click="detail">{{article.title}}</span></span>
+        <div class='title'><span class='modify-txt' :class="{'is-read': article.tag.hasRead}"><span @click="detail">{{article.title}}</span></span>
         </div>
         <div class='info'>
             <span @click.stop='getIntroduction'>{{article.author}}</span>
@@ -30,7 +30,7 @@
 </template>
 
 <script>
-    import {getTag, updateTag} from '../../service/request';
+    import {updateTag} from '../../service/request';
 
     export default {
         name: 'Column',
@@ -52,27 +52,6 @@
                 }
             }
         },
-        data() {
-            return {
-                love: 0,
-                hasRead: 0,
-                sum: 0
-            };
-        },
-        mounted() {
-            let param = {
-                condition: {
-                    articleId: this.article.id
-                }
-            };
-            getTag(param).then((data) => {
-                if (data.status === 200) {
-                    this.love = data.data[0].love;
-                    this.hasRead = data.data[0].hasRead;
-                    this.sum = data.dataExt.tags;
-                }
-            });
-        },
         methods: {
             modifyLoveOfTag(love) {
                 let param = {
@@ -83,8 +62,8 @@
                 };
                 updateTag(param).then((data) => {
                     if (data.status === 200) {
-                        this.love = data.data[0].love;
-                        this.sum = data.dataExt.tags;
+                        this.article.tag.love = data.data[0].love;
+                        this.article.tag.sum = data.dataExt.tags;
                     }
                 });
             },
@@ -98,10 +77,16 @@
                 };
                 updateTag(params).then(data => {
                     if (data.status === 200) {
-                        this.hasRead = data.data[0].hasRead;
+                        this.article.tag.hasRead = data.data[0].hasRead;
                     }
                 });
-                this.$emit('detail', this.article.id);
+                let routerData = this.$router.resolve({
+                    path: '/detail',
+                    query: {
+                        id: this.article.id
+                    }
+                });
+                window.open(routerData.href, '_blank');
             },
             getIntroduction() {
                 let routerData = this.$router.resolve({
