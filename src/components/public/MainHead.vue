@@ -150,6 +150,7 @@
         position: relative;
         width: 100%;
         height: 10%;
+        z-index: 100;
         transition: all .4s ease-in-out;
 
         .choose-tab {

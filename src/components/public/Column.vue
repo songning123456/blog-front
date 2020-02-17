@@ -1,5 +1,5 @@
 <template>
-    <div class='column' @click="detail">
+    <div class='column'>
         <div class='tag'>
             <div class='like-tag' v-if="love === 1" @click.stop="sureTag"><img
                 src="../../assets/like.svg"/><span>{{sum}}</span></div>
@@ -7,10 +7,18 @@
                 src="../../assets/dislike.svg"><span>{{sum}}</span>
             </div>
             <i class="el-icon-delete" v-if="showDelete" @click.stop="$emit('delete', article.id)"></i>
-            <i class="el-icon-chat-line-square" v-if="showIntroduction" @click.stop="displayIntroduction"></i>
+            <el-popover placement="right-start" trigger="click" popper-class='column-popover' :visible-arrow='false'>
+                <el-table :data='searchResult' :show-overflow-tooltip='true' max-height="400" :header-cell-style="{background:'#eef1f6',color:'#606266'}">
+                    <el-table-column width="50" label='序号' align="center"><span slot-scope="scope"
+                                                                                v-html="scope.$index + 1"></span>
+                    </el-table-column>
+                    <el-table-column label='查询结果' align="center"><span slot-scope="scope" v-html="scope.row"></span>
+                    </el-table-column>
+                </el-table>
+                <i class="el-icon-chat-line-square" slot="reference" v-if="searchResult.length > 0"></i>
+            </el-popover>
         </div>
-        <div class='title'><span class='modify-txt'
-                                 :class="{'is-read': hasRead}"><span>{{article.title}}</span></span></div>
+        <div class='title'><span class='modify-txt' :class="{'is-read': hasRead}"><span @click="detail">{{article.title}}</span></span></div>
         <div class='info'>
             <span @click.stop='getIntroduction'>{{article.author}}</span>
             <span>{{' | '}}</span>
@@ -35,9 +43,11 @@
                 type: Boolean,
                 default: false
             },
-            showIntroduction: {
-                type: Boolean,
-                default: false
+            searchResult: {
+                type: Array,
+                default() {
+                    return [];
+                }
             }
         },
         data() {
@@ -76,9 +86,6 @@
                         this.sum = data.dataExt.tags;
                     }
                 });
-            },
-            displayIntroduction(e) {
-                this.$emit('introduction', this.article.id, e.clientY);
             },
             // 点击标题进入文章详情
             detail() {
@@ -242,5 +249,11 @@
                 }
             }
         }
+    }
+
+    .column-popover {
+        width: 20rem;
+        left: 1335px !important;
+        z-index: 2 !important;
     }
 </style>
