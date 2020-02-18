@@ -68,11 +68,12 @@
 
 <script>
     import LeftSideBar from '../../components/public/LeftSideBar';
-    import {getBlogger, saveImage, updateBlogger} from '../../service/http';
+    import {saveImage, updateBlogger} from '../../service/http';
     import config from '../../utils/Config';
     import ToolLoading from '../../components/util/ToolLoading';
     import Reg from '../../utils/Regular';
     import FloatMenu from '../../components/util/FloatMenu';
+    import init from '../../utils/Init';
 
     export default {
         name: 'ModifyBlogger',
@@ -157,7 +158,15 @@
             };
         },
         mounted() {
-            this.getBlogger();
+            init.getBlogger().then(data => {
+                this.form = Object.assign({}, data);
+                for (let key in this.form) {
+                    if (this.form[key] === null || this.form[key] === 'null') {
+                        this.form[key] = '';
+                    }
+                }
+                this.copy = Object.assign({}, this.form);
+            });
         },
         computed: {
             avatar() {
@@ -179,29 +188,6 @@
                 if (menu.id === '退出') {
                     let labelName = sessionStorage.getItem('currentLabelName');
                     this.$router.push({path: '/read/' + labelName});
-                }
-            },
-            getBlogger() {
-                if (JSON.stringify(this.$store.state.blogger) !== '{}') {
-                    this.form = Object.assign({}, this.$store.state.blogger);
-                    for (let key in this.form) {
-                        if (this.form[key] === null || this.form[key] === 'null') {
-                            this.form[key] = '';
-                        }
-                    }
-                    this.copy = Object.assign({}, this.form);
-                } else {
-                    getBlogger({condition: {}}).then(data => {
-                        this.$response(data, '获取个人简介').then(data => {
-                            this.form = data.data[0];
-                            for (let key in this.form) {
-                                if (this.form[key] === null || this.form[key] === 'null') {
-                                    this.form[key] = '';
-                                }
-                            }
-                            this.copy = Object.assign({}, this.form);
-                        });
-                    });
                 }
             },
             save(type) {

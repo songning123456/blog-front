@@ -34,7 +34,7 @@
 
     import {loginBlog} from '../../service/http';
     import uuidv1 from 'uuid/v1';
-    import Util from '../../utils/Function';
+    import Util from '../../utils/Common';
     import Reg from '../../utils/Regular';
 
     let keyFlag = true;

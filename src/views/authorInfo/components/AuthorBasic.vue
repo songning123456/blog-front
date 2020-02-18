@@ -24,8 +24,8 @@
 </template>
 
 <script>
-    import {getBlogger} from '../../../service/http';
     import config from '../../../utils/Config';
+    import {getBlogger} from '../../../service/http';
 
     export default {
         name: 'AuthorBasic',
@@ -73,11 +73,14 @@
             };
         },
         created() {
-            if (JSON.stringify(this.$store.state.blogger) !== '{}') {
-                this.result = this.analysis(this.$store.state.blogger);
-            } else {
-                this.getBloggerInfo();
-            }
+            let param = {
+                condition: {userId: this.$route.query.userId}
+            };
+            getBlogger(param).then((data) => {
+                if (data.status === 200 && data.total > 0) {
+                    this.result = this.analysis(data.data[0]);
+                }
+            });
         },
         methods: {
             analysis(data) {
@@ -100,19 +103,6 @@
                     }
                 }
                 return result;
-            },
-            getBloggerInfo() {
-                let form = {
-                    userId: this.$route.query.userId
-                };
-                let param = {
-                    condition: form
-                };
-                getBlogger(param).then((data) => {
-                    if (data.status === 200 && data.total > 0) {
-                        this.result = this.analysis(data.data[0]);
-                    }
-                });
             },
             tabClick(tab) {
                 if (this.currentTab !== tab) {

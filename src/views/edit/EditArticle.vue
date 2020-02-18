@@ -29,9 +29,9 @@
     import FloatMenu from '../../components/util/FloatMenu';
     import ToolLoading from '../../components/util/ToolLoading';
     import Config from '../../utils/Config';
+    import init from '../../utils/Init';
     import {
         publishArticle,
-        getBlogger,
         saveImage,
         deleteImage,
         insertHistoryInfo,
@@ -41,7 +41,7 @@
     export default {
         name: 'EditArticle',
         components: {ToolLoading, FloatMenu},
-        data () {
+        data() {
             return {
                 img: [],
                 form: {
@@ -56,22 +56,24 @@
                 bgUrl: require('../../assets/articleBg.png')
             };
         },
-        mounted () {
+        mounted() {
             let doc = document.getElementsByClassName('el-input__suffix')[0];
             doc.addEventListener('click', this.queryLabel);
-            this.getBlogger();
+            init.getBlogger().then(data => {
+                this.form.author = data.author;
+            });
             this.getSelected();
         },
-        destroyed () {
+        destroyed() {
             let scope = this;
             let doc = document.getElementsByClassName('el-input__suffix')[0];
             doc.removeEventListener('click', scope.queryLabel);
         },
         methods: {
-            returnBtn () {
+            returnBtn() {
                 this.$router.go(-1);
             },
-            formCheck (type) {
+            formCheck(type) {
                 if (type === 1 && !this.form.title) {
                     this.$message.warning('标题不能为空');
                     return false;
@@ -86,11 +88,11 @@
                 }
                 return true;
             },
-            queryLabel () {
+            queryLabel() {
                 let scope = this;
                 scope.$refs['multiLabel'].query(scope.form.labelFuzzyName);
             },
-            addImage (pos, file) {
+            addImage(pos, file) {
                 let scope = this;
                 let formData = new FormData();
                 formData.append('file', file, file.filename);
@@ -102,7 +104,7 @@
                     }
                 });
             },
-            delImage (params) {
+            delImage(params) {
                 let url = params[0];
                 let temps = url.split('\\');
                 let imageName = temps[temps.length - 1];
@@ -114,7 +116,7 @@
                     }
                 });
             },
-            publishArticle () {
+            publishArticle() {
                 let scope = this;
                 if (!scope.formCheck(1)) {
                     return;
@@ -150,19 +152,7 @@
                     scope.form = {};
                 });
             },
-            // 根据username 获取 author, 发布文章时直接使用
-            getBlogger () {
-                if (JSON.stringify(this.$store.state.blogger) !== '{}') {
-                    this.form.author = this.$store.state.blogger.author;
-                } else {
-                    getBlogger({condition: {}}).then((data) => {
-                        this.$response(data, '获取作者信息').then(data => {
-                            this.form.author = data.data[0].author;
-                        });
-                    });
-                }
-            },
-            getSelected () {
+            getSelected() {
                 getSelectedLabel().then(data => {
                     if (data.status === 200 && data.total > 0) {
                         this.labelNameOption = data.data.map(item => {

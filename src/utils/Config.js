@@ -1,4 +1,4 @@
-import util from './Function';
+import util from './Common';
 
 const _config_ = {};
 
@@ -61,7 +61,7 @@ _config_.getVideoOriginal = function () {
 
 _config_.getWechatWebSocket = function () {
     let param = _config_.getSource(wechat);
-    return param.original;
+    return param.websocket;
 };
 
 export default _config_;

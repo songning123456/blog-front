@@ -15,7 +15,8 @@
                     <div class="system-to-my">
                         <template v-for='(item, index) in systemMessages'>
                             <post-message v-if="item.type === 'post'" :post="item" :key="index"></post-message>
-                            <receive-message v-if='item.type === "receive"' :receive="item" :is-system='true' :key="index"></receive-message>
+                            <receive-message v-if='item.type === "receive"' :receive="item" :is-system='true'
+                                             :key="index"></receive-message>
                         </template>
                     </div>
                     <div class="my-to-system">
@@ -27,7 +28,8 @@
                     <div class="online-members">
                         <div class="member-info" v-for="item in onlineMembers" :key="item.userId">
                             <el-avatar :src="item.avatar"></el-avatar>
-                            <div class='member-name' ref="memberName" :user-id='item.userId' @mouseenter="modifyHover" :class="{'hover-w-resize': scrollHover, 'hover-pointer': !scrollHover}">
+                            <div class='member-name' ref="memberName" :user-id='item.userId' @mouseenter="modifyHover"
+                                 :class="{'hover-w-resize': scrollHover, 'hover-pointer': !scrollHover}">
                                 {{item.author}}
                             </div>
                         </div>
@@ -37,7 +39,8 @@
                         <div class="online-info" ref="onlineInfo">
                             <template v-for="(item, index) in onlineMessages">
                                 <post-message v-if='item.type === "post"' :post="item" :key="index"></post-message>
-                                <receive-message v-if='item.type === "receive"' :receive="item" :key="index"></receive-message>
+                                <receive-message v-if='item.type === "receive"' :receive="item"
+                                                 :key="index"></receive-message>
                             </template>
                         </div>
                     </div>
@@ -56,11 +59,13 @@
     import EmptyView from '../../components/util/EmptyView';
     import PostMessage from './components/PostMessage';
     import ReceiveMessage from './components/ReceiveMessage';
+    /*   import wechat from '../../utils/Wechat';
+       import init from '../../utils/Init';*/
 
     export default {
         name: 'Wechat',
         components: {ReceiveMessage, PostMessage, MainHead, EmptyView},
-        data () {
+        data() {
             return {
                 currentTab: 'onlineChat',
                 nameScroll: {},
@@ -148,7 +153,7 @@
                 systemMessages: []
             };
         },
-        activated () {
+        activated() {
             this.$nextTick(() => {
                 let memberDoc = this.$refs['memberName'];
                 for (let i = 0; i < memberDoc.length; i++) {
@@ -165,15 +170,17 @@
             let doc = this.$refs['onlineInfo'];
             doc.scrollTop = doc.scrollHeight;
         },
+        mounted() {
+        },
         methods: {
-            modifyHover (e) {
+            modifyHover(e) {
                 if (e.target.innerText.length > 6) {
                     this.scrollHover = true;
                 } else {
                     this.scrollHover = false;
                 }
             },
-            scrollName (event) {
+            scrollName(event) {
                 event.preventDefault();
                 // eslint-disable-next-line no-unused-vars
                 let userId = event.target.getAttribute('user-id');
@@ -197,6 +204,9 @@
                     this.onlineMessages.push(obj);
                     this.toOnlineMessage = '';
                 }
+            },
+            handleMessage(data) {
+
             }
         }
     };

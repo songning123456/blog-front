@@ -1,5 +1,5 @@
 import {shardMerge, shardUpload, videoIsExist} from '../service/http';
-import Function from './Function';
+import Common from './Common';
 import md5 from 'js-md5';
 
 let upload = {};
@@ -52,7 +52,7 @@ export const uploadByPieces = ({file, pieceSize = 10, progress, success, error})
         }
         // 存在某些分片未上传
         if (promiseAll.length > 0) {
-            progress(Function.keepDecimal(upload.hasExist * (90 / upload.chunkCount), 2));
+            progress(Common.keepDecimal(upload.hasExist * (90 / upload.chunkCount), 2));
             success && success({showProgress: true});
             Promise.all(promiseAll).then(result => {
                 if (!result.includes('fail')) {
@@ -90,7 +90,7 @@ export const uploadByPieces = ({file, pieceSize = 10, progress, success, error})
         return new Promise((resolve, reject) => {
             shardUpload(formData).then(data => {
                 if (data.status === 200) {
-                    progress(Function.keepDecimal((++upload.progressIndex + upload.hasExist) * (90 / upload.chunkCount), 2));
+                    progress(Common.keepDecimal((++upload.progressIndex + upload.hasExist) * (90 / upload.chunkCount), 2));
                     resolve('success');
                 } else {
                     reject('fail');

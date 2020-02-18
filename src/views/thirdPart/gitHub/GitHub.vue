@@ -31,7 +31,7 @@
 
 <script>
     import uuidv1 from 'uuid/v1';
-    import Util from '../../../utils/Function';
+    import Util from '../../../utils/Common';
     import FloatMenu from '../../../components/util/FloatMenu';
 
     export default {

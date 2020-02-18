@@ -1,11 +1,11 @@
-let Function = {};
+let Common = {};
 
 /**
  * 深拷贝
  * @param obj
  * @returns {*}
  */
-Function.deepClone = function clone(obj) {
+Common.deepClone = function clone(obj) {
     let result = obj;
     if (typeof obj === 'object' && obj !== null) {
         result = Object.prototype.toString.call(obj) === '[object Array]' ? [] : {};
@@ -19,7 +19,7 @@ Function.deepClone = function clone(obj) {
 /**
  * []根据{label: '', value:''}中的某一key获取另一个key的值
  */
-Function.getValueByLabel = function (arr, srcKey, srcValue, targetKey) {
+Common.getValueByLabel = function (arr, srcKey, srcValue, targetKey) {
     for (let i in arr) {
         if (arr[i][srcKey] === srcValue) {
             return arr[i][targetKey];
@@ -32,7 +32,7 @@ Function.getValueByLabel = function (arr, srcKey, srcValue, targetKey) {
  * @param param
  * @returns {string}
  */
-Function.camelToUnderline = function (param) {
+Common.camelToUnderline = function (param) {
     return param.replace(/([A-Z])/g, '-$1').toLowerCase();
 };
 
@@ -40,7 +40,7 @@ Function.camelToUnderline = function (param) {
  * 下划线转驼峰
  * @param param
  */
-Function.underlineToCamel = function (param) {
+Common.underlineToCamel = function (param) {
     return param.replace(/_(\w)/g, function (all, letter) {
         return letter.toUpperCase();
     });
@@ -51,7 +51,7 @@ Function.underlineToCamel = function (param) {
  * @param object
  * @param array
  */
-Function.getObjByAttribute = function (object = {}, array = []) {
+Common.getObjByAttribute = function (object = {}, array = []) {
     let result = {};
     if (JSON.stringify(object) !== '{}' && array.length !== 0) {
         array.forEach(item => {
@@ -63,7 +63,7 @@ Function.getObjByAttribute = function (object = {}, array = []) {
 /**
  * 对象转json字符串
  */
-Function.objectToJson = (object) => {
+Common.objectToJson = (object) => {
     try {
         return JSON.stringify(object);
     } catch (e) {
@@ -74,7 +74,7 @@ Function.objectToJson = (object) => {
 /**
  * json字符串转对象
  */
-Function.jsonToObject = (json) => {
+Common.jsonToObject = (json) => {
     if (typeof json === 'object') {
         return json;
     }
@@ -89,7 +89,7 @@ Function.jsonToObject = (json) => {
 /**
  * @return {string}
  */
-Function.GetString = function (url, obj) {
+Common.GetString = function (url, obj) {
     let result = url + '?';
     for (let key in obj) {
         result += (key + '=' + obj[key] + '&');
@@ -103,7 +103,7 @@ Function.GetString = function (url, obj) {
  * @param value
  * @param n
  */
-Function.keepDecimal = function (value, n) {
+Common.keepDecimal = function (value, n) {
     let result = value + '';
     if (result.includes('.')) {
         result = (+result).toFixed(n);
@@ -111,4 +111,4 @@ Function.keepDecimal = function (value, n) {
     return +result;
 };
 
-export default Function;
+export default Common;

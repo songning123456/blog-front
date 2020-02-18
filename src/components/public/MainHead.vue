@@ -31,7 +31,8 @@
 
 <script>
     import config from '../../utils/Config';
-    import {exitBlog, getBlogger} from '../../service/http';
+    import {exitBlog} from '../../service/http';
+    import init from '../../utils/Init';
 
     export default {
         name: 'MainHead',
@@ -68,7 +69,9 @@
             }
         },
         mounted() {
-            this.getBloggerInfo();
+            init.getBlogger().then(data => {
+                this.blogger = data;
+            });
         },
         activated() {
             // 绑定搜索文章 查询事件
@@ -117,18 +120,6 @@
             },
             writeBtn() {
                 this.$router.push({path: '/edit'});
-            },
-            getBloggerInfo() {
-                if (JSON.stringify(this.$store.state.blogger) !== '{}') {
-                    this.blogger = Object.assign({}, this.$store.state.blogger);
-                } else {
-                    getBlogger({condition: {}}).then((data) => {
-                        this.$response(data, '获取个人信息').then(data => {
-                            this.blogger = data.data[0];
-                            this.$store.commit('SET_BLOGGER', Object.assign({}, this.blogger));
-                        });
-                    });
-                }
             },
             aboutme() {
                 window.open('https://github.com/songning123456/', '_blank');
