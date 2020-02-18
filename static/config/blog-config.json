@@ -14,5 +14,13 @@
         "dev": {
             "originalUrl": "http://localhost:8072/video/original?url="
         }
+    },
+    "Wechat": {
+        "pro": {
+            "websocket": "ws://simple-blog.xyz/server/webSocket/wechat"
+        },
+        "dev": {
+            "websocket": "ws://localhost:8072/webSocket/wechat"
+        }
     }
 }

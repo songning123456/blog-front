@@ -68,10 +68,10 @@
 
 <script>
     import LeftSideBar from '../../components/public/LeftSideBar';
-    import {getBlogger, saveImage, updateBlogger} from '../../service/request';
-    import config from '../../utils/ConfigUtil';
+    import {getBlogger, saveImage, updateBlogger} from '../../service/http';
+    import config from '../../utils/Config';
     import ToolLoading from '../../components/util/ToolLoading';
-    import Reg from '../../utils/RegularUtil';
+    import Reg from '../../utils/Regular';
     import FloatMenu from '../../components/util/FloatMenu';
 
     export default {

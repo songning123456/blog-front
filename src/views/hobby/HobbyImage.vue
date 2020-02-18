@@ -42,10 +42,10 @@
 <script>
     import LeftSideBar from '../../components/public/LeftSideBar';
     import FloatMenu from '../../components/util/FloatMenu';
-    import {saveAlbum, getAlbum} from '../../service/request';
+    import {saveAlbum, getAlbum} from '../../service/http';
     import EmptyView from '../../components/util/EmptyView';
     import ImageSwiper from '../../components/public/ImageSwiper';
-    import config from '../../utils/ConfigUtil';
+    import config from '../../utils/Config';
     import TableOrList from '../../components/tableOrList/TableOrList';
     import ToolLoading from '../../components/util/ToolLoading';
 

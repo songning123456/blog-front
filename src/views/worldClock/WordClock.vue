@@ -20,7 +20,7 @@
     import Day from './component/Day';
     import Month from './component/Month';
     import SetWrap from './component/setting/SetWrap';
-    import {insertHistoryInfo} from '../../service/request';
+    import {insertHistoryInfo} from '../../service/http';
 
     export default {
         name: 'WordClock',

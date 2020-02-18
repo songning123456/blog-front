@@ -23,7 +23,7 @@
 
 <script>
     import EmptyView from '../../components/util/EmptyView';
-    import {getHotArticle} from '../../service/request';
+    import {getHotArticle} from '../../service/http';
 
     export default {
         name: 'HotArticle',

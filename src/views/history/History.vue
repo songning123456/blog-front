@@ -19,7 +19,7 @@
 
 <script>
     import MainHead from '../../components/public/MainHead';
-    import {getHistoryInfo} from '../../service/request';
+    import {getHistoryInfo} from '../../service/http';
     import EmptyView from '../../components/util/EmptyView';
 
     export default {

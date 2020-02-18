@@ -21,7 +21,7 @@
 </template>
 
 <script>
-    import {updateTag} from '../../service/request';
+    import {updateTag} from '../../service/http';
 
     export default {
         name: 'Column',

@@ -70,7 +70,7 @@
 <script>
     import ToolLoading from '../../../components/util/ToolLoading';
     import EmptyView from '../../../components/util/EmptyView';
-    import {getSystemConfigLike, updateSystemConfig} from '../../../service/request';
+    import {getSystemConfigLike, updateSystemConfig} from '../../../service/http';
 
     export default {
         name: 'SystemConfig',

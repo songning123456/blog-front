@@ -30,8 +30,8 @@
 </template>
 
 <script>
-    import config from '../../utils/ConfigUtil';
-    import {exitBlog, getBlogger} from '../../service/request';
+    import config from '../../utils/Config';
+    import {exitBlog, getBlogger} from '../../service/http';
 
     export default {
         name: 'MainHead',

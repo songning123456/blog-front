@@ -39,7 +39,7 @@
     import LeftSideBar from '../../components/public/LeftSideBar';
     import SingleInfo from './components/SingleInfo';
     import EmptyView from '../../components/util/EmptyView';
-    import {addMyInfo, getMyInfo, updatePersonalInformation} from '../../service/request';
+    import {addMyInfo, getMyInfo, updatePersonalInformation} from '../../service/http';
     import ToolLoading from '../../components/util/ToolLoading';
     import AddInfo from './components/AddInfo';
     import FloatMenu from '../../components/util/FloatMenu';

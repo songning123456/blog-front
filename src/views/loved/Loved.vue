@@ -19,7 +19,7 @@
 <script>
     import MainHead from '../../components/public/MainHead';
     import Column from '../../components/public/Column';
-    import {getLovedArticle} from '../../service/request';
+    import {getLovedArticle} from '../../service/http';
     import EmptyView from '../../components/util/EmptyView';
     import ToolLoading from '../../components/util/ToolLoading';
 

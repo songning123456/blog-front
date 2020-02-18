@@ -32,9 +32,9 @@
 
 <script>
     import LeftSideBar from '../../components/public/LeftSideBar';
-    import {modifyUser} from '../../service/request';
+    import {modifyUser} from '../../service/http';
     import ToolLoading from '../../components/util/ToolLoading';
-    import Reg from '../../utils/RegularUtil';
+    import Reg from '../../utils/Regular';
     import FloatMenu from '../../components/util/FloatMenu';
 
     export default {

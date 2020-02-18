@@ -20,7 +20,7 @@
 <script>
     import MainHead from '../../components/public/MainHead';
     import Column from '../../components/public/Column';
-    import {deleteArticle, getWrittenArticle} from '../../service/request';
+    import {deleteArticle, getWrittenArticle} from '../../service/http';
     import EmptyView from '../../components/util/EmptyView';
     import ToolLoading from '../../components/util/ToolLoading';
 

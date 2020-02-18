@@ -32,10 +32,10 @@
 
 <script>
 
-    import {loginBlog} from '../../service/request';
+    import {loginBlog} from '../../service/http';
     import uuidv1 from 'uuid/v1';
-    import Util from '../../utils/FunctionUtil';
-    import Reg from '../../utils/RegularUtil';
+    import Util from '../../utils/Function';
+    import Reg from '../../utils/Regular';
 
     let keyFlag = true;
 

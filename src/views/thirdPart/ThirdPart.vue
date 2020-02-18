@@ -24,7 +24,7 @@
     import ToolLoading from '../../components/util/ToolLoading';
     import FloatMenu from '../../components/util/FloatMenu';
     import uuidv1 from 'uuid/v1';
-    import {gitHubUser, loginBlog} from '../../service/request';
+    import {gitHubUser, loginBlog} from '../../service/http';
 
     export default {
         name: 'ThirdPart',

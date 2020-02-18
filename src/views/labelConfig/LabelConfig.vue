@@ -23,7 +23,7 @@
 <script>
     import EmptyView from '../../components/util/EmptyView';
     import SingleLabel from './components/SingleLabel';
-    import {getAllLabel, updateAttention} from '../../service/request';
+    import {getAllLabel, updateAttention} from '../../service/http';
     import ToolLoading from '../../components/util/ToolLoading';
     import MainHead from '../../components/public/MainHead';
 

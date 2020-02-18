@@ -31,7 +31,7 @@
     import BMap from 'BMap';
     import PopoverFloat from '../../components/util/PopoverFloat';
     import ToolLoading from '../../components/util/ToolLoading';
-    import {insertHistoryInfo} from '../../service/request';
+    import {insertHistoryInfo} from '../../service/http';
 
     export default {
         name: 'SimpleMap',

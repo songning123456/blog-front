@@ -20,7 +20,7 @@ import i18n from './lang';
 import './style/iconfont/iconfont.css';
 import VueLazyComponent from '@xunlei/vue-lazy-component';
 import ZMessage from './configure/util/ZMessage';
-import Config from '../src/utils/ConfigUtil';
+import Config from './utils/Config';
 import './style/elementui/elementui.scss';
 import router from './router';
 import App from './App';

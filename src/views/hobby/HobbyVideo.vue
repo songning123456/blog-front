@@ -46,9 +46,9 @@
 <script>
     import LeftSideBar from '../../components/public/LeftSideBar';
     import FloatMenu from '../../components/util/FloatMenu';
-    import {getVideo} from '../../service/request';
-    import {uploadByPieces} from '../../utils/UploadUtil';
-    import config from '../../utils/ConfigUtil';
+    import {getVideo} from '../../service/http';
+    import {uploadByPieces} from '../../utils/Upload';
+    import config from '../../utils/Config';
     import 'videojs-flash';
     import 'videojs-hotkeys';
     import TableOrList from '../../components/tableOrList/TableOrList';

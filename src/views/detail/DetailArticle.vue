@@ -21,7 +21,7 @@
 </template>
 
 <script>
-    import {getContent, insertHistoryInfo} from '../../service/request.js';
+    import {getContent, insertHistoryInfo} from '../../service/http.js';
     import ElFrameset from '../../components/layout/el-frameset';
     import ElFrame from '../../components/layout/el-frame';
     import EmptyView from '../../components/util/EmptyView';

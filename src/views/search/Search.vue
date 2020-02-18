@@ -16,7 +16,7 @@
 
 <script>
     import MainHead from '../../components/public/MainHead';
-    import {highlightSearch} from '../../service/request';
+    import {highlightSearch} from '../../service/http';
     import Column from '../../components/public/Column';
     import ToolLoading from '../../components/util/ToolLoading';
     import EmptyView from '../../components/util/EmptyView';

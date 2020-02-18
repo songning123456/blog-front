@@ -56,7 +56,7 @@
     import FloatMenu from '../../components/util/FloatMenu';
     import uuidv1 from 'uuid/v1';
     import ToolLoading from '../../components/util/ToolLoading';
-    import {sendSimpleMail, saveEmailDraft} from '../../service/request';
+    import {sendSimpleMail, saveEmailDraft} from '../../service/http';
 
     export default {
         name: 'Email',

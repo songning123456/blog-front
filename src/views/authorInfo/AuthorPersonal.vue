@@ -27,7 +27,7 @@
 
 <script>
     import AuthorBasic from './components/AuthorBasic';
-    import {getPersonalInfo} from '../../service/request';
+    import {getPersonalInfo} from '../../service/http';
     import EmptyView from '../../components/util/EmptyView';
 
     export default {

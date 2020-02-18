@@ -38,7 +38,7 @@
 
     import SystemConfig from '../../views/config/systemConfig/SystemConfig';
     import LabelButton from '../../components/util/LabelButton';
-    import {getUserPermission, refreshCache} from '../../service/request';
+    import {getUserPermission, refreshCache} from '../../service/http';
     import ToolLoading from '../../components/util/ToolLoading';
     import MainHead from '../../components/public/MainHead';
 

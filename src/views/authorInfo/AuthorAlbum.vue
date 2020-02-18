@@ -37,8 +37,8 @@
     import AuthorBasic from './components/AuthorBasic';
     import TableOrList from '../../components/tableOrList/TableOrList';
     import ToolLoading from '../../components/util/ToolLoading';
-    import {getAlbum} from '../../service/request';
-    import config from '../../utils/ConfigUtil';
+    import {getAlbum} from '../../service/http';
+    import config from '../../utils/Config';
     import ImageSwiper from '../../components/public/ImageSwiper';
     import EmptyView from '../../components/util/EmptyView';
 

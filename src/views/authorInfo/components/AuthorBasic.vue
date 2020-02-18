@@ -24,8 +24,8 @@
 </template>
 
 <script>
-    import {getBlogger} from '../../../service/request';
-    import config from '../../../utils/ConfigUtil';
+    import {getBlogger} from '../../../service/http';
+    import config from '../../../utils/Config';
 
     export default {
         name: 'AuthorBasic',

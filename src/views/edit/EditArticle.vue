@@ -28,7 +28,7 @@
 <script>
     import FloatMenu from '../../components/util/FloatMenu';
     import ToolLoading from '../../components/util/ToolLoading';
-    import Config from '../../utils/ConfigUtil';
+    import Config from '../../utils/Config';
     import {
         publishArticle,
         getBlogger,
@@ -36,7 +36,7 @@
         deleteImage,
         insertHistoryInfo,
         getSelectedLabel
-    } from '../../service/request';
+    } from '../../service/http';
 
     export default {
         name: 'EditArticle',

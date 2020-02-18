@@ -36,8 +36,8 @@
 
 <script>
     import AuthorBasic from './components/AuthorBasic';
-    import {getVideo} from '../../service/request';
-    import config from '../../utils/ConfigUtil';
+    import {getVideo} from '../../service/http';
+    import config from '../../utils/Config';
     import 'videojs-flash';
     import 'videojs-hotkeys';
     import TableOrList from '../../components/tableOrList/TableOrList';

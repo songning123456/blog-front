@@ -9,7 +9,7 @@
 </template>
 
 <script>
-    import DateUtil from '../../utils/DateUtil';
+    import DateUtil from '../../utils/Date';
 
     export default {
         name: 'TabPanel',

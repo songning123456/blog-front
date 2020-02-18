@@ -10,7 +10,7 @@
 
 <script>
     import Column from '../../components/public/Column';
-    import {getAbstract} from '../../service/request';
+    import {getAbstract} from '../../service/http';
     import EmptyView from '../../components/util/EmptyView';
     import ToolLoading from '../../components/util/ToolLoading';
 

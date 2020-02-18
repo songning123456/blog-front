@@ -70,9 +70,9 @@
         saveImage,
         registerAll,
         insertHistoryInfo
-    } from '../../service/request';
+    } from '../../service/http';
     import ToolLoading from '../../components/util/ToolLoading';
-    import Reg from '../../utils/RegularUtil';
+    import Reg from '../../utils/Regular';
 
     export default {
         name: 'Register',

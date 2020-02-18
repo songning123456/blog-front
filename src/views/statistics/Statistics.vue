@@ -79,7 +79,7 @@
     import MainHead from '../../components/public/MainHead';
     import SideMenuPanel from '../../components/public/SideMenuPanel';
     import TabPanel from '../../components/public/TabPanel';
-    import {getHadoop, insertHistoryInfo} from '../../service/request';
+    import {getHadoop, insertHistoryInfo} from '../../service/http';
     import ToolLoading from '../../components/util/ToolLoading';
     import ECharts from '../../components/public/ECharts';
     import EmptyView from '../../components/util/EmptyView';

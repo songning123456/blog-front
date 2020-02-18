@@ -18,8 +18,8 @@
 <script>
     import MainHead from '../../components/public/MainHead';
     import LabelPanel from '../../components/public/LabelPanel';
-    import {getSelectedLabel} from '../../service/request';
-    import EventUtil from '../../utils/EventUtil';
+    import {getSelectedLabel} from '../../service/http';
+    import EventUtil from '../../utils/Event';
     import uuidv1 from 'uuid/v1';
     import FloatMenu from '../../components/util/FloatMenu';
 
