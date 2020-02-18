@@ -1,6 +1,6 @@
 <template>
     <div class="search">
-        <main-head @futureTab='futureTab' ref='mainHead'></main-head>
+        <main-head ref='mainHead'></main-head>
         <div class='search-article' ref='searchArticle'>
             <div v-infinite-scroll='loadMore' infinite-scorll-disabled='busy' infinite-scroll-distance='10'
                  class="frame-center">
@@ -46,9 +46,6 @@
             next();
         },
         methods: {
-            futureTab(tab) {
-                this.$router.push({path: '/' + tab});
-            },
             getDetail(id) {
                 let routerData = this.$router.resolve({
                     path: '/detail',

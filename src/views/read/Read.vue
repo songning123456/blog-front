@@ -1,6 +1,6 @@
 <template>
     <div class="read">
-        <main-head @futureTab='futureTab' current-tab="read" ref='mainHead'></main-head>
+        <main-head current-tab="read" ref='mainHead'></main-head>
         <div class="frame-center">
             <div class="top-frame">
                 <label-panel :tabs="labelNames" ref='labelPanel' @current='chooseCurrent'
@@ -76,9 +76,6 @@
             this.scrollLeft.removeEventListener('mousewheel', this.mouseScroll, true);
         },
         methods: {
-            futureTab (tab) {
-                this.$router.push({path: '/' + tab});
-            },
             getSelectedLabelNames () {
                 getSelectedLabel().then((data) => {
                     this.$response(data, '获取关注标签').then(data => {

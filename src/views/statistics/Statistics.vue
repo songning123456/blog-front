@@ -1,6 +1,6 @@
 <template>
     <div class="statistics">
-        <main-head @futureTab='futureTab' current-tab="statistics" ref='mainHead'></main-head>
+        <main-head current-tab="statistics" ref='mainHead'></main-head>
         <div class='frame-center global-css'>
             <side-menu-panel class='page-left' :side-bar='sideBar' title='大数据统计' :img-src='imgSrc'>
                 <div slot='panel' class='slot-left'>
@@ -178,9 +178,6 @@
             this.sideBar.showing = true;
         },
         methods: {
-            futureTab (tab) {
-                this.$router.push({path: '/' + tab});
-            },
             formCheck () {
                 let scope = this;
                 if (!scope.form.startTime) {

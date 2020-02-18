@@ -1,6 +1,6 @@
 <template>
     <div class="history">
-        <main-head @futureTab='futureTab' current-tab="history" ref='mainHead'></main-head>
+        <main-head current-tab="history" ref='mainHead'></main-head>
         <div class='frame-center'>
             <el-timeline v-infinite-scroll='loadMore' infinite-scroll-disabled='busy' infinite-scroll-distance='10'>
                 <el-timeline-item :timestamp="item.updateTime" placement='top' v-for='(item, index) in result.data'
@@ -42,9 +42,6 @@
             };
         },
         methods: {
-            futureTab(tab) {
-                this.$router.push({path: '/' + tab});
-            },
             loadMore() {
                 this.busy = true;
                 setTimeout(() => {

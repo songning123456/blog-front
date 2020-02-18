@@ -1,6 +1,6 @@
 <template>
     <div class="wechat">
-        <main-head @futureTab='futureTab' current-tab="wechat" ref='mainHead'></main-head>
+        <main-head current-tab="wechat" ref='mainHead'></main-head>
         <div class='frame-center'>
             <div class="chat-page">
                 <div class="chat-tabs">
@@ -166,9 +166,6 @@
             doc.scrollTop = doc.scrollHeight;
         },
         methods: {
-            futureTab (tab) {
-                this.$router.push({path: '/' + tab});
-            },
             modifyHover (e) {
                 if (e.target.innerText.length > 6) {
                     this.scrollHover = true;

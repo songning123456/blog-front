@@ -1,6 +1,6 @@
 <template>
     <div class='label-config'>
-        <main-head @futureTab='futureTab' ref='mainHead'></main-head>
+        <main-head ref='mainHead'></main-head>
         <div class="top-frame">
             <el-form :inline="true" :model='form'>
                 <el-form-item label='标签名称'>
@@ -45,9 +45,6 @@
             scope.search();
         },
         methods: {
-            futureTab (tab) {
-                this.$router.push({path: '/' + tab});
-            },
             query () {
                 let scope = this;
                 let form = {

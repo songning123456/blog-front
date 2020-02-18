@@ -96,7 +96,7 @@
                     if (tab === 'read' && sessionStorage.getItem('currentLabelName')) {
                         tab = tab + '/' + sessionStorage.getItem('currentLabelName');
                     }
-                    this.$emit('futureTab', tab);
+                    this.$router.push({path: '/' + tab});
                 }
             },
             // 其他body 点击事件 关闭 设置栏

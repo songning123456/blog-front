@@ -1,6 +1,6 @@
 <template>
     <div class="blog-config">
-        <main-head @futureTab='futureTab' ref='mainHead'></main-head>
+        <main-head ref='mainHead'></main-head>
         <div class='frame-center'>
             <div class='config-left'>
                 <div class="refresh-cache">
@@ -78,9 +78,6 @@
             });
         },
         methods: {
-            futureTab (tab) {
-                this.$router.push({path: '/' + tab});
-            },
             chooseType (index) {
                 let scope = this;
                 scope.chooseTab = scope.tabsForm[index].name;

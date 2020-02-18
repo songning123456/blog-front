@@ -1,6 +1,6 @@
 <template>
     <div class="written">
-        <main-head @futureTab='futureTab' ref='mainHead'></main-head>
+        <main-head ref='mainHead'></main-head>
         <div class="frame-center">
             <div class="left-frame"></div>
             <div class="middle-frame">
@@ -43,9 +43,6 @@
             };
         },
         methods: {
-            futureTab(tab) {
-                this.$router.push({path: '/' + tab});
-            },
             // 跳转到文章内容
             getDetail(id) {
                 let scope = this;

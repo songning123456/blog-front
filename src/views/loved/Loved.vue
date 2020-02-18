@@ -1,6 +1,6 @@
 <template>
     <div class="loved">
-        <main-head @futureTab='futureTab' ref='mainHead'></main-head>
+        <main-head ref='mainHead'></main-head>
         <div class="frame-center">
             <div class="left-frame"></div>
             <div class="middle-frame">
@@ -42,9 +42,6 @@
             };
         },
         methods: {
-            futureTab(tab) {
-                this.$router.push({path: '/' + tab});
-            },
             getLoved() {
                 let params = {
                     recordStartNo: this.page.recordStartNo,
