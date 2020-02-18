@@ -87,7 +87,7 @@
     export default {
         name: 'Statistics',
         components: {MainHead, EmptyView, ECharts, ToolLoading, TabPanel, SideMenuPanel},
-        data () {
+        data() {
             return {
                 sideBar: {
                     showing: false
@@ -134,9 +134,8 @@
         },
         watch: {
             result: {
-                handler (newVal, oldVal) {
+                handler(newVal, oldVal) {
                     if (Object.keys(newVal).length !== 0) {
-                        let scope = this;
                         let keyValues = newVal.map(item => {
                             let obj = {
                                 name: item.xaxis,
@@ -147,75 +146,68 @@
                         let keys = newVal.map(item => item.xaxis);
                         let values = newVal.map(item => item.yaxis);
 
-                        scope.chartData.first.data = keyValues;
-                        scope.chartData.first.legend = keys;
+                        this.chartData.first.data = keyValues;
+                        this.chartData.first.legend = keys;
                         keys.forEach((key, i) => {
-                            if (i < 8) {
-                                scope.chartData.first.legendSelected[keys[i]] = true;
-                            } else {
-                                scope.chartData.first.legendSelected[keys[i]] = false;
-                            }
+                            this.chartData.first.legendSelected[keys[i]] = i < 8;
                         });
-                        scope.option.first = scope.getFirstOption();
+                        this.option.first = this.getFirstOption();
 
-                        scope.chartData.second.xAxisData = keys;
-                        scope.chartData.second.seriesData = values;
-                        scope.option.second = scope.getSecondOption();
+                        this.chartData.second.xAxisData = keys;
+                        this.chartData.second.seriesData = values;
+                        this.option.second = this.getSecondOption();
 
-                        scope.chartData.third.xAxisData = keys;
-                        scope.chartData.third.seriesData = values;
-                        scope.option.third = scope.getThirdOption();
+                        this.chartData.third.xAxisData = keys;
+                        this.chartData.third.seriesData = values;
+                        this.option.third = this.getThirdOption();
 
-                        scope.chartData.fourth.xAxisData = keys;
-                        scope.chartData.fourth.seriesData = values;
-                        scope.option.fourth = scope.getFourth();
+                        this.chartData.fourth.xAxisData = keys;
+                        this.chartData.fourth.seriesData = values;
+                        this.option.fourth = this.getFourth();
                     }
                 },
                 deep: true
             }
         },
-        activated () {
+        activated() {
             this.sideBar.showing = true;
         },
         methods: {
-            formCheck () {
-                let scope = this;
-                if (!scope.form.startTime) {
+            formCheck() {
+                if (!this.form.startTime) {
                     this.$message.error('开始时间不能为空!');
                     return false;
                 }
-                if (!scope.form.endTime) {
+                if (!this.form.endTime) {
                     this.$message.error('结束时间不能为空!');
                     return false;
                 }
-                if (Date.parse(scope.form.endTime) <= Date.parse(scope.form.startTime)) {
+                if (Date.parse(this.form.endTime) <= Date.parse(this.form.startTime)) {
                     this.$message.error('开始时间不能大于结束时间!');
                     return false;
                 }
                 return true;
             },
-            query () {
-                let scope = this;
-                scope.sideBar.showing = false;
-                scope.result = {};
-                scope.loading = true;
-                if (scope.formCheck()) {
-                    scope.statistic();
+            query() {
+                this.sideBar.showing = false;
+                this.result = {};
+                this.loading = true;
+                if (this.formCheck()) {
+                    this.statistic();
                 }
             },
-            statistic () {
-                let scope = this;
+            statistic() {
                 let param = {
-                    condition: scope.form
+                    condition: this.form
                 };
                 getHadoop(param).then((data) => {
-                    scope.$response(data, '大数据统计').then(data => {
-                        scope.result = data.data;
+                    this.$response(data, '大数据统计').then(data => {
+                        this.result = data.data;
                     });
                 }).finally(() => {
-                        scope.loading = false;
+                    this.loading = false;
                         // 插入历史信息
-                        insertHistoryInfo({condition: {title: scope.COMMON_MAP.HISTORY.STATISTIC}}).then(data => {
+                        insertHistoryInfo({condition: {title: this.COMMON_MAP.HISTORY.STATISTIC}}).then(data => {
                             if (data.status !== 200) {
                                 this.$message.error('插入历史信息失败!');
                             }
@@ -223,18 +215,15 @@
                     }
                 );
             },
-            reset () {
-                let scope = this;
-                scope.form.type = 'kinds';
-                scope.$refs['tabPanel'].chooseType(0);
+            reset() {
+                this.form.type = 'kinds';
+                this.$refs['tabPanel'].chooseType(0);
             },
-            rangeTime (arg1, arg2) {
-                let scope = this;
-                scope.form.startTime = arg1;
-                scope.form.endTime = arg2;
+            rangeTime(arg1, arg2) {
+                this.form.startTime = arg1;
+                this.form.endTime = arg2;
             },
-            getFirstOption () {
-                let scope = this;
+            getFirstOption() {
                 return {
                     tooltip: {
                         trigger: 'item',
@@ -246,15 +235,15 @@
                         top: 0,
                         left: 'left',
                         pageButtonPosition: 'end',
-                        data: scope.chartData.first.legend,
-                        selected: scope.chartData.first.legendSelected
+                        data: this.chartData.first.legend,
+                        selected: this.chartData.first.legendSelected
                     },
                     series: {
                         name: '大数据统计(饼状图)',
                         type: 'pie',
                         radius: '55%',
                         center: ['50%', '60%'],
-                        data: scope.chartData.first.data,
+                        data: this.chartData.first.data,
                         itemStyle: {
                             emphasis: {
                                 shadowBlur: 10,
@@ -265,8 +254,7 @@
                     }
                 };
             },
-            getSecondOption () {
-                let scope = this;
+            getSecondOption() {
                 return {
                     tooltip: {
                         trigger: 'axis',
@@ -280,7 +268,7 @@
                     xAxis: [
                         {
                             type: 'category',
-                            data: scope.chartData.second.xAxisData,
+                            data: this.chartData.second.xAxisData,
                             axisTick: {
                                 alignWithLabel: true
                             },
@@ -302,7 +290,7 @@
                             name: '大数据统计',
                             type: 'bar',
                             barWidth: '60%',
-                            data: scope.chartData.second.seriesData,
+                            data: this.chartData.second.seriesData,
                             itemStyle: {
                                 //通常情况下：
                                 normal: {
@@ -325,52 +313,47 @@
                         type: 'slider',
                         show: true,
                         start: 0,
-                        end: parseInt(scope.chartData.second.xAxisData.length / 30),
+                        end: parseInt(this.chartData.second.xAxisData.length / 30),
                         handleSize: 8
                     }]
                 };
             },
-            getThirdOption () {
-                let scope = this;
+            getThirdOption() {
                 return {
-                    angleAxis: {
+                    xAxis: {
                         type: 'category',
-                        data: scope.chartData.third.xAxisData,
-                        z: 10
+                        data: this.chartData.third.xAxisData
                     },
-                    radiusAxis: {},
-                    polar: {},
+                    yAxis: {
+                        type: 'value'
+                    },
                     series: [{
-                        type: 'bar',
-                        data: scope.chartData.third.seriesData,
-                        coordinateSystem: 'polar',
-                        // name: scope.form.type,
-                        // stack: scope.form.type,
-                        color: function (params) {
-                            let colorList = ['#65d186', '#f67287', '#f29e3c', '#c05bdd', '#7a65f2']; //每根柱子的颜色
-                            return colorList[params.dataIndex % colorList.length];
-                        }
+                        data: this.chartData.third.seriesData,
+                        type: 'line',
+                        smooth: true
                     }],
-                    legend: {
+                    dataZoom: [{ //添加X轴滚动条
+                        type: 'slider',
                         show: true,
-                        data: [scope.form.type]
-                    }
+                        start: 0,
+                        end: parseInt(this.chartData.third.xAxisData.length / 10),
+                        handleSize: 8
+                    }]
                 };
             },
-            getFourth () {
-                let scope = this;
+            getFourth() {
                 return {
                     xAxis: {
                         type: 'category',
                         boundaryGap: false,
-                        data: scope.chartData.fourth.xAxisData
+                        data: this.chartData.fourth.xAxisData
                     },
                     yAxis: {
                         name: '数量',
                         type: 'value'
                     },
                     series: [{
-                        data: scope.chartData.fourth.seriesData,
+                        data: this.chartData.fourth.seriesData,
                         type: 'line',
                         color: ['#58afed'], //折线颜色
                         areaStyle: {
@@ -381,7 +364,7 @@
                         type: 'slider',
                         show: true,
                         start: 0,
-                        end: parseInt(scope.chartData.fourth.xAxisData.length / 4),
+                        end: parseInt(this.chartData.fourth.xAxisData.length / 4),
                         handleSize: 8
                     }]
                 };

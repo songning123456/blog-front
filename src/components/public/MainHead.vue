@@ -56,13 +56,11 @@
         },
         computed: {
             avatar() {
-                let scope = this;
-                if (JSON.stringify(scope.blogger) !== '{}') {
-                    if (scope.blogger.headPortrait.indexOf('https://') === -1 && scope.blogger.headPortrait.indexOf('http://') === -1) {
-                        let src = config.getImageOriginal() + encodeURIComponent(scope.blogger.headPortrait);
-                        return src;
+                if (JSON.stringify(this.blogger) !== '{}') {
+                    if (this.blogger.headPortrait.indexOf('https://') === -1 && this.blogger.headPortrait.indexOf('http://') === -1) {
+                        return config.getImageOriginal() + encodeURIComponent(this.blogger.headPortrait);
                     } else {
-                        return scope.blogger.headPortrait;
+                        return this.blogger.headPortrait;
                     }
                 } else {
                     return '';
