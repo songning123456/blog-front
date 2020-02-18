@@ -5,12 +5,17 @@
                   :class='{"current-tab": currentTab === tab.name}'>{{tab.label}}
             </span>
         </div>
-        <el-input ref='elInput' suffix-icon='el-icon-search' v-model='$store.state.fuzzyQuery' placeholder='请输入搜索内容'
+        <el-input ref='elInput' suffix-icon='el-icon-search' v-model='$store.state.query.param' placeholder='请输入搜索内容'
                   @keyup.enter.native="queryBtn"></el-input>
         <el-button type="primary" @click.native='writeBtn'>写文章</el-button>
         <el-avatar :src="avatar" @click.native.stop="configBar = !configBar">
             <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>
         </el-avatar>
+        <el-radio-group v-model="$store.state.query.type">
+            <el-radio label="content">文章</el-radio>
+            <el-radio label="title">标题</el-radio>
+            <el-radio label="author">作者</el-radio>
+        </el-radio-group>
         <div class="main-head-popover" v-show='configBar'>
             <div @click.stop='$router.push({path: "/modify-password"})'><span>修改资料</span></div>
             <div @click.stop='$router.push({path: "/hobby-image"})'><span>业余爱好</span></div>
@@ -99,13 +104,14 @@
                 this.configBar = false;
             },
             queryBtn() {
-                if (this.$store.state.fuzzyQuery) {
+                if (this.$store.state.query.param) {
+                    // 添加time,解决路由不跳转问题
+                    let query = Object.assign({}, this.$store.state.query);
+                    query.time = new Date().getTime();
                     this.$router.push({
                         path: '/search',
                         name: 'search',
-                        query: {
-                            data: this.$store.state.fuzzyQuery
-                        }
+                        query: query
                     });
                 } else {
                     this.$message.warning('请输入搜索内容');
@@ -180,7 +186,7 @@
             float: left;
             position: absolute;
             top: 50%;
-            left: 78%;
+            left: 77.5%;
             transform: translate(-50%, -50%);
 
             .el-input__suffix {
@@ -193,6 +199,14 @@
             top: 50%;
             left: 90.5%;
             transform: translate(-50%, -50%);
+        }
+
+        .el-radio-group {
+            position: absolute;
+            top: 87%;
+            left: 77%;
+            transform: translate(-50%, -50%);
+
         }
 
         .el-avatar {

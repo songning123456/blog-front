@@ -15,7 +15,7 @@
             },
             category: {
                 type: String,
-                default: 'face'
+                default: 'spinner'
             }
         },
         data () {

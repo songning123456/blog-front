@@ -9,7 +9,10 @@ const store = new Vuex.Store({
     state: {
         language: getLanguage(),
         blogger: {},
-        fuzzyQuery: ''
+        query: {
+            type: 'content',
+            param: ''
+        }
     },
     mutations: {
         SET_LANGUAGE: (state, language) => {
@@ -18,6 +21,9 @@ const store = new Vuex.Store({
         },
         SET_BLOGGER: (state, blogger) => {
             state.blogger = blogger;
+        },
+        SET_QUERY: (state, query) => {
+            state.query = query;
         }
     },
     actions: {

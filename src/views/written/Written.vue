@@ -93,12 +93,12 @@
                     this.loading = true;
                 }
                 getWrittenArticle(params).then(data => {
-                    this.$response(data, 'infiniteScroll').then(data => {
+                    if (data.status === 200) {
                         this.page.total = data.total;
+                        if (this.page.recordStartNo === 0) {
+                            this.result = [];
+                        }
                         if (data.data.length > 0) {
-                            if (this.page.recordStartNo === 0) {
-                                this.result = [];
-                            }
                             data.data.forEach(item => {
                                 this.result.push(item);
                             });
@@ -106,7 +106,7 @@
                         } else {
                             this.busy = true;
                         }
-                    });
+                    }
                 }).finally(() => {
                     this.loading = false;
                 });

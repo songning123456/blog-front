@@ -1,5 +1,5 @@
 <template>
-    <div class='column'>
+    <div class='column' @click="detail">
         <div class='tag'>
             <div class='like-tag' v-if="article.tag.love === 1" @click.stop="modifyLoveOfTag(0)"><img
                 src="../../assets/like.svg"/><span>{{article.tag.sum}}</span></div>
@@ -7,22 +7,13 @@
                 src="../../assets/dislike.svg"><span>{{article.tag.sum}}</span>
             </div>
             <i class="el-icon-delete" v-if="showDelete" @click.stop="$emit('delete', article.id)"></i>
-            <el-popover placement="right-start" trigger="click" popper-class='column-popover' :visible-arrow='false'>
-                <el-table :data='searchResult' :show-overflow-tooltip='true' max-height="400"
-                          :header-cell-style="{background:'#eef1f6',color:'#606266'}">
-                    <el-table-column width="50" label='序号' align="center"><span slot-scope="scope"
-                                                                                v-html="scope.$index + 1"></span>
-                    </el-table-column>
-                    <el-table-column label='查询结果' align="center"><span slot-scope="scope" v-html="scope.row"></span>
-                    </el-table-column>
-                </el-table>
-                <i class="el-icon-chat-line-square" slot="reference" v-if="searchResult.length > 0"></i>
-            </el-popover>
         </div>
-        <div class='title'><span class='modify-txt' :class="{'is-read': article.tag.hasRead}"><span @click="detail">{{article.title}}</span></span>
+        <div class='title'><span class='modify-txt'
+                                 :class="{'is-read': article.tag.hasRead}"><span
+            v-html="getQueryText(article.title)"></span></span>
         </div>
         <div class='info'>
-            <span @click.stop='getIntroduction'>{{article.author}}</span>
+            <span @click.stop='getIntroduction' v-html="getQueryText(article.author)"></span>
             <span>{{' | '}}</span>
             <span @click.stop='jumpClock'>{{article.updateTime}}</span>
         </div>
@@ -44,12 +35,6 @@
             showDelete: {
                 type: Boolean,
                 default: false
-            },
-            searchResult: {
-                type: Array,
-                default() {
-                    return [];
-                }
             }
         },
         methods: {
@@ -101,6 +86,12 @@
             jumpClock() {
                 let scope = this;
                 scope.$router.push({path: '/world-clock'});
+            },
+            getQueryText(text) {
+                let chosen = `<em>${this.$store.state.query.param}</em>`;
+                let reg = new RegExp(this.$store.state.query.param, 'g');
+                let result = text.replace(reg, chosen);
+                return result;
             }
         }
     };
@@ -113,7 +104,7 @@
         background: white;
         margin: .2rem 0;
 
-        &.column:hover {
+        &:hover {
             background-color: #fbfbfc;
             cursor: pointer;
         }
@@ -167,7 +158,7 @@
                 }
             }
 
-            .el-icon-delete, .el-icon-chat-line-square {
+            .el-icon-delete {
                 position: absolute;
                 right: 1rem;
                 bottom: .1rem;
@@ -223,7 +214,7 @@
             }
 
             span:nth-child(1) {
-                padding-left: 1.2rem;
+                margin-left: 1.2rem;
 
                 &:hover {
                     color: #409eff;
@@ -236,11 +227,10 @@
                 }
             }
         }
-    }
 
-    .column-popover {
-        width: 20rem;
-        left: 1335px !important;
-        z-index: 2 !important;
+        em {
+            font-style: normal;
+            color: #e8001c;
+        }
     }
 </style>
