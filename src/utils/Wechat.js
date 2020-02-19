@@ -5,9 +5,11 @@ let wechat = {};
 wechat.webSocket = null;
 // 避免webSocket重复连接
 wechat.lockReConnect = false;
+// 接收消息的方法集合
+wechat.message = null;
 // 心跳
 wechat.heartCheck = {
-    timeout: 10 * 1000, // 10s发一次心跳
+    timeout: 2000, // 2s发一次心跳
     timeoutObj: null,
     serverTimeoutObj: null,
     reset: function () {
@@ -16,12 +18,15 @@ wechat.heartCheck = {
         return this;
     },
     start: function () {
-        this.timeoutObj = setTimeout(() => {
-            // 发送一次心跳ping, 返回pong说明连接正常
+        let self = this;
+        this.timeoutObj = setTimeout(function () {
+            //这里发送一个心跳，后端收到后，返回一个心跳消息，onmessage拿到返回的心跳就说明连接正常
             wechat.webSocket.send('ping');
-            this.serverTimeoutObj = setTimeout(() => {
+            //如果超过一定时间还没重置，说明后端主动断开了
+            self.serverTimeoutObj = setTimeout(function () {
+                //如果onclose会执行reconnect，我们执行ws.close()就行了.如果直接执行reconnect 会触发onclose导致重连两次
                 wechat.webSocket.close();
-            }, this.timeout);
+            }, self.timeout);
         }, this.timeout);
     }
 };
@@ -60,9 +65,8 @@ wechat.initWebSocket = function () {
     wechat.webSocket.onmessage = (message) => {
         wechat.heartCheck.reset().start();
         if (message.data !== 'pong') {
-            let data = JSON.parse(message.data);
-            if (wechat.message[data.userId]) {
-                wechat.message[data.userId](data);
+            if (wechat.message) {
+                wechat.message(Object.assign({}, JSON.parse(message.data)));
             }
         }
     };

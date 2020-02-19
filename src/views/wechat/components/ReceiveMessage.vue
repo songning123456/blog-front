@@ -1,6 +1,6 @@
 <template>
     <div class="receive-message">
-        <el-avatar :src="isSystem ? require('../../../assets/robot.svg') : receive.avatar"></el-avatar>
+        <el-avatar :src="isSystem ? require('../../../assets/robot.svg') : receiveAvatar"></el-avatar>
         <div class="author-message">
             <div class="author">{{isSystem ? '系统通知' : receive.author}}</div>
             <div class="message" v-html="getMessage(receive.message)"></div>
@@ -9,6 +9,7 @@
 </template>
 
 <script>
+    import config from '../../../utils/Config';
     export default {
         name: 'ReceiveMessage',
         props: {
@@ -19,6 +20,11 @@
             isSystem: {
                 type: Boolean,
                 default: false
+            }
+        },
+        computed: {
+            receiveAvatar() {
+                return config.getImageOriginal() + encodeURIComponent(this.receive.avatar);
             }
         },
         methods: {

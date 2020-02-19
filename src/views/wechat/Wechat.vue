@@ -14,7 +14,8 @@
                 <div class="system-info" v-show="currentTab === 'systemInfo'">
                     <div class="system-to-my">
                         <template v-for='(item, index) in systemMessages'>
-                            <post-message v-if="item.type === 'post'" :post="item" :key="index"></post-message>
+                            <post-message v-if="item.type === 'post'" :loading='loading[item[userId]]' :post="item"
+                                          :key="index"></post-message>
                             <receive-message v-if='item.type === "receive"' :receive="item" :is-system='true'
                                              :key="index"></receive-message>
                         </template>
@@ -38,9 +39,10 @@
                         <div class="online-total">当前在线<span>{{onlineMembers.length}}</span>人</div>
                         <div class="online-info" ref="onlineInfo">
                             <template v-for="(item, index) in onlineMessages">
-                                <post-message v-if='item.type === "post"' :post="item" :key="index"></post-message>
-                                <receive-message v-if='item.type === "receive"' :receive="item"
-                                                 :key="index"></receive-message>
+                                <post-message v-if='userId === item.userId'
+                                              :loading='loading[item.userId + item.updateTime]' :post="item"
+                                              :key="index"></post-message>
+                                <receive-message v-else :receive="item" :key="index"></receive-message>
                             </template>
                         </div>
                     </div>
@@ -59,8 +61,9 @@
     import EmptyView from '../../components/util/EmptyView';
     import PostMessage from './components/PostMessage';
     import ReceiveMessage from './components/ReceiveMessage';
-    /*   import wechat from '../../utils/Wechat';
-       import init from '../../utils/Init';*/
+    import wechat from '../../utils/Wechat';
+    import DateUtil from '../../utils/Date';
+    import init from '../../utils/Init';
 
     export default {
         name: 'Wechat',
@@ -150,7 +153,9 @@
                 toOnlineMessage: '',
                 toSystemMessage: '',
                 onlineMessages: [],
-                systemMessages: []
+                systemMessages: [],
+                loading: {},
+                userId: ''
             };
         },
         activated() {
@@ -170,15 +175,15 @@
             let doc = this.$refs['onlineInfo'];
             doc.scrollTop = doc.scrollHeight;
         },
-        mounted() {
+        created() {
+            wechat.message = this.handleMessage;
+            init.getBlogger().then(data => {
+                this.userId = data.userId;
+            });
         },
         methods: {
             modifyHover(e) {
-                if (e.target.innerText.length > 6) {
-                    this.scrollHover = true;
-                } else {
-                    this.scrollHover = false;
-                }
+                this.scrollHover = e.target.innerText.length > 6;
             },
             scrollName(event) {
                 event.preventDefault();
@@ -194,19 +199,27 @@
                 let obj = {
                     author: this.$store.state.blogger.author,
                     avatar: this.$store.state.blogger.headPortrait,
+                    userId: this.$store.state.blogger.userId,
                     message: message,
-                    type: 'post'
+                    updateTime: DateUtil.formatDate(new Date()),
+                    online: true
                 };
+                this.$set(this.loading, obj.userId + obj.updateTime, true);
                 if (which === 'toSystem') {
                     this.systemMessages.push(obj);
                     this.toSystemMessage = '';
                 } else {
                     this.onlineMessages.push(obj);
+                    wechat.webSocket.send(JSON.stringify(obj));
                     this.toOnlineMessage = '';
                 }
             },
             handleMessage(data) {
-
+                if (this.userId === data.userId) {
+                    this.$set(this.loading, data.userId + data.updateTime, false);
+                } else {
+                    this.onlineMessages.push(data);
+                }
             }
         }
     };
