@@ -27,7 +27,8 @@
                 </div>
                 <div class="online-chat" v-show="currentTab === 'onlineChat'">
                     <div class="online-members">
-                        <div class="member-info" v-for="item in onlineMembers" :key="item.userId">
+                        <div class="member-info" v-for="item in onlineMembers" :key="item.userId"
+                             :class='{"member-first": item.userId === userId}'>
                             <el-avatar :src="item.headPortrait"></el-avatar>
                             <div class='member-name' :title='item.author'>{{item.author}}</div>
                         </div>
@@ -128,11 +129,23 @@
                         this.onlineMessages.push(data);
                     }
                 } else {
-                    this.onlineMembers = [];
-                    // 获取在线人数
-                    for (let key in data) {
-                        data[key].headPortrait = init.getHeadPortrait(data[key].headPortrait);
-                        this.onlineMembers.push(data[key]);
+                    // 连接webSocket成功时， 获取 在线人数信息 和 对话信息
+                    if (data[0].online) {
+                        // 获取 在线人数信息
+                        this.onlineMembers = [];
+                        for (let key in data) {
+                            data[key].headPortrait = init.getHeadPortrait(data[key].headPortrait);
+                            if (data[key].userId === this.userId) {
+                                this.onlineMembers.unshift(data[key]);
+                            } else {
+                                this.onlineMembers.push(data[key]);
+                            }
+                        }
+                    } else {
+                        // 获取 对话信息
+                        for (let key in data) {
+                            this.onlineMessages.push(data[key]);
+                        }
                     }
                 }
             }
@@ -238,6 +251,10 @@
                             border: 1px solid #409EFF;
                             margin-bottom: .4rem;
 
+                            &.member-first {
+                                border: 1px solid #0eff00;
+                            }
+
                             .el-avatar {
                                 height: 1.6rem;
                                 width: 1.6rem;
@@ -259,6 +276,7 @@
                                 overflow: hidden;
                                 text-overflow: ellipsis;
                             }
+
                             &:hover {
                                 cursor: pointer;
                             }
