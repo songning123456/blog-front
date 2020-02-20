@@ -28,11 +28,8 @@
                 <div class="online-chat" v-show="currentTab === 'onlineChat'">
                     <div class="online-members">
                         <div class="member-info" v-for="item in onlineMembers" :key="item.userId">
-                            <el-avatar :src="item.avatar"></el-avatar>
-                            <div class='member-name' ref="memberName" :user-id='item.userId' @mouseenter="modifyHover"
-                                 :class="{'hover-w-resize': scrollHover, 'hover-pointer': !scrollHover}">
-                                {{item.author}}
-                            </div>
+                            <el-avatar :src="item.headPortrait"></el-avatar>
+                            <div class='member-name' :title='item.author'>{{item.author}}</div>
                         </div>
                     </div>
                     <div class="group-message">
@@ -71,85 +68,7 @@
         data() {
             return {
                 currentTab: 'onlineChat',
-                nameScroll: {},
-                scrollHover: false,
-                onlineMembers: [
-                    {
-                        userId: '121212',
-                        avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-                        author: 'AAAAAA'
-                    },
-                    {
-                        userId: '1212121212',
-                        avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-                        author: 'BBBAAAAAA'
-                    },
-                    {
-                        userId: 'sdsdsd1',
-                        avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-                        author: 'CCCAAAAAAA'
-                    },
-                    {
-                        userId: 'ewewew2',
-                        message: '12121212',
-                        avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-                        author: 'DDDAAAAAAAAA'
-                    },
-                    {
-                        userId: 'ewewew3',
-                        avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-                        author: 'DDD'
-                    },
-                    {
-                        userId: 'ewewew4',
-                        avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-                        author: 'DDD'
-                    },
-                    {
-                        userId: 'ewewew5',
-                        message: '12121212',
-                        avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-                        author: 'DDD'
-                    },
-                    {
-                        userId: 'ewewew6',
-                        avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-                        author: 'DDD'
-                    },
-                    {
-                        userId: 'ewewew7',
-                        message: '12121212',
-                        avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-                        author: 'DDD'
-                    },
-                    {
-                        userId: 'ewewew8',
-                        message: '12121212',
-                        avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-                        author: 'DDD'
-                    },
-                    {
-                        userId: 'ewewew9',
-                        avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-                        author: 'DDD'
-                    },
-                    {
-                        userId: 'ewewew0',
-                        message: '12121212',
-                        avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-                        author: 'DDD'
-                    },
-                    {
-                        userId: 'ewewew11',
-                        avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-                        author: 'DDD'
-                    },
-                    {
-                        userId: 'wewe22w12',
-                        avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-                        author: 'EEE'
-                    }
-                ],
+                onlineMembers: [],
                 toOnlineMessage: '',
                 toSystemMessage: '',
                 onlineMessages: [],
@@ -158,18 +77,6 @@
                 userId: ''
             };
         },
-        activated() {
-            this.$nextTick(() => {
-                let memberDoc = this.$refs['memberName'];
-                for (let i = 0; i < memberDoc.length; i++) {
-                    let userId = memberDoc[i].getAttribute('user-id');
-                    if (memberDoc[i].innerText.length > 6) {
-                        this.nameScroll[userId] = memberDoc[i];
-                        this.nameScroll[userId].addEventListener('mousewheel', this.scrollName, true);
-                    }
-                }
-            });
-        },
         updated() {
             // 滚动条到最底部
             let doc = this.$refs['onlineInfo'];
@@ -177,32 +84,19 @@
         },
         created() {
             wechat.message = this.handleMessage;
+            wechat.open = this.handleOpen;
             init.getBlogger().then(data => {
                 this.userId = data.userId;
             });
         },
         methods: {
-            modifyHover(e) {
-                this.scrollHover = e.target.innerText.length > 6;
-            },
-            scrollName(event) {
-                event.preventDefault();
-                // eslint-disable-next-line no-unused-vars
-                let userId = event.target.getAttribute('user-id');
-                if (event.deltaY > 0) {
-                    this.nameScroll[userId].scrollLeft += 10;
-                } else {
-                    this.nameScroll[userId].scrollLeft -= 10;
-                }
-            },
             sendMessage(message, which) {
                 let obj = {
                     author: this.$store.state.blogger.author,
-                    avatar: this.$store.state.blogger.headPortrait,
+                    headPortrait: this.$store.state.blogger.headPortrait,
                     userId: this.$store.state.blogger.userId,
                     message: message,
-                    updateTime: DateUtil.formatDate(new Date()),
-                    online: true
+                    updateTime: DateUtil.formatDate(new Date())
                 };
                 this.$set(this.loading, obj.userId + obj.updateTime, true);
                 if (which === 'toSystem') {
@@ -214,11 +108,32 @@
                     this.toOnlineMessage = '';
                 }
             },
+            handleOpen() {
+                // 等获取到userId在请求后台
+                init.getBlogger().then(data => {
+                    let obj = {
+                        userId: data.userId,
+                        online: 1
+                    };
+                    wechat.webSocket.send(JSON.stringify(obj));
+                });
+            },
             handleMessage(data) {
-                if (this.userId === data.userId) {
-                    this.$set(this.loading, data.userId + data.updateTime, false);
+                // 说明是 正常 接收消息
+                if (data.userId) {
+                    // 判断是 发送方 or 接收方
+                    if (this.userId === data.userId) {
+                        this.$set(this.loading, data.userId + data.updateTime, false);
+                    } else {
+                        this.onlineMessages.push(data);
+                    }
                 } else {
-                    this.onlineMessages.push(data);
+                    this.onlineMembers = [];
+                    // 获取在线人数
+                    for (let key in data) {
+                        data[key].headPortrait = init.getHeadPortrait(data[key].headPortrait);
+                        this.onlineMembers.push(data[key]);
+                    }
                 }
             }
         }
@@ -330,35 +245,22 @@
                                 left: 20%;
                                 top: 50%;
                                 transform: translate(-50%, -50%);
-
-                                &:hover {
-                                    cursor: pointer;
-                                }
                             }
 
                             .member-name {
-                                display: inline-block;
                                 position: absolute;
                                 left: 36%;
                                 top: 50%;
                                 transform: translate(0, -50%);
                                 width: 4rem;
-                                overflow: auto;
-                                user-select: none;
                                 text-align: left;
-
-                                &::-webkit-scrollbar {
-                                    width: 1px;
-                                    height: 1px;
-                                }
-
-                                &.hover-pointer:hover {
-                                    cursor: pointer;
-                                }
-
-                                &.hover-w-resize:hover {
-                                    cursor: w-resize;
-                                }
+                                font-size: .8rem;
+                                white-space: nowrap;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                            }
+                            &:hover {
+                                cursor: pointer;
                             }
                         }
                     }

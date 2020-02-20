@@ -1,8 +1,13 @@
 import store from '../store/store';
 import {getBlogger} from '../service/http';
+import Config from './Config';
 
 let init = {};
 
+/**
+ * 获取blogger信息
+ * @returns {Promise<unknown>}
+ */
 init.getBlogger = function () {
     return new Promise((resolve, reject) => {
         if (JSON.stringify(store.state.blogger) !== '{}') {
@@ -20,5 +25,18 @@ init.getBlogger = function () {
             });
         }
     });
+};
+
+/**
+ * 转换头像
+ * @param headPortrait
+ * @returns {boolean|string|*|string}
+ */
+init.getHeadPortrait = function (headPortrait) {
+    if (headPortrait && headPortrait.indexOf('https://') === -1 && headPortrait.indexOf('http://') === -1) {
+        return Config.getImageOriginal() + encodeURIComponent(headPortrait);
+    } else {
+        return headPortrait;
+    }
 };
 export default init;

@@ -5,6 +5,8 @@ let wechat = {};
 wechat.webSocket = null;
 // 避免webSocket重复连接
 wechat.lockReConnect = false;
+// 打开时发送消息通知后台登陆成功并且发布
+wechat.open = null;
 // 接收消息的方法集合
 wechat.message = null;
 // 心跳
@@ -55,6 +57,7 @@ wechat.reconnect = function () {
 wechat.initWebSocket = function () {
     wechat.webSocket.onopen = (message) => {
         wechat.heartCheck.reset().start();
+        wechat.open();
     };
     wechat.webSocket.onerror = (message) => {
         wechat.reconnect();

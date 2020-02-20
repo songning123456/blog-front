@@ -30,7 +30,6 @@
 </template>
 
 <script>
-    import config from '../../utils/Config';
     import {exitBlog} from '../../service/http';
     import init from '../../utils/Init';
 
@@ -57,18 +56,10 @@
         },
         computed: {
             avatar() {
-                if (JSON.stringify(this.blogger) !== '{}') {
-                    if (this.blogger.headPortrait.indexOf('https://') === -1 && this.blogger.headPortrait.indexOf('http://') === -1) {
-                        return config.getImageOriginal() + encodeURIComponent(this.blogger.headPortrait);
-                    } else {
-                        return this.blogger.headPortrait;
-                    }
-                } else {
-                    return '';
-                }
+                return init.getHeadPortrait(this.blogger.headPortrait);
             }
         },
-        mounted() {
+        created() {
             init.getBlogger().then(data => {
                 this.blogger = data;
             });

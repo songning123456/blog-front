@@ -9,13 +9,15 @@
 </template>
 
 <script>
-    import config from '../../../utils/Config';
+    import init from '../../../utils/Init';
+
     export default {
         name: 'ReceiveMessage',
         props: {
             receive: {
                 type: Object,
-                default() {}
+                default() {
+                }
             },
             isSystem: {
                 type: Boolean,
@@ -24,20 +26,22 @@
         },
         computed: {
             receiveAvatar() {
-                return config.getImageOriginal() + encodeURIComponent(this.receive.avatar);
+                return init.getHeadPortrait(this.receive.headPortrait);
             }
         },
         methods: {
             getMessage(message) {
                 let result = '';
-                let length = message.length;
-                for (let i = 0, j = 1; i < length; i++, j++) {
-                    if (length === 20) {
-                        result += message[i];
-                    } else if (i && j % 20 === 0) {
-                        result += '<br/>';
-                    } else {
-                        result += message[i];
+                if (message && message.length > 0) {
+                    let length = message.length;
+                    for (let i = 0, j = 1; i < length; i++, j++) {
+                        if (length === 20) {
+                            result += message[i];
+                        } else if (i && j % 20 === 0) {
+                            result += '<br/>';
+                        } else {
+                            result += message[i];
+                        }
                     }
                 }
                 return result;
@@ -70,7 +74,7 @@
                 border-radius: 5px;
                 padding: .4rem;
                 display: block;
-                word-wrap:break-word;
+                word-wrap: break-word;
                 text-align: left;
             }
         }

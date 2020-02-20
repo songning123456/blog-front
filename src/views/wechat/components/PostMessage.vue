@@ -5,12 +5,12 @@
             <div class="author">{{post.author}}</div>
             <div class="message" v-html="getMessage(post.message)"></div>
         </div>
-        <img v-show='loading' v-if='loading' src='../../../assets/wechatSpinner.svg' />
+        <img v-show='loading' v-if='loading' src='../../../assets/wechatSpinner.svg'/>
     </div>
 </template>
 
 <script>
-    import config from '../../../utils/Config';
+    import init from '../../../utils/Init';
 
     export default {
         name: 'PostMessage',
@@ -27,20 +27,22 @@
         },
         computed: {
             postAvatar() {
-                return config.getImageOriginal() + encodeURIComponent(this.post.avatar);
+                return init.getHeadPortrait(this.post.headPortrait);
             }
         },
         methods: {
             getMessage(message) {
                 let result = '';
-                let length = message.length;
-                for (let i = 0, j = 1; i < length; i++, j++) {
-                    if (length === 20) {
-                        result += message[i];
-                    } else if (i && j % 20 === 0) {
-                        result += '<br/>';
-                    } else {
-                        result += message[i];
+                if (message && message.length > 0) {
+                    let length = message.length;
+                    for (let i = 0, j = 1; i < length; i++, j++) {
+                        if (length === 20) {
+                            result += message[i];
+                        } else if (i && j % 20 === 0) {
+                            result += '<br/>';
+                        } else {
+                            result += message[i];
+                        }
                     }
                 }
                 return result;

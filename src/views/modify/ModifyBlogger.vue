@@ -69,7 +69,6 @@
 <script>
     import LeftSideBar from '../../components/public/LeftSideBar';
     import {saveImage, updateBlogger} from '../../service/http';
-    import config from '../../utils/Config';
     import ToolLoading from '../../components/util/ToolLoading';
     import Reg from '../../utils/Regular';
     import FloatMenu from '../../components/util/FloatMenu';
@@ -170,17 +169,7 @@
         },
         computed: {
             avatar() {
-                let scope = this;
-                if (scope.form.headPortrait !== '') {
-                    if (scope.form.headPortrait.indexOf('https://') === -1 && scope.form.headPortrait.indexOf('http://') === -1) {
-                        let src = config.getImageOriginal() + encodeURIComponent(scope.form.headPortrait);
-                        return src;
-                    } else {
-                        return scope.form.headPortrait;
-                    }
-                } else {
-                    return '';
-                }
+                return init.getHeadPortrait(this.form.headPortrait);
             }
         },
         methods: {
