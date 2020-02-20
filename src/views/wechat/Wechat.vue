@@ -9,7 +9,7 @@
                 <div class="online-chat">
                     <div class="online-members">
                         <div class="member-info" v-for="item in onlineMembers" :key="item.userId"
-                             :class='{"member-first": item.userId === userId}'>
+                             :class='{"member-first": item.userId === userId}' @click.stop='getIntroduction(item.userId)'>
                             <el-avatar :src="item.headPortrait"></el-avatar>
                             <div class='member-name' :title='item.author'>{{item.author}}</div>
                         </div>
@@ -83,6 +83,16 @@
                 this.onlineMessages.push(obj);
                 wechat.webSocket.send(JSON.stringify(obj));
                 this.toOnlineMessage = '';
+            },
+            getIntroduction (userId) {
+                let routerData = this.$router.resolve({
+                    path: '/author-personal',
+                    name: 'authorPersonal',
+                    query: {
+                        userId: userId
+                    }
+                });
+                window.open(routerData.href, '_blank');
             },
             queryDialog() {
                 let params = {
