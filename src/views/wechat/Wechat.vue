@@ -4,28 +4,9 @@
         <div class='frame-center'>
             <div class="chat-page">
                 <div class="chat-tabs">
-                    <div class="chat-tab" @click.stop="currentTab = 'systemInfo'"
-                         :class="{'current-tab': currentTab === 'systemInfo'}">系统通知
-                    </div>
-                    <div class="chat-tab" @click.stop="currentTab = 'onlineChat'"
-                         :class="{'current-tab': currentTab === 'onlineChat'}">在线聊天
-                    </div>
+                    <div class="chat-tab">在线聊天</div>
                 </div>
-                <div class="system-info" v-show="currentTab === 'systemInfo'">
-                    <div class="system-to-my">
-                        <template v-for='(item, index) in systemMessages'>
-                            <post-message v-if="item.type === 'post'" :loading='loading[item[userId]]' :post="item"
-                                          :key="index"></post-message>
-                            <receive-message v-if='item.type === "receive"' :receive="item" :is-system='true'
-                                             :key="index"></receive-message>
-                        </template>
-                    </div>
-                    <div class="my-to-system">
-                        <el-input type="textarea" :rows="4" placeholder="请输入内容" v-model="toSystemMessage"></el-input>
-                        <el-button type="primary" @click='sendMessage(toSystemMessage, "toSystem")'>发送</el-button>
-                    </div>
-                </div>
-                <div class="online-chat" v-show="currentTab === 'onlineChat'">
+                <div class="online-chat">
                     <div class="online-members">
                         <div class="member-info" v-for="item in onlineMembers" :key="item.userId"
                              :class='{"member-first": item.userId === userId}'>
@@ -68,12 +49,9 @@
         components: {ReceiveMessage, PostMessage, MainHead, EmptyView},
         data() {
             return {
-                currentTab: 'onlineChat',
                 onlineMembers: [],
                 toOnlineMessage: '',
-                toSystemMessage: '',
                 onlineMessages: [],
-                systemMessages: [],
                 loading: {},
                 userId: ''
             };
@@ -91,7 +69,7 @@
             });
         },
         methods: {
-            sendMessage(message, which) {
+            sendMessage(message) {
                 let obj = {
                     author: this.$store.state.blogger.author,
                     headPortrait: this.$store.state.blogger.headPortrait,
@@ -100,14 +78,9 @@
                     updateTime: DateUtil.formatDate(new Date())
                 };
                 this.$set(this.loading, obj.userId + obj.updateTime, true);
-                if (which === 'toSystem') {
-                    this.systemMessages.push(obj);
-                    this.toSystemMessage = '';
-                } else {
-                    this.onlineMessages.push(obj);
-                    wechat.webSocket.send(JSON.stringify(obj));
-                    this.toOnlineMessage = '';
-                }
+                this.onlineMessages.push(obj);
+                wechat.webSocket.send(JSON.stringify(obj));
+                this.toOnlineMessage = '';
             },
             handleOpen() {
                 // 等获取到userId在请求后台
@@ -183,44 +156,11 @@
                     .chat-tab {
                         float: left;
                         margin-left: 1.5rem;
-
-                        &.current-tab {
-                            color: #409EFF;
-                            border-bottom: 1.5px solid #409EFF;
-                        }
+                        color: #409EFF;
+                        border-bottom: 1.5px solid #409EFF;
 
                         &:hover {
                             cursor: pointer;
-                            color: #409EFF;
-                        }
-                    }
-                }
-
-                .system-info {
-                    width: 100%;
-                    height: calc(100% - 1.8rem - 1px);
-
-                    .system-to-my {
-                        height: calc(75% - 1.6rem - 2px);
-                        width: calc(100% - 1.6rem - 2px);
-                        margin: .8rem;
-                        border: 1px solid #409EFF;
-                        background-color: #f8f8f9;
-                    }
-
-                    .my-to-system {
-                        height: 25%;
-                        width: 100%;
-                        float: left;
-                        padding: 0 .8rem .8rem .8rem;
-                        box-sizing: border-box;
-                        position: relative;
-
-                        .el-button {
-                            width: 6rem;
-                            position: absolute;
-                            top: 5rem;
-                            right: .8rem;
                         }
                     }
                 }
