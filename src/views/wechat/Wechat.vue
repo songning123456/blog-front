@@ -43,6 +43,7 @@
     import wechat from '../../utils/Wechat';
     import DateUtil from '../../utils/Date';
     import init from '../../utils/Init';
+    import {getDialog} from '../../service/http';
 
     export default {
         name: 'Wechat',
@@ -67,6 +68,7 @@
             init.getBlogger().then(data => {
                 this.userId = data.userId;
             });
+            this.queryDialog();
         },
         methods: {
             sendMessage(message) {
@@ -82,6 +84,19 @@
                 wechat.webSocket.send(JSON.stringify(obj));
                 this.toOnlineMessage = '';
             },
+            queryDialog() {
+                let params = {
+                    condition: {}
+                };
+                getDialog(params).then(data => {
+                    if (data.status === 200 && data.total > 0) {
+                        for (let key in data.data) {
+                            this.onlineMessages.push(data.data[key]);
+                        }
+                    }
+                }).catch(e => {
+                });
+            },
             handleOpen() {
                 // 等获取到userId在请求后台
                 init.getBlogger().then(data => {
@@ -89,6 +104,7 @@
                         userId: data.userId,
                         online: 1
                     };
+                    // 获取在线人数信息
                     wechat.webSocket.send(JSON.stringify(obj));
                 });
             },
@@ -97,27 +113,22 @@
                 if (data.userId) {
                     // 判断是 发送方 or 接收方
                     if (this.userId === data.userId) {
+                        // 发送方
                         this.$set(this.loading, data.userId + data.updateTime, false);
                     } else {
+                        // 接收方
                         this.onlineMessages.push(data);
                     }
                 } else {
-                    // 连接webSocket成功时， 获取 在线人数信息 和 对话信息
-                    if (data[0].online) {
-                        // 获取 在线人数信息
-                        this.onlineMembers = [];
-                        for (let key in data) {
-                            data[key].headPortrait = init.getHeadPortrait(data[key].headPortrait);
-                            if (data[key].userId === this.userId) {
-                                this.onlineMembers.unshift(data[key]);
-                            } else {
-                                this.onlineMembers.push(data[key]);
-                            }
-                        }
-                    } else {
-                        // 获取 对话信息
-                        for (let key in data) {
-                            this.onlineMessages.push(data[key]);
+                    // 连接webSocket成功时， 获取 在线人数信息
+                    // 获取 在线人数信息
+                    this.onlineMembers = [];
+                    for (let key in data) {
+                        data[key].headPortrait = init.getHeadPortrait(data[key].headPortrait);
+                        if (data[key].userId === this.userId) {
+                            this.onlineMembers.unshift(data[key]);
+                        } else {
+                            this.onlineMembers.push(data[key]);
                         }
                     }
                 }

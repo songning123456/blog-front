@@ -214,3 +214,7 @@ export const getLovedArticle = (params) => {
 export const deleteArticle = (params) => {
     return axios.ajax('/blog/delete', 'post', params);
 };
+
+export const getDialog = (params) => {
+    return axios.ajax('/wechat/getDialog', 'post', params);
+};
