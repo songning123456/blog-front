@@ -1,5 +1,6 @@
 <template>
     <div class="receive-message">
+        <div class="update-time"><span>{{receive.updateTime}}</span></div>
         <el-avatar :src="isSystem ? require('../../../assets/robot.svg') : receiveAvatar"></el-avatar>
         <div class="author-message">
             <div class="author">{{isSystem ? '系统通知' : receive.author}}</div>
@@ -57,10 +58,27 @@
         height: auto;
         overflow: auto;
 
+        .update-time {
+            font-size: .6rem;
+            width: 100%;
+            height: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            span {
+                color: #fff;
+                border-radius: 2px;
+                background-color: #dadada;
+                padding: .2rem .4rem;
+            }
+        }
+
         .author-message {
             width: auto;
             height: auto;
             float: left;
+            position: relative;
 
             .author {
                 text-align: left;
@@ -68,7 +86,7 @@
             }
 
             .message {
-                margin-top: .2rem;
+                margin: .2rem 0;
                 font-size: .75rem;
                 background-color: white;
                 border-radius: 5px;
@@ -76,6 +94,14 @@
                 display: block;
                 word-wrap: break-word;
                 text-align: left;
+                box-shadow: 0 1px 7px -5px #000;
+            }
+            .message:before {
+                right: 100%;
+                content: " ";
+                position: absolute;
+                border: 6px solid transparent;
+                border-right-color: white;
             }
         }
 

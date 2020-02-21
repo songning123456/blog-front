@@ -213,7 +213,7 @@
                             margin-bottom: .4rem;
 
                             &.member-first {
-                                border: 1px solid #0eff00;
+                                border: 1px solid #9eea6a;
                             }
 
                             .el-avatar {
@@ -289,7 +289,7 @@
                         .el-button {
                             width: 6rem;
                             position: absolute;
-                            top: 5rem;
+                            top: 5.1rem;
                             right: .8rem;
                         }
                     }

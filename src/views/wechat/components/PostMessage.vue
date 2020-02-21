@@ -1,5 +1,6 @@
 <template>
     <div class="post-message">
+        <div class="update-time"><span>{{post.updateTime}}</span></div>
         <el-avatar :src="postAvatar"></el-avatar>
         <div class="author-message">
             <div class="author">{{post.author}}</div>
@@ -58,10 +59,27 @@
         height: auto;
         overflow: auto;
 
+        .update-time {
+            font-size: .6rem;
+            width: 100%;
+            height: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            span {
+                color: #fff;
+                border-radius: 2px;
+                background-color: #dadada;
+                padding: .2rem .4rem;
+            }
+        }
+
         .author-message {
             width: auto;
             height: auto;
             float: right;
+            position: relative;
 
             .author {
                 text-align: right;
@@ -69,14 +87,23 @@
             }
 
             .message {
-                margin-top: .2rem;
+                margin: .2rem 0;
                 font-size: .75rem;
-                background-color: #91cef5;
+                background-color: #9eea6a;
                 border-radius: 5px;
                 padding: .4rem;
                 display: block;
                 word-wrap: break-word;
                 text-align: left;
+                box-shadow: 0 1px 7px -5px #000;
+            }
+
+            .message:before {
+                left: 100%;
+                content: " ";
+                position: absolute;
+                border: 6px solid transparent;
+                border-left-color: #9eea6a;
             }
         }
 
