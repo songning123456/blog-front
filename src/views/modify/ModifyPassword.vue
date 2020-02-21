@@ -107,28 +107,31 @@
                 }
             },
             submit() {
-                let scope = this;
-                scope.$refs['ruleForm'].validate((valid) => {
+                this.$refs['ruleForm'].validate((valid) => {
                     if (valid) {
                         let params = {
                             condition: {
-                                oldPassword: scope.form.oldPassword,
-                                password: scope.form.password
+                                oldPassword: this.form.oldPassword,
+                                password: this.form.password
                             }
                         };
-                        scope.loading = true;
+                        this.loading = true;
                         modifyUser(params).then(data => {
                             if (data.status === 200) {
                                 this.$message.success('修改成功');
-                                localStorage.setItem('username', '');
-                                localStorage.setItem('password', '');
+                                let unPwd = localStorage.getItem('UN_PWD');
+                                if (unPwd) {
+                                    let obj = JSON.parse(unPwd);
+                                    obj.password = this.form.password;
+                                    localStorage.setItem('UN_PWD', JSON.stringify(obj));
+                                }
                             } else {
                                 this.$message.error('修改失败 ' + data.message);
                             }
                         }).catch(e => {
                             this.$message.error('修改失败 ' + e);
                         }).finally(() => {
-                            scope.loading = false;
+                            this.loading = false;
                         });
                     } else {
                         return false;
