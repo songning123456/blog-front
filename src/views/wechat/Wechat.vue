@@ -9,14 +9,14 @@
                 <div class="online-chat">
                     <div class="online-members">
                         <div class="member-info" v-for="item in onlineMembers" :key="item.userId"
-                             :class='{"member-first": item.userId === userId}'
+                             :class='{"member-first": item.userId === userId, "not-online": item.online === 0}'
                              @click.stop='getIntroduction(item.userId)'>
-                            <el-avatar :src="item.headPortrait"></el-avatar>
+                            <el-avatar :src="item.headPortrait" :class="{'to-grey': item.online === 0}"></el-avatar>
                             <div class='member-name' :title='item.author'>{{item.author}}</div>
                         </div>
                     </div>
                     <div class="group-message">
-                        <div class="online-total">当前在线<span>{{onlineMembers.length}}</span>人<i
+                        <div class="online-total">当前在线<span>{{onlineTotal}}</span>人<i
                             class="el-icon-refresh" @click="initQuery"></i></div>
                         <scroll-loader @scrollToTop="upRefresh" ref='scrollLoader'>
                             <template v-for="(item, index) in onlineMessages">
@@ -30,7 +30,7 @@
                     <div class="send-message">
                         <el-input type="textarea" :rows="4" placeholder="请输入内容" v-model="toOnlineMessage"
                                   @click.native="scrollBottom"></el-input>
-                        <el-button type="primary" @click='sendMessage(toOnlineMessage)'>发送</el-button>
+                        <el-button type="primary" @click='sendMessage'>发送</el-button>
                     </div>
                 </div>
             </div>
@@ -55,6 +55,7 @@
         data() {
             return {
                 onlineMembers: [],
+                onlineTotal: 0,
                 toOnlineMessage: '',
                 onlineMessages: [],
                 loading: {},
@@ -80,12 +81,12 @@
             this.initQuery();
         },
         methods: {
-            sendMessage(message) {
+            sendMessage() {
                 let obj = {
                     author: this.$store.state.blogger.author,
                     headPortrait: this.$store.state.blogger.headPortrait,
                     userId: this.$store.state.blogger.userId,
-                    message: message,
+                    message: this.toOnlineMessage,
                     updateTime: DateUtil.formatDate(new Date())
                 };
                 this.$set(this.loading, obj.userId + obj.updateTime, true);
@@ -186,6 +187,7 @@
                 } else {
                     // 连接webSocket成功时， 获取 在线人数信息
                     // 获取 在线人数信息
+                    this.onlineTotal = 0;
                     this.onlineMembers = [];
                     for (let key in data) {
                         data[key].headPortrait = init.getHeadPortrait(data[key].headPortrait);
@@ -193,6 +195,9 @@
                             this.onlineMembers.unshift(data[key]);
                         } else {
                             this.onlineMembers.push(data[key]);
+                        }
+                        if (data[key].online === 1) {
+                            ++this.onlineTotal;
                         }
                     }
                 }
@@ -259,12 +264,17 @@
                         }
 
                         .member-info {
-                            width: 96%;
+                            width: 100%;
                             height: 2.5rem;
                             position: relative;
                             box-sizing: border-box;
                             border: 1px solid #409EFF;
-                            margin-bottom: .4rem;
+                            margin-bottom: .05rem;
+
+                            &.not-online {
+                                color: #c0c4cc;
+                                border: 1px solid #c0c4cc;
+                            }
 
                             &.member-first {
                                 border: 1px solid #9eea6a;
@@ -279,6 +289,10 @@
                                 transform: translate(-50%, -50%);
                             }
 
+                            .to-grey {
+                                filter: grayscale(100%);
+                            }
+
                             .member-name {
                                 position: absolute;
                                 left: 36%;
@@ -286,7 +300,7 @@
                                 transform: translate(0, -50%);
                                 width: 4rem;
                                 text-align: left;
-                                font-size: .8rem;
+                                font-size: .65rem;
                                 white-space: nowrap;
                                 overflow: hidden;
                                 text-overflow: ellipsis;

@@ -61,7 +61,7 @@
         background: #f8f8f9;
 
         &::-webkit-scrollbar {
-            width: 0;
+            width: 2px;
         }
 
         .loading {
