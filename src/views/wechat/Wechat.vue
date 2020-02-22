@@ -16,7 +16,8 @@
                         </div>
                     </div>
                     <div class="group-message">
-                        <div class="online-total">当前在线<span>{{onlineMembers.length}}</span>人</div>
+                        <div class="online-total">当前在线<span>{{onlineMembers.length}}</span>人<i
+                            class="el-icon-refresh" @click="initQuery"></i></div>
                         <scroll-loader @scrollToTop="upRefresh" ref='scrollLoader'>
                             <template v-for="(item, index) in onlineMessages">
                                 <post-message v-if='userId === item.userId'
@@ -28,7 +29,7 @@
                     </div>
                     <div class="send-message">
                         <el-input type="textarea" :rows="4" placeholder="请输入内容" v-model="toOnlineMessage"
-                                  @click.native="focusInput"></el-input>
+                                  @click.native="scrollBottom"></el-input>
                         <el-button type="primary" @click='sendMessage(toOnlineMessage)'>发送</el-button>
                     </div>
                 </div>
@@ -62,7 +63,7 @@
                 userId: '',
                 page: {
                     recordStartNo: 0,
-                    pageRecordNum: 7,
+                    pageRecordNum: 10,
                     total: 0
                 }
             };
@@ -75,20 +76,7 @@
             });
         },
         mounted() {
-            let params = {
-                recordStartNo: this.page.recordStartNo++,
-                pageRecordNum: this.page.pageRecordNum,
-                condition: {}
-            };
-            getDialog(params).then(data => {
-                if (data.status === 200 && data.total > 0) {
-                    this.onlineMessages = data.data.reverse();
-                }
-            }).finally(() => {
-                // 滚动条到最底部
-                let doc = this.$refs['scrollLoader'].$el;
-                doc.scrollTop = doc.scrollHeight;
-            });
+            this.initQuery();
         },
         methods: {
             sendMessage(message) {
@@ -114,10 +102,33 @@
                 });
                 window.open(routerData.href, '_blank');
             },
-            focusInput(event) {
-                // 滚动条到最底部
+            // 滚动条到最底部
+            scrollBottom() {
                 let doc = this.$refs['scrollLoader'].$el;
                 doc.scrollTop = doc.scrollHeight;
+            },
+            initQuery() {
+                let params = {
+                    pageRecordNum: this.page.pageRecordNum,
+                    condition: {}
+                };
+                getDialog(params).then(data => {
+                    if (data.status === 200 && data.total > 0) {
+                        this.onlineMessages = data.data;
+                    }
+                    this.page.total = data.total;
+                    this.page.recordStartNo = Math.floor(this.page.total / this.page.pageRecordNum);
+                }).finally(() => {
+                    this.scrollBottom();
+                    // 如果已经到顶部，则置为false
+                    if (this.$refs['scrollLoader'].stopTopLoading) {
+                        this.$refs['scrollLoader'].stopTopLoading = false;
+                    }
+                    // 如果数据已经全部加载完毕
+                    if (this.isRefreshedAll) {
+                        this.isRefreshedAll = false;
+                    }
+                });
             },
             upRefresh(done) {
                 if (this.isUpperLoading) {
@@ -128,20 +139,21 @@
                     this.isUpperLoading = false;
                     return;
                 }
+                // 已经加载到顶部
+                if (this.page.recordStartNo <= 1) {
+                    this.isRefreshedAll = true;
+                    done(true);
+                    return;
+                }
                 let params = {
-                    recordStartNo: this.page.recordStartNo++,
+                    recordStartNo: --this.page.recordStartNo,
                     pageRecordNum: this.page.pageRecordNum,
                     condition: {}
                 };
                 getDialog(params).then(data => {
                     if (data.status === 200) {
-                        if (data.data.length > 0) {
-                            this.onlineMessages = data.data.reverse().concat(this.onlineMessages);
-                            done();
-                        } else {
-                            this.isRefreshedAll = true;
-                            done(true);
-                        }
+                        this.onlineMessages = data.data.concat(this.onlineMessages);
+                        done();
                     }
                 }).finally(() => {
                     this.isUpperLoading = false;
@@ -165,6 +177,7 @@
                     if (this.userId === data.userId) {
                         // 发送方
                         this.$set(this.loading, data.userId + data.updateTime, false);
+                        this.scrollBottom();
                     } else {
                         // 接收方
                         this.onlineMessages.push(data);
@@ -296,6 +309,7 @@
                             height: 1.5rem;
                             line-height: 1.5rem;
                             text-align: center;
+                            position: relative;
 
                             span {
                                 background: #ecf5ff;
@@ -303,6 +317,19 @@
                                 color: #409eff;
                                 padding: .12rem .5rem;
                                 margin: 0 .2rem;
+                            }
+
+                            .el-icon-refresh {
+                                position: absolute;
+                                font-size: .8rem;
+                                top: 50%;
+                                right: 0;
+                                transform: translate(-50%, -50%);
+
+                                &:hover {
+                                    color: #409eff;
+                                    cursor: pointer;
+                                }
                             }
                         }
                     }
