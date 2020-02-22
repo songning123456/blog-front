@@ -9,24 +9,26 @@
                 <div class="online-chat">
                     <div class="online-members">
                         <div class="member-info" v-for="item in onlineMembers" :key="item.userId"
-                             :class='{"member-first": item.userId === userId}' @click.stop='getIntroduction(item.userId)'>
+                             :class='{"member-first": item.userId === userId}'
+                             @click.stop='getIntroduction(item.userId)'>
                             <el-avatar :src="item.headPortrait"></el-avatar>
                             <div class='member-name' :title='item.author'>{{item.author}}</div>
                         </div>
                     </div>
                     <div class="group-message">
                         <div class="online-total">当前在线<span>{{onlineMembers.length}}</span>人</div>
-                        <div class="online-info" ref="onlineInfo">
+                        <scroll-loader @scrollToTop="upRefresh" ref='scrollLoader'>
                             <template v-for="(item, index) in onlineMessages">
                                 <post-message v-if='userId === item.userId'
                                               :loading='loading[item.userId + item.updateTime]' :post="item"
                                               :key="index"></post-message>
                                 <receive-message v-else :receive="item" :key="index"></receive-message>
                             </template>
-                        </div>
+                        </scroll-loader>
                     </div>
                     <div class="send-message">
-                        <el-input type="textarea" :rows="4" placeholder="请输入内容" v-model="toOnlineMessage"></el-input>
+                        <el-input type="textarea" :rows="4" placeholder="请输入内容" v-model="toOnlineMessage"
+                                  @click.native="focusInput"></el-input>
                         <el-button type="primary" @click='sendMessage(toOnlineMessage)'>发送</el-button>
                     </div>
                 </div>
@@ -44,23 +46,26 @@
     import DateUtil from '../../utils/Date';
     import init from '../../utils/Init';
     import {getDialog} from '../../service/http';
+    import ScrollLoader from '../../components/util/ScrollLoader';
 
     export default {
         name: 'Wechat',
-        components: {ReceiveMessage, PostMessage, MainHead, EmptyView},
+        components: {ScrollLoader, ReceiveMessage, PostMessage, MainHead, EmptyView},
         data() {
             return {
                 onlineMembers: [],
                 toOnlineMessage: '',
                 onlineMessages: [],
                 loading: {},
-                userId: ''
+                isUpperLoading: false,
+                isRefreshedAll: false,
+                userId: '',
+                page: {
+                    recordStartNo: 0,
+                    pageRecordNum: 7,
+                    total: 0
+                }
             };
-        },
-        updated() {
-            // 滚动条到最底部
-            let doc = this.$refs['onlineInfo'];
-            doc.scrollTop = doc.scrollHeight;
         },
         created() {
             wechat.message = this.handleMessage;
@@ -68,7 +73,22 @@
             init.getBlogger().then(data => {
                 this.userId = data.userId;
             });
-            this.queryDialog();
+        },
+        mounted() {
+            let params = {
+                recordStartNo: this.page.recordStartNo++,
+                pageRecordNum: this.page.pageRecordNum,
+                condition: {}
+            };
+            getDialog(params).then(data => {
+                if (data.status === 200 && data.total > 0) {
+                    this.onlineMessages = data.data.reverse();
+                }
+            }).finally(() => {
+                // 滚动条到最底部
+                let doc = this.$refs['scrollLoader'].$el;
+                doc.scrollTop = doc.scrollHeight;
+            });
         },
         methods: {
             sendMessage(message) {
@@ -84,7 +104,7 @@
                 wechat.webSocket.send(JSON.stringify(obj));
                 this.toOnlineMessage = '';
             },
-            getIntroduction (userId) {
+            getIntroduction(userId) {
                 let routerData = this.$router.resolve({
                     path: '/author-personal',
                     name: 'authorPersonal',
@@ -94,17 +114,37 @@
                 });
                 window.open(routerData.href, '_blank');
             },
-            queryDialog() {
+            focusInput(event) {
+                // 滚动条到最底部
+                let doc = this.$refs['scrollLoader'].$el;
+                doc.scrollTop = doc.scrollHeight;
+            },
+            upRefresh(done) {
+                if (this.isUpperLoading) {
+                    return;
+                }
+                if (this.isRefreshedAll) {
+                    done(true);
+                    this.isUpperLoading = false;
+                    return;
+                }
                 let params = {
+                    recordStartNo: this.page.recordStartNo++,
+                    pageRecordNum: this.page.pageRecordNum,
                     condition: {}
                 };
                 getDialog(params).then(data => {
-                    if (data.status === 200 && data.total > 0) {
-                        for (let key in data.data) {
-                            this.onlineMessages.push(data.data[key]);
+                    if (data.status === 200) {
+                        if (data.data.length > 0) {
+                            this.onlineMessages = data.data.reverse().concat(this.onlineMessages);
+                            done();
+                        } else {
+                            this.isRefreshedAll = true;
+                            done(true);
                         }
                     }
-                }).catch(e => {
+                }).finally(() => {
+                    this.isUpperLoading = false;
                 });
             },
             handleOpen() {
@@ -263,17 +303,6 @@
                                 color: #409eff;
                                 padding: .12rem .5rem;
                                 margin: 0 .2rem;
-                            }
-                        }
-
-                        .online-info {
-                            overflow: auto;
-                            height: calc(100% - 1.5rem);
-                            width: 100%;
-                            background: #f8f8f9;
-
-                            &::-webkit-scrollbar {
-                                width: 0;
                             }
                         }
                     }
