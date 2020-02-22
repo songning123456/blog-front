@@ -61,7 +61,7 @@ _config_.getVideoOriginal = function () {
 
 _config_.getWechatWebSocket = function () {
     let param = _config_.getSource(wechat);
-    return param.websocket;
+    return param.websocket + '?Authorization=' + localStorage.token;
 };
 
 export default _config_;

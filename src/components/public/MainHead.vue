@@ -32,6 +32,7 @@
 <script>
     import {exitBlog} from '../../service/http';
     import init from '../../utils/Init';
+    import wechat from '../../utils/Wechat';
 
     export default {
         name: 'MainHead',
@@ -120,6 +121,7 @@
                     if (data.status === 200) {
                         // 删除token
                         localStorage.removeItem('token');
+                        wechat.webSocket.close();
                         this.$router.push({path: '/'});
                     }
                 }).catch((e) => {

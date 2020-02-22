@@ -74,5 +74,4 @@ wechat.initWebSocket = function () {
         }
     };
 };
-wechat.createWebSocket();
 export default wechat;

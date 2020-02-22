@@ -69,6 +69,7 @@
             };
         },
         created() {
+            wechat.createWebSocket();
             wechat.message = this.handleMessage;
             wechat.open = this.handleOpen;
             init.getBlogger().then(data => {
