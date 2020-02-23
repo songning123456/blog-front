@@ -121,7 +121,11 @@
                     if (data.status === 200) {
                         // 删除token
                         localStorage.removeItem('token');
-                        wechat.webSocket.close();
+                        try {
+                            wechat.webSocket.close();
+                        } catch (e) {
+                            console.error(e);
+                        }
                         this.$router.push({path: '/'});
                     }
                 }).catch((e) => {
