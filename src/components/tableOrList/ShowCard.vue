@@ -27,14 +27,14 @@
         props: {
             card: {
                 type: Object,
-                default() {
+                default () {
                 }
             }
         },
-        data() {
+        data () {
             return {};
         },
-        mounted() {
+        mounted () {
             let doc = this.$refs.coverInfo.getElementsByClassName('info');
             for (let i = 0; i < doc.length; i++) {
                 doc[i].children[0].style.width = '30px';
@@ -65,6 +65,14 @@
             display: flex;
             justify-content: center;
             align-items: center;
+
+            .el-image {
+                max-height: 100%;
+
+                &::-webkit-scrollbar {
+                    width: 0;
+                }
+            }
         }
 
         .cover-info {
