@@ -40,7 +40,7 @@
                 result: {},
                 tabs: [
                     {label: '成长经历', name: 'personal'},
-                    {label: '个性相册', name: 'album'},
+                    {label: '个性相册', name: 'image'},
                     {
                         label: '个性视频', name: 'video'
                     }],

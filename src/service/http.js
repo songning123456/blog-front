@@ -156,23 +156,20 @@ export const existUser = (params) => {
 export const saveImage = (params) => {
     return axios.ajax('/image/save', 'post', params);
 };
-export const saveAlbum = (params) => {
-    return axios.ajax('/image/saveAlbum', 'post', params);
-};
-export const getAlbum = (params) => {
-    return axios.ajax('/image/getAlbum', 'post', params);
+export const directUpload = (params) => {
+    return axios.ajax('/file/directUpload', 'post', params);
 };
 export const shardUpload = (params) => {
-    return axios.ajax('/video/shardUpload', 'post', params);
+    return axios.ajax('/file/shardUpload', 'post', params);
 };
 export const shardMerge = (params) => {
-    return axios.ajax('/video/shardMerge', 'get', params);
+    return axios.ajax('/file/shardMerge', 'get', params);
 };
-export const videoIsExist = (params) => {
-    return axios.ajax('/video/isExist', 'get', params);
+export const fileIsExist = (params) => {
+    return axios.ajax('/file/isExist', 'get', params);
 };
-export const getVideo = (params) => {
-    return axios.ajax('/video/getVideo', 'post', params);
+export const getFile = (params) => {
+    return axios.ajax('/file/getFile', 'post', params);
 };
 export const deleteImage = (params) => {
     return axios.ajax('/image/delete', 'post', params);

@@ -1,4 +1,4 @@
-<template>
+<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
     <div class="author-video">
         <author-basic current-tab="video">
             <template v-slot:container>
@@ -36,7 +36,7 @@
 
 <script>
     import AuthorBasic from './components/AuthorBasic';
-    import {getVideo} from '../../service/http';
+    import {getFile} from '../../service/http';
     import config from '../../utils/Config';
     import 'videojs-flash';
     import 'videojs-hotkeys';
@@ -110,16 +110,16 @@
             analysis(list) {
                 this.playVideos = list.map(item => {
                     let obj = {};
-                    obj.src = config.getVideoOriginal() + encodeURIComponent(item.src);
-                    obj.type = item.type;
+                    obj.src = config.getVideoOriginal() + encodeURIComponent(item.fileSrc);
+                    obj.type = item.fileType + '/mp4';
                     return obj;
                 });
                 this.displayVideos = list.map((item, index) => {
                     let obj = {};
                     obj.$index = index;
-                    obj.name = item.name;
+                    obj.name = item.fileName;
                     obj.updateTime = item.updateTime;
-                    obj.cover = config.getImageOriginal() + encodeURIComponent(item.cover);
+                    obj.cover = config.getImageOriginal() + encodeURIComponent(item.coverSrc);
                     return obj;
                 });
             },
@@ -128,14 +128,15 @@
                     this.loading = true;
                 }
                 let form = {
-                    userId: this.$route.query.userId
+                    userId: this.$route.query.userId,
+                    fileType: 'video'
                 };
                 let params = {
                     recordStartNo: this.page.recordStartNo - 1,
                     pageRecordNum: this.page.pageRecordNum,
                     condition: form
                 };
-                getVideo(params).then(data => {
+                getFile(params).then(data => {
                     if (data.status === 200 && data.total > 0) {
                         this.page.total = data.total;
                         this.analysis(data.data);

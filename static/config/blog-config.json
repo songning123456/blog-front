@@ -9,10 +9,10 @@
     },
     "Video": {
         "pro": {
-            "originalUrl": "http://simple-blog.xyz/server/video/original?url="
+            "originalUrl": "http://simple-blog.xyz/server/file/video/original?url="
         },
         "dev": {
-            "originalUrl": "http://localhost:8072/video/original?url="
+            "originalUrl": "http://localhost:8072/file/video/original?url="
         }
     },
     "Wechat": {

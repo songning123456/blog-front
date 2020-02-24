@@ -1,9 +1,9 @@
-import {shardMerge, shardUpload, videoIsExist} from '../service/http';
+import {shardMerge, shardUpload, fileIsExist} from '../service/http';
 import Common from './Common';
 import md5 from 'js-md5';
 
 let upload = {};
-export const uploadByPieces = ({file, pieceSize = 10, progress, success, error}) => {
+export const uploadByPieces = ({file, fileType, pieceSize = 10, progress, success, error}) => {
     upload.chunkSize = pieceSize * 1024 * 1024; // 10MB/片
     upload.chunkCount = Math.ceil(file.size / upload.chunkSize); // 总片数
     upload.hasExist = []; // 某个文件已经上传的部分
@@ -14,7 +14,7 @@ export const uploadByPieces = ({file, pieceSize = 10, progress, success, error})
         fileReader.addEventListener('load', e => {
             let fileBlob = e.target.result;
             upload.md5 = md5(fileBlob);
-            videoIsExist({md5: upload.md5}).then(data => {
+            fileIsExist({fileType: fileType, md5: upload.md5}).then(data => {
                 if (data.status === 200) {
                     if (!data.data) {
                         // 文件已经上传
@@ -69,7 +69,7 @@ export const uploadByPieces = ({file, pieceSize = 10, progress, success, error})
     };
     // 合并分片
     const mergeChunk = () => {
-        shardMerge({md5: upload.md5, filename: file.name}).then(data => {
+        shardMerge({fileType: fileType, md5: upload.md5, fileName: file.name}).then(data => {
             if (data.status === 200) {
                 progress(100);
                 success && success({shardMerge: true, hideProgress: true});
@@ -84,8 +84,9 @@ export const uploadByPieces = ({file, pieceSize = 10, progress, success, error})
     const uploadChunk = ({chunk, currentChunk}) => {
         let formData = new FormData();
         formData.append('file', chunk);
+        formData.append('fileType', fileType);
         formData.append('md5', upload.md5);
-        formData.append('filename', file.name);
+        formData.append('fileName', file.name);
         formData.append('currentChunk', currentChunk);
         return new Promise((resolve, reject) => {
             shardUpload(formData).then(data => {

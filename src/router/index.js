@@ -151,9 +151,9 @@ export default new Router({
                 requireAuth: true
             }
         }, {
-            path: '/author-album',
-            name: 'authorAlbum',
-            component: () => import('../views/authorInfo/AuthorAlbum'),
+            path: '/author-image',
+            name: 'authorImage',
+            component: () => import('../views/authorInfo/AuthorImage'),
             meta: {
                 title: '作者相册',
                 requireAuth: true
@@ -236,6 +236,14 @@ export default new Router({
             component: () => import('../views/hobby/HobbyVideo'),
             meta: {
                 title: '视频搜集',
+                requireAuth: true
+            }
+        }, {
+            path: '/hobby-music',
+            name: 'hobbyMusic',
+            component: () => import('../views/hobby/HobbyMusic'),
+            meta: {
+                title: '音乐搜集',
                 requireAuth: true
             }
         }, {

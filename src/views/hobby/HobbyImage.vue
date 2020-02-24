@@ -42,7 +42,7 @@
 <script>
     import LeftSideBar from '../../components/public/LeftSideBar';
     import FloatMenu from '../../components/util/FloatMenu';
-    import {saveAlbum, getAlbum} from '../../service/http';
+    import {directUpload, getFile} from '../../service/http';
     import EmptyView from '../../components/util/EmptyView';
     import ImageSwiper from '../../components/public/ImageSwiper';
     import config from '../../utils/Config';
@@ -52,7 +52,7 @@
     export default {
         name: 'HobbyImage',
         components: {ToolLoading, TableOrList, LeftSideBar, FloatMenu, ImageSwiper, EmptyView},
-        data() {
+        data () {
             return {
                 menu: [
                     {
@@ -85,22 +85,22 @@
                 }
             };
         },
-        mounted() {
+        mounted () {
             this.queryData();
         },
         methods: {
-            chooseItem(menu) {
+            chooseItem (menu) {
                 if (menu.id === '退出') {
                     let labelName = sessionStorage.getItem('currentLabelName');
                     this.$router.push({path: '/read/' + labelName});
                 }
             },
-            httpRequest(file) {
+            httpRequest (file) {
                 this.loading = true;
                 let formData = new FormData();
                 formData.append('file', file.file, file.file.name);
-                formData.append('dir', 'album');
-                saveAlbum(formData).then(data => {
+                formData.append('fileType', 'image');
+                directUpload(formData).then(data => {
                     if (data.status === 200) {
                         this.queryData();
                     } else {
@@ -108,36 +108,38 @@
                     }
                 });
             },
-            beforeUpload(file) {
+            beforeUpload (file) {
                 const extension = file.name.split('.')[1];
                 if (!(extension === 'png' || extension === 'jpg')) {
                     this.$message.warning('上传模板只能是jpg/png格式!');
                     return false;
                 }
             },
-            analysis(list) {
+            analysis (list) {
                 this.displayImages = list.map((item, index) => {
                     let obj = {};
                     obj.$index = index;
-                    obj.name = item.name;
+                    obj.name = item.fileName;
                     obj.updateTime = item.updateTime;
-                    obj.cover = config.getImageOriginal() + encodeURIComponent(item.imageSrc);
+                    obj.cover = config.getImageOriginal() + encodeURIComponent(item.fileSrc);
                     return obj;
                 });
                 this.swiperList = list.map(item => {
-                    return config.getImageOriginal() + encodeURIComponent(item.imageSrc);
+                    return config.getImageOriginal() + encodeURIComponent(item.fileSrc);
                 });
             },
-            queryData() {
+            queryData () {
                 if (!this.loading) {
                     this.loading = true;
                 }
                 let params = {
                     recordStartNo: this.page.recordStartNo - 1,
                     pageRecordNum: this.page.pageRecordNum,
-                    condition: {}
+                    condition: {
+                        fileType: 'image'
+                    }
                 };
-                getAlbum(params).then(data => {
+                getFile(params).then(data => {
                     if (data.status === 200 && data.total > 0) {
                         this.page.total = data.total;
                         this.analysis(data.data);
@@ -153,16 +155,16 @@
                     }
                 });
             },
-            handleCurrentChange(index) {
+            handleCurrentChange (index) {
                 this.page.recordStartNo = index;
                 this.queryData();
             },
-            playImage(index) {
+            playImage (index) {
                 setTimeout(() => {
                     this.$refs.imageSwiper.swiper.slideToLoop(index, 1000, 0);
                 }, 1);
             },
-            slideChange(index) {
+            slideChange (index) {
                 this.$refs.tableOrList.current.selection = index;
             }
         }

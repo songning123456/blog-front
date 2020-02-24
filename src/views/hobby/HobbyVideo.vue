@@ -46,7 +46,7 @@
 <script>
     import LeftSideBar from '../../components/public/LeftSideBar';
     import FloatMenu from '../../components/util/FloatMenu';
-    import {getVideo} from '../../service/http';
+    import {getFile} from '../../service/http';
     import {uploadByPieces} from '../../utils/Upload';
     import config from '../../utils/Config';
     import 'videojs-flash';
@@ -57,7 +57,7 @@
     export default {
         name: 'HobbyVideo',
         components: {ToolLoading, TableOrList, LeftSideBar, FloatMenu},
-        data() {
+        data () {
             return {
                 menu: [
                     {
@@ -102,26 +102,27 @@
                 }
             };
         },
-        mounted() {
+        mounted () {
             this.queryData();
         },
         computed: {
-            player() {
+            player () {
                 return this.$refs.videoPlayer.player;
             }
         },
         methods: {
-            chooseItem(menu) {
+            chooseItem (menu) {
                 if (menu.id === '退出') {
                     let labelName = sessionStorage.getItem('currentLabelName');
                     this.$router.push({path: '/read/' + labelName});
                 }
             },
             // 覆盖action的动作
-            httpRequest(file) {
+            httpRequest (file) {
                 this.loading = true;
                 uploadByPieces({
                     file: file.file,
+                    fileType: 'video',
                     pieceSize: 5,
                     success: data => {
                         if (data.isExist) {
@@ -154,7 +155,7 @@
                 });
             },
             //判断是否是视频格式
-            beforeUpload(file) {
+            beforeUpload (file) {
                 // 可支持的视频格式
                 let videoFormat = ['video/mp4', 'video/ogg', 'video/flv', 'video/avi', 'video/wmv', 'video/rmvb'];
                 if (videoFormat.indexOf(file.type) === -1) {
@@ -163,11 +164,11 @@
                 }
             },
             // 点击播放哪个视频
-            playVideo(index) {
+            playVideo (index) {
                 this.playerOptions.sources = [this.playVideos[index]];
             },
             // 添加视频快捷键
-            playerIsReady(player) {
+            playerIsReady (player) {
                 player.hotkeys({
                     volumeStep: 0.1,
                     seekStep: 5,
@@ -180,32 +181,34 @@
                 });
             },
             // 转换查询的结果集
-            analysis(list) {
+            analysis (list) {
                 this.playVideos = list.map(item => {
                     let obj = {};
-                    obj.src = config.getVideoOriginal() + encodeURIComponent(item.src);
-                    obj.type = item.type;
+                    obj.src = config.getVideoOriginal() + encodeURIComponent(item.fileSrc);
+                    obj.type = item.fileType + '/mp4';
                     return obj;
                 });
                 this.displayVideos = list.map((item, index) => {
                     let obj = {};
                     obj.$index = index;
-                    obj.name = item.name;
+                    obj.name = item.fileName;
                     obj.updateTime = item.updateTime;
-                    obj.cover = config.getImageOriginal() + encodeURIComponent(item.cover);
+                    obj.cover = config.getImageOriginal() + encodeURIComponent(item.coverSrc);
                     return obj;
                 });
             },
-            queryData() {
+            queryData () {
                 if (!this.loading) {
                     this.loading = true;
                 }
                 let params = {
                     recordStartNo: this.page.recordStartNo - 1,
                     pageRecordNum: this.page.pageRecordNum,
-                    condition: {}
+                    condition: {
+                        fileType: 'video'
+                    }
                 };
-                getVideo(params).then(data => {
+                getFile(params).then(data => {
                     if (data.status === 200 && data.total > 0) {
                         this.page.total = data.total;
                         this.analysis(data.data);
@@ -221,7 +224,7 @@
                     }
                 });
             },
-            handleCurrentChange(index) {
+            handleCurrentChange (index) {
                 this.page.recordStartNo = index;
                 this.queryData();
             }

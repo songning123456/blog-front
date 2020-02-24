@@ -59,6 +59,12 @@
                             title: '视频收集',
                             name: 'hobbyVideo',
                             path: '/hobby-video'
+                        },
+                        {
+                            image: require('../../assets/hobbyMusic.svg'),
+                            title: '音乐收集',
+                            name: 'hobbyMusic',
+                            path: '/hobby-music'
                         }
                     ]
                 },

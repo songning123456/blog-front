@@ -1,9 +1,9 @@
 <template>
-    <div class="author-album">
-        <author-basic current-tab="album">
+    <div class="author-image">
+        <author-basic current-tab="image">
             <template v-slot:container>
-                <div class="album-container">
-                    <div class="album-left">
+                <div class="image-container">
+                    <div class="image-left">
                         <div class="frame-top">
                             <table-or-list ref='tableOrList' :display="displayImages"
                                            @current="playImage"></table-or-list>
@@ -19,7 +19,7 @@
                             </el-pagination>
                         </div>
                     </div>
-                    <div class="album-right">
+                    <div class="image-right">
                         <div class="container">
                             <tool-loading :loading="loading" category="spinner"></tool-loading>
                             <image-swiper ref='imageSwiper' :swiper-list="swiperList" @slideChange='slideChange'
@@ -37,16 +37,15 @@
     import AuthorBasic from './components/AuthorBasic';
     import TableOrList from '../../components/tableOrList/TableOrList';
     import ToolLoading from '../../components/util/ToolLoading';
-    import {getAlbum} from '../../service/http';
+    import {getFile} from '../../service/http';
     import config from '../../utils/Config';
     import ImageSwiper from '../../components/public/ImageSwiper';
     import EmptyView from '../../components/util/EmptyView';
 
-
     export default {
-        name: 'AuthorAlbum',
+        name: 'AuthorImage',
         components: {EmptyView, ImageSwiper, ToolLoading, TableOrList, AuthorBasic},
-        data() {
+        data () {
             return {
                 displayImages: [],
                 swiperList: [],
@@ -58,36 +57,37 @@
                 }
             };
         },
-        mounted() {
+        mounted () {
             this.queryData();
         },
         methods: {
-            analysis(list) {
+            analysis (list) {
                 this.displayImages = list.map((item, index) => {
                     let obj = {};
                     obj.$index = index;
-                    obj.name = item.name;
+                    obj.name = item.fileName;
                     obj.updateTime = item.updateTime;
-                    obj.cover = config.getImageOriginal() + encodeURIComponent(item.imageSrc);
+                    obj.cover = config.getImageOriginal() + encodeURIComponent(item.fileSrc);
                     return obj;
                 });
                 this.swiperList = list.map(item => {
-                    return config.getImageOriginal() + encodeURIComponent(item.imageSrc);
+                    return config.getImageOriginal() + encodeURIComponent(item.fileSrc);
                 });
             },
-            queryData() {
+            queryData () {
                 if (!this.loading) {
                     this.loading = true;
                 }
                 let form = {
-                    userId: this.$route.query.userId
+                    userId: this.$route.query.userId,
+                    fileType: 'image'
                 };
                 let params = {
                     recordStartNo: this.page.recordStartNo - 1,
                     pageRecordNum: this.page.pageRecordNum,
                     condition: form
                 };
-                getAlbum(params).then(data => {
+                getFile(params).then(data => {
                     if (data.status === 200 && data.total > 0) {
                         this.page.total = data.total;
                         this.analysis(data.data);
@@ -103,16 +103,16 @@
                     }
                 });
             },
-            handleCurrentChange(index) {
+            handleCurrentChange (index) {
                 this.page.recordStartNo = index;
                 this.queryData();
             },
-            playImage(index) {
+            playImage (index) {
                 setTimeout(() => {
                     this.$refs.imageSwiper.swiper.slideToLoop(index, 1000, 0);
                 }, 1);
             },
-            slideChange(index) {
+            slideChange (index) {
                 this.$refs.tableOrList.current.selection = index;
             }
         }
@@ -120,17 +120,17 @@
 </script>
 
 <style lang="scss" scoped>
-    .author-album {
+    .author-image {
         width: 100%;
         height: 100%;
         position: relative;
 
-        .album-container {
+        .image-container {
             width: 100%;
             height: 100%;
             background-color: #f8f8f9;
 
-            .album-left {
+            .image-left {
                 width: 40%;
                 height: 100%;
                 float: left;
@@ -164,7 +164,7 @@
                 }
             }
 
-            .album-right {
+            .image-right {
                 width: 60%;
                 height: 100%;
                 float: left;
