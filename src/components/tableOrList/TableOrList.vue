@@ -5,7 +5,7 @@
             <i class="el-icon-s-unfold" :class="{'to-blue': kind === 'table'}" @click="kind = 'table'"></i>
         </div>
         <div class="display-info" v-show="display.length > 0">
-            <show-list ref='showList' :list="display" :current='current' v-show='kind === "list"'></show-list>
+            <show-list ref='showList' :list="display" :current='current' v-show='kind === "list"' :error-cover="errorCover"></show-list>
             <show-table ref='showTable' :table='display' :current='current' v-show="kind === 'table'"></show-table>
         </div>
         <empty-view v-show="display.length === 0"></empty-view>
@@ -26,6 +26,10 @@
                 default() {
                     return [];
                 }
+            },
+            errorCover: {
+                type: String,
+                default: 'errorCover'
             }
         },
         data() {

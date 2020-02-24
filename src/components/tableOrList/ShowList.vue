@@ -1,8 +1,8 @@
 <template>
     <div class="show-list">
         <show-card v-for="item in list" :key="item.$index" :card="item"
-                    @click.native="currentChange(item.$index)"
-                    :class="{'high-light': current.selection === item.$index}"></show-card>
+                   @click.native="currentChange(item.$index)" :error="errorCover"
+                   :class="{'high-light': current.selection === item.$index}"></show-card>
     </div>
 </template>
 
@@ -15,21 +15,25 @@
         props: {
             list: {
                 type: Array,
-                default() {
+                default () {
                     return [];
                 }
             },
             current: {
                 type: Object,
-                default() {
+                default () {
                     return {
                         selection: 0
                     };
                 }
+            },
+            errorCover: {
+                type: String,
+                default: 'errorCover'
             }
         },
         methods: {
-            currentChange(index) {
+            currentChange (index) {
                 if (this.current.selection !== index) {
                     this.current.selection = index;
                 }

@@ -1,7 +1,14 @@
 <template>
     <div class="show-card">
         <div class="cover-src">
-            <el-image :src="card.cover" lazy scroll-container='.display-info'></el-image>
+            <el-image :src="card.cover" lazy scroll-container='.display-info'>
+                <div slot="error" v-if="error === 'wangyiyun'">
+                    <img src="../../assets/wangyiyun.svg"/>
+                </div>
+                <div slot="error" v-else>
+                    <img src="../../assets/errorCover.svg"/>
+                </div>
+            </el-image>
         </div>
         <div class="cover-info" ref='coverInfo'>
             <div class="info">
@@ -29,6 +36,10 @@
                 type: Object,
                 default () {
                 }
+            },
+            error: {
+                type: String,
+                default: 'errorCover'
             }
         },
         data () {

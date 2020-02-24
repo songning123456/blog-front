@@ -4,10 +4,10 @@
         <div class="music-frame">
             <div class="music-left">
                 <div class="frame-top">
-                    <el-upload class="videoUpload-demo" drag action='' :accept="'audio/*'" :show-file-list="false"
+                    <el-upload class="upload-demo" drag action='' :accept="'audio/*'" :show-file-list="false"
                                :disabled='loading'
                                :http-request='httpRequest'>
-                        <i class="el-icon-videoUpload"></i>
+                        <i class="el-icon-upload"></i>
                         <div class="el-upload__text">将音乐拖到此处，或<em>点击上传</em></div>
                         <div class="el-upload__tip" slot="tip">仅支持<b>audio/*</b>文件</div>
                     </el-upload>
@@ -15,22 +15,47 @@
                         <el-progress type="circle" :percentage="progress.percentage"></el-progress>
                     </div>
                 </div>
-                <div class="frame-center"></div>
-                <div class="frame-bottom"></div>
+                <div class="frame-center">
+                    <table-or-list ref='tableOrList' :display="displayMusic" error-cover="wangyiyun"></table-or-list>
+                    <tool-loading :loading="loading"></tool-loading>
+                </div>
+                <div class="frame-bottom">
+                    <el-pagination
+                        @current-change="handleCurrentChange"
+                        :current-page.sync="page.recordStartNo"
+                        :page-size="page.pageRecordNum"
+                        layout="total, prev, pager, next"
+                        :total="page.total" :disabled="loading">
+                    </el-pagination>
+                </div>
             </div>
             <div class="music-right"></div>
         </div>
+        <float-menu :menus="menu" @itemClick="chooseItem"></float-menu>
     </div>
 </template>
 
 <script>
     import LeftSideBar from '../../components/public/LeftSideBar';
+    import FloatMenu from '../../components/util/FloatMenu';
+    import {uploadByPieces} from '../../utils/Upload';
+    import {getFile} from '../../service/http';
+    import config from '../../utils/Config';
+    import TableOrList from '../../components/tableOrList/TableOrList';
+    import ToolLoading from '../../components/util/ToolLoading';
 
     export default {
         name: 'HobbyMusic',
-        components: {LeftSideBar},
+        components: {ToolLoading, TableOrList, FloatMenu, LeftSideBar},
         data () {
             return {
+                menu: [
+                    {
+                        id: '退出',
+                        image: require('../../assets/exit.svg'),
+                        title: '返回首页'
+                    }
+                ],
                 loading: false,
                 page: {
                     recordStartNo: 1,
@@ -40,11 +65,98 @@
                 progress: {
                     percentage: 0,
                     show: false
-                }
+                },
+                displayMusic: []
             };
         },
+        mounted () {
+            this.queryData();
+        },
         methods: {
-            httpRequest () {
+            chooseItem (menu) {
+                if (menu.id === '退出') {
+                    let labelName = sessionStorage.getItem('currentLabelName');
+                    this.$router.push({path: '/read/' + labelName});
+                }
+            },
+            // 覆盖action的动作
+            httpRequest (file) {
+                this.loading = true;
+                uploadByPieces({
+                    file: file.file,
+                    fileType: 'music',
+                    pieceSize: 5,
+                    success: data => {
+                        if (data.isExist) {
+                            this.$message.warning('文件已经上传');
+                            this.loading = false;
+                        }
+                        // 合并分片成功后重新查询一次数据
+                        if (data.shardMerge) {
+                            this.queryData();
+                        }
+                        // 显示 上传进度条
+                        if (data.showProgress) {
+                            this.progress.show = true;
+                        }
+                        // 隐藏 上传进度条
+                        if (data.hideProgress) {
+                            setTimeout(() => {
+                                this.progress.show = false;
+                                this.progress.percentage = 0;
+                            }, 1000);
+                        }
+                    },
+                    error: e => {
+                        this.$message.error('分片上传视频失败 ' + e);
+                        this.loading = false;
+                    },
+                    progress: data => {
+                        this.progress.percentage = data;
+                    }
+                });
+            },
+            // 转换查询的结果集
+            analysis (list) {
+                this.displayMusic = list.map((item, index) => {
+                    let obj = {};
+                    obj.$index = index;
+                    obj.name = item.fileName;
+                    obj.updateTime = item.updateTime;
+                    obj.cover = config.getImageOriginal() + encodeURIComponent(item.coverSrc);
+                    return obj;
+                });
+            },
+            queryData () {
+                if (!this.loading) {
+                    this.loading = true;
+                }
+                let params = {
+                    recordStartNo: this.page.recordStartNo - 1,
+                    pageRecordNum: this.page.pageRecordNum,
+                    condition: {
+                        fileType: 'music'
+                    }
+                };
+                getFile(params).then(data => {
+                    if (data.status === 200 && data.total > 0) {
+                        this.page.total = data.total;
+                        this.analysis(data.data);
+                    }
+                }).catch(e => {
+                    this.$message.error(e);
+                }).finally(() => {
+                    if (this.loading) {
+                        this.loading = false;
+                    }
+                    if (this.page.total > 0) {
+                        this.$refs.tableOrList.current = {selection: 0};
+                    }
+                });
+            },
+            handleCurrentChange (index) {
+                this.page.recordStartNo = index;
+                this.queryData();
             }
         }
     };
@@ -73,10 +185,18 @@
                     height: 25%;
                     position: relative;
 
-                    .videoUpload-demo {
+                    .upload-demo {
                         position: absolute;
                         top: 50%;
                         left: 50%;
+                        transform: translate(-50%, -50%);
+                    }
+
+                    .begin-cancel-progress {
+                        width: 8rem;
+                        position: absolute;
+                        top: 50%;
+                        left: 88%;
                         transform: translate(-50%, -50%);
                     }
                 }
