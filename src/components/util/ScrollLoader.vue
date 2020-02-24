@@ -3,7 +3,7 @@
         <div class="loading" v-if="topLoading">
             <div class="loader">加载中...</div>
         </div>
-        <div class='slot-attribute' :style="{minHeight: dialogHeight + 50 + 'px'}">
+        <div class='slot-attribute' :style="{minHeight: dialogHeight + 'px'}">
             <slot></slot>
         </div>
     </div>
@@ -12,19 +12,19 @@
 <script>
     export default {
         name: 'ScrollLoader',
-        data() {
+        data () {
             return {
                 dialogHeight: 700,
                 topLoading: false,
                 stopTopLoading: false // 是否停止传播滚动到顶部事件
             };
         },
-        mounted() {
+        mounted () {
             this.dialogHeight = this.$refs.scrollLoader.offsetHeight;
             this.listenScroll();
         },
         methods: {
-            topDone(stopTopLoading) {
+            topDone (stopTopLoading) {
                 this.topLoading = false;
                 if (stopTopLoading) {
                     this.stopTopLoading = true;
@@ -35,7 +35,7 @@
                     });
                 }
             },
-            listenScroll() {
+            listenScroll () {
                 setTimeout(() => {
                     let scrollLoader = this.$refs.scrollLoader;
                     scrollLoader.onscroll = () => {
