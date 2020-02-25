@@ -48,7 +48,7 @@
     import config from '../../utils/Config';
     import TableOrList from '../../components/tableOrList/TableOrList';
     import ToolLoading from '../../components/util/ToolLoading';
-    import AudioPlayer from '@/components/util/AudioPlayer';
+    import AudioPlayer from '../../components/util/AudioPlayer';
 
     export default {
         name: 'HobbyMusic',

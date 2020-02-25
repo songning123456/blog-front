@@ -167,6 +167,14 @@ export default new Router({
                 requireAuth: true
             }
         }, {
+            path: '/author-music',
+            name: 'authorMusic',
+            component: () => import('../views/authorInfo/AuthorMusic'),
+            meta: {
+                title: '作者音乐',
+                requireAuth: true
+            }
+        }, {
             path: '/world-clock',
             name: 'worldClock',
             component: () => import('../views/worldClock/WordClock'),

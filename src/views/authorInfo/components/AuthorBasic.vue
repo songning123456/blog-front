@@ -35,7 +35,7 @@
                 default: ''
             }
         },
-        data() {
+        data () {
             return {
                 result: {},
                 tabs: [
@@ -43,6 +43,8 @@
                     {label: '个性相册', name: 'image'},
                     {
                         label: '个性视频', name: 'video'
+                    }, {
+                        label: '个性音乐', name: 'music'
                     }],
                 display: [
                     {
@@ -72,7 +74,7 @@
                 ]
             };
         },
-        created() {
+        created () {
             let param = {
                 condition: {userId: this.$route.query.userId}
             };
@@ -83,7 +85,7 @@
             });
         },
         methods: {
-            analysis(data) {
+            analysis (data) {
                 let result = {};
                 for (let key in data) {
                     // 判断结果值是否存在
@@ -104,7 +106,7 @@
                 }
                 return result;
             },
-            tabClick(tab) {
+            tabClick (tab) {
                 if (this.currentTab !== tab) {
                     this.$router.push({
                         path: '/author-' + tab,
