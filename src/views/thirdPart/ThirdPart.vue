@@ -3,14 +3,6 @@
         <div class='empty-info' v-if='JSON.stringify(form) === "{}" && !loading'>
             <empty-view></empty-view>
         </div>
-        <!-- <div class="display-info" v-if='JSON.stringify(form) !== "{}" && !loading'>
-             <h2>{{type}}用户数据</h2>
-             <el-form :modal='form' label-width="7rem">
-                 <el-form-item v-for="(value, key) in form" :key="key" :label='key'>
-                     <el-input :value="value + ''" readonly></el-input>
-                 </el-form-item>
-             </el-form>
-         </div>-->
         <div class='load-info' v-if='loading'>
             <tool-loading :loading='loading' category="spinner"></tool-loading>
         </div>
@@ -63,11 +55,9 @@
         },
         methods: {
             chooseItem (menu) {
-                let scope = this;
-                scope.$router.push({path: '/'});
+                this.$router.push({path: '/'});
             },
             callback () {
-                let scope = this;
                 // 回调之后再次进入 获取信息
                 let param = JSON.parse(sessionStorage.getItem('gitHub'));
                 if (Object.keys(param).length > 0 && param.clientId && param.clientSecret && param.code && param.getProxyAccessTokenURL && param.getAccessTokenURL) {
@@ -103,7 +93,7 @@
                         gitHubUser({condition: params}).then(data => {
                             if (data.status === 200) {
                                 this.form = data.dataExt;
-                                scope.login();
+                                this.login();
                             }
                         }).finally(() => {
                             sessionStorage.removeItem('gitHub');
@@ -113,10 +103,9 @@
                 }
             },
             login () {
-                let scope = this;
                 let param = new FormData();
-                let username = 'gitHubUn' + scope.form.id;
-                let password = 'gitHubPd' + scope.form.id;
+                let username = 'gitHubUn' + this.form.id;
+                let password = 'gitHubPd' + this.form.id;
                 param.append('username', username);
                 param.append('password', password);
                 // 如果存在token时，先删除
@@ -127,7 +116,7 @@
                 loginBlog(param).then((data) => {
                     if (data.status === 200) {
                         // 跳转路由
-                        scope.$router.push(
+                        this.$router.push(
                             {
                                 path: '/read',
                                 name: 'read'
@@ -138,7 +127,7 @@
                     console.error('错误用户: ', e);
                     this.$message.error('~~~请输入正确用户~~~');
                 }).finally(() => {
-                    scope.loading = false;
+                    this.loading = false;
                 });
             }
         }
