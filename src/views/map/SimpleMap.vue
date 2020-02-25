@@ -44,19 +44,24 @@
                     latitude: '', // 维度
                     longitude: '' // 精度
                 },
-                loading: false
+                loading: false,
+                simpleMap: null,
+                styleIndex: 0,
+                styles: [
+                    'normal', 'light', 'dark', 'redalert', 'googlelite', 'grassgreen', 'midnight',
+                    'pink', 'darkgreen', 'bluish', 'grayscale', 'hardedge'
+                ] // 地图风格
             };
         },
         mounted () {
-            let scope = this;
-            scope.sureCity().then((data) => {
-                scope.initMap(data);
+            this.sureCity().then((data) => {
+                this.initMap(data);
             }).catch((error) => {
                 this.$message.error(error);
             }).finally(() => {
-                scope.loading = false;
+                this.loading = false;
             });
-            insertHistoryInfo({condition: {title: scope.COMMON_MAP.HISTORY.SIMPLE_MAP}}).then(data => {
+            insertHistoryInfo({condition: {title: this.COMMON_MAP.HISTORY.SIMPLE_MAP}}).then(data => {
                 if (data.status !== 200) {
                     this.$message.error('插入历史信息失败!');
                 }
@@ -66,15 +71,14 @@
             sureCity () {
                 // 定义获取城市方法
                 const geolocation = new BMap.Geolocation();
-                let scope = this;
-                scope.loading = true;
+                this.loading = true;
                 let promise = new Promise((resolve, reject) => {
                     geolocation.getCurrentPosition((position) => {
-                        scope.city.province = position.address.province;
-                        scope.city.name = position.address.city;
-                        scope.city.latitude = position.latitude;
-                        scope.city.longitude = position.longitude;
-                        resolve(scope.city);
+                        this.city.province = position.address.province;
+                        this.city.name = position.address.city;
+                        this.city.latitude = position.latitude;
+                        this.city.longitude = position.longitude;
+                        resolve(this.city);
                     }, () => {
                         reject('定位失败');
                     });
@@ -84,6 +88,7 @@
             initMap (data) {
                 // 创建地图实例
                 let map = new BMap.Map('simpleMap');
+                this.simpleMap = map;
                 // 创建点坐标
                 let point = new BMap.Point(data.longitude, data.latitude);
                 // 初始化地图，设置中心点坐标和地图级别
@@ -102,14 +107,18 @@
                 // 仅当设置城市信息时，MapTypeControl的切换功能才能可用
                 map.setCurrentCity(data.name);
                 //地图风格
-                map.setMapStyle({style: 'midnight'});
+                map.setMapStyle({style: this.styles[this.styleIndex]});
             },
             switchStyle () {
-
+                if (this.styleIndex === this.styles.length - 1) {
+                    this.styleIndex = 0;
+                } else {
+                    this.styleIndex++;
+                }
+                this.simpleMap.setMapStyle({style: this.styles[this.styleIndex]});
             },
             exitMap () {
-                let scope = this;
-                scope.$router.go(-1);
+                this.$router.go(-1);
             }
         }
     };
@@ -130,10 +139,11 @@
         .map-info {
             width: 100%;
             height: 100%;
+            padding-top: 5px;
 
             .el-form {
                 .el-form-item {
-                    margin-bottom: 1px;
+                    margin-bottom: 4px;
 
                     .el-input {
                         width: 85%;
