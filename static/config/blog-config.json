@@ -1,18 +1,26 @@
 {
     "Image": {
         "pro": {
-            "originalUrl": "http://simple-blog.xyz/server/image/original?url="
+            "originalUrl": "http://simple-blog.xyz/server/file/stream/image?url="
         },
         "dev": {
-            "originalUrl": "http://localhost:8072/image/original?url="
+            "originalUrl": "http://localhost:8072/file/stream/image?url="
         }
     },
     "Video": {
         "pro": {
-            "originalUrl": "http://simple-blog.xyz/server/file/video/original?url="
+            "originalUrl": "http://simple-blog.xyz/server/file/stream/video?url="
         },
         "dev": {
-            "originalUrl": "http://localhost:8072/file/video/original?url="
+            "originalUrl": "http://localhost:8072/file/stream/video?url="
+        }
+    },
+    "Music": {
+        "pro": {
+            "originalUrl": "http://simple-blog.xyz/server/file/stream/music?url="
+        },
+        "dev": {
+            "originalUrl": "http://localhost:8072/file/stream/music?url="
         }
     },
     "Wechat": {

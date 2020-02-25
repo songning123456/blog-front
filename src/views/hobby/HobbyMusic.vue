@@ -16,7 +16,8 @@
                     </div>
                 </div>
                 <div class="frame-center">
-                    <table-or-list ref='tableOrList' :display="displayMusic" error-cover="wangyiyun"></table-or-list>
+                    <table-or-list ref='tableOrList' :display="displayMusics" error-cover="wangyiyun"
+                                   @current="playMusic"></table-or-list>
                     <tool-loading :loading="loading"></tool-loading>
                 </div>
                 <div class="frame-bottom">
@@ -29,7 +30,11 @@
                     </el-pagination>
                 </div>
             </div>
-            <div class="music-right"></div>
+            <div class="music-right">
+                <audio-player ref='audioPlayer' class="audio-player" :audio-list="playMusics" @play-prev='audioPrev'
+                              @play-next='audioNext'></audio-player>
+                <img src="../../assets/musicBg.jpg"/>
+            </div>
         </div>
         <float-menu :menus="menu" @itemClick="chooseItem"></float-menu>
     </div>
@@ -43,10 +48,11 @@
     import config from '../../utils/Config';
     import TableOrList from '../../components/tableOrList/TableOrList';
     import ToolLoading from '../../components/util/ToolLoading';
+    import AudioPlayer from '@/components/util/AudioPlayer';
 
     export default {
         name: 'HobbyMusic',
-        components: {ToolLoading, TableOrList, FloatMenu, LeftSideBar},
+        components: {AudioPlayer, ToolLoading, TableOrList, FloatMenu, LeftSideBar},
         data () {
             return {
                 menu: [
@@ -66,7 +72,8 @@
                     percentage: 0,
                     show: false
                 },
-                displayMusic: []
+                displayMusics: [],
+                playMusics: []
             };
         },
         mounted () {
@@ -116,15 +123,27 @@
                     }
                 });
             },
+            playMusic (index) {
+                this.$refs.audioPlayer.playSome(index);
+            },
+            audioPrev (index) {
+                this.$refs.tableOrList.current.selection = index;
+            },
+            audioNext (index) {
+                this.$refs.tableOrList.current.selection = index;
+            },
             // 转换查询的结果集
             analysis (list) {
-                this.displayMusic = list.map((item, index) => {
+                this.displayMusics = list.map((item, index) => {
                     let obj = {};
                     obj.$index = index;
                     obj.name = item.fileName;
                     obj.updateTime = item.updateTime;
                     obj.cover = config.getImageOriginal() + encodeURIComponent(item.coverSrc);
                     return obj;
+                });
+                this.playMusics = list.map(item => {
+                    return config.getMusicOriginal() + encodeURIComponent(item.fileSrc);
                 });
             },
             queryData () {
@@ -235,6 +254,19 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
+                position: relative;
+
+                .audio-player {
+                    position: absolute;
+                    z-index: 1;
+                    left: 50%;
+                    bottom: 25%;
+                }
+
+                img {
+                    filter: blur(1px);
+                    width: 70%;
+                }
             }
         }
     }

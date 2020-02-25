@@ -6,6 +6,8 @@ let image;
 
 let video;
 
+let music;
+
 let wechat;
 
 _config_.setConfig = function (config) {
@@ -25,6 +27,11 @@ _config_.setConfig = function (config) {
         Video = util.jsonToObject(Video);
     }
     video = Video;
+    let {Music} = config;
+    if (typeof Music === 'string') {
+        Music = util.jsonToObject(Music);
+    }
+    music = Music;
     let {Wechat} = config;
     if (typeof Wechat === 'string') {
         Wechat = util.jsonToObject(Wechat);
@@ -56,6 +63,11 @@ _config_.getImageOriginal = function () {
 
 _config_.getVideoOriginal = function () {
     let param = _config_.getSource(video);
+    return param.originalUrl;
+};
+
+_config_.getMusicOriginal = function () {
+    let param = _config_.getSource(music);
     return param.originalUrl;
 };
 
