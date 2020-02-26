@@ -3,6 +3,7 @@ const path = require('path');
 const utils = require('./utils');
 const config = require('../config');
 const vueLoaderConfig = require('./vue-loader.conf');
+const {VueLoaderPlugin} = require('vue-loader');
 
 function resolve (dir) {
     return path.join(__dirname, '..', dir);
@@ -20,6 +21,7 @@ const createLintingRule = () => ({
 });
 
 module.exports = {
+    mode: process.env.NODE_ENV,
     context: path.resolve(__dirname, '../'),
     entry: {
         app: './src/main.js'
@@ -38,6 +40,10 @@ module.exports = {
             '@': resolve('src'),
         }
     },
+    plugins: [
+        // vue-loader was used without the corresponding plugin. Make sure to include VueLoaderPlugin in your webpack config.
+        new VueLoaderPlugin()
+    ],
     module: {
         rules: [
             ...(config.dev.useEslint ? [createLintingRule()] : []),

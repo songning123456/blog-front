@@ -22,14 +22,12 @@
 
 <script>
     import {getContent, insertHistoryInfo} from '../../service/http.js';
-    import ElFrameset from '../../components/layout/el-frameset';
-    import ElFrame from '../../components/layout/el-frame';
     import EmptyView from '../../components/util/EmptyView';
     import ToolLoading from '../../components/util/ToolLoading';
 
     export default {
         name: 'DetailArticle',
-        components: {ToolLoading, EmptyView, ElFrame, ElFrameset},
+        components: {ToolLoading, EmptyView},
         data () {
             return {
                 result: {},
