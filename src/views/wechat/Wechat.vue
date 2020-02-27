@@ -27,10 +27,17 @@
                             </template>
                         </scroll-loader>
                     </div>
+                    <div class="extra-operate">
+                        <el-popover placement="top" trigger="click" popper-class='emotion-popover'
+                                    :visible-arrow="false">
+                            <emotion-list @emotion='handleEmotion'></emotion-list>
+                            <img class="emotion-img" src="../../assets/emotion.svg" slot="reference"/>
+                        </el-popover>
+                    </div>
                     <div class="send-message">
                         <el-input type="textarea" :rows="4" placeholder="请输入内容" v-model="toOnlineMessage"
                                   @click.native="scrollBottom"></el-input>
-                        <el-button type="primary" @click='sendMessage'>发送</el-button>
+                        <el-button @click='sendMessage'>发送</el-button>
                     </div>
                 </div>
             </div>
@@ -48,11 +55,13 @@
     import init from '../../utils/Init';
     import {getDialog} from '../../service/http';
     import ScrollLoader from '../../components/util/ScrollLoader';
+    import EmotionList from '@/components/emotion/EmotionList';
+    import Emotion from '@/utils/Emotion';
 
     export default {
         name: 'Wechat',
-        components: {ScrollLoader, ReceiveMessage, PostMessage, MainHead, EmptyView},
-        data() {
+        components: {EmotionList, ScrollLoader, ReceiveMessage, PostMessage, MainHead, EmptyView},
+        data () {
             return {
                 onlineMembers: [],
                 onlineTotal: 0,
@@ -69,7 +78,7 @@
                 }
             };
         },
-        created() {
+        created () {
             wechat.createWebSocket();
             wechat.message = this.handleMessage;
             wechat.open = this.handleOpen;
@@ -77,16 +86,16 @@
                 this.userId = data.userId;
             });
         },
-        mounted() {
+        mounted () {
             this.initQuery();
         },
         methods: {
-            sendMessage() {
+            sendMessage () {
                 let obj = {
                     author: this.$store.state.blogger.author,
                     headPortrait: this.$store.state.blogger.headPortrait,
                     userId: this.$store.state.blogger.userId,
-                    message: this.toOnlineMessage,
+                    message: Emotion.img2Text(this.toOnlineMessage),
                     updateTime: DateUtil.formatDate(new Date())
                 };
                 this.$set(this.loading, obj.userId + obj.updateTime, true);
@@ -94,7 +103,7 @@
                 wechat.webSocket.send(JSON.stringify(obj));
                 this.toOnlineMessage = '';
             },
-            getIntroduction(userId) {
+            getIntroduction (userId) {
                 let routerData = this.$router.resolve({
                     path: '/author-personal',
                     name: 'authorPersonal',
@@ -105,11 +114,11 @@
                 window.open(routerData.href, '_blank');
             },
             // 滚动条到最底部
-            scrollBottom() {
+            scrollBottom () {
                 let doc = this.$refs['scrollLoader'].$el;
                 doc.scrollTop = doc.scrollHeight;
             },
-            initQuery() {
+            initQuery () {
                 let params = {
                     pageRecordNum: this.page.pageRecordNum,
                     condition: {}
@@ -132,7 +141,7 @@
                     }
                 });
             },
-            upRefresh(done) {
+            upRefresh (done) {
                 if (this.isUpperLoading) {
                     return;
                 }
@@ -161,7 +170,10 @@
                     this.isUpperLoading = false;
                 });
             },
-            handleOpen() {
+            handleEmotion (item) {
+                this.toOnlineMessage += item;
+            },
+            handleOpen () {
                 // 等获取到userId在请求后台
                 init.getBlogger().then(data => {
                     let obj = {
@@ -172,7 +184,7 @@
                     wechat.webSocket.send(JSON.stringify(obj));
                 });
             },
-            handleMessage(data) {
+            handleMessage (data) {
                 // 说明是 正常 接收消息
                 if (data.userId) {
                     // 判断是 发送方 or 接收方
@@ -206,7 +218,7 @@
     };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
     .wechat {
         position: relative;
         width: 100%;
@@ -313,10 +325,10 @@
                     }
 
                     .group-message {
-                        height: calc(75% - 1.6rem - 2px);
+                        height: calc(70% - .8rem - 2px);
                         width: calc(78% - 0.8rem - 2px);
                         float: left;
-                        margin: .8rem .8rem .8rem 0;
+                        margin: .8rem .8rem 0 0;
                         border: 1px solid #409EFF;
 
                         .online-total {
@@ -349,6 +361,26 @@
                         }
                     }
 
+                    .extra-operate {
+                        width: 78%;
+                        height: 5%;
+                        float: left;
+                        padding-right: .8rem;
+                        box-sizing: border-box;
+                        position: relative;
+
+                        .emotion-img {
+                            position: absolute;
+                            top: 50%;
+                            left: 3%;
+                            transform: translate(-50%, -50%);
+
+                            &:hover {
+                                cursor: pointer;
+                            }
+                        }
+                    }
+
                     .send-message {
                         height: 25%;
                         width: 78%;
@@ -357,8 +389,15 @@
                         box-sizing: border-box;
                         position: relative;
 
+                        /deep/ textarea {
+                            border: none;
+                            resize: none;
+                            outline: none;
+                        }
+
                         .el-button {
-                            width: 6rem;
+                            width: 4rem;
+                            padding: .3rem .2rem;
                             position: absolute;
                             top: 5.1rem;
                             right: .8rem;
@@ -367,6 +406,13 @@
                 }
             }
         }
+    }
+
+    .emotion-popover {
+        width: 14rem;
+        top: 18.8rem !important;
+        left: 30.5rem !important;
+        margin-bottom: unset !important;
     }
 
 </style>

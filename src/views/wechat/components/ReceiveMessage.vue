@@ -11,13 +11,14 @@
 
 <script>
     import init from '../../../utils/Init';
+    import Emotion from '../../../utils/Emotion';
 
     export default {
         name: 'ReceiveMessage',
         props: {
             receive: {
                 type: Object,
-                default() {
+                default () {
                 }
             },
             isSystem: {
@@ -26,26 +27,14 @@
             }
         },
         computed: {
-            receiveAvatar() {
+            receiveAvatar () {
                 return init.getHeadPortrait(this.receive.headPortrait);
             }
         },
         methods: {
-            getMessage(message) {
-                let result = '';
-                if (message && message.length > 0) {
-                    let length = message.length;
-                    for (let i = 0, j = 1; i < length; i++, j++) {
-                        if (length === 20) {
-                            result += message[i];
-                        } else if (i && j % 20 === 0) {
-                            result += '<br/>';
-                        } else {
-                            result += message[i];
-                        }
-                    }
-                }
-                return result;
+            // 把所有md5加密信息 转换成 图片
+            getMessage (message) {
+                return Emotion.text2Img(message);
             }
         }
     };
@@ -75,6 +64,7 @@
         }
 
         .author-message {
+            max-width: 45%;
             width: auto;
             height: auto;
             float: left;
@@ -96,6 +86,7 @@
                 text-align: left;
                 box-shadow: 0 1px 7px -5px #000;
             }
+
             .message:before {
                 right: 100%;
                 content: " ";
