@@ -78,6 +78,7 @@
 
             .message {
                 margin: .2rem 0;
+                min-height: 17px;
                 font-size: .75rem;
                 background-color: #9eea6a;
                 border-radius: 5px;

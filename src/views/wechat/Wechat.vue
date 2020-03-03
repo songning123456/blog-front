@@ -35,8 +35,8 @@
                         </el-popover>
                     </div>
                     <div class="send-message">
-                        <el-input type="textarea" :rows="4" placeholder="请输入内容" v-model="toOnlineMessage"
-                                  @click.native="scrollBottom"></el-input>
+                        <content-editable v-model="toOnlineMessage" style="height: 70%" ref="contentEdit"
+                                          @click.native="scrollBottom"></content-editable>
                         <el-button @click='sendMessage'>发送</el-button>
                     </div>
                 </div>
@@ -55,12 +55,13 @@
     import init from '../../utils/Init';
     import {getDialog} from '../../service/http';
     import ScrollLoader from '../../components/util/ScrollLoader';
-    import EmotionList from '@/components/emotion/EmotionList';
-    import Emotion from '@/utils/Emotion';
+    import EmotionList from '../../components/emotion/EmotionList';
+    import Emotion from '../../utils/Emotion';
+    import ContentEditable from '../../components/public/ContentEditable';
 
     export default {
         name: 'Wechat',
-        components: {EmotionList, ScrollLoader, ReceiveMessage, PostMessage, MainHead, EmptyView},
+        components: {ContentEditable, EmotionList, ScrollLoader, ReceiveMessage, PostMessage, MainHead, EmptyView},
         data () {
             return {
                 onlineMembers: [],
@@ -91,6 +92,9 @@
         },
         methods: {
             sendMessage () {
+                if (!this.toOnlineMessage) {
+                    return;
+                }
                 let obj = {
                     author: this.$store.state.blogger.author,
                     headPortrait: this.$store.state.blogger.headPortrait,
@@ -171,7 +175,7 @@
                 });
             },
             handleEmotion (item) {
-                this.toOnlineMessage += item;
+                this.$refs['contentEdit'].insertImg(item);
             },
             handleOpen () {
                 // 等获取到userId在请求后台
@@ -388,12 +392,6 @@
                         padding: 0 .8rem .8rem 0;
                         box-sizing: border-box;
                         position: relative;
-
-                        /deep/ textarea {
-                            border: none;
-                            resize: none;
-                            outline: none;
-                        }
 
                         .el-button {
                             width: 4rem;
