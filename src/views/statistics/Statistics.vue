@@ -50,21 +50,21 @@
                     <div class='content-top'>
                         <div class='content-left'>
                             <div class='content-title'></div>
-                            <e-charts :option='option.first'></e-charts>
+                            <bl-charts :option='option.first'></bl-charts>
                         </div>
                         <div class='content-right'>
                             <div class='content-title'></div>
-                            <e-charts :option='option.second'></e-charts>
+                            <bl-charts :option='option.second'></bl-charts>
                         </div>
                     </div>
                     <div class='content-bottom'>
                         <div class='content-left'>
                             <div class='content-title'></div>
-                            <e-charts :option='option.third'></e-charts>
+                            <bl-charts :option='option.third'></bl-charts>
                         </div>
                         <div class='content-right'>
                             <div class='content-title'></div>
-                            <e-charts :option='option.fourth'></e-charts>
+                            <bl-charts :option='option.fourth'></bl-charts>
                         </div>
                     </div>
                 </div>
@@ -81,12 +81,12 @@
     import TabPanel from '../../components/public/TabPanel';
     import {getHadoop, insertHistoryInfo} from '../../service/http';
     import ToolLoading from '../../components/util/ToolLoading';
-    import ECharts from '../../components/public/ECharts';
+    import BlCharts from '../../components/public/BlCharts';
     import EmptyView from '../../components/util/EmptyView';
 
     export default {
         name: 'Statistics',
-        components: {MainHead, EmptyView, ECharts, ToolLoading, TabPanel, SideMenuPanel},
+        components: {MainHead, EmptyView, BlCharts, ToolLoading, TabPanel, SideMenuPanel},
         data() {
             return {
                 sideBar: {
@@ -457,7 +457,7 @@
                     background-color: #f0f2f9;
                 }
 
-                .e-charts {
+                .bl-charts {
                     height: calc(100% - 2.1rem);
                 }
             }

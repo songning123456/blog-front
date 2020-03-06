@@ -1,15 +1,13 @@
 <template>
-    <div class='e-charts' ref='ECharts'></div>
+    <div class='bl-charts' ref='ECharts'></div>
 </template>
 
 <script>
     import echarts from 'echarts';
     import elementResizeDetectorMaker from 'element-resize-detector';
 
-    require('echarts/lib/component/dataZoom');
-
     export default {
-        name: 'ECharts',
+        name: 'BlCharts',
         components: echarts,
         data () {
             return {
@@ -79,7 +77,7 @@
 </script>
 
 <style lang="scss">
-    .e-charts {
+    .bl-charts {
         width: 100%;
         height: 100%;
     }

@@ -96,7 +96,8 @@ module.exports = {
         child_process: 'empty'
     },
     externals: {
-        'BMap': 'BMap'
+        'BMap': 'BMap',
+        echarts: 'echarts'
     }
 // 注意这里修改了配置文件 需要重启项目
 };

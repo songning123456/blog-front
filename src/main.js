@@ -18,7 +18,6 @@ import store from './store/store';
 import VueI18n from 'vue-i18n';
 import i18n from './lang';
 import './style/iconfont/iconfont.css';
-import VueLazyComponent from '@xunlei/vue-lazy-component';
 import ZMessage from './configure/util/ZMessage';
 import Config from './utils/Config';
 import './style/elementui/elementui.scss';
@@ -76,7 +75,6 @@ Vue.use(Vuex);
 Vue.use(VueI18n, {
     i18n: (key, value) => i18n.t(key, value)
 });
-Vue.use(VueLazyComponent);
 router.beforeEach((to, from, next) => {
     if (to.meta.title) {
         document.title = to.meta.title;
