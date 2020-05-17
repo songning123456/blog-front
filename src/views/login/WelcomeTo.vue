@@ -59,7 +59,7 @@
                     getProxyAccessTokenURL: '/github/login/oauth/access_token', // 前端代理
                     getAccessTokenURL: 'https://github.com/login/oauth/access_token',
                     getUserURL: 'https://api.github.com/user',
-                    redirectURL: 'http://simple-blog.xyz/#/third-part',
+                    redirectURL: 'http://blog.sonin.cn/#/third-part',
                     frontOrServer: 'server' // 用前端还是后端去请求
                 }
             };

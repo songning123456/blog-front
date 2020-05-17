@@ -1,7 +1,7 @@
 let Config = {};
 
 let MODE_PATTERN = {
-    pro: 'http://server.simple-blog.xyz',
+    pro: 'http://blog-server.sonin.cn',
     dev: 'http://localhost:8072'
 };
 

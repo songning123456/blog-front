@@ -1,7 +1,7 @@
 {
     "Image": {
         "pro": {
-            "originalUrl": "http://server.simple-blog.xyz/file/stream/image?url="
+            "originalUrl": "http://blog-server.sonin.cn/file/stream/image?url="
         },
         "dev": {
             "originalUrl": "http://localhost:8072/file/stream/image?url="
@@ -9,7 +9,7 @@
     },
     "Video": {
         "pro": {
-            "originalUrl": "http://server.simple-blog.xyz/file/stream/video?url="
+            "originalUrl": "http://blog-server.sonin.cn/file/stream/video?url="
         },
         "dev": {
             "originalUrl": "http://localhost:8072/file/stream/video?url="
@@ -17,7 +17,7 @@
     },
     "Music": {
         "pro": {
-            "originalUrl": "http://server.simple-blog.xyz/file/stream/music?url="
+            "originalUrl": "http://blog-server.sonin.cn/file/stream/music?url="
         },
         "dev": {
             "originalUrl": "http://localhost:8072/file/stream/music?url="
@@ -25,7 +25,7 @@
     },
     "Wechat": {
         "pro": {
-            "websocket": "ws://server.simple-blog.xyz/webSocket/wechat"
+            "websocket": "ws://blog-server.sonin.cn/webSocket/wechat"
         },
         "dev": {
             "websocket": "ws://localhost:8072/webSocket/wechat"
